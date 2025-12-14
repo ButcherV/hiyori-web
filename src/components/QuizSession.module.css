@@ -1,0 +1,43 @@
+/* src/components/QuizSession.module.css */
+
+/* 容器 */
+.sessionContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  touch-action: none; 
+  overflow: hidden;
+}
+
+/* 头部题目区 */
+.header {
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10;
+}
+
+.prompt {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+}
+
+.highlight {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* 核心：卡片堆叠的那个“坑位” */
+.cardStackContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 50px;
+}

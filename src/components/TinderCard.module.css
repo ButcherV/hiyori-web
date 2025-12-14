@@ -1,0 +1,40 @@
+/* src/components/TinderCard.module.css */
+
+/* 卡片本体 */
+.tinderCard {
+  position: absolute;
+  width: 85%;
+  max-width: 320px;
+  height: 60%;
+  max-height: 450px;
+  
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  
+  /* 性能优化 */
+  will-change: transform;
+  /* 这里的 pointer-events 由 JS 动态控制，CSS里默认设个基础值即可 */
+}
+
+/* 卡片内部的内容 */
+.colorBlock {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+}
+
+/* 滑动时的红绿遮罩 */
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 24px;
+  z-index: 2;
+  pointer-events: none;
+}

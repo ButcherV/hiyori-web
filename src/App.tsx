@@ -1,23 +1,13 @@
-import { useState } from 'react'
-import styles from './App.module.css' 
+import styles from './App.module.css';
+import { QuizSession } from './components/QuizSession';
 
 function App() {
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>日和 Hiyori</h1>
-        <p style={{ color: 'var(--color-text-sub)' }}>
-          CSS Architecture Ready
-        </p>
-      </header>
-      
-      <main>
-        <div className={styles.cardDemo}>
-          <span>🇯🇵 + 🍎</span>
-        </div>
-      </main>
+    // 直接用全屏容器
+    <div className={styles.appContainer}>
+      <QuizSession />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
