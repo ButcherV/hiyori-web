@@ -22,18 +22,23 @@ export function QuizSession() {
   const cycleCount = useRef(0);
 
   // 1. 初始化新题目
+// 1. 初始化新题目
   const loadNewQuestion = () => {
-    const randomWord = _.sample(RAW_DATA) as Vocabulary;
+    // 每次换题前，先把旧题清空，避免闪烁
+    setQuestion(null);
+
     let validQuestion: QuizQuestion | null = null;
     let attempts = 0;
 
-    while (!validQuestion && attempts < 20) {
-      const possibleModes: QuizMode[] = ['WORD_TO_MEANING', 'KANA_FILL_BLANK'];
-      if (randomWord.visual) {
-        possibleModes.push('WORD_TO_EMOJI', 'WORD_TO_COLOR', 'BRAND_TO_NAME');
-      }
-      const randomMode = _.sample(possibleModes) as QuizMode;
-      validQuestion = generateQuestion(randomWord, randomMode);
+    // 尝试生成题目
+    while (!validQuestion && attempts < 50) {
+      const randomWord = _.sample(RAW_DATA) as Vocabulary;
+      
+      // 🔥 修改重点在这里：
+      // 以前是随机算一个 randomMode，现在我们强制写死 'KANA_FILL_BLANK'
+      // 这样就只会生成填空题了
+      validQuestion = generateQuestion(randomWord, 'KANA_FILL_BLANK');
+      
       attempts++;
     }
 
@@ -44,10 +49,10 @@ export function QuizSession() {
       originalOptions.current = validQuestion.options;
       cycleCount.current = 0;
 
-      // 初始牌堆：先直接给一组
-      // (为了更保险，初始可以直接生成两组，这里先用一组，滑几下就会自动补)
       setCardQueue(validQuestion.options); 
     } else {
+      // 如果运气不好50次都没随到能填空的词，就重试
+      console.warn("Retrying to find a valid question...");
       loadNewQuestion();
     }
   };
