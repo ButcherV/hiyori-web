@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import _ from 'lodash';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion'; 
 import styles from './QuizSession.module.css';
 
 import type { Vocabulary, QuizQuestion, QuizOption } from '../types';
@@ -8,6 +8,31 @@ import { RAW_DATA } from '../data';
 import { generateQuestion } from '../engine';
 import { TinderCard } from './TinderCard';
 import { QuizHeader } from './QuizHeader';
+import { MistakeModal } from './MistakeModal'; // ✅ 引入新组件
+
+// 动画变量配置 (跟之前一样，不用改)
+const slideVariants = {
+  enter: (direction: 'horizontal' | 'vertical') => ({
+    x: direction === 'horizontal' ? 300 : 0,
+    y: direction === 'vertical' ? 300 : 0,
+    opacity: 0,
+    position: 'absolute' as const,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    y: 0,
+    opacity: 1,
+    position: 'relative' as const,
+  },
+  exit: (direction: 'horizontal' | 'vertical') => ({
+    zIndex: 0,
+    x: direction === 'horizontal' ? -300 : 0,
+    y: direction === 'vertical' ? -300 : 0, // 垂直模式：向上飞走
+    opacity: 0,
+    position: 'absolute' as const,
+  })
+};
 
 export function QuizSession() {
   const [question, setQuestion] = useState<QuizQuestion | null>(null);
@@ -15,23 +40,27 @@ export function QuizSession() {
   const originalOptions = useRef<QuizOption[]>([]);
   const cycleCount = useRef(0);
 
-  // 🔥 状态1：当前是否锁住了 (锁住时不能滑动)
   const [isLocked, setIsLocked] = useState(false);
-  // 🔥 状态2：是否揭示答案 (控制 Header 动画)
   const [isRevealed, setIsRevealed] = useState(false);
-  // 🔥 状态3：记录正确答案的文本，传给 Header 用
   const [correctAnswerText, setCorrectAnswerText] = useState<string>('');
+  
+  // 状态：正确答案对象 (传给 Modal 用)
+  const [correctOptionData, setCorrectOptionData] = useState<QuizOption | undefined>(undefined);
+  // 状态：Modal 是否打开
+  const [isMistakeModalOpen, setIsMistakeModalOpen] = useState(false);
 
-  const loadNewQuestion = () => {
-    // 重置所有状态
-    setQuestion(null);
+  // 切题方向
+  const [slideDirection, setSlideDirection] = useState<'horizontal' | 'vertical'>('horizontal');
+
+  const loadNewQuestion = useCallback(() => {
     setIsLocked(false);
     setIsRevealed(false);
     setCorrectAnswerText('');
+    setCorrectOptionData(undefined); // 清理
+    setIsMistakeModalOpen(false);    // 确保关闭
 
     let validQuestion: QuizQuestion | null = null;
     let attempts = 0;
-
     while (!validQuestion && attempts < 50) {
       const randomWord = _.sample(RAW_DATA) as Vocabulary;
       validQuestion = generateQuestion(randomWord, 'KANA_FILL_BLANK');
@@ -42,17 +71,19 @@ export function QuizSession() {
       setQuestion(validQuestion);
       originalOptions.current = validQuestion.options;
       cycleCount.current = 0;
-      setCardQueue(validQuestion.options); 
-    } else {
-      loadNewQuestion();
+      setCardQueue(validQuestion.options);
+      
+      // 预存一下正确选项数据，方便 Modal 调用
+      setCorrectOptionData(validQuestion.options.find(o => o.isCorrect));
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadNewQuestion();
-  }, []);
+  }, [loadNewQuestion]);
 
   const appendMoreCards = () => {
+    // ... (保持不变)
     if (originalOptions.current.length === 0) return;
     cycleCount.current += 1; 
     const currentCycle = cycleCount.current;
@@ -72,39 +103,8 @@ export function QuizSession() {
     });
   };
 
-  const handleSwipe = (option: QuizOption, direction: 'LIKE' | 'NOPE') => {
-    // 如果已经锁住了，不允许任何操作 (双重保险)
-    if (isLocked) return;
-
-    // 视觉移除卡片
-    setTimeout(() => {
-      removeTopCard();
-    }, 0); 
-
-    if (direction === 'LIKE') {
-      if (option.isCorrect) {
-        console.log("Bingo!");
-        
-        // 1. 🔥 立即上锁，防止继续滑动
-        setIsLocked(true);
-        
-        // 2. 告诉 Header：开始播放填空动画
-        setCorrectAnswerText(option.content); // 告诉它填什么字
-        setIsRevealed(true); // 告诉它可以变身了
-
-        // 3. 延迟切题：给动画留出 1.2秒 的展示时间
-        // 用户只能盯着看动画，不能动，这样就非常安全
-        setTimeout(() => {
-          loadNewQuestion();
-        }, 1200);
-
-      } else {
-        // 选错了暂时不做特殊处理，继续
-      }
-    }
-  };
-
   const removeTopCard = () => {
+    // ... (保持不变)
     setCardQueue(prev => {
       const remaining = prev.slice(1);
       if (remaining.length <= 3) {
@@ -114,37 +114,100 @@ export function QuizSession() {
     });
   };
 
+  const handleSwipe = (option: QuizOption, direction: 'LIKE' | 'NOPE') => {
+    if (isLocked) return;
+
+    setTimeout(() => {
+      removeTopCard();
+    }, 0); 
+
+    if (direction === 'LIKE') {
+      if (option.isCorrect) {
+        // === 答对了 ===
+        console.log("Bingo!");
+        setIsLocked(true);
+        setCorrectAnswerText(option.content);
+        setIsRevealed(true);
+
+        // 设置动画：水平推
+        setSlideDirection('horizontal');
+
+        setTimeout(() => {
+          loadNewQuestion();
+        }, 1200);
+
+      } else {
+        // === 答错了 (用户右滑选择了错误的答案) ===
+        console.log("Wrong!");
+        
+        // 1. 立即锁定
+        setIsLocked(true);
+        
+        // 2. 设置动画：垂直向上 (意思是这道题飞到错题本里去了)
+        setSlideDirection('vertical');
+
+        // 3. 打开弹窗
+        // 注意：TinderCard 的飞出动画已经由 removeTopCard 触发了
+        // 这里稍微延迟一点点弹窗，体验更好
+        setTimeout(() => {
+           setIsMistakeModalOpen(true);
+        }, 300);
+      }
+    }
+  };
+
+  // 🔥 Modal 点击 "Next" 后的回调
+  const handleMistakeModalNext = () => {
+    // 关闭 Modal 的同时，触发切题
+    setIsMistakeModalOpen(false);
+    
+    // 这里的 loadNewQuestion 会读取 slideDirection='vertical'
+    // 所以旧题会向上飞，新题从下飞入
+    loadNewQuestion();
+  };
+
   if (!question) return <div>Loading...</div>;
 
-return (
+  return (
     <div className={styles.sessionContainer}>
       
-      <QuizHeader 
-        question={question} 
-        isRevealed={isRevealed} 
-        correctAnswerContent={correctAnswerText}
-      />
+      {/* 切题动画区域 */}
+      <div style={{ width: '100%', position: 'relative', height: '200px', overflow: 'hidden' }}>
+        <AnimatePresence initial={false} mode='popLayout' custom={slideDirection}>
+          <motion.div
+            key={question.id}
+            custom={slideDirection}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ type: "spring", stiffness: 300, damping: 30, duration: 0.5 }}
+            style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <QuizHeader 
+              question={question} 
+              isRevealed={isRevealed} 
+              correctAnswerContent={correctAnswerText}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-      {/* 🔥🔥🔥 修改这里：把 div 改成 motion.div 
-         让整个卡片区域在揭示答案时：
-         1. 变透明 (opacity)
-         2. 变模糊 (blur)
-         3. 稍微缩小一点，产生“退后”的景深感 (scale)
-      */}
       <motion.div 
         className={styles.cardStackContainer}
-        animate={isRevealed ? { 
-          opacity: 0.3,        // 变淡
-          filter: "blur(5px)", // 虚化 (毛玻璃效果)
-          scale: 0.95,         // 稍微退后
-          pointerEvents: "none" // 双重保险：虚化时彻底禁止鼠标事件
+        // 当答对揭示(isRevealed) 或者 弹窗打开(isMistakeModalOpen) 时，都虚化背景
+        animate={(isRevealed || isMistakeModalOpen) ? { 
+          opacity: 0.3, 
+          filter: "blur(5px)", 
+          scale: 0.95, 
+          pointerEvents: "none" 
         } : { 
           opacity: 1, 
           filter: "blur(0px)", 
           scale: 1,
           pointerEvents: "auto"
         }}
-        transition={{ duration: 0.4 }} // 这里的时长跟 Header 的动画配合
+        transition={{ duration: 0.4 }}
       >
         <AnimatePresence>
           {cardQueue.map((option, index) => {
@@ -163,6 +226,15 @@ return (
           })}
         </AnimatePresence>
       </motion.div>
+
+      {/* 🔥 放入弹窗组件 */}
+      <MistakeModal 
+        isOpen={isMistakeModalOpen}
+        question={question} // 传入当前题目对象
+        correctOption={correctOptionData}
+        onNext={handleMistakeModalNext}
+      />
+      
     </div>
   );
 }
