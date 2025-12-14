@@ -3,33 +3,52 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  padding: 10px 0;
   width: 100%;
-  /* 预留一点高度，防止动画导致跳动 */
   min-height: 180px; 
 }
 
+.headerTitle {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  width: 100%;
+  min-height: 180px;  */
+}
+
+.headerSubtitle {
+  padding-top: 16px;
+}
+
 .promptText {
-  font-size: 2.5rem; /* 字号加大，突出题目 */
+  font-size: 2.5rem;
   font-weight: 800;
   color: var(--color-text-main);
   display: flex;
-  gap: 4px; /* 字符之间的间距 */
-  align-items: flex-end; /* 底部对齐，为了让下划线好看 */
+  gap: 4px;
+  align-items: flex-end; 
+  /* 确保行高一致 */
+  line-height: 1.2; 
 }
 
-/* 特殊高亮的字符（即下划线部分） */
-.highlightChar {
-  color: var(--color-primary);
-  border-bottom: 3px solid var(--color-primary);
-  min-width: 1.5rem; /* 保证有一个占位宽度 */
+/* 🔥 关键修改：提取公共基础样式 */
+.charBase {
+  display: inline-block;
   text-align: center;
-  padding-bottom: 2px;
-}
-
-/* 普通字符 */
-.normalChar {
-  /* 暂时没有什么特殊样式 */
+  min-width: 2rem;
+  /* padding-bottom: 2px; */
+  
+  /* 🔥 解决对齐问题的核心：
+     给所有字都加 3px 边框。
+     默认为 transparent (看不见)，这样高度就被占住了。
+     .highlightChar 只需改变这个颜色即可。
+  */
+  border-bottom: 4px solid transparent; 
+  
+  position: relative;
+  overflow: hidden; /* 这一条对动画很重要，为了遮住还没升上来的字 */
 }
 
 .modeLabel {
@@ -39,12 +58,4 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   opacity: 0.7;
-}
-
-/* 针对颜色题型的样式 (预留) */
-.colorBlock {
-  width: 120px;
-  height: 120px;
-  border-radius: 24px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }

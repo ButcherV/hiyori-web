@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import styles from './QuizSession.module.css';
 
 import type { Vocabulary, QuizQuestion, QuizOption } from '../types';
@@ -116,17 +116,36 @@ export function QuizSession() {
 
   if (!question) return <div>Loading...</div>;
 
-  return (
+return (
     <div className={styles.sessionContainer}>
       
-      {/* 传参给 Header */}
       <QuizHeader 
         question={question} 
         isRevealed={isRevealed} 
         correctAnswerContent={correctAnswerText}
       />
 
-      <div className={styles.cardStackContainer}>
+      {/* 🔥🔥🔥 修改这里：把 div 改成 motion.div 
+         让整个卡片区域在揭示答案时：
+         1. 变透明 (opacity)
+         2. 变模糊 (blur)
+         3. 稍微缩小一点，产生“退后”的景深感 (scale)
+      */}
+      <motion.div 
+        className={styles.cardStackContainer}
+        animate={isRevealed ? { 
+          opacity: 0.3,        // 变淡
+          filter: "blur(5px)", // 虚化 (毛玻璃效果)
+          scale: 0.95,         // 稍微退后
+          pointerEvents: "none" // 双重保险：虚化时彻底禁止鼠标事件
+        } : { 
+          opacity: 1, 
+          filter: "blur(0px)", 
+          scale: 1,
+          pointerEvents: "auto"
+        }}
+        transition={{ duration: 0.4 }} // 这里的时长跟 Header 的动画配合
+      >
         <AnimatePresence>
           {cardQueue.map((option, index) => {
             if (index > 2) return null;
@@ -137,14 +156,13 @@ export function QuizSession() {
                 index={index}
                 totalCards={cardQueue.length}
                 isTop={index === 0}
-                // 🔥 传入禁用状态：如果锁住了，或者不是第一张，都禁用
                 disabled={isLocked} 
                 onSwipe={handleSwipe}
               />
             );
           })}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 }

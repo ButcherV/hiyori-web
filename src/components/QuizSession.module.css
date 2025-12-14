@@ -19,7 +19,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   position: relative;
   
   /* 如果觉得卡片离题目太近，可以稍微给点上边距 */
