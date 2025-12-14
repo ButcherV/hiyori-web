@@ -1,0 +1,50 @@
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  /* 预留一点高度，防止动画导致跳动 */
+  min-height: 180px; 
+}
+
+.promptText {
+  font-size: 2.5rem; /* 字号加大，突出题目 */
+  font-weight: 800;
+  color: var(--color-text-main);
+  display: flex;
+  gap: 4px; /* 字符之间的间距 */
+  align-items: flex-end; /* 底部对齐，为了让下划线好看 */
+}
+
+/* 特殊高亮的字符（即下划线部分） */
+.highlightChar {
+  color: var(--color-primary);
+  border-bottom: 3px solid var(--color-primary);
+  min-width: 1.5rem; /* 保证有一个占位宽度 */
+  text-align: center;
+  padding-bottom: 2px;
+}
+
+/* 普通字符 */
+.normalChar {
+  /* 暂时没有什么特殊样式 */
+}
+
+.modeLabel {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--color-text-sub);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* 针对颜色题型的样式 (预留) */
+.colorBlock {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}

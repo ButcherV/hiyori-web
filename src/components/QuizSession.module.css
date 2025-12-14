@@ -1,43 +1,29 @@
-/* src/components/QuizSession.module.css */
-
-/* 容器 */
+/* 整个页面的大容器 */
 .sessionContainer {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  align-items: center;
+  /* 让 Header 在上面，卡片在中间偏下 */
+  justify-content: flex-start; 
+  height: 100vh;
   width: 100%;
-  touch-action: none; 
   overflow: hidden;
-}
-
-/* 头部题目区 */
-.header {
-  flex: 0 0 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 10;
-}
-
-.prompt {
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--color-text-main);
-}
-
-.highlight {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-/* 核心：卡片堆叠的那个“坑位” */
-.cardStackContainer {
-  flex: 1;
   position: relative;
+  background-color: var(--color-bg); /* 确保有背景色 */
+}
+
+/* 专门放卡片的区域 */
+.cardStackContainer {
+  /* 占据剩下的空间 */
+  flex: 1; 
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding-bottom: 50px;
+  align-items: center;
+  position: relative;
+  
+  /* 如果觉得卡片离题目太近，可以稍微给点上边距 */
+  margin-top: 20px; 
+  /* 防止卡片太靠底 */
+  padding-bottom: 50px; 
 }
