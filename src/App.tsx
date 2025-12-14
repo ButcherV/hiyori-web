@@ -1,15 +1,18 @@
-import './App.css'
+import { useState } from 'react'
+import styles from './App.module.css' 
 
 function App() {
   return (
-    <div className="app-container">
-      <header>
-        <h1>日和 Hiyori</h1>
-        <p>环境搭建完成 (No Tailwind)</p>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>日和 Hiyori</h1>
+        <p style={{ color: 'var(--color-text-sub)' }}>
+          CSS Architecture Ready
+        </p>
       </header>
       
       <main>
-        <div className="card-demo">
+        <div className={styles.cardDemo}>
           <span>🇯🇵 + 🍎</span>
         </div>
       </main>

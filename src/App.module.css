@@ -1,0 +1,42 @@
+/* src/App.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  color: var(--color-primary); /* 使用变量！ */
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.cardDemo {
+  background: var(--color-card-bg); /* 使用变量！ */
+  padding: 40px;
+  border-radius: var(--radius-card); /* 使用变量！ */
+  box-shadow: var(--shadow-card);    /* 使用变量！ */
+  font-size: 3rem;
+  
+  /* 一个简单的进场动画 */
+  animation: floatIn var(--transition-bounce) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes floatIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

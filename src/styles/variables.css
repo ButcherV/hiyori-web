@@ -1,0 +1,40 @@
+/* src/styles/variables.css */
+:root {
+  /* --- 调色板 (Palette) --- */
+  
+  /* 主色：鸟居红 (Torii Red) - 用于重点、按钮 */
+  --color-primary: #FF4500;
+  
+  /* 背景色：和纸白 (Washi White) - 用于页面背景，稍微带点暖色，护眼 */
+  --color-bg: #F9F9F7;
+  
+  /* 卡片背景：纯白 */
+  --color-card-bg: #FFFFFF;
+  
+  /* 文字色：墨黑 (Sumi Ink) - 不要用纯黑 #000，太刺眼 */
+  --color-text-main: #2D2D2D;
+  --color-text-sub: #6E6E6E;
+  
+  /* 辅助色：抹茶绿 (Matcha) - 用于正确选项 */
+  --color-success: #789262;
+  
+  /* 辅助色：错误红 */
+  --color-error: #D32F2F;
+
+  /* --- 布局 (Layout) --- */
+  --radius-card: 16px;     /* 卡片圆角 */
+  --radius-button: 99px;   /* 胶囊按钮 */
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08); /* 柔和的阴影 */
+  
+  /* --- 动画 (Animation) --- */
+  --transition-fast: 0.2s ease;
+  --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 预留暗黑模式接口，以后只需要覆盖这些变量即可 */
+@media (prefers-color-scheme: dark) {
+  /* :root {
+     --color-bg: #1A1A1A;
+     ...
+  } */
+}

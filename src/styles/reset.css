@@ -1,0 +1,35 @@
+/* src/styles/reset.css */
+
+/* 1. 核心：所有元素使用 border-box，padding 不会撑大宽高 */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. 移除默认的 margin，让你完全控制布局 */
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+/* 3. 继承字体，防止 form 元素（input/button）字体不一致 */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 4. 图片自适应，防止图片撑破容器 */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 5. 移除列表的默认圆点和缩进 */
+ul, ol {
+  list-style: none;
+  padding: 0;
+}
+
+/* 6. 防止 iOS 点击高亮（原生感优化） */
+html {
+  -webkit-tap-highlight-color: transparent;
+  /* 禁止用户手势缩放，模拟 App 体验 */
+  touch-action: manipulation; 
+}

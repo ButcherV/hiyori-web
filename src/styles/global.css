@@ -1,0 +1,17 @@
+/* src/styles/global.css */
+body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  /* 这一行保证在 iOS 上滑动流畅 */
+  -webkit-font-smoothing: antialiased;
+  /* 防止页面整体滚动（我们是 App，通常是内部容器滚动） */
+  overflow: hidden; 
+  height: 100vh;
+  width: 100vw;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
