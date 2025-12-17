@@ -1,5 +1,6 @@
 /* src/styles/variables.css */
 :root {
+  
   /* --- 调色板 (Palette) --- */
   
   /* 主色：鸟居红 (Torii Red) - 用于重点、按钮 */
@@ -29,6 +30,15 @@
   /* --- 动画 (Animation) --- */
   --transition-fast: 0.2s ease;
   --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+
+  /* 1. UI 字体：优先简中 (PingFang SC / 微软雅黑) */
+  /* 用于：菜单、设置页、按钮、提示语 */
+  --font-family-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+
+  /* 2. 日语字体：优先日文标准 (Hiragino Kaku / Meiryo) */
+  /* 用于：TinderCard 的单词、QuizHeader 的题目、罗马音 */
+  --font-family-ja: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", "Noto Sans JP", sans-serif;
 }
 
 /* 预留暗黑模式接口，以后只需要覆盖这些变量即可 */

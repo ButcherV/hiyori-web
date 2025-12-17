@@ -1,0 +1,132 @@
+/* 容器：去掉固定内边距，允许内容撑满，保证最小高度 */
+.container {
+  min-height: 100vh;
+  background-color: #F2F2F7; /* 整个页面底色 */
+  padding-bottom: 40px; /* 底部留白，防止到底部划不动 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1c1c1e;
+  overflow-x: hidden; /* 防止横向出现滚动条 */
+}
+
+/* 1. Header: 需要单独加边距 */
+.header {
+  padding: 20px 20px 10px 20px; /* 上 右 下 左 */
+  background: #F2F2F7;
+}
+
+.date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8e8e93;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* 2. Hero Scroll Section: 横向滚动区域 */
+.scrollContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  
+  /* 关键：让滚动区域两头留白，但滑动时能贴边 */
+  padding: 10px 20px 30px 20px; 
+  
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.heroCard {
+  /* 85% 宽度，让下一张露个头 */
+  min-width: 85%; 
+  position: relative;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  overflow: hidden;
+  /* 阴影更柔和 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  scroll-snap-align: center; /* 居中吸附 */
+  transition: transform 0.2s;
+}
+
+.heroCard:active {
+  transform: scale(0.98);
+}
+
+.heroDecor {
+  position: absolute;
+  bottom: -20px;
+  right: 0px;
+  font-size: 120px;
+  font-weight: 800;
+  opacity: 0.15;
+  pointer-events: none;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.heroTop { margin-bottom: 12px; }
+.heroLabel { font-size: 12px; font-weight: 700; opacity: 0.8; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;}
+.heroTitle { font-size: 28px; font-weight: 700; line-height: 1.1; }
+
+.heroBottom { display: flex; align-items: center; gap: 12px; }
+.progressTrack { flex: 1; height: 6px; background-color: rgba(255, 255, 255, 0.3); border-radius: 3px; overflow: hidden; }
+.progressFill { height: 100%; background-color: white; border-radius: 3px; }
+.progressText { font-size: 14px; font-weight: 600; }
+
+/* 3. Grid Section */
+.sectionHeader {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding: 0 20px; /* 标题对齐 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 两列 */
+  gap: 16px; /* 卡片间距 */
+  padding: 0 20px; /* Grid 整体内边距 */
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); /* 轻微阴影 */
+  transition: background-color 0.2s;
+  /* 确保卡片高度统一 */
+  aspect-ratio: 1 / 0.85; 
+  justify-content: space-between;
+}
+
+.card:active { background-color: #f2f2f7; }
+
+.iconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.cardTitle { font-size: 16px; font-weight: 600; margin-bottom: 2px; color: #000;}
+.cardSub { font-size: 12px; color: #8e8e93; font-weight: 500;}

@@ -1,0 +1,123 @@
+/* src/components/BottomSheet/BottomSheet.module.css */
+
+/* --- 蒙层：全屏半透明黑底 --- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  
+  /* 布局：让内容沉在底部，且水平居中 */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  
+  /* 进场动画 */
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* 新增：蒙层退场状态 (配合 JS 逻辑) */
+.overlay.closing {
+  animation: fadeOut 0.2s ease-in forwards;
+}
+
+/* --- 弹窗主体 --- */
+.content {
+  width: 100%;
+  max-width: 600px; /* 桌面端限制最大宽度 */
+  max-height: 85vh; /* 最多占屏幕高度的 85% */
+  
+  background-color: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  
+  display: flex;
+  flex-direction: column;
+  
+  /* 底部安全区适配 + 默认内边距 */
+  padding: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  
+  /* 进场动画 */
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 新增：内容退场状态 (配合 JS 逻辑) */
+.content.closing {
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- 头部：标题和关闭按钮 --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-shrink: 0; /* 防止头部被压缩 */
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  font-size: 0; /* 用图标本身的大小，或者保留之前的 px 设置 */
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+  padding: 8px; /* 增加点击热区 */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.closeBtn:active {
+  background-color: #f5f5f5;
+}
+
+/* --- 内容区域：滚动控制核心 --- */
+.body {
+  flex: 1;                  /* 占满剩余空间 */
+  display: flex;            /* 变成 Flex 盒子 */
+  flex-direction: column;   /* 垂直排列 */
+  
+  /* ⚠️ 核心代码：禁止父级滚动，把高度锁死，强制子元素自己处理溢出 */
+  overflow: hidden; 
+  min-height: 0;            /* 修复 Flex 嵌套时不滚动的 Bug */
+}
+
+/* --- 动画定义 --- */
+
+/* 向上滑入 (Open) */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* 向下滑出 (Close) */
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* 淡入 (Open) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 淡出 (Close) */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
