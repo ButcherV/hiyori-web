@@ -1,11 +1,29 @@
-import React, { useState } from 'react'; 
+import React, { useState, useMemo } from 'react'; 
 import styles from "./HomePage.module.css";
+
+// 引入组件
 import BottomSheet from '../components/BottomSheet'; 
 import LessonMenu from '../components/LessonMenu';
+import SettingsMenu from '../components/SettingsMenu'; 
 
+// 引入类型
+import type { ScriptType } from '../components/LessonMenu'; 
+
+// 引入工具函数
+import { 
+  getJapaneseGreeting, 
+  getJapaneseDateStr, 
+  getJapaneseWeekday, 
+  getJapaneseHoliday,
+  isRedDay 
+} from '../utils/dateHelper';
+
+// 引入图标
 import { 
   Hash, Calendar, Zap, Type, BookOpen, 
-  Headphones, Mic, Trophy 
+  Headphones, Mic, Trophy, 
+  Settings, 
+  Search    
 } from "lucide-react";
 
 interface HomePageProps {
@@ -13,11 +31,38 @@ interface HomePageProps {
 }
 
 export function HomePage({ onCategorySelect }: HomePageProps) {
+  // --- 状态管理 ---
   const [isSelectionOpen, setSelectionOpen] = useState(false);
+  const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
 
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  // --- 🔥 核心修改：组装 Header 数据 ---
+  const headerData = useMemo(() => {
+    const now = new Date();
+    
+    // 1. 获取各个原子部分
+    const datePart = getJapaneseDateStr(now);    // "12月18日"
+    const weekPart = getJapaneseWeekday(now);    // "木曜日"
+    const holidayPart = getJapaneseHoliday(now); // "元日" 或 null
+    const isRed = isRedDay(now);                 // true/false (用于变红)
 
-  // --- 数据定义 (不变) ---
+    // 2. 拼装逻辑 (UI 决定怎么展示)
+    // 格式：日期 + 空格 + 星期
+    let fullDateText = `${datePart} ${weekPart}`;
+    
+    // 如果是节日，追加 " · 节日名"
+    if (holidayPart) {
+      fullDateText += ` · ${holidayPart}`;
+    }
+
+    return {
+      greeting: getJapaneseGreeting(now),
+      fullDateText,
+      isRed
+    };
+  }, []);
+
+  // --- 数据定义 (保持不变) ---
   const heroCourses = [
     {
       id: 'hiragana',
@@ -51,23 +96,22 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   ];
 
   // --- 交互逻辑 ---
-
-  // 处理 Hero 卡片点击
   const handleHeroClick = (id: string) => {
-    if (id === 'hiragana') {
-      setSelectionOpen(true); // 打开弹窗
+    if (id === 'hiragana' || id === 'katakana') {
+      setCurrentScript(id as ScriptType);
+      setSelectionOpen(true);
     } else {
       onCategorySelect(id);
     }
   };
 
-  // ✅ 2. 新增：处理课程选择事件
   const handleLessonSelect = (lessonId: string) => {
-    console.log("用户选择了课程:", lessonId);
-    setSelectionOpen(false); // 选完关闭弹窗
-    
-    // TODO: 这里将来调用 onCategorySelect 或 navigation 跳转到学习页
-    // onCategorySelect(lessonId); 
+    console.log(`User Selected: ${lessonId}`);
+    setSelectionOpen(false); 
+  };
+
+  const handleSearchClick = () => {
+    console.log("Open Search Modal (Todo)");
   };
 
   return (
@@ -75,8 +119,33 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       
       {/* Header */}
       <header className={styles.header}>
-        <div className={styles.date}>{today.toUpperCase()}</div>
-        <div className={styles.title}>Dashboard</div>
+        {/* 左侧：日期和日语问候 */}
+        <div className={styles.headerText}>
+          {/* 🔥 动态样式：如果是红日子，添加 holidayDate 类 */}
+          <div className={`${styles.date} ${headerData.isRed ? styles.holidayDate : ''}`}>
+            {headerData.fullDateText}
+          </div>
+          <div className={styles.japaneseTitle}>{headerData.greeting}</div>
+        </div>
+        
+        {/* 右侧：操作按钮组 */}
+        <div className={styles.headerActions}>
+          <button 
+            className={styles.iconBtn} 
+            onClick={handleSearchClick}
+            aria-label="Search"
+          >
+            <Search size={24} strokeWidth={2} />
+          </button>
+
+          <button 
+            className={styles.iconBtn} 
+            onClick={() => setSettingsOpen(true)}
+            aria-label="Settings"
+          >
+            <Settings size={24} strokeWidth={2} />
+          </button>
+        </div>
       </header>
 
       {/* Hero Banner */}
@@ -121,13 +190,24 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         ))}
       </div>
 
-      {/* ✅ 3. 挂载 LessonMenu 组件 */}
+      {/* Bottom Sheets */}
       <BottomSheet 
         isOpen={isSelectionOpen} 
         onClose={() => setSelectionOpen(false)} 
-        title="Select Hiragana Row"
+        title={currentScript === 'hiragana' ? "Select Hiragana Row" : "Select Katakana Row"}
       >
-        <LessonMenu onSelect={handleLessonSelect} />
+        <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
+      </BottomSheet>
+
+      <BottomSheet
+        isOpen={isSettingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        title="Settings"
+      >
+        <SettingsMenu 
+          currentLang="English" 
+          onLanguageClick={() => console.log("Language clicked")}
+        />
       </BottomSheet>
 
     </div>

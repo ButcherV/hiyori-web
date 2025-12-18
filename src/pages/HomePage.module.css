@@ -1,41 +1,108 @@
 /* 容器：去掉固定内边距，允许内容撑满，保证最小高度 */
 .container {
   min-height: 100vh;
-  background-color: #F2F2F7; /* 整个页面底色 */
+  /* 使用全局变量或默认色 */
+  background-color: var(--bg-app, #F2F2F7);
   padding-bottom: 40px; /* 底部留白，防止到底部划不动 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: #1c1c1e;
+  color: var(--text-primary, #1c1c1e);
   overflow-x: hidden; /* 防止横向出现滚动条 */
 }
 
-/* 1. Header: 需要单独加边距 */
+/* --- 1. Header 区域 (重构版) --- */
 .header {
-  padding: 20px 20px 10px 20px; /* 上 右 下 左 */
-  background: #F2F2F7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 垂直居中 */
+  
+  margin-bottom: 8px;
+  /* 保持左右内边距，防止贴边 */
+  padding: 16px 16px 0px 16px;
+}
+
+/* 左侧文字容器：占据剩余空间 */
+.headerText {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* 允许占据左侧空间 */
+  min-width: 0; /* 防止Flex子项内容过长导致溢出 */
+  margin-right: 16px; /* 和右侧按钮保持距离 */
 }
 
 .date {
   font-size: 13px;
   font-weight: 600;
-  color: #8e8e93;
+  color: #8e8e93; /* 默认灰色 */
   letter-spacing: 0.5px;
   margin-bottom: 4px;
+  font-family: var(--font-ja); /* 确保使用日语字体 */
+  transition: color 0.2s;
 }
 
-.title {
-  font-size: 34px;
-  font-weight: 700;
+.holidayDate {
+  color: #FF3B30; /* 日本日历常用的红色 */
+}
+
+/* ✅ 重点：日语标题样式 */
+.japaneseTitle {
+  font-size: 40px; /* 约等于 2rem */
+  padding-top: 8px;
+  font-weight: 800;
   letter-spacing: -0.5px;
+  color: var(--text-primary, #1c1c1e);
+  line-height: 1.1;
+  
+  /* ✅ 使用 global.css 定义的日语字体栈变量 */
+  font-family: var(--font-ja, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif);
+  
+  /* 防止文字过长换行 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 2. Hero Scroll Section: 横向滚动区域 */
+/* ✅ 右侧按钮组容器 */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* 两个按钮之间的间距 */
+  flex-shrink: 0; /* 防止被挤压 */
+}
+
+/* ✅ 通用图标按钮样式 (替代原来的 settingsBtn) */
+.iconBtn {
+  background: none;
+  border: none;
+  padding: 8px;
+  color: var(--text-primary, #1c1c1e);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* 消除移动端点击高亮 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.iconBtn:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 让最右边的按钮在视觉上贴近屏幕边缘 */
+.headerActions .iconBtn:last-child {
+  margin-right: -8px;
+}
+
+/* --- 2. Hero Scroll Section: 横向滚动区域 --- */
 .scrollContainer {
   display: flex;
   overflow-x: auto;
   gap: 16px;
   
-  /* 关键：让滚动区域两头留白，但滑动时能贴边 */
-  padding: 10px 20px 30px 20px; 
+  padding: 8px 16px 32px 16px; 
   
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -55,7 +122,7 @@
   color: white;
   overflow: hidden;
   /* 阴影更柔和 */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
   cursor: pointer;
   scroll-snap-align: center; /* 居中吸附 */
   transition: transform 0.2s;
@@ -73,7 +140,8 @@
   font-weight: 800;
   opacity: 0.15;
   pointer-events: none;
-  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  /* 装饰性文字也建议使用日文字体 */
+  font-family: var(--font-ja, "Hiragino Kaku Gothic ProN", sans-serif);
 }
 
 .heroTop { margin-bottom: 12px; }
@@ -85,23 +153,24 @@
 .progressFill { height: 100%; background-color: white; border-radius: 3px; }
 .progressText { font-size: 14px; font-weight: 600; }
 
-/* 3. Grid Section */
+/* --- 3. Grid Section --- */
 .sectionHeader {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 16px;
-  padding: 0 20px; /* 标题对齐 */
+  padding: 0 16px; /* 标题对齐 */
+  color: var(--text-primary, #1c1c1e);
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr; /* 两列 */
   gap: 16px; /* 卡片间距 */
-  padding: 0 20px; /* Grid 整体内边距 */
+  padding: 0 16px; /* Grid 整体内边距 */
 }
 
 .card {
-  background-color: white;
+  background-color: var(--bg-surface, white);
   border-radius: 12px;
   padding: 16px;
   display: flex;
@@ -128,5 +197,5 @@
   font-weight: bold;
 }
 
-.cardTitle { font-size: 16px; font-weight: 600; margin-bottom: 2px; color: #000;}
+.cardTitle { font-size: 16px; font-weight: 600; margin-bottom: 2px; color: var(--text-primary, #000);}
 .cardSub { font-size: 12px; color: #8e8e93; font-weight: 500;}

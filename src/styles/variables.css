@@ -39,6 +39,25 @@
   /* 2. 日语字体：优先日文标准 (Hiragino Kaku / Meiryo) */
   /* 用于：TinderCard 的单词、QuizHeader 的题目、罗马音 */
   --font-family-ja: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", "Noto Sans JP", sans-serif;
+
+  --bg-app: #f9fafb;       /* 页面底色 */
+  --bg-surface: #ffffff;   /* 列表/卡片背景色 */
+  --text-primary: #111827; /* 主要文字色 */
+  --text-secondary: #9ca3af; /* 次要文字色 */
+  --primary-color: #3b82f6;  /* 主题色 */
+}
+
+.font-ja {
+  font-family: var(---font-family-ja);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-app: #000000;
+    --bg-surface: #1c1c1e;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+  }
 }
 
 /* 预留暗黑模式接口，以后只需要覆盖这些变量即可 */

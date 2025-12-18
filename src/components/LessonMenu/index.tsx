@@ -1,10 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useMemo } from 'react';
 import styles from './LessonMenu.module.css';
 import { MenuRow } from './MenuRow';
 import type { LessonItem, LessonStatus, LessonCategory } from './types';
 
-// ... (ALL_LESSONS 数据保持不变，省略以节省篇幅，请保留你之前复制的完整数据) ...
-const ALL_LESSONS: LessonItem[] = [
+// 引入通用组件
+import { CategoryTabs } from '../CategoryTabs';
+import type { TabOption } from '../CategoryTabs';
+// 引入 Hook
+import { useScrollShadow } from '../../hooks/useScrollShadow';
+
+// --- 1. 数据定义 (保持不变) ---
+
+const HIRAGANA_DATA: LessonItem[] = [
   // --- 清音 (Seion) ---
   { id: 'row-a', category: 'seion', title: 'A - Row', preview: 'あ い う え お' },
   { id: 'row-ka', category: 'seion', title: 'Ka - Row', preview: 'か き く け こ' },
@@ -16,15 +23,13 @@ const ALL_LESSONS: LessonItem[] = [
   { id: 'row-ya', category: 'seion', title: 'Ya - Row', preview: 'や ゆ よ' },
   { id: 'row-ra', category: 'seion', title: 'Ra - Row', preview: 'ら り る れ ろ' },
   { id: 'row-wa', category: 'seion', title: 'Wa - Row', preview: 'わ を ん' },
-
-  // --- 浊音 (Dakuon) ---
+  // --- 浊音 ---
   { id: 'row-ga', category: 'dakuon', title: 'Ga - Row', preview: 'が ぎ ぐ げ ご' },
   { id: 'row-za', category: 'dakuon', title: 'Za - Row', preview: 'ざ じ ず ぜ ぞ' },
   { id: 'row-da', category: 'dakuon', title: 'Da - Row', preview: 'だ ぢ づ で ど' },
   { id: 'row-ba', category: 'dakuon', title: 'Ba - Row', preview: 'ば び ぶ べ ぼ' },
   { id: 'row-pa', category: 'dakuon', title: 'Pa - Row', preview: 'ぱ ぴ ぷ ぺ ぽ' },
-
-  // --- 拗音 (Yoon) ---
+  // --- 拗音 ---
   { id: 'row-kya', category: 'yoon', title: 'Kya - Row', preview: 'きゃ きゅ きょ' },
   { id: 'row-sha', category: 'yoon', title: 'Sha - Row', preview: 'しゃ しゅ しょ' },
   { id: 'row-cha', category: 'yoon', title: 'Cha - Row', preview: 'ちゃ ちゅ ちょ' },
@@ -38,64 +43,143 @@ const ALL_LESSONS: LessonItem[] = [
   { id: 'row-pya', category: 'yoon', title: 'Pya - Row', preview: 'ぴゃ ぴゅ ぴょ' },
 ];
 
+const KATAKANA_DATA: LessonItem[] = [
+  // --- 清音 ---
+  { id: 'k-row-a', category: 'seion', title: 'A - Row', preview: 'ア イ ウ エ オ' },
+  { id: 'k-row-ka', category: 'seion', title: 'Ka - Row', preview: 'カ キ ク ケ コ' },
+  { id: 'k-row-sa', category: 'seion', title: 'Sa - Row', preview: 'サ シ ス セ ソ' },
+  { id: 'k-row-ta', category: 'seion', title: 'Ta - Row', preview: 'タ チ ツ テ ト' },
+  { id: 'k-row-na', category: 'seion', title: 'Na - Row', preview: 'ナ ニ ヌ ネ ノ' },
+  { id: 'k-row-ha', category: 'seion', title: 'Ha - Row', preview: 'ハ ヒ フ ヘ ホ' },
+  { id: 'k-row-ma', category: 'seion', title: 'Ma - Row', preview: 'マ ミ ム メ モ' },
+  { id: 'k-row-ya', category: 'seion', title: 'Ya - Row', preview: 'ヤ ユ ヨ' },
+  { id: 'k-row-ra', category: 'seion', title: 'Ra - Row', preview: 'ラ リ ル レ ロ' },
+  { id: 'k-row-wa', category: 'seion', title: 'Wa - Row', preview: 'ワ ヲ ン' },
+  // --- 浊音 ---
+  { id: 'k-row-ga', category: 'dakuon', title: 'Ga - Row', preview: 'ガ ギ グ ゲ ゴ' },
+  { id: 'k-row-za', category: 'dakuon', title: 'Za - Row', preview: 'ザ ジ ズ ゼ ゾ' },
+  { id: 'k-row-da', category: 'dakuon', title: 'Da - Row', preview: 'ダ ヂ ヅ デ ド' },
+  { id: 'k-row-ba', category: 'dakuon', title: 'Ba - Row', preview: 'バ ビ ブ ベ ボ' },
+  { id: 'k-row-pa', category: 'dakuon', title: 'Pa - Row', preview: 'パ ピ プ ペ ポ' },
+  // --- 拗音 ---
+  { id: 'k-row-kya', category: 'yoon', title: 'Kya - Row', preview: 'キャ キュ キョ' },
+  { id: 'k-row-sha', category: 'yoon', title: 'Sha - Row', preview: 'シャ シュ ショ' },
+  { id: 'k-row-cha', category: 'yoon', title: 'Cha - Row', preview: 'チャ チュ チョ' },
+  { id: 'k-row-nya', category: 'yoon', title: 'Nya - Row', preview: 'ニャ ニュ ニョ' },
+  { id: 'k-row-hya', category: 'yoon', title: 'Hya - Row', preview: 'ヒャ ヒュ ヒョ' },
+  { id: 'k-row-mya', category: 'yoon', title: 'Mya - Row', preview: 'ミャ ミュ ミョ' },
+  { id: 'k-row-rya', category: 'yoon', title: 'Rya - Row', preview: 'リャ リュ リョ' },
+  { id: 'k-row-gya', category: 'yoon', title: 'Gya - Row', preview: 'ギャ ギュ ギョ' },
+  { id: 'k-row-ja',  category: 'yoon', title: 'Ja - Row',  preview: 'ジャ ジュ ジョ' },
+  { id: 'k-row-bya', category: 'yoon', title: 'Bya - Row', preview: 'ビャ ビュ ビョ' },
+  { id: 'k-row-pya', category: 'yoon', title: 'Pya - Row', preview: 'ピャ ピュ ピョ' },
+];
+
+// --- 2. 核心算法：计算每个课程的状态 ---
+// 逻辑：已完成的 -> mastered; 第一个未完成的 -> current; 剩下的 -> new
+const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
+  const statusMap: Record<string, LessonStatus> = {};
+  
+  // 标记是否已经找到了当前的进度点
+  let foundCurrent = false;
+
+  allLessons.forEach((lesson) => {
+    // 1. 只要 ID 在已完成列表里，那就是 master (不管顺序，哪怕是跳着学的)
+    if (finishedIds.includes(lesson.id)) {
+      statusMap[lesson.id] = 'mastered';
+    } 
+    // 2. 如果还没找到 current，且当前这个没学完 -> 它就是 current
+    else if (!foundCurrent) {
+      statusMap[lesson.id] = 'current';
+      foundCurrent = true; // 找到了！把门关上，后面的都是 new
+    } 
+    // 3. 剩下的所有未完成的 -> new (Locked)
+    else {
+      statusMap[lesson.id] = 'new';
+    }
+  });
+
+  return statusMap;
+};
+
+// --- 3. 组件定义 ---
+
+export type ScriptType = 'hiragana' | 'katakana';
+
 interface LessonMenuProps {
   onSelect: (lessonId: string) => void;
+  script: ScriptType;
 }
 
-const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect }) => {
+const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
   const [activeTab, setActiveTab] = useState<LessonCategory>('seion');
-  
-  // ✅ 1. 创建 Ref 来控制滚动容器
-  const listRef = useRef<HTMLDivElement>(null);
+  const { scrollRef, isScrolled } = useScrollShadow(); 
 
-  // 模拟进度
-  const userProgress: Record<string, LessonStatus> = {
-    'row-a': 'mastered',
-    'row-ka': 'current',
-    'row-ga': 'new',
+  // --- 模拟用户数据 ---
+  // 这里写死了一些已完成的 ID，模拟“跳着学”的情况
+  // 实际项目中，这里应该从 props 传入，或者从 API/LocalStorage 获取
+  const [finishedIds] = useState<string[]>([
+    'row-a',      // 平假名第1行 (已完成)
+    'row-sa',     // 平假名第3行 (已完成 - 跳过了 row-ka)
+    'k-row-a',    // 片假名第1行 (已完成)
+  ]);
+
+  const tabOptions: TabOption[] = [
+    { id: 'seion',  label: 'Seion',  ja: '(清音)' },
+    { id: 'dakuon', label: 'Dakuon', ja: '(濁音)' },
+    { id: 'yoon',   label: 'Yoon',   ja: '(拗音)' },
+  ];
+
+  // 1. 根据 script 确定使用哪个数据源
+  const currentDataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
+  
+  // 2. 🔥 调用算法：根据数据源和已完成列表，动态生成状态 Map
+  // 使用 useMemo 缓存结果，只在数据源或完成记录变化时重算
+  const lessonStatusMap = useMemo(() => {
+    return getStatusMap(currentDataSet, finishedIds);
+  }, [currentDataSet, finishedIds]);
+
+  // 3. 根据 Tab 筛选显示列表
+  const visibleLessons = currentDataSet.filter(item => item.category === activeTab);
+
+  const handleTabChange = (newTabId: string) => {
+    setActiveTab(newTabId as LessonCategory);
   };
 
-  const visibleLessons = ALL_LESSONS.filter(item => item.category === activeTab);
+  // UX优化：当 script (从Dashboard进入不同课程) 变化时，重置 Tab 为第一页
+  useLayoutEffect(() => {
+    setActiveTab('seion');
+  }, [script]);
 
-  // ✅ 2. 监听 Tab 变化，强制滚动回顶
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
+  // UX优化：防止白屏，切换数据时滚回顶部
+  useLayoutEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
     }
-  }, [activeTab]);
+  }, [activeTab, script]);
 
   return (
     <div className={styles.container}>
       
-      {/* Tab 切换栏 */}
-      <div className={styles.tabs}>
-        <button 
-          className={`${styles.tabBtn} ${activeTab === 'seion' ? styles.active : ''}`}
-          onClick={() => setActiveTab('seion')}
-        >
-          Seion <span className={styles.jaText} lang="ja">(清音)</span>
-        </button>
-        
-        <button 
-          className={`${styles.tabBtn} ${activeTab === 'dakuon' ? styles.active : ''}`}
-          onClick={() => setActiveTab('dakuon')}
-        >
-          {/* 🔴 重点修正：把 '浊' 改为日文汉字 '濁' */}
-          Dakuon <span className={styles.jaText} lang="ja">(濁音)</span>
-        </button>
-        
-        <button 
-          className={`${styles.tabBtn} ${activeTab === 'yoon' ? styles.active : ''}`}
-          onClick={() => setActiveTab('yoon')}
-        >
-          Yoon <span className={styles.jaText} lang="ja">(拗音)</span>
-        </button>
+      <div className={`${styles.headerWrapper} ${isScrolled ? styles.showShadow : ''}`}>
+        <CategoryTabs 
+          options={tabOptions}
+          activeId={activeTab}
+          onChange={handleTabChange}
+          renderTab={(item) => (
+            <>
+              <span>{item.label}</span>
+              <span className={styles.jaText} lang="ja">{item.ja}</span>
+            </>
+          )}
+        />
       </div>
 
-      {/* 绑定 ref 到滚动容器 */}
-      <div className={styles.list} ref={listRef}>
+      <div className={styles.list} ref={scrollRef}>
         {visibleLessons.map((item) => {
-          const status = userProgress[item.id] || 'new';
+          // 4. 从 Map 中获取该课程的状态
+          const status = lessonStatusMap[item.id];
+          
           return (
             <MenuRow 
               key={item.id}
