@@ -1,18 +1,15 @@
 import React, { useState, useMemo } from 'react'; 
 import styles from "./HomePage.module.css";
-
-// ✅ 1. 引入 i18n hook
 import { useTranslation } from 'react-i18next';
 
-// 引入组件
+// --- 引入组件 ---
 import BottomSheet from '../components/BottomSheet'; 
 import LessonMenu from '../components/LessonMenu';
 import SettingsMenu from '../components/SettingsMenu'; 
+// ✅ 1. 引入新做好的 DatesPage
+import DatesPage from './DatesPage'; 
 
-// 引入类型
 import type { ScriptType } from '../components/LessonMenu'; 
-
-// 引入工具函数
 import { 
   getJapaneseGreeting, 
   getJapaneseDateStr, 
@@ -21,7 +18,6 @@ import {
   isRedDay 
 } from '../utils/dateHelper';
 
-// 引入图标
 import { 
   Hash, Calendar, Zap, Type, BookOpen, 
   Headphones, Mic, Trophy, 
@@ -34,27 +30,25 @@ interface HomePageProps {
 }
 
 export function HomePage({ onCategorySelect }: HomePageProps) {
-  // ✅ 2. 初始化翻译函数
   const { t } = useTranslation();
 
   // --- 状态管理 ---
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
+  
+  // ✅ 2. 新增状态：当前正在进行的练习 (null 代表在首页)
+  const [activeDrill, setActiveDrill] = useState<string | null>(null);
 
-  // --- Header 数据 (保持原来的逻辑，沉浸式日语体验) ---
+  // --- Header 数据 (沉浸式日语) ---
   const headerData = useMemo(() => {
     const now = new Date();
-    
     const datePart = getJapaneseDateStr(now);    
     const weekPart = getJapaneseWeekday(now);    
     const holidayPart = getJapaneseHoliday(now); 
     const isRed = isRedDay(now);                 
-
     let fullDateText = `${datePart} ${weekPart}`;
-    if (holidayPart) {
-      fullDateText += ` · ${holidayPart}`;
-    }
+    if (holidayPart) fullDateText += ` · ${holidayPart}`;
 
     return {
       greeting: getJapaneseGreeting(now),
@@ -63,11 +57,10 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     };
   }, []);
 
-  // --- 数据定义 (使用 t 函数替换硬编码) ---
+  // --- 数据定义 ---
   const heroCourses = [
     {
       id: 'hiragana',
-      // ✅ 翻译 Label 和 Title
       label: t('home.hero.current_session'), 
       title: t('home.hero.hiragana_title'),
       char: 'あ',
@@ -77,7 +70,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     },
     {
       id: 'katakana',
-      // ✅ 翻译 Label 和 Title
       label: t('home.hero.next_milestone'),
       title: t('home.hero.katakana_title'),
       char: 'ア',
@@ -88,57 +80,19 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   ];
 
   const drills = [
-    { 
-      id: 'numbers', 
-      title: t('home.drills.numbers'), 
-      sub: t('home.drills.numbers_sub'), 
-      icon: Hash, color: '#FF9500' 
-    },
-    { 
-      id: 'dates', 
-      title: t('home.drills.dates'), 
-      sub: t('home.drills.dates_sub'), 
-      icon: Calendar, color: '#30B0C7' 
-    },
-    { 
-      id: 'vocab', 
-      title: t('home.drills.vocab'), 
-      sub: t('home.drills.vocab_sub'), 
-      icon: Zap, color: '#AF52DE' 
-    },
-    { 
-      id: 'kanji', 
-      title: t('home.drills.kanji'), 
-      sub: t('home.drills.kanji_sub'), 
-      icon: Type, color: '#FF3B30' 
-    },
-    { 
-      id: 'grammar', 
-      title: t('home.drills.grammar'), 
-      sub: t('home.drills.grammar_sub'), 
-      icon: BookOpen, color: '#5856D6' 
-    },
-    { 
-      id: 'listening', 
-      title: t('home.drills.listening'), 
-      sub: t('home.drills.listening_sub'), 
-      icon: Headphones, color: '#00C7BE' 
-    },
-    { 
-      id: 'speaking', 
-      title: t('home.drills.speaking'), 
-      sub: t('home.drills.speaking_sub'), 
-      icon: Mic, color: '#34C759' 
-    },
-    { 
-      id: 'challenge', 
-      title: t('home.drills.challenge'), 
-      sub: t('home.drills.challenge_sub'), 
-      icon: Trophy, color: '#FFcc00' 
-    },
+    { id: 'numbers', title: t('home.drills.numbers'), sub: t('home.drills.numbers_sub'), icon: Hash, color: '#FF9500' },
+    // ✅ 注意这个 id 必须是 'dates'，对应下面的判断
+    { id: 'dates', title: t('home.drills.dates'), sub: t('home.drills.dates_sub'), icon: Calendar, color: '#30B0C7' },
+    { id: 'vocab', title: t('home.drills.vocab'), sub: t('home.drills.vocab_sub'), icon: Zap, color: '#AF52DE' },
+    { id: 'kanji', title: t('home.drills.kanji'), sub: t('home.drills.kanji_sub'), icon: Type, color: '#FF3B30' },
+    { id: 'grammar', title: t('home.drills.grammar'), sub: t('home.drills.grammar_sub'), icon: BookOpen, color: '#5856D6' },
+    { id: 'listening', title: t('home.drills.listening'), sub: t('home.drills.listening_sub'), icon: Headphones, color: '#00C7BE' },
+    { id: 'speaking', title: t('home.drills.speaking'), sub: t('home.drills.speaking_sub'), icon: Mic, color: '#34C759' },
+    { id: 'challenge', title: t('home.drills.challenge'), sub: t('home.drills.challenge_sub'), icon: Trophy, color: '#FFcc00' },
   ];
 
   // --- 交互逻辑 ---
+
   const handleHeroClick = (id: string) => {
     if (id === 'hiragana' || id === 'katakana') {
       setCurrentScript(id as ScriptType);
@@ -153,10 +107,27 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     setSelectionOpen(false); 
   };
 
-  const handleSearchClick = () => {
-    console.log("Open Search Modal (Todo)");
+  // ✅ 3. 修改 Drill 点击逻辑：拦截 'dates'，其他的继续向上层汇报
+  const handleDrillClick = (id: string) => {
+    if (id === 'dates') {
+      // 切换到日期页面
+      setActiveDrill('dates');
+    } else {
+      // 其他功能还没做，保持原样
+      onCategorySelect(id);
+    }
   };
 
+  // ✅ 4. 条件渲染：如果 activeDrill 是 dates，直接显示 DatesPage
+  if (activeDrill === 'dates') {
+    return (
+      <DatesPage 
+        onBack={() => setActiveDrill(null)} // 传进去一个回调，让它能切回来
+      />
+    );
+  }
+
+  // --- 下面是原本的 Dashboard 渲染 ---
   return (
     <div className={styles.container}>
       
@@ -170,18 +141,14 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         </div>
         
         <div className={styles.headerActions}>
-          <button 
-            className={styles.iconBtn} 
-            onClick={handleSearchClick}
-            aria-label={t('common.search')} // ✅ 翻译 aria-label
-          >
+          <button className={styles.iconBtn} aria-label={t('common.search')}>
             <Search size={24} strokeWidth={2} />
           </button>
 
           <button 
             className={styles.iconBtn} 
             onClick={() => setSettingsOpen(true)}
-            aria-label={t('common.settings')} // ✅ 翻译 aria-label
+            aria-label={t('common.settings')}
           >
             <Settings size={24} strokeWidth={2} />
           </button>
@@ -215,10 +182,11 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       </div>
 
       {/* Grid Section */}
-      <div className={styles.sectionHeader}>{t('home.drills.title')}</div> {/* ✅ 翻译标题 */}
+      <div className={styles.sectionHeader}>{t('home.drills.title')}</div>
       <div className={styles.grid}>
         {drills.map((item) => (
-          <div key={item.id} className={styles.card} onClick={() => onCategorySelect(item.id)}>
+          // ✅ 修改：onClick 这里调用新的 handleDrillClick
+          <div key={item.id} className={styles.card} onClick={() => handleDrillClick(item.id)}>
             <div className={styles.iconBox} style={{ backgroundColor: item.color }}>
               <item.icon size={24} strokeWidth={2.5} />
             </div>
@@ -234,7 +202,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       <BottomSheet 
         isOpen={isSelectionOpen} 
         onClose={() => setSelectionOpen(false)} 
-        // ✅ 翻译弹窗标题
         title={currentScript === 'hiragana' ? t('home.modal.select_hiragana') : t('home.modal.select_katakana')}
       >
         <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
@@ -243,12 +210,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setSettingsOpen(false)}
-        // ✅ 翻译弹窗标题
         title={t('common.settings')}
       >
-        <SettingsMenu 
-          // 这里可以传入当前语言状态，不过 SettingsMenu 内部如果已经接了 i18n hook，这里甚至不需要传 props
-        />
+        <SettingsMenu />
       </BottomSheet>
 
     </div>

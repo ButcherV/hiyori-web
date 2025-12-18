@@ -1,0 +1,267 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F2F2F7; /* App背景色 */
+  font-family: var(--font-ja, sans-serif);
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: transparent;
+}
+
+.headerTitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  padding: 8px;
+  color: #007AFF; /* iOS Blue */
+  cursor: pointer;
+}
+
+/* --- A. Stage (舞台) --- */
+.stage {
+  flex: 1; /* 占据上半部分剩余空间 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #fff;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  min-height: 240px; /* 保证最小高度 */
+}
+
+.stageContent {
+  text-align: center;
+  margin-bottom: 24px;
+  /* 添加轻微的出现动画 */
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.8; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.mainNumber {
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 1;
+  color: #1c1c1e;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.kanjiRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.kanji {
+  font-size: 24px;
+  color: #8e8e93;
+}
+
+.kana {
+  font-size: 32px;
+  font-weight: 700;
+  color: #007AFF; /* 默认主色 */
+}
+
+/* ⚠️ 不规则读音的警告色 */
+.warnText {
+  color: #FF3B30; /* iOS Red */
+}
+
+.romaji {
+  font-size: 16px;
+  color: #aeaeb2;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* 进度点 */
+.dotsRow {
+  display: flex;
+  gap: 12px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #e5e5ea;
+  transition: all 0.3s;
+}
+
+.dotActive {
+  background-color: #007AFF;
+  transform: scale(1.4);
+}
+
+/* --- B. Grid (网格) --- */
+.gridContainer {
+  padding: 0 20px;
+  margin-bottom: 80px; /* 给底部控制栏留空间 */
+}
+
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.weekDay {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.cell {
+  aspect-ratio: 1; /* 正方形 */
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1c1e;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+/* ⚠️ 不规则日期的背景色 (淡橙/淡红) */
+.cellIrregular {
+  background-color: #FFF0EB; /* 极淡的红色背景 */
+  color: #FF3B30;
+}
+
+/* 不规则的小圆点标记 */
+.irregularDot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #FF3B30;
+  opacity: 0.5;
+}
+
+/* 选中高亮状态 (优先级最高) */
+.cellActive {
+  background-color: #007AFF !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+.cellActive .irregularDot {
+  background-color: white; /* 选中后点变白 */
+  opacity: 1;
+}
+
+/* --- C. Controller (底部) --- */
+.controller {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 16px 32px 32px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.ctrlBtn {
+  background: none;
+  border: none;
+  color: #8e8e93;
+  padding: 12px;
+  position: relative;
+  cursor: pointer;
+}
+
+.ctrlActive {
+  color: #007AFF;
+}
+
+.loopBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.playBtn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.playBtn:active {
+  transform: scale(0.95);
+}
+
+/* Play 图标视觉居中修正 */
+.playIconOffset {
+  margin-left: 4px; 
+}
+
+.progressText {
+  width: 44px; /* 占位防止跳动 */
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8e8e93;
+  font-variant-numeric: tabular-nums;
+}
