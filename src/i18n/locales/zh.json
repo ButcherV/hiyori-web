@@ -1,0 +1,47 @@
+{
+  "common": {
+    "settings": "设置",
+    "search": "搜索",
+    "version": "版本"
+  },
+  "home": {
+    "hero": {
+      "current_session": "当前课程",
+      "next_milestone": "下一里程碑",
+      "hiragana_title": "平假名\n基础入门",
+      "katakana_title": "片假名\n进阶掌握"
+    },
+    "drills": {
+      "title": "快速练习",
+      "numbers": "数字",
+      "numbers_sub": "1 - 100 与价格",
+      "dates": "日期",
+      "dates_sub": "星期与月份",
+      "vocab": "词汇",
+      "vocab_sub": "生存必备词汇",
+      "kanji": "汉字",
+      "kanji_sub": "N5 核心汉字",
+      "grammar": "语法",
+      "grammar_sub": "助词与动词",
+      "listening": "听力",
+      "listening_sub": "每日音频",
+      "speaking": "口语",
+      "speaking_sub": "发音纠正",
+      "challenge": "挑战",
+      "challenge_sub": "每周测验"
+    },
+    "modal": {
+      "select_hiragana": "选择平假名课程",
+      "select_katakana": "选择片假名课程"
+    }
+  },
+  "settings": {
+    "display": "显示设置",
+    "appearance": "外观模式",
+    "language": "界面语言",
+    "learning": "学习设置",
+    "show_romaji": "显示罗马音",
+    "autoplay": "自动播放音频",
+    "about": "关于"
+  }
+}

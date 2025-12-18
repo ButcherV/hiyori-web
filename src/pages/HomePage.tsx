@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react'; 
 import styles from "./HomePage.module.css";
 
+// ✅ 1. 引入 i18n hook
+import { useTranslation } from 'react-i18next';
+
 // 引入组件
 import BottomSheet from '../components/BottomSheet'; 
 import LessonMenu from '../components/LessonMenu';
@@ -31,26 +34,24 @@ interface HomePageProps {
 }
 
 export function HomePage({ onCategorySelect }: HomePageProps) {
+  // ✅ 2. 初始化翻译函数
+  const { t } = useTranslation();
+
   // --- 状态管理 ---
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
 
-  // --- 🔥 核心修改：组装 Header 数据 ---
+  // --- Header 数据 (保持原来的逻辑，沉浸式日语体验) ---
   const headerData = useMemo(() => {
     const now = new Date();
     
-    // 1. 获取各个原子部分
-    const datePart = getJapaneseDateStr(now);    // "12月18日"
-    const weekPart = getJapaneseWeekday(now);    // "木曜日"
-    const holidayPart = getJapaneseHoliday(now); // "元日" 或 null
-    const isRed = isRedDay(now);                 // true/false (用于变红)
+    const datePart = getJapaneseDateStr(now);    
+    const weekPart = getJapaneseWeekday(now);    
+    const holidayPart = getJapaneseHoliday(now); 
+    const isRed = isRedDay(now);                 
 
-    // 2. 拼装逻辑 (UI 决定怎么展示)
-    // 格式：日期 + 空格 + 星期
     let fullDateText = `${datePart} ${weekPart}`;
-    
-    // 如果是节日，追加 " · 节日名"
     if (holidayPart) {
       fullDateText += ` · ${holidayPart}`;
     }
@@ -62,12 +63,13 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     };
   }, []);
 
-  // --- 数据定义 (保持不变) ---
+  // --- 数据定义 (使用 t 函数替换硬编码) ---
   const heroCourses = [
     {
       id: 'hiragana',
-      label: 'CURRENT SESSION',
-      title: 'Hiragana\nBasics',
+      // ✅ 翻译 Label 和 Title
+      label: t('home.hero.current_session'), 
+      title: t('home.hero.hiragana_title'),
       char: 'あ',
       progress: '45%',
       color: '#007AFF',
@@ -75,8 +77,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     },
     {
       id: 'katakana',
-      label: 'NEXT MILESTONE',
-      title: 'Katakana\nMastery',
+      // ✅ 翻译 Label 和 Title
+      label: t('home.hero.next_milestone'),
+      title: t('home.hero.katakana_title'),
       char: 'ア',
       progress: '10%',
       color: '#FF2D55',
@@ -85,14 +88,54 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   ];
 
   const drills = [
-    { id: 'numbers', title: 'Numbers', sub: '1 - 100 & Prices', icon: Hash, color: '#FF9500' },
-    { id: 'dates', title: 'Dates', sub: 'Week & Month', icon: Calendar, color: '#30B0C7' },
-    { id: 'vocab', title: 'Vocab', sub: 'Survival Words', icon: Zap, color: '#AF52DE' },
-    { id: 'kanji', title: 'Kanji', sub: 'N5 Essentials', icon: Type, color: '#FF3B30' },
-    { id: 'grammar', title: 'Grammar', sub: 'Particles & Verbs', icon: BookOpen, color: '#5856D6' },
-    { id: 'listening', title: 'Listening', sub: 'Daily Audio', icon: Headphones, color: '#00C7BE' },
-    { id: 'speaking', title: 'Speaking', sub: 'Pronunciation', icon: Mic, color: '#34C759' },
-    { id: 'challenge', title: 'Challenge', sub: 'Weekly Quiz', icon: Trophy, color: '#FFcc00' },
+    { 
+      id: 'numbers', 
+      title: t('home.drills.numbers'), 
+      sub: t('home.drills.numbers_sub'), 
+      icon: Hash, color: '#FF9500' 
+    },
+    { 
+      id: 'dates', 
+      title: t('home.drills.dates'), 
+      sub: t('home.drills.dates_sub'), 
+      icon: Calendar, color: '#30B0C7' 
+    },
+    { 
+      id: 'vocab', 
+      title: t('home.drills.vocab'), 
+      sub: t('home.drills.vocab_sub'), 
+      icon: Zap, color: '#AF52DE' 
+    },
+    { 
+      id: 'kanji', 
+      title: t('home.drills.kanji'), 
+      sub: t('home.drills.kanji_sub'), 
+      icon: Type, color: '#FF3B30' 
+    },
+    { 
+      id: 'grammar', 
+      title: t('home.drills.grammar'), 
+      sub: t('home.drills.grammar_sub'), 
+      icon: BookOpen, color: '#5856D6' 
+    },
+    { 
+      id: 'listening', 
+      title: t('home.drills.listening'), 
+      sub: t('home.drills.listening_sub'), 
+      icon: Headphones, color: '#00C7BE' 
+    },
+    { 
+      id: 'speaking', 
+      title: t('home.drills.speaking'), 
+      sub: t('home.drills.speaking_sub'), 
+      icon: Mic, color: '#34C759' 
+    },
+    { 
+      id: 'challenge', 
+      title: t('home.drills.challenge'), 
+      sub: t('home.drills.challenge_sub'), 
+      icon: Trophy, color: '#FFcc00' 
+    },
   ];
 
   // --- 交互逻辑 ---
@@ -119,21 +162,18 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       
       {/* Header */}
       <header className={styles.header}>
-        {/* 左侧：日期和日语问候 */}
         <div className={styles.headerText}>
-          {/* 🔥 动态样式：如果是红日子，添加 holidayDate 类 */}
           <div className={`${styles.date} ${headerData.isRed ? styles.holidayDate : ''}`}>
             {headerData.fullDateText}
           </div>
           <div className={styles.japaneseTitle}>{headerData.greeting}</div>
         </div>
         
-        {/* 右侧：操作按钮组 */}
         <div className={styles.headerActions}>
           <button 
             className={styles.iconBtn} 
             onClick={handleSearchClick}
-            aria-label="Search"
+            aria-label={t('common.search')} // ✅ 翻译 aria-label
           >
             <Search size={24} strokeWidth={2} />
           </button>
@@ -141,7 +181,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
           <button 
             className={styles.iconBtn} 
             onClick={() => setSettingsOpen(true)}
-            aria-label="Settings"
+            aria-label={t('common.settings')} // ✅ 翻译 aria-label
           >
             <Settings size={24} strokeWidth={2} />
           </button>
@@ -175,7 +215,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       </div>
 
       {/* Grid Section */}
-      <div className={styles.sectionHeader}>Quick Drills</div>
+      <div className={styles.sectionHeader}>{t('home.drills.title')}</div> {/* ✅ 翻译标题 */}
       <div className={styles.grid}>
         {drills.map((item) => (
           <div key={item.id} className={styles.card} onClick={() => onCategorySelect(item.id)}>
@@ -194,7 +234,8 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       <BottomSheet 
         isOpen={isSelectionOpen} 
         onClose={() => setSelectionOpen(false)} 
-        title={currentScript === 'hiragana' ? "Select Hiragana Row" : "Select Katakana Row"}
+        // ✅ 翻译弹窗标题
+        title={currentScript === 'hiragana' ? t('home.modal.select_hiragana') : t('home.modal.select_katakana')}
       >
         <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
       </BottomSheet>
@@ -202,11 +243,11 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setSettingsOpen(false)}
-        title="Settings"
+        // ✅ 翻译弹窗标题
+        title={t('common.settings')}
       >
         <SettingsMenu 
-          currentLang="English" 
-          onLanguageClick={() => console.log("Language clicked")}
+          // 这里可以传入当前语言状态，不过 SettingsMenu 内部如果已经接了 i18n hook，这里甚至不需要传 props
         />
       </BottomSheet>
 

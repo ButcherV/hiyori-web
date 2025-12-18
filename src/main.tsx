@@ -7,6 +7,8 @@ import './styles/reset.css'
 import './styles/variables.css'
 import './styles/global.css'
 
+import './i18n';
+
 // 🔥 1. 引入我们刚才写的设置 Context
 import { SettingsProvider } from './context/SettingsContext'
 

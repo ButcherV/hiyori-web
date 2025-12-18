@@ -1,0 +1,47 @@
+{
+  "common": {
+    "settings": "Settings",
+    "search": "Search",
+    "version": "Version"
+  },
+  "home": {
+    "hero": {
+      "current_session": "CURRENT SESSION",
+      "next_milestone": "NEXT MILESTONE",
+      "hiragana_title": "Hiragana\nBasics",
+      "katakana_title": "Katakana\nMastery"
+    },
+    "drills": {
+      "title": "Quick Drills",
+      "numbers": "Numbers",
+      "numbers_sub": "1 - 100 & Prices",
+      "dates": "Dates",
+      "dates_sub": "Week & Month",
+      "vocab": "Vocab",
+      "vocab_sub": "Survival Words",
+      "kanji": "Kanji",
+      "kanji_sub": "N5 Essentials",
+      "grammar": "Grammar",
+      "grammar_sub": "Particles & Verbs",
+      "listening": "Listening",
+      "listening_sub": "Daily Audio",
+      "speaking": "Speaking",
+      "speaking_sub": "Pronunciation",
+      "challenge": "Challenge",
+      "challenge_sub": "Weekly Quiz"
+    },
+    "modal": {
+      "select_hiragana": "Select Hiragana Row",
+      "select_katakana": "Select Katakana Row"
+    }
+  },
+  "settings": {
+    "display": "DISPLAY",
+    "appearance": "Appearance",
+    "language": "Language",
+    "learning": "LEARNING",
+    "show_romaji": "Show Romaji",
+    "autoplay": "Auto-play Audio",
+    "about": "ABOUT"
+  }
+}
