@@ -2,21 +2,28 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #F2F2F7; /* App背景色 */
+  background-color: #F2F2F7;
   font-family: var(--font-ja, sans-serif);
+  overflow: hidden; /* 防止页面整体滚动 */
 }
 
-/* --- Header --- */
+/* --- Top Area (Header + Tabs) --- */
+.topArea {
+  background-color: #fff;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  z-index: 10;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background: transparent;
+  padding: 8px 16px; /* 减小内边距 */
 }
 
 .headerTitle {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   color: #1c1c1e;
 }
@@ -25,200 +32,261 @@
   background: none;
   border: none;
   padding: 8px;
-  color: #007AFF; /* iOS Blue */
+  color: #007AFF;
   cursor: pointer;
 }
 
-/* --- A. Stage (舞台) --- */
-.stage {
-  flex: 1; /* 占据上半部分剩余空间 */
+/* Tabs / Segmented Control */
+.tabsContainer {
+  padding: 0 16px;
+}
+
+.segmentedControl {
   display: flex;
-  flex-direction: column;
+  background-color: #7676801f; /* iOS 风格浅灰背景 */
+  border-radius: 9px;
+  padding: 2px;
+  height: 32px;
+}
+
+.tabBtn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1c1c1e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tabActive {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+
+/* --- A. Compact Stage (紧凑型舞台 - 左右布局) --- */
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 整体居中 */
+  gap: 24px; /* 左右间距 */
+  
+  padding: 16px 24px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
+  z-index: 5;
+}
+
+/* 左侧大数字 */
+.stageLeft {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #fff;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-  min-height: 240px; /* 保证最小高度 */
-}
-
-.stageContent {
-  text-align: center;
-  margin-bottom: 24px;
-  /* 添加轻微的出现动画 */
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0.8; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  width: 80px; /* 固定宽度防止抖动 */
 }
 
 .mainNumber {
-  font-size: 80px;
+  font-size: 64px; /* 稍微缩小一点 */
   font-weight: 800;
   line-height: 1;
   color: #1c1c1e;
-  margin-bottom: 8px;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
 }
 
-.kanjiRow {
+/* 右侧信息堆叠 */
+.stageRight {
   display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.kanji {
-  font-size: 24px;
-  color: #8e8e93;
+  flex-direction: column;
+  align-items: flex-start; /* 左对齐 */
+  gap: 4px;
+  min-width: 120px;
 }
 
 .kana {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
-  color: #007AFF; /* 默认主色 */
+  color: #007AFF;
+  line-height: 1.1;
 }
 
-/* ⚠️ 不规则读音的警告色 */
 .warnText {
-  color: #FF3B30; /* iOS Red */
+  color: #FF3B30;
+}
+
+.subInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.kanji {
+  font-size: 15px;
+  color: #8e8e93;
+  font-weight: 600;
 }
 
 .romaji {
-  font-size: 16px;
+  font-size: 14px;
   color: #aeaeb2;
   font-weight: 500;
-  text-transform: capitalize;
 }
 
-/* 进度点 */
+/* 进度点 (现在在右侧下方) */
 .dotsRow {
   display: flex;
-  gap: 12px;
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background-color: #e5e5ea;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .dotActive {
   background-color: #007AFF;
-  transform: scale(1.4);
+  transform: scale(1.3);
 }
 
-/* --- B. Grid (网格) --- */
+.dotFinished {
+  background-color: #8EBFFF; /* 读过的点稍微淡一点 */
+}
+
+/* --- B. Scrollable Area --- */
+.scrollArea {
+  flex: 1; /* 占据剩余所有空间 */
+  overflow-y: auto; /* 允许滚动 */
+  -webkit-overflow-scrolling: touch;
+  padding-top: 20px;
+  padding-bottom: 100px; /* 底部给悬浮栏留出足够空间 */
+}
+
 .gridContainer {
   padding: 0 20px;
-  margin-bottom: 80px; /* 给底部控制栏留空间 */
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .weekHeader {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   text-align: center;
 }
 
 .weekDay {
   font-size: 11px;
   font-weight: 600;
-  color: #8e8e93;
-  text-transform: uppercase;
+  color: #aeaeb2;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 10px; /* 稍微加大间距 */
 }
 
 .cell {
-  aspect-ratio: 1; /* 正方形 */
+  aspect-ratio: 1;
   border: none;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 12px; /* 更圆润 */
   font-size: 16px;
   font-weight: 600;
   color: #1c1c1e;
   position: relative;
   cursor: pointer;
-  transition: transform 0.1s, background-color 0.2s;
-  
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .cell:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
+  background-color: #f2f2f7;
 }
 
-/* ⚠️ 不规则日期的背景色 (淡橙/淡红) */
 .cellIrregular {
-  background-color: #FFF0EB; /* 极淡的红色背景 */
+  background-color: #FFF0EB; 
   color: #FF3B30;
 }
 
-/* 不规则的小圆点标记 */
 .irregularDot {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 5px;
+  right: 5px;
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background-color: #FF3B30;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
-/* 选中高亮状态 (优先级最高) */
 .cellActive {
   background-color: #007AFF !important;
   color: white !important;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-  transform: scale(1.05);
-  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+  transform: scale(1.1);
+  z-index: 2;
 }
 
 .cellActive .irregularDot {
-  background-color: white; /* 选中后点变白 */
+  background-color: white;
   opacity: 1;
 }
 
-/* --- C. Controller (底部) --- */
+.placeholder {
+  text-align: center;
+  color: #8e8e93;
+  margin-top: 40px;
+}
+
+/* --- C. Floating Controller (悬浮控制栏) --- */
 .controller {
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  bottom: 32px; /* 距离底部有距离，形成悬浮感 */
   left: 0;
   right: 0;
-  background-color: white;
-  padding: 16px 32px 32px 32px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* 让点击穿透空白区域 */
+  z-index: 20;
+}
+
+.controllerInner {
+  pointer-events: auto; /* 按钮恢复点击 */
+  background: rgba(255, 255, 255, 0.9); /* 半透明磨砂 */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 8px 24px;
+  border-radius: 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.5);
+  
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  gap: 24px;
 }
 
 .ctrlBtn {
   background: none;
   border: none;
   color: #8e8e93;
-  padding: 12px;
+  padding: 8px;
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .ctrlActive {
@@ -227,15 +295,23 @@
 
 .loopBadge {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 9px;
+  top: 2px;
+  right: 2px;
+  font-size: 8px;
   font-weight: 800;
+  background: #007AFF;
+  color: white;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .playBtn {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background-color: #007AFF;
   color: white;
@@ -252,16 +328,15 @@
   transform: scale(0.95);
 }
 
-/* Play 图标视觉居中修正 */
 .playIconOffset {
-  margin-left: 4px; 
+  margin-left: 3px; 
 }
 
 .progressText {
-  width: 44px; /* 占位防止跳动 */
-  text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #8e8e93;
+  width: 50px;
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }

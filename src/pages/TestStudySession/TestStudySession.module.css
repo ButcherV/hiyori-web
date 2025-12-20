@@ -1,0 +1,181 @@
+/* src/pages/TestStudySession/TestStudySession.module.css */
+
+/* 1. 页面容器：全屏，禁止滚动 */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f2f2f7; /* iOS 风格淡灰背景 */
+  overflow: hidden; /* 防止页面被拖动 */
+  touch-action: none; /* 禁止浏览器默认手势 */
+  user-select: none;
+}
+
+/* 2. 第一层：Top Navigation (退出 & 进度) */
+.topNav {
+  height: 50px; /* 固定高度 */
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  /* 稍微给个背景色或留白都可以，这里选透明 */
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #007aff;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.progressText {
+  font-size: 14px;
+  color: #8e8e93;
+  font-weight: 500;
+  font-feature-settings: "tnum";
+}
+
+/* 3. 第二层：Instruction Bar (指令栏) - 固定高度 */
+.instructionBar {
+  /* 给足够的高度容纳问题，且不让它被压缩 */
+  height: 80px; 
+  flex-shrink: 0; 
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  text-align: center;
+}
+
+/* 指令文字的基础样式 (默认用于 Quiz 这种重要问题) */
+.instructionText {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1c1c1e;
+  line-height: 1.2;
+  transition: all 0.3s ease; /* 让切换顺滑一点 */
+}
+
+/* 变体：被动状态 (用于 Learn/Trace) - 看起来像标签而不是问题 */
+.instructionText.passive {
+  color: #8e8e93; /* 灰色 */
+  font-size: 14px; /* 小字 */
+  text-transform: uppercase; /* 全大写 */
+  letter-spacing: 1.5px; /* 增加字间距 */
+  font-weight: 600;
+}
+
+/* 4. 第三层：Card Area (自适应填满剩余空间) */
+.cardAreaWrapper {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 10px 20px 100px;
+  perspective: 1000px;
+}
+
+.cardArea {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  perspective: 1000px;
+}
+
+/* --- 卡片内部样式 --- */
+
+.cardContent {
+  width: 100%;
+  height: 100%;
+  /* 内部布局 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* 垂直居中 */
+  text-align: center;
+}
+
+/* Learn 模式样式 */
+.learnMode .bigChar {
+  font-size: 140px;
+  font-weight: 800;
+  color: #1c1c1e;
+  margin: 20px 0;
+}
+
+.learnMode p {
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Quiz 模式样式 */
+.quizMode .bigChar {
+  font-size: 140px;
+  font-weight: 800;
+  color: #1c1c1e; /* 默认黑色 */
+  margin: 30px 0;
+}
+
+.quizMode .hint {
+  margin-top: auto; /* 推到底部 */
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #c7c7cc;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Context (单词学习) 模式专用样式 */
+.contextBox {
+  margin-top: 10px;
+  padding: 20px 30px;
+  background: #f2f2f7;
+  border-radius: 16px;
+  min-width: 220px;
+  text-align: center;
+}
+
+.word {
+  font-size: 28px;
+  font-weight: 700;
+  color: #007aff;
+  margin: 0;
+}
+
+.meaning {
+  font-size: 18px;
+  color: #8e8e93;
+  margin: 8px 0 0 0;
+  font-weight: 500;
+}
+
+/* 替代原本的 subHint，用于普通的 Shape 学习 */
+.subHint {
+  font-size: 14px;
+  color: #c7c7cc;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Quiz Word Hint (可选，如果在测验时想显示单词) */
+.wordHint {
+  font-size: 20px;
+  color: #8e8e93;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  font-weight: 500;
+}

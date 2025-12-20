@@ -5,39 +5,33 @@
   border-radius: 12px;
   flex-shrink: 0;
   gap: 4px;
-  
-  /* 这是一个小优化：防止点击快的时候，文字被选中 */
   user-select: none; 
 }
 
 .tabBtn {
   flex: 1;
   border: none;
-  background: transparent; /* ⚠️ 去掉背景色，交给 activeBackground */
+  background: transparent;
   padding: 8px 0;
-  border-radius: 8px; /* 这个 radius 主要用于 hover 效果或者 focus 框 */
+  border-radius: 8px;
   cursor: pointer;
   
-  /* 关键布局设置 */
-  position: relative; /* 为了让绝对定位的滑块能找准位置 */
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   
-  /* 字体设置 */
   font-size: 14px;
   font-weight: 600;
-  color: #8e8e93; /* 未选中时的灰色 */
+  color: #8e8e93;
   transition: color 0.2s ease;
   
-  /* 消除点击时的蓝色框 */
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 选中状态下，只改文字颜色，不改背景 */
 .tabBtn.active {
-  color: #1a1a1a; /* 选中时的黑色 */
+  color: #1a1a1a;
 }
 
 /* 🔥 滑块本体样式 */
@@ -49,8 +43,8 @@
   bottom: 0;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* iOS 风格的投影 */
-  z-index: 1; /* 在底层 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1;
 }
 
 /* 🔥 内容容器 */

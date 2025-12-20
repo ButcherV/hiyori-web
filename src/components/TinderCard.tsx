@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'; 
+import { useEffect } from 'react'; 
 import { motion, useMotionValue, useTransform, useAnimation } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
 

@@ -18,7 +18,6 @@
   text-transform: uppercase;
 }
 
-/* --- 通用行布局 --- */
 .controlRow {
   display: flex;
   align-items: center;
@@ -26,7 +25,6 @@
   padding: 12px 4px;
   margin-bottom: 8px;
   cursor: pointer;
-  /* 确保最小高度一致 */
   min-height: 48px; 
 }
 
@@ -51,14 +49,12 @@
   color: var(--text-secondary, #9ca3af);
 }
 
-/* --- 1. Segmented Control (外观切换) --- */
 .segmentedControl {
   display: flex;
   background-color: #f2f2f7;
   border-radius: 8px;
   padding: 2px;
   height: 32px;
-  /* ✅ 修改：只剩两个按钮，宽度改小一点更精致 */
   width: 100px; 
 }
 
@@ -117,7 +113,6 @@
   font-weight: 600;
 }
 
-/* --- 3. Switch (iOS 风格开关) --- */
 .switch {
   width: 50px;
   height: 30px;

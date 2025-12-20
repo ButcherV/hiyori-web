@@ -1,6 +1,3 @@
-/* src/components/BottomSheet/BottomSheet.module.css */
-
-/* --- 蒙层：全屏半透明黑底 --- */
 .overlay {
   position: fixed;
   top: 0;
@@ -10,27 +7,25 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   
-  /* 布局：让内容沉在底部，且水平居中 */
+  /* 让内容沉在底部，且水平居中 */
   display: flex;
   align-items: flex-end;
   justify-content: center;
   
-  /* 进场动画 */
   animation: fadeIn 0.2s ease-out forwards;
 }
 
-/* 新增：蒙层退场状态 (配合 JS 逻辑) */
+/* 蒙层退场状态 (配合 JS 逻辑) */
 .overlay.closing {
   animation: fadeOut 0.2s ease-in forwards;
 }
 
-/* --- 弹窗主体 --- */
 .content {
   width: 100%;
-  max-width: 600px; /* 桌面端限制最大宽度 */
-  max-height: 85vh; /* 最多占屏幕高度的 85% */
+  max-width: 600px;
+  max-height: 85vh;
   
-  background-color: #ffffff;
+  background-color: white;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   
@@ -39,13 +34,13 @@
   
   /* 底部安全区适配 + 默认内边距 */
   padding: 20px;
-  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
   
   /* 进场动画 */
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 新增：内容退场状态 (配合 JS 逻辑) */
+/* 内容退场状态 (配合 JS 逻辑) */
 .content.closing {
   animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -87,13 +82,13 @@
 
 /* --- 内容区域：滚动控制核心 --- */
 .body {
-  flex: 1;                  /* 占满剩余空间 */
-  display: flex;            /* 变成 Flex 盒子 */
-  flex-direction: column;   /* 垂直排列 */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   
   /* ⚠️ 核心代码：禁止父级滚动，把高度锁死，强制子元素自己处理溢出 */
   overflow: hidden; 
-  min-height: 0;            /* 修复 Flex 嵌套时不滚动的 Bug */
+  min-height: 0; 
 }
 
 /* --- 动画定义 --- */

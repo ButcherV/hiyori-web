@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // 🔥 引入 motion
+import { motion } from 'framer-motion';
 import styles from './CategoryTabs.module.css';
 
 export interface TabOption {
@@ -32,7 +32,6 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
             className={`${styles.tabBtn} ${isActive ? styles.active : ''}`}
             onClick={() => onChange(item.id)}
           >
-            {/* 🔥 核心动画层：只有激活时才渲染这个 div */}
             {isActive && (
               <motion.div
                 className={styles.activeBackground}

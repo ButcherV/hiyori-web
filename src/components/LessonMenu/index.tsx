@@ -1,15 +1,17 @@
 import React, { useState, useLayoutEffect, useMemo } from 'react';
+// 1. 引入路由钩子
+import { useNavigate } from 'react-router-dom';
+
 import styles from './LessonMenu.module.css';
 import { MenuRow } from './MenuRow';
 import type { LessonItem, LessonStatus, LessonCategory } from './types';
 
-// 引入通用组件
 import { CategoryTabs } from '../CategoryTabs';
 import type { TabOption } from '../CategoryTabs';
-// 引入 Hook
+
 import { useScrollShadow } from '../../hooks/useScrollShadow';
 
-// --- 1. 数据定义 (保持不变) ---
+// --- 静态数据定义 ---
 
 const HIRAGANA_DATA: LessonItem[] = [
   // --- 清音 (Seion) ---
@@ -75,7 +77,8 @@ const KATAKANA_DATA: LessonItem[] = [
   { id: 'k-row-pya', category: 'yoon', title: 'Pya - Row', preview: 'ピャ ピュ ピョ' },
 ];
 
-// --- 2. 核心算法：计算每个课程的状态 ---
+// --- 逻辑函数 ---
+
 // 逻辑：已完成的 -> mastered; 第一个未完成的 -> current; 剩下的 -> new
 const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
   const statusMap: Record<string, LessonStatus> = {};
@@ -84,7 +87,7 @@ const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
   let foundCurrent = false;
 
   allLessons.forEach((lesson) => {
-    // 1. 只要 ID 在已完成列表里，那就是 master (不管顺序，哪怕是跳着学的)
+    // 1. 只要 ID 在已完成列表里，那就是 master
     if (finishedIds.includes(lesson.id)) {
       statusMap[lesson.id] = 'mastered';
     } 
@@ -102,22 +105,23 @@ const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
   return statusMap;
 };
 
-// --- 3. 组件定义 ---
+// --- 类型与组件定义 ---
 
 export type ScriptType = 'hiragana' | 'katakana';
 
 interface LessonMenuProps {
-  onSelect: (lessonId: string) => void;
+  // 🔥 onSelect 已移除，因为改用路由跳转了
   script: ScriptType;
 }
 
-const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
+const LessonMenu: React.FC<LessonMenuProps> = ({ script }) => {
+  // 2. 初始化路由钩子
+  const navigate = useNavigate();
+  
   const [activeTab, setActiveTab] = useState<LessonCategory>('seion');
   const { scrollRef, isScrolled } = useScrollShadow(); 
 
   // --- 模拟用户数据 ---
-  // 这里写死了一些已完成的 ID，模拟“跳着学”的情况
-  // 实际项目中，这里应该从 props 传入，或者从 API/LocalStorage 获取
   const [finishedIds] = useState<string[]>([
     'row-a',      // 平假名第1行 (已完成)
     'row-sa',     // 平假名第3行 (已完成 - 跳过了 row-ka)
@@ -133,8 +137,7 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
   // 1. 根据 script 确定使用哪个数据源
   const currentDataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
   
-  // 2. 🔥 调用算法：根据数据源和已完成列表，动态生成状态 Map
-  // 使用 useMemo 缓存结果，只在数据源或完成记录变化时重算
+  // 2. 根据数据源和已完成列表，动态生成状态 Map
   const lessonStatusMap = useMemo(() => {
     return getStatusMap(currentDataSet, finishedIds);
   }, [currentDataSet, finishedIds]);
@@ -146,7 +149,7 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
     setActiveTab(newTabId as LessonCategory);
   };
 
-  // UX优化：当 script (从Dashboard进入不同课程) 变化时，重置 Tab 为第一页
+  // UX优化：当 script 变化时，重置 Tab 为第一页
   useLayoutEffect(() => {
     setActiveTab('seion');
   }, [script]);
@@ -177,7 +180,7 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
 
       <div className={styles.list} ref={scrollRef}>
         {visibleLessons.map((item) => {
-          // 4. 从 Map 中获取该课程的状态
+          // 获取该课程的状态
           const status = lessonStatusMap[item.id];
           
           return (
@@ -185,7 +188,13 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ onSelect, script }) => {
               key={item.id}
               item={item}
               status={status}
-              onClick={() => onSelect(item.id)}
+              // 🔥 核心修改：点击直接触发路由跳转
+              onClick={() => {
+                // 如果你想禁止未解锁的关卡跳转，可以在这里加判断：
+                // if (status === 'new') return;
+                
+                navigate(`/study/${item.id}`);
+              }}
             />
           );
         })}
