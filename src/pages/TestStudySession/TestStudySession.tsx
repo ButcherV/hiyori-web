@@ -1,106 +1,132 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TinderCard, type TinderCardRef } from '../../components/TinderCard/index';
 import { TraceCard } from '../../components/TraceCard/index';
-// 引入新的逻辑生成器
-import { generateWaveSequence } from './lessonLogic';
+import { generateWaveSequence, getRemedialCards, type LessonCard } from './lessonLogic';
+import { Volume2 } from 'lucide-react';
 import styles from './TestStudySession.module.css';
 
 export const TestStudySession = () => {
   const navigate = useNavigate();
   const cardRef = useRef<TinderCardRef>(null);
 
-  // 初始化数据：使用波浪序列生成器
-  const lessonPath = useMemo(() => generateWaveSequence(), []);
+  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const currentItem = lessonPath[currentIndex];
+  useEffect(() => {
+    setLessonQueue(generateWaveSequence());
+  }, []);
 
-  // --- 结束判断 ---
+  const currentItem = lessonQueue[currentIndex];
+
   if (!currentItem) {
+    if (lessonQueue.length === 0) return null;
     return (
       <div className={styles.container} style={{ justifyContent: 'center', alignItems: 'center' }}>
         <h1>🎉 Session Complete!</h1>
-        <button className={styles.backBtn} onClick={() => navigate(-1)} style={{ fontSize: 20 }}>
-          Back to Home
-        </button>
+        <button className={styles.backBtn} onClick={() => navigate(-1)} style={{ fontSize: 20 }}>Finish</button>
       </div>
     );
   }
 
-  // --- 🧠 核心逻辑：Header 文案生成器 ---
-  const getInstruction = () => {
+  // --- 🔥 Header 文案逻辑 (极简版) ---
+  const getHeader = () => {
     switch (currentItem.type) {
       case 'LEARN':
-        // 区分是初次学形状，还是学单词
-        return currentItem.subType === 'SHAPE' 
-          ? { text: 'New Character', isPassive: true }
-          : { text: 'Word Context', isPassive: true };
-      
-      case 'TRACE':
         return { 
-          text: 'Stroke Practice', 
+          // 学习模式保留一点提示，或者也可以改成直接显示假名
+          title: currentItem.subType === 'SHAPE' ? 'New Character' : 'Word Context', 
+          sub: '', 
           isPassive: true 
         };
-      
+      case 'TRACE':
+        return { title: 'Stroke Practice', sub: '', isPassive: true };
       case 'QUIZ':
-        // Quiz 模式
-        return { 
-          text: `Find "${currentItem.targetChar}"`, 
-          isPassive: false 
-        };
+        if (currentItem.subType === 'ROMAJI') {
+          // [测1] 假名辨音
+          // 旧: How to read "あ"?
+          // 新: "あ" (直接展示题目核心)
+          return { 
+            title: currentItem.targetChar, // 例如：あ
+            sub: '', 
+            isPassive: false 
+          };
+        } else {
+          // [测2] 单词辨析
+          // 旧: Find "蟻"
+          // 新: "蟻" (下方副标题显示 ari)
+          return { 
+            title: currentItem.targetKanji, // 例如：蟻
+            sub: currentItem.targetWordRomaji ? `(${currentItem.targetWordRomaji})` : '', // 例如：(ari)
+            isPassive: false 
+          };
+        }
       default:
-        return { text: '', isPassive: true };
+        return { title: '', sub: '', isPassive: true };
     }
   };
-
-  const instruction = getInstruction();
-
-  // --- 🛡️ 交互逻辑：方向锁 ---
-  const getBlockedDirections = (): ('left' | 'right')[] => {
-    if (currentItem.type === 'LEARN') return ['left']; // 只能右滑(Next)
-    if (currentItem.type === 'TRACE') return ['left', 'right']; // 必须写完自动飞
-    
-    if (currentItem.type === 'QUIZ') {
-      // 使用 isCorrect 字段判断
-      return currentItem.isCorrect ? ['left'] : ['right'];
-    }
-    return [];
-  };
-
-  const preventSwipe = getBlockedDirections();
   
-  // 只有 Trace 模式需要禁用卡片触摸，把控制权给 Canvas
+  const headerInfo = getHeader(); 
+
+  const getBlockedDirections = (): ('left' | 'right')[] => {
+    if (currentItem.type === 'LEARN') return ['left'];
+    if (currentItem.type === 'TRACE') return ['left', 'right'];
+    return []; 
+  };
+  const preventSwipe = getBlockedDirections();
   const isTouchEnabled = currentItem.type !== 'TRACE';
 
-  // --- 事件处理 ---
   const handleSwipe = (dir: 'left' | 'right') => {
-    console.log(`Swiped ${dir} on ${currentItem.id}`);
+    if (currentItem.type === 'QUIZ') {
+      const isRightSwipe = dir === 'right';
+      const isCorrectAction = (currentItem.isCorrect && isRightSwipe) || (!currentItem.isCorrect && !isRightSwipe);
+
+      if (!isCorrectAction) {
+        // ❌ 错题补救
+        const targetChar = currentItem.targetChar || currentItem.char;
+        setLessonQueue(prev => {
+          const newQueue = [...prev];
+          newQueue.splice(currentIndex + 1, 0, ...getRemedialCards(targetChar));
+          return newQueue;
+        });
+      } else {
+        // ✅ 答对清理
+        if (currentItem.isCorrect && isRightSwipe && currentItem.quizGroupId) {
+          setLessonQueue(prev => {
+            const newQueue = [...prev];
+            for (let i = newQueue.length - 1; i > currentIndex; i--) {
+              if (newQueue[i].quizGroupId === currentItem.quizGroupId) {
+                newQueue.splice(i, 1);
+              }
+            }
+            return newQueue;
+          });
+        }
+      }
+    }
     setTimeout(() => setCurrentIndex(prev => prev + 1), 200);
+  };
+
+  const handlePlaySound = (e: React.MouseEvent) => {
+    e.stopPropagation(); 
+    console.log(`Playing sound for: ${currentItem.char}`);
   };
 
   return (
     <div className={styles.container}>
-      
-      {/* 1. Top Nav */}
       <div className={styles.topNav}>
         <button className={styles.backBtn} onClick={() => navigate(-1)}>Exit</button>
-        <span className={styles.progressText}>{currentIndex + 1} / {lessonPath.length}</span>
+        <span className={styles.progressText}>Remaining: {lessonQueue.length - currentIndex}</span>
       </div>
 
-      {/* 2. Instruction Bar */}
       <div className={styles.instructionBar}>
-        <div 
-          className={`
-            ${styles.instructionText} 
-            ${instruction.isPassive ? styles.passive : ''}
-          `}
-        >
-          {instruction.text}
+        <div className={`${styles.instructionTitle} ${headerInfo.isPassive ? styles.passive : ''} ${currentItem.id.includes('remedial') ? styles.remedialText : ''}`}>
+          {headerInfo.title}
         </div>
+        {/* 副标题 (例如 ari) */}
+        {headerInfo.sub && <div className={styles.instructionSub}>{headerInfo.sub}</div>}
       </div>
 
-      {/* 3. Card Area */}
       <div className={styles.cardAreaWrapper}>
         <div className={styles.cardArea}>
           <TinderCard
@@ -112,46 +138,47 @@ export const TestStudySession = () => {
           >
             <div className={styles.cardContent}>
               
-              {/* A. 学习卡片 (Learn & Context) */}
-              {currentItem.type === 'LEARN' && (
-                <div className={styles.learnMode}>
+              {/* [学1] 基础认知 */}
+              {currentItem.type === 'LEARN' && currentItem.subType === 'SHAPE' && (
+                <div className={styles.learnShape}>
                   <div className={styles.bigChar}>{currentItem.char}</div>
+                  <div className={styles.romajiSub}>{currentItem.romaji}</div>
                   
-                  {/* 根据 subType 决定显示什么 */}
-                  {currentItem.subType === 'CONTEXT' ? (
-                    <div className={styles.contextBox}>
-                      <p className={styles.word}>{currentItem.word}</p>
-                      <p className={styles.meaning}>{currentItem.meaning}</p>
-                    </div>
-                  ) : (
-                    <p className={styles.subHint}>Listen and memorize</p>
-                  )}
+                  <div className={styles.speakerBtn} onClick={handlePlaySound}>
+                    <Volume2 />
+                  </div>
                 </div>
               )}
 
-              {/* B. 描红卡片 */}
+              {/* [学2] 单词语境 */}
+              {currentItem.type === 'LEARN' && currentItem.subType === 'CONTEXT' && (
+                <div className={styles.learnContext}>
+                  <div className={styles.furigana}>{currentItem.word}</div>
+                  <div className={styles.kanjiMain}>{currentItem.kanji}</div>
+                  
+                  {/* 🔥 修正：使用 wordRomaji (ari) 而不是 romaji (a) */}
+                  {/* 这解决了你图片里指出的问题：单词卡下面不应该显示 'a' */}
+                  <div className={styles.romajiBottom}>{currentItem.wordRomaji}</div>
+                  
+                  <div className={styles.speakerBtn} onClick={handlePlaySound}>
+                    <Volume2 />
+                  </div>
+                </div>
+              )}
+
+              {/* [练1] 描红 */}
               {currentItem.type === 'TRACE' && (
                 <TraceCard 
                   char={currentItem.char}
-                  onComplete={() => {
-                    cardRef.current?.swipe('right');
-                  }}
+                  onComplete={() => cardRef.current?.swipe('right')}
                 />
               )}
 
-              {/* C. 测验卡片 */}
+              {/* [测1 & 测2] Quiz */}
               {currentItem.type === 'QUIZ' && (
                 <div className={styles.quizMode}>
-                  <div className={styles.bigChar}>{currentItem.char}</div>
-                  
-                  {/* 如果是 Word Quiz，可以额外显示单词提示 (可选) */}
-                  {currentItem.subType === 'WORD' && currentItem.word && (
-                     <p className={styles.wordHint}>{currentItem.word}</p>
-                  )}
-                  
-                  <div className={styles.hint}>
-                    ← Discard &nbsp;&nbsp;|&nbsp;&nbsp; Keep →
-                  </div>
+                  <div className={styles.quizText}>{currentItem.displayContent}</div>
+                  <div className={styles.hint}>← Discard &nbsp;|&nbsp; Keep →</div>
                 </div>
               )}
 
@@ -159,7 +186,6 @@ export const TestStudySession = () => {
           </TinderCard>
         </div>
       </div>
-
     </div>
   );
 };
