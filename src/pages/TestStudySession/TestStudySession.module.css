@@ -116,14 +116,37 @@
 .speakerBtn svg { width: 22px; height: 22px; stroke-width: 2.5px; }
 
 /* --- [学1] 基础认知 --- */
-.learnShape { display: flex; flex-direction: column; align-items: center; }
+.learnShape { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
 .bigChar { font-size: 140px; font-weight: 800; color: #1c1c1e; margin: 10px 0; }
 .romajiSub { font-size: 28px; color: #8e8e93; font-weight: 600; margin-top: -10px; }
 
 /* --- [学2] 单词语境 --- */
-.learnContext { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.furigana { font-size: 24px; color: #8e8e93; font-weight: 500; letter-spacing: 2px; margin-bottom: -5px; }
-.kanjiMain { font-size: 90px; font-weight: 800; color: #1c1c1e; line-height: 1.1; margin: 5px 0; }
+.learnContext { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+}
+.furigana { 
+  font-size: 24px; 
+  color: #8e8e93; 
+  font-weight: 500; 
+  letter-spacing: 2px; 
+  margin-bottom: -5px;
+  font-family: var(--font-family-ja);
+}
+.kanjiMain { 
+  font-size: 90px; 
+  font-weight: 800; 
+  color: #1c1c1e; 
+  line-height: 1.1; 
+  margin: 5px 0;
+  font-family: var(--font-family-ja);
+}
 .romajiBottom { font-size: 24px; color: #c7c7cc; font-weight: 600; margin-top: 15px; }
 
 /* --- [测1 & 测2] Quiz --- */
@@ -286,4 +309,42 @@
 .accept {
   color: #34c759;
   border: 1px solid #34c75920;
+}
+
+.jaFont {
+  font-family: var(--font-family-ja), sans-serif;
+  /* 稍微加粗一点点，因为日文字体通常比英文字体细 */
+  font-weight: 800; 
+}
+
+.meaningText {
+  font-size: 14px;
+  color: #9ca3af; /* 浅灰色，弱化显示 */
+  margin-top: 8px;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* 🔥 1. 定义从模糊变清晰的动画 */
+@keyframes unblur {
+  from {
+    filter: blur(8px);
+    opacity: 0.8;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* 🔥 2. 背景卡片的样式 (平时处于模糊状态) */
+.backgroundCard {
+  filter: blur(8px);
+  opacity: 0.2;
+  transition: transform 0.3s; /* 只有位置移动需要 transition，filter 交给动画 */
+}
+
+/* 🔥 3. 顶层卡片的样式 (激活时执行变清晰动画) */
+.activeCard {
+  animation: unblur 0.4s ease-out forwards;
 }

@@ -188,12 +188,13 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script }) => {
               key={item.id}
               item={item}
               status={status}
-              // 🔥 核心修改：点击直接触发路由跳转
-              onClick={() => {
-                // 如果你想禁止未解锁的关卡跳转，可以在这里加判断：
-                // if (status === 'new') return;
-                
-                navigate(`/study/${item.id}`);
+              onClick={() => {  
+                const targetChars = item.preview.split(' ');              
+                navigate(`/study/${item.id}`, {
+                  state: { 
+                    targetChars: targetChars 
+                  }
+                });
               }}
             />
           );

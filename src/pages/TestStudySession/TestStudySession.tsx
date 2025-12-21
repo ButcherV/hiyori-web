@@ -3,44 +3,43 @@ import { useNavigate } from 'react-router-dom';
 import { TinderCard, type TinderCardRef } from '../../components/TinderCard/index';
 import { TraceCard } from '../../components/TraceCard/index';
 import { generateWaveSequence, getRemedialCards, type LessonCard } from './lessonLogic';
-// 🔥 引入 X 和 Check 图标
 import { Volume2, CheckCircle, X, Check } from 'lucide-react';
 import styles from './TestStudySession.module.css';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
-// 定义最大堆叠数量
 const MAX_STACK_SIZE = 3;
-// 倒计时秒数
 const AUTO_REDIRECT_SECONDS = 3;
 
 export const TestStudySession = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
+
   const cardRef = useRef<TinderCardRef>(null);
 
-  // 核心状态
   const [lessonQueue, setLessonQueue] = useState<LessonCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
-  
-  // 倒计时状态
   const [countdown, setCountdown] = useState(AUTO_REDIRECT_SECONDS);
 
-  // 初始化加载课程
+  const location = useLocation();
+  const targetChars = location.state?.targetChars || ['あ', 'い', 'う', 'え', 'お'];
+  console.log("targetChars", targetChars)
+
   useEffect(() => {
     setLessonQueue(generateWaveSequence());
   }, []);
 
   const currentItem = lessonQueue[currentIndex];
 
-  // 计算堆叠卡片
   const visibleCards = useMemo(() => {
     if (!lessonQueue.length || currentIndex >= lessonQueue.length) return [];
     return lessonQueue.slice(currentIndex, currentIndex + MAX_STACK_SIZE);
   }, [lessonQueue, currentIndex]);
 
-  // --- 🏁 Session Complete 判断 ---
   const isFinished = !currentItem && currentIndex >= lessonQueue.length && lessonQueue.length > 0;
 
-  // 倒计时逻辑
   useEffect(() => {
     if (isFinished) {
       const interval = setInterval(() => {
@@ -57,65 +56,53 @@ export const TestStudySession = () => {
     }
   }, [isFinished, navigate]);
 
-
-  // --- 渲染：结算页面 ---
   if (isFinished) {
     return (
       <div className={styles.completeContainer}>
         <div className={styles.celebrationIcon}>
           <CheckCircle size={80} strokeWidth={2.5} />
         </div>
-        
         <h1 className={styles.completeTitle}>All Done!</h1>
         <p className={styles.completeSub}>Great job learning today.</p>
-        
         <button className={styles.fillingBtn} onClick={() => navigate('/')}>
-          <span className={styles.btnText}>
-            Back to Home ({countdown})
-          </span>
+          <span className={styles.btnText}>Back to Home ({countdown})</span>
         </button>
       </div>
     );
   }
 
-  // 初始 Loading
   if (lessonQueue.length === 0) return null;
 
-  // --- Header 文案逻辑 ---
+  // Header Logic
   const getHeader = () => {
-    if (!currentItem) return { title: '', sub: '', isPassive: true };
-
-    if (currentItem.customTitle) {
-      return { title: currentItem.customTitle, sub: '', isPassive: true };
-    }
-
-    switch (currentItem.type) {
-      case 'LEARN':
-        return { 
-          title: currentItem.subType === 'SHAPE' ? 'New Kana' : 'New Word', 
-          sub: '', 
-          isPassive: true 
-        };
-      case 'TRACE':
-        return { title: 'Stroke Practice', sub: '', isPassive: true };
-      case 'QUIZ':
-        if (currentItem.subType === 'ROMAJI') {
-          return { title: currentItem.targetChar, sub: '', isPassive: false };
+    if (!currentItem) return { title: '', sub: '', isPassive: true, isJa: false };
+    if (currentItem.headerTitle) {
+      // 🔥🔥🔥 核心修改：解析 sub 文本 🔥🔥🔥
+      let displaySub = '';
+      if (currentItem.headerSub) {
+        if (typeof currentItem.headerSub === 'string') {
+          // 如果是普通的字符串（比如以后有不需要翻译的情况），直接显示
+          displaySub = currentItem.headerSub;
         } else {
-          return { 
-            title: currentItem.targetKanji, 
-            sub: currentItem.targetWordRomaji ? `${currentItem.targetWordRomaji}` : '', 
-            isPassive: false 
-          };
+          // 如果是 LocalizedText 对象，根据当前语言取值
+          displaySub = currentItem.headerSub[currentLang];
         }
-      default:
-        return { title: '', sub: '', isPassive: true };
+      }
+
+      return { 
+        title: currentItem.customTitle || currentItem.headerTitle, 
+        sub: displaySub, // 使用解析后的文本
+        isPassive: currentItem.type !== 'QUIZ',
+        isJa: !!currentItem.isHeaderJa
+      };
     }
+    if (currentItem.customTitle) {
+      return { title: currentItem.customTitle, sub: '', isPassive: true, isJa: false };
+    }
+    return { title: '', sub: '', isPassive: true, isJa: false };
   };
-  
   const headerInfo = getHeader(); 
 
-  // --- 方向锁 ---
   const getBlockedDirections = (): ('left' | 'right')[] => {
     if (!currentItem) return [];
     if (currentItem.type === 'LEARN') return ['left'];
@@ -125,14 +112,10 @@ export const TestStudySession = () => {
   const preventSwipe = getBlockedDirections();
   const isTouchEnabled = currentItem?.type !== 'TRACE';
 
-  // --- 🔥 按钮触发滑动辅助函数 ---
   const triggerSwipe = (dir: 'left' | 'right') => {
-    if (cardRef.current) {
-      cardRef.current.swipe(dir);
-    }
+    if (cardRef.current) cardRef.current.swipe(dir);
   };
 
-  // --- 滑动处理逻辑 ---
   const handleSwipe = (dir: 'left' | 'right') => {
     if (currentItem.type === 'QUIZ') {
       const isRightSwipe = dir === 'right';
@@ -140,40 +123,28 @@ export const TestStudySession = () => {
 
       setLessonQueue(prev => {
         const newQueue = [...prev];
-
-        // A: 完美胜利
         if (isCorrectAction && currentItem.isCorrect && isRightSwipe) {
           if (currentItem.quizGroupId) {
              for (let i = newQueue.length - 1; i > currentIndex; i--) {
-               if (newQueue[i].quizGroupId === currentItem.quizGroupId) {
-                 newQueue.splice(i, 1);
-               }
+               if (newQueue[i].quizGroupId === currentItem.quizGroupId) newQueue.splice(i, 1);
              }
           }
         }
-
-        // B: 答错惩罚
         if (!isCorrectAction) {
           setIsShaking(true);
           setTimeout(() => setIsShaking(false), 500);
-
           if (currentItem.quizGroupId) {
             for (let i = newQueue.length - 1; i > currentIndex; i--) {
-              if (newQueue[i].quizGroupId === currentItem.quizGroupId) {
-                newQueue.splice(i, 1);
-              }
+              if (newQueue[i].quizGroupId === currentItem.quizGroupId) newQueue.splice(i, 1);
             }
           }
-
           const targetChar = currentItem.targetChar || currentItem.char;
           const remedialCards = getRemedialCards(targetChar, currentItem.subType);
           newQueue.splice(currentIndex + 1, 0, ...remedialCards);
         }
-        
         return newQueue;
       });
     }
-
     setTimeout(() => setCurrentIndex(prev => prev + 1), 200);
   };
 
@@ -185,11 +156,9 @@ export const TestStudySession = () => {
     const offsetY = index * 18;
     const scale = 1 - index * 0.05;
     const zIndex = MAX_STACK_SIZE - index;
-
     return {
       zIndex,
       transform: `translateY(${offsetY}px) scale(${scale})`,
-      filter: `brightness(${1 - index * 0.1})`,
       pointerEvents: index === 0 ? 'auto' : 'none' as const,
     };
   };
@@ -204,7 +173,12 @@ export const TestStudySession = () => {
       <div className={styles.instructionBar}>
         {currentItem && (
           <>
-            <div className={`${styles.instructionTitle} ${headerInfo.isPassive ? styles.passive : ''} ${currentItem.id.includes('remedial') ? styles.remedialText : ''}`}>
+            <div className={`
+              ${styles.instructionTitle} 
+              ${headerInfo.isPassive ? styles.passive : ''} 
+              ${currentItem.id.includes('remedial') ? styles.remedialText : ''}
+              ${headerInfo.isJa ? styles.jaFont : ''}
+            `}>
               {headerInfo.title}
             </div>
             {headerInfo.sub && <div className={styles.instructionSub}>{headerInfo.sub}</div>}
@@ -214,14 +188,20 @@ export const TestStudySession = () => {
 
       <div className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}>
         <div className={styles.cardArea}>
-          
           {visibleCards.map((card, index) => {
             const isTopCard = index === 0;
             const cardStyle = getStackStyle(index);
+            
+            // 🔥🔥🔥 1. 定义内容模糊的类名 🔥🔥🔥
+            // 如果是顶层卡，用 activeCard (执行变清晰动画)
+            // 如果是背景卡，用 backgroundCard (保持模糊)
+            const contentBlurClass = isTopCard ? styles.activeCard : styles.backgroundCard;
 
             return (
               <div 
                 key={card.id} 
+                // 🔥🔥🔥 2. 这里移除了 backgroundCard/activeCard 🔥🔥🔥
+                // 让卡片容器保持清晰（白底、阴影不受影响）
                 className={styles.stackWrapper} 
                 style={cardStyle}
               >
@@ -231,40 +211,58 @@ export const TestStudySession = () => {
                   preventSwipe={isTopCard ? preventSwipe : []}
                   onSwipe={isTopCard ? handleSwipe : undefined}
                 >
-                  <div className={styles.cardContent}>
+                  <div 
+                    className={`${styles.cardContent} ${contentBlurClass}`}
+                  >
                     
+                    {/* Learn: Shape */}
                     {card.type === 'LEARN' && card.subType === 'SHAPE' && (
+                      // 🔥🔥🔥 3. 把类名加到具体内容容器上 🔥🔥🔥
                       <div className={styles.learnShape}>
-                        <div className={styles.bigChar}>{card.char}</div>
+                        <div className={`${styles.bigChar} ${styles.jaFont}`}>{card.char}</div>
                         <div className={styles.romajiSub}>{card.romaji}</div>
-                        <div className={styles.speakerBtn} onClick={handlePlaySound}>
-                          <Volume2 />
-                        </div>
+                        <div className={styles.speakerBtn} onClick={handlePlaySound}><Volume2 /></div>
                       </div>
                     )}
 
+                    {/* Learn: Context */}
                     {card.type === 'LEARN' && card.subType === 'CONTEXT' && (
+                      // 🔥🔥🔥 4. 这里也加 🔥🔥🔥
                       <div className={styles.learnContext}>
-                        <div className={styles.furigana}>{card.word}</div>
-                        <div className={styles.kanjiMain}>{card.kanji}</div>
+                        <div className={`${styles.furigana} ${styles.jaFont}`}>{card.word}</div>
+                        <div className={`${styles.kanjiMain} ${styles.jaFont}`}>{card.kanji}</div>
                         <div className={styles.romajiBottom}>{card.wordRomaji}</div>
-                        <div className={styles.speakerBtn} onClick={handlePlaySound}>
-                          <Volume2 />
-                        </div>
+                        
+                        {card.meaning && (
+                          <div className={styles.meaningText}>
+                            {card.meaning[currentLang]}
+                          </div>
+                        )}
+
+                        <div className={styles.speakerBtn} onClick={handlePlaySound}><Volume2 /></div>
                       </div>
                     )}
 
                     {card.type === 'TRACE' && (
-                      <TraceCard 
-                        char={card.char}
-                        onComplete={() => isTopCard && cardRef.current?.swipe('right')}
-                      />
+                      // 🔥🔥🔥 5. TraceCard 组件可能不支持 className，所以包一层 div 比较稳妥 🔥🔥🔥
+                      <div style={{ width: '100%', height: '100%' }}>
+                        <TraceCard 
+                          char={card.char}
+                          onComplete={() => isTopCard && cardRef.current?.swipe('right')}
+                        />
+                      </div>
                     )}
 
+                    {/* Quiz */}
                     {card.type === 'QUIZ' && (
                       <div className={styles.quizMode}>
-                        <div className={styles.quizText}>{card.displayContent}</div>
-                        {/* 🔥 删除了旧的文字提示 Hint */}
+                        {/* 🔥🔥🔥 6. 这里也加 🔥🔥🔥 */}
+                        <div className={`
+                          ${styles.quizText} 
+                          ${card.isContentJa ? styles.jaFont : ''}
+                        `}>
+                          {card.displayContent}
+                        </div>
                       </div>
                     )}
 
@@ -273,31 +271,19 @@ export const TestStudySession = () => {
               </div>
             );
           })}
-
         </div>
       </div>
       
-      {/* 🔥🔥🔥 新增：底部操作按钮 (仅在 QUIZ 模式显示) 🔥🔥🔥 */}
       {currentItem?.type === 'QUIZ' && (
         <div className={styles.quizActions}>
-          <button 
-            className={`${styles.actionBtn} ${styles.reject}`} 
-            onClick={() => triggerSwipe('left')}
-            aria-label="Discard"
-          >
+          <button className={`${styles.actionBtn} ${styles.reject}`} onClick={() => triggerSwipe('left')}>
             <X size={32} strokeWidth={3} />
           </button>
-          
-          <button 
-            className={`${styles.actionBtn} ${styles.accept}`} 
-            onClick={() => triggerSwipe('right')}
-            aria-label="Keep"
-          >
+          <button className={`${styles.actionBtn} ${styles.accept}`} onClick={() => triggerSwipe('right')}>
             <Check size={32} strokeWidth={3} />
           </button>
         </div>
       )}
-
     </div>
   );
 };

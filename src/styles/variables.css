@@ -17,10 +17,10 @@
   --color-text-sub: #6E6E6E;
   
   /* 辅助色：抹茶绿 (Matcha) - 用于正确选项 */
-  --color-success: #789262;
+  --color-success: #34c759;
   
   /* 辅助色：错误红 */
-  --color-error: #D32F2F;
+  --color-error: #ff3b30;
 
   /* --- 布局 (Layout) --- */
   --radius-card: 16px;     /* 卡片圆角 */
@@ -48,7 +48,7 @@
 }
 
 .font-ja {
-  font-family: var(---font-family-ja);
+  font-family: var(--font-family-ja);
 }
 
 @media (prefers-color-scheme: dark) {
