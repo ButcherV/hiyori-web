@@ -18,18 +18,15 @@ export const TestStudySession = () => {
 
   const cardRef = useRef<TinderCardRef>(null);
 
-  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
   const [countdown, setCountdown] = useState(AUTO_REDIRECT_SECONDS);
 
   const location = useLocation();
   const targetChars = location.state?.targetChars || ['あ', 'い', 'う', 'え', 'お'];
-  console.log("targetChars", targetChars)
-
-  useEffect(() => {
-    setLessonQueue(generateWaveSequence());
-  }, []);
+  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>(() => {
+     return generateWaveSequence(targetChars); 
+  });
 
   const currentItem = lessonQueue[currentIndex];
 

@@ -86,10 +86,10 @@ export const KANA_DB: Record<string, KanaEntry> = {
     charDistractors: ['あ', 'む', 'す'],
     romaji: 'o', 
     romajiDistractors: ['ou', 'o', 'wo'],
-    kanji: 'お酒', 
-    word: 'おさけ', 
-    wordRomaji: 'osake', 
-    meaning: { en: 'alcohol; liquor', zh: '酒；清酒' },
-    wordDistractors: ['あさけ', 'おさき', 'おきけ'] 
+    kanji: '青い', 
+    word: 'あおい', 
+    wordRomaji: 'aoi', 
+    meaning: { en: 'blue; green', zh: '蓝色；年轻的' },
+    wordDistractors: ['あさい', 'おさい', 'おあい'] 
   },
 };

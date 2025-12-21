@@ -61,6 +61,17 @@ const getRandomSubarray = (arr: string[], count: number) => {
   return shuffled.slice(0, count);
 };
 
+// 🔥🔥🔥 新增：Fisher-Yates 洗牌算法 🔥🔥🔥
+// 用于打乱"题目包"的顺序，保证题目乱序但题目内部（选项）不散
+const shuffleArray = <T>(array: T[]): T[] => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};
+
 // 生成学习卡
 const createLearn = (char: string, subType: 'SHAPE' | 'CONTEXT'): LessonCard => {
   const data = KANA_DB[char];
@@ -223,28 +234,56 @@ export const getRemedialCards = (char: string, failedType: SubType): LessonCard[
   return [learnCard, ...createQuiz(char, retryType)];
 };
 
-export const generateWaveSequence = (targetChars: string[] = Object.keys(KANA_DB)): LessonCard[] => {
-  const sequence: LessonCard[] = [];
+// 🔥🔥🔥 核心重构：符合记忆曲线的三波次生成器 🔥🔥🔥
+// 接收 targetChars 数组（例如 ['あ', 'い', 'う']）
+export const generateWaveSequence = (
+  targetChars: string[] = Object.keys(KANA_DB)
+): LessonCard[] => {
+  
+  // 1. 数据清洗：确保数据库里有这些字
+  const validChars = targetChars.filter(char => KANA_DB[char]);
 
-  targetChars.forEach(char => {
-    // 确保数据库里有这个字，防止报错
-    if (!KANA_DB[char]) return;
+  if (validChars.length === 0) return [];
 
-    // 1. 学 (Shape)
-    sequence.push(createLearn(char, 'SHAPE'));
-    
-    // 2. 学 (Context)
-    sequence.push(createLearn(char, 'CONTEXT'));
-    
-    // 3. 练 (Trace)
-    sequence.push(createTrace(char));
-    
-    // 4. 测 (各种 Quiz)
-    // 这里使用扩展运算符 ... 把 createQuiz 返回的数组展开推入 sequence
-    sequence.push(...createQuiz(char, 'ROMAJI'));
-    sequence.push(...createQuiz(char, 'KANA'));
-    sequence.push(...createQuiz(char, 'WORD'));
+  // === 第一波：批量认知 (Intro) ===
+  // 连续看所有字的字形，混个脸熟
+  const phase1: LessonCard[] = validChars.map(char => 
+    createLearn(char, 'SHAPE')
+  );
+
+  // === 第二波：深化与书写 (Deepening) ===
+  // 此时距离第一波已经过了一会儿(间隔效应)。
+  // 每个字进行：单词语境 -> 描红。
+  const phase2: LessonCard[] = validChars.flatMap(char => [
+    createLearn(char, 'CONTEXT'),
+    createTrace(char)
+  ]);
+
+  // === 第三波：交织大乱斗 (Interleaved Quiz) ===
+  // 这是一个最关键的阶段。
+  // 我们收集所有字的所有题型，然后打乱"题目"的顺序。
+  
+  // 1. 收集所有题目包 (每个包是一道题的卡片数组 LessonCard[])
+  let allQuizPacks: LessonCard[][] = [];
+
+  validChars.forEach(char => {
+    // 每个字生成 3 道题，每道题是一个数组
+    const quiz1 = createQuiz(char, 'ROMAJI');
+    const quiz2 = createQuiz(char, 'KANA');
+    const quiz3 = createQuiz(char, 'WORD');
+
+    if (quiz1.length) allQuizPacks.push(quiz1);
+    if (quiz2.length) allQuizPacks.push(quiz2);
+    if (quiz3.length) allQuizPacks.push(quiz3);
   });
 
-  return sequence;
+  // 2. 打乱题目顺序 (Interleaving)
+  // 比如：[Q_あ_Word, Q_え_Romaji, Q_い_Kana ...]
+  const shuffledPacks = shuffleArray(allQuizPacks);
+
+  // 3. 展平为单一的卡片流
+  const phase3: LessonCard[] = shuffledPacks.flat();
+
+  // === 合并所有波次 ===
+  return [...phase1, ...phase2, ...phase3];
 };
