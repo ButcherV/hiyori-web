@@ -5,11 +5,11 @@
   width: 100vw;
   height: 100vh;
   background-color: var(--color-bg);
-  
+
   /* 布局控制 */
   display: flex;
   flex-direction: column;
-  
+
   /* 关键：防止 iOS/Android 的弹性滚动导致页面跟着动 */
   overflow: hidden;
   position: relative;

@@ -5,7 +5,33 @@
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background-color: #f2f2f7;
+  /* background-color: #f2f2f7; */
+  background: #9cecfb; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #0052d4,
+    #65c7f7,
+    #9cecfb
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #0052d4,
+    #65c7f7,
+    #9cecfb
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  background: #c02425; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #c02425,
+    #ff6a00
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #c02425,
+    #ff6a00
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   overflow: hidden;
   touch-action: none;
   user-select: none;
@@ -20,9 +46,19 @@
 }
 
 .backBtn {
-  background: none; border: none; font-size: 16px; font-weight: 600; color: #007aff; cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #007aff;
+  cursor: pointer;
 }
-.progressText { font-size: 14px; color: #8e8e93; font-weight: 500; font-feature-settings: "tnum"; }
+.progressText {
+  font-size: 14px;
+  color: #8e8e93;
+  font-weight: 500;
+  font-feature-settings: 'tnum';
+}
 
 /* --- Header 区域 --- */
 .instructionBar {
@@ -51,10 +87,15 @@
 }
 
 .instructionTitle.passive {
-  color: #8e8e93; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px;
+  color: #8e8e93;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-.remedialText { color: #ff3b30 !important; }
+.remedialText {
+  color: #ff3b30 !important;
+}
 
 /* --- Card 通用 --- */
 .cardAreaWrapper {
@@ -65,14 +106,14 @@
   position: relative;
   padding: 10px 32px 104px;
   /* 增加透视感，让 3D 变换更自然 */
-  perspective: 1000px; 
+  perspective: 1000px;
 }
 
 .cardArea {
   width: 100%;
   height: 100%;
   /* 关键：设为相对定位，作为卡片绝对定位的参考点 */
-  position: relative; 
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,7 +133,16 @@
   transition: all 0.3s ease-in-out;
 }
 
-.cardContent { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+.cardContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
 
 /* --- 🔊 喇叭图标 --- */
 .speakerBtn {
@@ -107,65 +157,123 @@
   align-items: center;
   justify-content: center;
   color: #007aff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.1s;
   z-index: 10;
 }
-.speakerBtn:active { transform: scale(0.92); background: #e5e5ea; }
-.speakerBtn svg { width: 22px; height: 22px; stroke-width: 2.5px; }
+.speakerBtn:active {
+  transform: scale(0.92);
+  background: #e5e5ea;
+}
+.speakerBtn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.5px;
+}
 
 /* --- [学1] 基础认知 --- */
-.learnShape { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
+.learnShape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.bigChar { font-size: 140px; font-weight: 800; color: #1c1c1e; margin: 10px 0; }
-.romajiSub { font-size: 28px; color: #8e8e93; font-weight: 600; margin-top: -10px; }
+.bigChar {
+  font-size: 140px;
+  font-weight: 800;
+  color: #1c1c1e;
+  margin: 10px 0;
+}
+.romajiSub {
+  font-size: 28px;
+  color: #8e8e93;
+  font-weight: 600;
+  margin-top: -10px;
+}
 
 /* --- [学2] 单词语境 --- */
-.learnContext { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
+.learnContext {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
-.furigana { 
-  font-size: 24px; 
-  color: #8e8e93; 
-  font-weight: 500; 
-  letter-spacing: 2px; 
+.furigana {
+  font-size: 24px;
+  color: #8e8e93;
+  font-weight: 500;
+  letter-spacing: 2px;
   margin-bottom: -5px;
   font-family: var(--font-family-ja);
 }
-.kanjiMain { 
-  font-size: 90px; 
-  font-weight: 800; 
-  color: #1c1c1e; 
-  line-height: 1.1; 
+.kanjiMain {
+  font-size: 90px;
+  font-weight: 800;
+  color: #1c1c1e;
+  line-height: 1.1;
   margin: 5px 0;
   font-family: var(--font-family-ja);
 }
-.romajiBottom { font-size: 24px; color: #c7c7cc; font-weight: 600; margin-top: 15px; }
+.romajiBottom {
+  font-size: 24px;
+  color: #c7c7cc;
+  font-weight: 600;
+  margin-top: 15px;
+}
 
 /* --- [测1 & 测2] Quiz --- */
-.quizMode { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.quizText { font-size: 80px; font-weight: 700; color: #1c1c1e; margin: 20px 0; }
-.hint { margin-top: auto; margin-bottom: 20px; font-size: 13px; color: #c7c7cc; font-weight: 600; text-transform: uppercase; position: absolute; bottom: 20px; }
+.quizMode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.quizText {
+  font-size: 80px;
+  font-weight: 700;
+  color: #1c1c1e;
+  margin: 20px 0;
+}
+.hint {
+  margin-top: auto;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #c7c7cc;
+  font-weight: 600;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 20px;
+}
 
 @keyframes shakeAnimation {
-  0% { transform: translate3d(0, 0, 0); }
-  10%, 90% { transform: translate3d(-4px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
-  40%, 60% { transform: translate3d(8px, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  10%,
+  90% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(4px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-8px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(8px, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 /* 激活抖动的类 */
 .shake {
-  animation: shakeAnimation 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shakeAnimation 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   /* 加上红色边框闪烁效果，增强错误警示 (可选) */
   /* border: 2px solid #ff3b30; */
 }
@@ -183,8 +291,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* 🏆 庆祝图标弹跳动画 */
@@ -195,9 +307,17 @@
 }
 
 @keyframes popIn {
-  0% { transform: scale(0); opacity: 0; }
-  60% { transform: scale(1.2); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .completeTitle {
@@ -262,7 +382,9 @@
 }
 
 @keyframes fillProgress {
-  to { width: 100%; }
+  to {
+    width: 100%;
+  }
 }
 
 /* --- ❌ 💚 Quiz 底部操作按钮 --- */
@@ -285,12 +407,14 @@
   border-radius: 50%;
   background: #ffffff;
   border: none;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.1s, background-color 0.2s;
+  transition:
+    transform 0.1s,
+    background-color 0.2s;
   pointer-events: auto; /* 开启按钮点击 */
 }
 
@@ -314,7 +438,7 @@
 .jaFont {
   font-family: var(--font-family-ja), sans-serif;
   /* 稍微加粗一点点，因为日文字体通常比英文字体细 */
-  font-weight: 800; 
+  font-weight: 800;
 }
 
 .meaningText {
@@ -347,4 +471,88 @@
 /* 🔥 3. 顶层卡片的样式 (激活时执行变清晰动画) */
 .activeCard {
   animation: unblur 0.4s ease-out forwards;
+}
+
+/* 🔥 新增：Review Card 样式 */
+.reviewListContainer {
+  width: 100%;
+  padding: 8px 16px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+  position: relative;
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+}
+
+.reviewLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 60px; /* 保证左侧假名对齐 */
+}
+
+.reviewChar {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: var(--font-family-ja);
+}
+
+.reviewRomaji {
+  font-size: 14px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.reviewRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.reviewWord {
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  font-family: var(--font-family-ja);
+}
+
+.reviewMeaning {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* 提示文字 */
+.swipeHint {
+  position: absolute;
+  bottom: 8px;
+  width: calc(100% - 32px);
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
 }

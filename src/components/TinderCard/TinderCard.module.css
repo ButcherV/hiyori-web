@@ -5,15 +5,15 @@
   position: absolute;
   width: 100%; /* 既然父容器会控制尺寸，这里最好填满 */
   height: 100%;
-  
+
   background: var(--color-card-bg);
   border-radius: 24px;
-  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
-  
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   /* 性能优化 */
   will-change: transform;
   /* 移除原先的 pointer-events 设置，交给 JS 控制 drag 行为 */
@@ -22,7 +22,10 @@
 .overlay {
   /* 你的原版样式，完全保留 */
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border-radius: 24px;
   z-index: 999; /* 确保盖在内容之上 */
   pointer-events: none; /* 这一点很重要，不能挡住鼠标事件 */

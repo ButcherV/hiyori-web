@@ -14,12 +14,12 @@ i18n
   .init({
     resources: {
       en: { translation: en },
-      zh: { translation: zh } // 注意：这里用 zh 代表中文，对应 settings 里的 key
+      zh: { translation: zh }, // 注意：这里用 zh 代表中文，对应 settings 里的 key
     },
     fallbackLng: 'en', // 如果检测不到语言，默认用英语
     interpolation: {
-      escapeValue: false // React 默认已经防范 XSS，不需要 i18n 再转义
-    }
+      escapeValue: false, // React 默认已经防范 XSS，不需要 i18n 再转义
+    },
   });
 
 export default i18n;

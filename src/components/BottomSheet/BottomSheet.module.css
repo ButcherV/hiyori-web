@@ -6,12 +6,12 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  
+
   /* 让内容沉在底部，且水平居中 */
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  
+
   animation: fadeIn 0.2s ease-out forwards;
 }
 
@@ -24,18 +24,18 @@
   width: 100%;
   max-width: 600px;
   max-height: 85vh;
-  
+
   background-color: white;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  
+
   display: flex;
   flex-direction: column;
-  
+
   /* 底部安全区适配 + 默认内边距 */
   padding: 20px;
   padding-bottom: max(8px, env(safe-area-inset-bottom));
-  
+
   /* 进场动画 */
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -85,34 +85,50 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  
+
   /* ⚠️ 核心代码：禁止父级滚动，把高度锁死，强制子元素自己处理溢出 */
-  overflow: hidden; 
-  min-height: 0; 
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* --- 动画定义 --- */
 
 /* 向上滑入 (Open) */
 @keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* 向下滑出 (Close) */
 @keyframes slideDown {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
 }
 
 /* 淡入 (Open) */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* 淡出 (Close) */
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

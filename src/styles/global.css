@@ -2,14 +2,14 @@
 body {
   /* 默认用中文 UI 字体，日语教学字体单独设置*/
   font-family: var(--font-family-ui);
-  
+
   /* 开启抗锯齿，让文字更细致 */
   -webkit-font-smoothing: antialiased;
   background-color: var(--color-bg);
   color: var(--color-text-main);
   /* --- 替换成这个（可选）--- */
   min-height: 100vh; /* 保证至少有一屏高 */
-  margin: 0;         /* 去掉浏览器默认边距 */
+  margin: 0; /* 去掉浏览器默认边距 */
 }
 
 #root {

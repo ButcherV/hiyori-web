@@ -1,52 +1,69 @@
 // src/pages/TestStudySession/lessonLogic.ts
 
-// 🔥 引入数据和类型
 import { KANA_DB, type LocalizedText } from './kanaData';
 
 // --- 1. 类型定义 ---
 export type TaskType = 'LEARN' | 'TRACE' | 'QUIZ';
-export type SubType = 'SHAPE' | 'CONTEXT' | 'ROMAJI' | 'KANA' | 'WORD';
+export type SubType =
+  | 'SHAPE'
+  | 'CONTEXT'
+  | 'ROMAJI'
+  | 'KANA'
+  | 'WORD'
+  | 'REVIEW';
 
-// LocalizedText 已经移到 kanaData.ts，这里直接使用 import 进来的即可
+// Review 卡片需要携带的数据结构
+export interface ReviewItem {
+  char: string;
+  romaji: string;
+  word: string;
+  wordRomaji: string;
+  meaning: LocalizedText;
+}
 
 export interface LessonCard {
   id: string;
   type: TaskType;
   subType: SubType;
-  
+
   // 基础数据
   char: string;
   romaji: string;
   word?: string;
   kanji?: string;
-  
-  // meaning 使用引入的 LocalizedText 类型
   meaning?: LocalizedText;
-  
   wordRomaji?: string;
-  
-  // 视图显示
   displayContent: string;
-  
-  // Quiz 专用逻辑
+
+  // Quiz 专用
   quizGroupId?: string;
-  isCorrect?: boolean; 
-  
-  // Header 显示专用字段
+  isCorrect?: boolean;
+
+  // Header
   headerTitle?: string;
   headerSub?: string | LocalizedText;
-
-  // 字体样式标记 (True = 使用日语字体, False = 使用默认字体)
   isHeaderJa?: boolean;
   isContentJa?: boolean;
-
-  // 定制补救卡文案
   customTitle?: string;
+
+  // Review 专用
+  reviewItems?: ReviewItem[];
+
+  // 🔥🔥🔥 核心字段：用于进度条统计 🔥🔥🔥
+  // true = 原始题目 (算进总进度)
+  // false = 补救/惩罚题目 (不算进总进度)
+  isOriginal: boolean;
 }
 
-// (FixedLengthArray, Range3to6, KanaEntry, KANA_DB 均已移至 kanaData.ts)
-
-// --- 3. 辅助工具函数 ---
+// --- 2. 辅助工具 ---
+const shuffleArray = <T>(array: T[]): T[] => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};
 
 const getRandomSubarray = (arr: string[], count: number) => {
   const shuffled = arr.slice(0);
@@ -61,19 +78,12 @@ const getRandomSubarray = (arr: string[], count: number) => {
   return shuffled.slice(0, count);
 };
 
-// 🔥🔥🔥 新增：Fisher-Yates 洗牌算法 🔥🔥🔥
-// 用于打乱"题目包"的顺序，保证题目乱序但题目内部（选项）不散
-const shuffleArray = <T>(array: T[]): T[] => {
-  const newArr = [...array];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
+// --- 3. 生成器函数 ---
 
-// 生成学习卡
-const createLearn = (char: string, subType: 'SHAPE' | 'CONTEXT'): LessonCard => {
+const createLearn = (
+  char: string,
+  subType: 'SHAPE' | 'CONTEXT'
+): LessonCard => {
   const data = KANA_DB[char];
   if (!data) return {} as LessonCard;
 
@@ -86,20 +96,16 @@ const createLearn = (char: string, subType: 'SHAPE' | 'CONTEXT'): LessonCard => 
     word: data.word,
     kanji: data.kanji,
     wordRomaji: data.wordRomaji,
-    
-    // 透传 meaning 对象
     meaning: data.meaning,
-    
-    displayContent: subType === 'SHAPE' ? data.char : data.kanji, 
+    displayContent: subType === 'SHAPE' ? data.char : data.kanji,
     headerTitle: subType === 'SHAPE' ? 'New Kana' : 'New Word',
-
-    // 样式逻辑
-    isHeaderJa: false, 
+    isHeaderJa: false,
     isContentJa: true,
+    // 默认生成的都是原始卡
+    isOriginal: true,
   };
 };
 
-// 生成描红卡
 const createTrace = (char: string): LessonCard => {
   const data = KANA_DB[char];
   return {
@@ -110,32 +116,31 @@ const createTrace = (char: string): LessonCard => {
     romaji: data.romaji,
     displayContent: char,
     headerTitle: 'Stroke Practice',
-    
-    // 样式逻辑
     isHeaderJa: false,
     isContentJa: true,
+    isOriginal: true,
   };
 };
 
-// 核心：createQuiz 自动标记字体
-const createQuiz = (target: string, type: 'ROMAJI' | 'KANA' | 'WORD'): LessonCard[] => {
+const createQuiz = (
+  target: string,
+  type: 'ROMAJI' | 'KANA' | 'WORD'
+): LessonCard[] => {
   const data = KANA_DB[target];
   if (!data) return [];
 
-  const cards: LessonCard[] = []; 
-  const groupId = `group-${target}-${type}-${Date.now()}`;
+  const cards: LessonCard[] = [];
+  const groupId = `group-${target}-${type}-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
 
   let questionTitle = '';
   let questionSub: string | LocalizedText = '';
   let correctAnswer = '';
   let distractorPool: string[] = [];
-  
   let isHeaderJa = false;
   let isContentJa = false;
 
   switch (type) {
-    case 'ROMAJI': 
-      // [题] 假名 -> [选] 罗马音
+    case 'ROMAJI':
       questionTitle = data.char;
       correctAnswer = data.romaji;
       distractorPool = data.romajiDistractors;
@@ -144,7 +149,6 @@ const createQuiz = (target: string, type: 'ROMAJI' | 'KANA' | 'WORD'): LessonCar
       break;
 
     case 'KANA':
-      // [题] 罗马音 -> [选] 假名
       questionTitle = data.romaji;
       correctAnswer = data.char;
       distractorPool = data.charDistractors;
@@ -153,7 +157,6 @@ const createQuiz = (target: string, type: 'ROMAJI' | 'KANA' | 'WORD'): LessonCar
       break;
 
     case 'WORD':
-      // [题] 汉字 -> [选] 假名单词
       questionTitle = data.kanji;
       questionSub = data.meaning;
       correctAnswer = data.word;
@@ -163,31 +166,28 @@ const createQuiz = (target: string, type: 'ROMAJI' | 'KANA' | 'WORD'): LessonCar
       break;
   }
 
-  // === 生成正确卡 ===
+  // 正确答案卡 (这是我们要统计的"题目")
   cards.push({
     id: `${groupId}-correct`,
     type: 'QUIZ',
     subType: type,
     quizGroupId: groupId,
-    
     char: data.char,
     romaji: data.romaji,
     word: data.word,
     kanji: data.kanji,
     wordRomaji: data.wordRomaji,
-    meaning: data.meaning, // 透传 meaning
-    
+    meaning: data.meaning,
     headerTitle: questionTitle,
     headerSub: questionSub,
     displayContent: correctAnswer,
-    
     isHeaderJa,
     isContentJa,
-    
-    isCorrect: true
+    isCorrect: true,
+    isOriginal: true, // 标记为原始卡
   });
 
-  // === 生成干扰卡 ===
+  // 干扰选项卡 (虽然也是 isOriginal=true，但在 useProgress 里我们会只统计 isCorrect 的)
   const countToPick = Math.floor(Math.random() * (6 - 3 + 1)) + 3;
   const selectedDistractors = getRandomSubarray(distractorPool, countToPick);
 
@@ -197,93 +197,114 @@ const createQuiz = (target: string, type: 'ROMAJI' | 'KANA' | 'WORD'): LessonCar
       type: 'QUIZ',
       subType: type,
       quizGroupId: groupId,
-      
       char: data.char,
       romaji: data.romaji,
       word: data.word,
       kanji: data.kanji,
       wordRomaji: data.wordRomaji,
-      
       headerTitle: questionTitle,
       headerSub: questionSub,
       displayContent: dText,
-      
       isHeaderJa,
       isContentJa,
-      
-      isCorrect: false
+      isCorrect: false,
+      isOriginal: true, // 干扰卡也是原始生成的
     });
   });
 
   return cards.sort(() => 0.5 - Math.random());
 };
 
-// --- 4. 导出逻辑函数 ---
+// --- 4. 补救卡逻辑 (关键点) ---
+export const getRemedialCards = (
+  char: string,
+  failedType: SubType
+): LessonCard[] => {
+  let newCards: LessonCard[] = [];
 
-export const getRemedialCards = (char: string, failedType: SubType): LessonCard[] => {
   if (failedType === 'WORD') {
     const learnCard = createLearn(char, 'CONTEXT');
-    learnCard.customTitle = "Review Word";
-    return [learnCard, ...createQuiz(char, 'WORD')];
+    learnCard.customTitle = 'Review Word';
+    newCards = [learnCard, ...createQuiz(char, 'WORD')];
+  } else {
+    const learnCard = createLearn(char, 'SHAPE');
+    learnCard.customTitle = 'Review Kana';
+    const retryType = failedType === 'KANA' ? 'KANA' : 'ROMAJI';
+    newCards = [learnCard, ...createQuiz(char, retryType)];
   }
 
-  const learnCard = createLearn(char, 'SHAPE');
-  learnCard.customTitle = "Review Kana";
-  const retryType = failedType === 'KANA' ? 'KANA' : 'ROMAJI';
-
-  return [learnCard, ...createQuiz(char, retryType)];
+  // 🔥🔥🔥 关键：强制把所有补救卡标记为 isOriginal = false 🔥🔥🔥
+  // 这样它们就不会被计入进度条的分母或分子
+  return newCards.map((c) => ({
+    ...c,
+    isOriginal: false,
+  }));
 };
 
-// 🔥🔥🔥 核心重构：符合记忆曲线的三波次生成器 🔥🔥🔥
-// 接收 targetChars 数组（例如 ['あ', 'い', 'う']）
+// --- 5. 主序列生成器 (三波次 + 复习卡) ---
+
 export const generateWaveSequence = (
   targetChars: string[] = Object.keys(KANA_DB)
 ): LessonCard[] => {
-  
-  // 1. 数据清洗：确保数据库里有这些字
-  const validChars = targetChars.filter(char => KANA_DB[char]);
-
+  // 数据清洗
+  const validChars = targetChars.filter((char) => KANA_DB[char]);
   if (validChars.length === 0) return [];
 
-  // === 第一波：批量认知 (Intro) ===
-  // 连续看所有字的字形，混个脸熟
-  const phase1: LessonCard[] = validChars.map(char => 
+  // === Phase 1: 批量认脸 ===
+  const phase1: LessonCard[] = validChars.map((char) =>
     createLearn(char, 'SHAPE')
   );
 
-  // === 第二波：深化与书写 (Deepening) ===
-  // 此时距离第一波已经过了一会儿(间隔效应)。
-  // 每个字进行：单词语境 -> 描红。
-  const phase2: LessonCard[] = validChars.flatMap(char => [
+  // === Phase 2: 批量深化 ===
+  const phase2: LessonCard[] = validChars.flatMap((char) => [
     createLearn(char, 'CONTEXT'),
-    createTrace(char)
+    createTrace(char),
   ]);
 
-  // === 第三波：交织大乱斗 (Interleaved Quiz) ===
-  // 这是一个最关键的阶段。
-  // 我们收集所有字的所有题型，然后打乱"题目"的顺序。
-  
-  // 1. 收集所有题目包 (每个包是一道题的卡片数组 LessonCard[])
+  // === Phase 3: 复习卡 + 大乱斗 ===
+
+  // A. 准备测试题池
   let allQuizPacks: LessonCard[][] = [];
-
-  validChars.forEach(char => {
-    // 每个字生成 3 道题，每道题是一个数组
-    const quiz1 = createQuiz(char, 'ROMAJI');
-    const quiz2 = createQuiz(char, 'KANA');
-    const quiz3 = createQuiz(char, 'WORD');
-
-    if (quiz1.length) allQuizPacks.push(quiz1);
-    if (quiz2.length) allQuizPacks.push(quiz2);
-    if (quiz3.length) allQuizPacks.push(quiz3);
+  validChars.forEach((char) => {
+    if (KANA_DB[char]) {
+      // 每个字生成 3 道题
+      const quiz1 = createQuiz(char, 'ROMAJI');
+      const quiz2 = createQuiz(char, 'KANA');
+      const quiz3 = createQuiz(char, 'WORD');
+      if (quiz1.length) allQuizPacks.push(quiz1);
+      if (quiz2.length) allQuizPacks.push(quiz2);
+      if (quiz3.length) allQuizPacks.push(quiz3);
+    }
   });
 
-  // 2. 打乱题目顺序 (Interleaving)
-  // 比如：[Q_あ_Word, Q_え_Romaji, Q_い_Kana ...]
+  // B. 生成 Review Card (小抄)
+  const reviewItems: ReviewItem[] = validChars.map((char) => ({
+    char: KANA_DB[char].char,
+    romaji: KANA_DB[char].romaji,
+    word: KANA_DB[char].word,
+    wordRomaji: KANA_DB[char].wordRomaji,
+    meaning: KANA_DB[char].meaning,
+  }));
+
+  const reviewCard: LessonCard = {
+    id: `review-card-${Date.now()}`,
+    type: 'LEARN',
+    subType: 'REVIEW',
+    char: '',
+    romaji: '',
+    displayContent: '',
+    headerTitle: 'Final Review',
+    reviewItems: reviewItems,
+    isHeaderJa: false,
+    isContentJa: false,
+    isOriginal: true, // Review 卡本身算作一个进度节点
+  };
+
+  // C. 打乱题目顺序
   const shuffledPacks = shuffleArray(allQuizPacks);
+  const phase3Quizzes = shuffledPacks.flat();
 
-  // 3. 展平为单一的卡片流
-  const phase3: LessonCard[] = shuffledPacks.flat();
-
-  // === 合并所有波次 ===
-  return [...phase1, ...phase2, ...phase3];
+  // === 合并 ===
+  // 顺序: 认脸 -> 深化 -> 小抄 -> 考试
+  return [...phase1, ...phase2, reviewCard, ...phase3Quizzes];
 };

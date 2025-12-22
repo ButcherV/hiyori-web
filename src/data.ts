@@ -12,7 +12,7 @@ export const RAW_DATA: Vocabulary[] = [
     kanji: '私',
     kana: 'わたし',
     romaji: 'watashi',
-    meaning: { zh: '我', en: 'I / Me' }
+    meaning: { zh: '我', en: 'I / Me' },
     // visual: undefined -> 没图，引擎会自动屏蔽视觉题型
   },
   {
@@ -21,7 +21,7 @@ export const RAW_DATA: Vocabulary[] = [
     kanji: 'あなた', // 有些词习惯写假名，但放在 kanji 字段作为"题面"
     kana: 'あなた',
     romaji: 'anata',
-    meaning: { zh: '你', en: 'You' }
+    meaning: { zh: '你', en: 'You' },
   },
   {
     id: 'w_iku',
@@ -29,7 +29,7 @@ export const RAW_DATA: Vocabulary[] = [
     kanji: '行く',
     kana: 'いく',
     romaji: 'iku',
-    meaning: { zh: '去', en: 'To go' }
+    meaning: { zh: '去', en: 'To go' },
   },
 
   // ============================================
@@ -43,10 +43,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'りんご',
     romaji: 'ringo',
     meaning: { zh: '苹果', en: 'Apple' },
-    visual: { 
-      type: 'EMOJI', 
-      value: '🍎' 
-    }
+    visual: {
+      type: 'EMOJI',
+      value: '🍎',
+    },
   },
   {
     id: 'w_cat',
@@ -55,10 +55,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'ねこ',
     romaji: 'neko',
     meaning: { zh: '猫', en: 'Cat' },
-    visual: { 
-      type: 'EMOJI', 
-      value: '🐱' 
-    }
+    visual: {
+      type: 'EMOJI',
+      value: '🐱',
+    },
   },
   {
     id: 'w_japan',
@@ -67,10 +67,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'にほん',
     romaji: 'nihon',
     meaning: { zh: '日本', en: 'Japan' },
-    visual: { 
-      type: 'EMOJI', 
-      value: '🇯🇵' 
-    }
+    visual: {
+      type: 'EMOJI',
+      value: '🇯🇵',
+    },
   },
 
   // ============================================
@@ -84,10 +84,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'あか',
     romaji: 'aka',
     meaning: { zh: '红色', en: 'Red' },
-    visual: { 
-      type: 'CSS_COLOR', 
-      value: '#FF0000' 
-    }
+    visual: {
+      type: 'CSS_COLOR',
+      value: '#FF0000',
+    },
   },
   {
     id: 'w_blue',
@@ -96,10 +96,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'あお',
     romaji: 'ao',
     meaning: { zh: '蓝色', en: 'Blue' },
-    visual: { 
-      type: 'CSS_COLOR', 
-      value: '#0000FF' 
-    }
+    visual: {
+      type: 'CSS_COLOR',
+      value: '#0000FF',
+    },
   },
 
   // ============================================
@@ -113,10 +113,10 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'ゆにくろ',
     romaji: 'uniqlo',
     meaning: { zh: '优衣库', en: 'Uniqlo' },
-    visual: { 
-      type: 'BRAND_COLOR', 
-      value: '#E60012' // 优衣库红
-    }
+    visual: {
+      type: 'BRAND_COLOR',
+      value: '#E60012', // 优衣库红
+    },
   },
 
   // ============================================
@@ -130,9 +130,9 @@ export const RAW_DATA: Vocabulary[] = [
     kana: 'さんじ',
     romaji: 'san-ji',
     meaning: { zh: '3点', en: '3:00' },
-    widget: { 
-      type: 'CLOCK', 
-      value: '3:00' 
-    }
-  }
+    widget: {
+      type: 'CLOCK',
+      value: '3:00',
+    },
+  },
 ];

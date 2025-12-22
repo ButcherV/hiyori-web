@@ -13,14 +13,14 @@ type TabType = 'days' | 'months' | 'weeks';
 export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
   // --- State ---
   const [activeTab, setActiveTab] = useState<TabType>('days');
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [passIndex, setPassIndex] = useState(0); 
+  const [passIndex, setPassIndex] = useState(0);
   const [isLoopMode, setIsLoopMode] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // 获取当前数据 (目前只处理 Days)
   const currentDay = datesData[currentIndex];
 
@@ -30,18 +30,18 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       return;
     }
-    const durations = [1000, 1500, 1200]; 
+    const durations = [1000, 1500, 1200];
     const currentDuration = durations[passIndex];
 
     timerRef.current = setTimeout(() => {
       if (passIndex < 2) {
-        setPassIndex(prev => prev + 1);
+        setPassIndex((prev) => prev + 1);
       } else {
         if (isLoopMode) {
           setPassIndex(0);
         } else {
           if (currentIndex < datesData.length - 1) {
-            setCurrentIndex(prev => prev + 1);
+            setCurrentIndex((prev) => prev + 1);
             setPassIndex(0);
           } else {
             setIsPlaying(false);
@@ -108,10 +108,12 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
         {/* 右侧：信息与进度 */}
         <div className={styles.stageRight}>
           {/* 假名 (重点) */}
-          <div className={`${styles.kana} ${currentDay.isIrregular ? styles.warnText : ''}`}>
+          <div
+            className={`${styles.kana} ${currentDay.isIrregular ? styles.warnText : ''}`}
+          >
             {currentDay.kana}
           </div>
-          
+
           {/* 汉字 + 罗马音 */}
           <div className={styles.subInfo}>
             <span className={styles.kanji}>{currentDay.kanji}</span>
@@ -120,14 +122,14 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
 
           {/* ✅ 保留：三遍进度点 (样式优化) */}
           <div className={styles.dotsRow}>
-            {[0, 1, 2].map(i => (
-              <div 
-                key={i} 
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
                 className={`
                   ${styles.dot} 
                   ${passIndex === i && isPlaying ? styles.dotActive : ''}
                   ${passIndex > i && isPlaying ? styles.dotFinished : ''} 
-                `} 
+                `}
               />
             ))}
           </div>
@@ -139,8 +141,10 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
         <div className={styles.gridContainer}>
           {/* 星期表头 */}
           <div className={styles.weekHeader}>
-            {['M','T','W','T','F','S','S'].map((d, i) => (
-              <span key={i} className={styles.weekDay}>{d}</span>
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
+              <span key={i} className={styles.weekDay}>
+                {d}
+              </span>
             ))}
           </div>
 
@@ -161,18 +165,18 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
                   >
                     {day.id}
                     {/* 不规则标记 */}
-                    {day.isIrregular && !isActive && <div className={styles.irregularDot} />}
+                    {day.isIrregular && !isActive && (
+                      <div className={styles.irregularDot} />
+                    )}
                   </button>
                 );
               })}
             </div>
           )}
-          
+
           {/* 预留给 Months / Weeks 的空状态 */}
           {activeTab !== 'days' && (
-            <div className={styles.placeholder}>
-              Coming Soon: {activeTab}
-            </div>
+            <div className={styles.placeholder}>Coming Soon: {activeTab}</div>
           )}
         </div>
       </div>
@@ -180,7 +184,7 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
       {/* --- C. Floating Controller (悬浮控制栏) --- */}
       <div className={styles.controller}>
         <div className={styles.controllerInner}>
-          <button 
+          <button
             className={`${styles.ctrlBtn} ${isLoopMode ? styles.ctrlActive : ''}`}
             onClick={() => setIsLoopMode(!isLoopMode)}
           >
@@ -192,13 +196,15 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
             {isPlaying ? (
               <Pause size={28} fill="currentColor" />
             ) : (
-              <Play size={28} fill="currentColor" className={styles.playIconOffset}/>
+              <Play
+                size={28}
+                fill="currentColor"
+                className={styles.playIconOffset}
+              />
             )}
           </button>
 
-          <div className={styles.progressText}>
-            {currentDay.id} / 31
-          </div>
+          <div className={styles.progressText}>{currentDay.id} / 31</div>
         </div>
       </div>
     </div>

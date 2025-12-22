@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Sun, Moon, 
-  Info, Globe, 
-  Type, Volume2 
-} from 'lucide-react';
+import { Sun, Moon, Info, Globe, Type, Volume2 } from 'lucide-react';
 import styles from './SettingsMenu.module.css';
 
 import { useTranslation } from 'react-i18next';
@@ -14,8 +10,8 @@ interface SettingsMenuProps {
   initialTheme?: ThemeMode;
 }
 
-export const SettingsMenu: React.FC<SettingsMenuProps> = ({ 
-  initialTheme = 'light', 
+export const SettingsMenu: React.FC<SettingsMenuProps> = ({
+  initialTheme = 'light',
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -35,15 +31,15 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             <Sun size={20} className={styles.icon} />
             <span className={styles.label}>{t('settings.appearance')}</span>
           </div>
-          
+
           <div className={styles.segmentedControl}>
-            <button 
+            <button
               className={`${styles.segmentBtn} ${theme === 'light' ? styles.active : ''}`}
               onClick={() => setTheme('light')}
             >
               <Sun size={18} />
             </button>
-            <button 
+            <button
               className={`${styles.segmentBtn} ${theme === 'dark' ? styles.active : ''}`}
               onClick={() => setTheme('dark')}
             >
@@ -57,7 +53,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             <Globe size={20} className={styles.icon} />
             <span className={styles.label}>{t('settings.language')}</span>
           </div>
-          
+
           <div className={styles.pillGroup}>
             <button
               className={`${styles.pillBtn} ${i18n.language.startsWith('en') ? styles.active : ''}`}
@@ -65,7 +61,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             >
               En
             </button>
-            <button 
+            <button
               className={`${styles.pillBtn} ${i18n.language.startsWith('zh') ? styles.active : ''}`}
               onClick={() => handleLanguageChange('zh')}
             >
@@ -77,16 +73,21 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
 
       <div className={styles.section}>
         <div className={styles.sectionTitle}>{t('settings.learning')}</div>
-        <div className={styles.controlRow} onClick={() => setShowRomaji(!showRomaji)}>
+        <div
+          className={styles.controlRow}
+          onClick={() => setShowRomaji(!showRomaji)}
+        >
           <div className={styles.labelGroup}>
             <Type size={20} className={styles.icon} />
             <span className={styles.label}>{t('settings.show_romaji')}</span>
           </div>
-          <div className={`${styles.switch} ${showRomaji ? styles.switchOn : ''}`}>
+          <div
+            className={`${styles.switch} ${showRomaji ? styles.switchOn : ''}`}
+          >
             <div className={styles.switchHandle} />
           </div>
         </div>
-        
+
         <div className={styles.controlRow}>
           <div className={styles.labelGroup}>
             <Volume2 size={20} className={styles.icon} />

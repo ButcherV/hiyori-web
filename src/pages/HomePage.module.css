@@ -2,9 +2,10 @@
 .container {
   min-height: 100vh;
   /* 使用全局变量或默认色 */
-  background-color: var(--bg-app, #F2F2F7);
+  background-color: var(--bg-app, #f2f2f7);
   padding-bottom: 40px; /* 底部留白，防止到底部划不动 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-primary, #1c1c1e);
   overflow-x: hidden; /* 防止横向出现滚动条 */
 }
@@ -14,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center; /* 垂直居中 */
-  
+
   margin-bottom: 8px;
   /* 保持左右内边距，防止贴边 */
   padding: 16px 16px 0px 16px;
@@ -40,7 +41,7 @@
 }
 
 .holidayDate {
-  color: #FF3B30; /* 日本日历常用的红色 */
+  color: #ff3b30; /* 日本日历常用的红色 */
 }
 
 /* ✅ 重点：日语标题样式 */
@@ -51,10 +52,16 @@
   letter-spacing: -0.5px;
   color: var(--text-primary, #1c1c1e);
   line-height: 1.1;
-  
+
   /* ✅ 使用 global.css 定义的日语字体栈变量 */
-  font-family: var(--font-ja, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif);
-  
+  font-family: var(
+    --font-ja,
+    'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP',
+    sans-serif
+  );
+
   /* 防止文字过长换行 */
   white-space: nowrap;
   overflow: hidden;
@@ -78,11 +85,11 @@
   cursor: pointer;
   border-radius: 50%;
   transition: background-color 0.2s;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   /* 消除移动端点击高亮 */
   -webkit-tap-highlight-color: transparent;
 }
@@ -101,9 +108,9 @@
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  
-  padding: 8px 16px 32px 16px; 
-  
+
+  padding: 8px 16px 32px 16px;
+
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
@@ -115,7 +122,7 @@
 
 .heroCard {
   /* 85% 宽度，让下一张露个头 */
-  min-width: 85%; 
+  min-width: 85%;
   position: relative;
   border-radius: 12px;
   padding: 16px;
@@ -141,17 +148,47 @@
   opacity: 0.15;
   pointer-events: none;
   /* 装饰性文字也建议使用日文字体 */
-  font-family: var(--font-ja, "Hiragino Kaku Gothic ProN", sans-serif);
+  font-family: var(--font-ja, 'Hiragino Kaku Gothic ProN', sans-serif);
 }
 
-.heroTop { margin-bottom: 12px; }
-.heroLabel { font-size: 12px; font-weight: 700; opacity: 0.8; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;}
-.heroTitle { font-size: 28px; font-weight: 700; line-height: 1.1; }
+.heroTop {
+  margin-bottom: 12px;
+}
+.heroLabel {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.heroTitle {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+}
 
-.heroBottom { display: flex; align-items: center; gap: 12px; }
-.progressTrack { flex: 1; height: 6px; background-color: rgba(255, 255, 255, 0.3); border-radius: 3px; overflow: hidden; }
-.progressFill { height: 100%; background-color: white; border-radius: 3px; }
-.progressText { font-size: 14px; font-weight: 600; }
+.heroBottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  background-color: white;
+  border-radius: 3px;
+}
+.progressText {
+  font-size: 14px;
+  font-weight: 600;
+}
 
 /* --- 3. Grid Section --- */
 .sectionHeader {
@@ -177,14 +214,16 @@
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04); /* 轻微阴影 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* 轻微阴影 */
   transition: background-color 0.2s;
   /* 确保卡片高度统一 */
-  aspect-ratio: 1 / 0.85; 
+  aspect-ratio: 1 / 0.85;
   justify-content: space-between;
 }
 
-.card:active { background-color: #f2f2f7; }
+.card:active {
+  background-color: #f2f2f7;
+}
 
 .iconBox {
   width: 44px;
@@ -197,5 +236,14 @@
   font-weight: bold;
 }
 
-.cardTitle { font-size: 16px; font-weight: 600; margin-bottom: 2px; color: var(--text-primary, #000);}
-.cardSub { font-size: 12px; color: #8e8e93; font-weight: 500;}
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--text-primary, #000);
+}
+.cardSub {
+  font-size: 12px;
+  color: #8e8e93;
+  font-weight: 500;
+}

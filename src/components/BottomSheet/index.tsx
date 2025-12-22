@@ -9,9 +9,14 @@ interface BottomSheetProps {
   children: React.ReactNode;
 }
 
-const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, title, children }) => {
+const BottomSheet: React.FC<BottomSheetProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+}) => {
   const [shouldRender, setShouldRender] = useState(false);
-  
+
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
@@ -45,13 +50,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, title, child
   const animationClass = isOpen ? '' : styles.closing;
 
   return (
-    <div 
-      className={`${styles.overlay} ${animationClass}`} 
-      onClick={onClose}
-    >
-      <div 
-        className={`${styles.content} ${animationClass}`} 
-        onClick={(e) => e.stopPropagation()} 
+    <div className={`${styles.overlay} ${animationClass}`} onClick={onClose}>
+      <div
+        className={`${styles.content} ${animationClass}`}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>
@@ -59,9 +61,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, title, child
             <X size={24} />
           </button>
         </div>
-        <div className={styles.body}>
-          {children}
-        </div>
+        <div className={styles.body}>{children}</div>
       </div>
     </div>
   );

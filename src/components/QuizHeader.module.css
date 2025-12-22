@@ -5,7 +5,7 @@
   justify-content: center;
   padding: 10px 0;
   width: 100%;
-  min-height: 180px; 
+  min-height: 180px;
 }
 
 .headerTitle {
@@ -28,9 +28,9 @@
   color: var(--color-text-main);
   display: flex;
   gap: 4px;
-  align-items: flex-end; 
+  align-items: flex-end;
   /* 确保行高一致 */
-  line-height: 1.2; 
+  line-height: 1.2;
   /* 🔥 强制由日文字体渲染，保证地道 */
   font-family: var(--font-family-ja);
 }
@@ -41,14 +41,14 @@
   text-align: center;
   min-width: 2rem;
   /* padding-bottom: 2px; */
-  
+
   /* 🔥 解决对齐问题的核心：
      给所有字都加 3px 边框。
      默认为 transparent (看不见)，这样高度就被占住了。
      .highlightChar 只需改变这个颜色即可。
   */
-  border-bottom: 4px solid transparent; 
-  
+  border-bottom: 4px solid transparent;
+
   position: relative;
   overflow: hidden; /* 这一条对动画很重要，为了遮住还没升上来的字 */
 }

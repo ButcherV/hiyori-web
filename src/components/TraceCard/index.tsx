@@ -4,13 +4,13 @@ import styles from './TraceCard.module.css';
 import { KANA_PATHS } from '../../datas/kanaPaths';
 
 // --- 常量配置 ---
-const STANDARD_VIEWBOX = "0 0 109 109";
+const STANDARD_VIEWBOX = '0 0 109 109';
 // 判定宽容度：检测管道的粗细 (109坐标系下，20px 算很宽容了)
-const HIT_STROKE_WIDTH = 25; 
+const HIT_STROKE_WIDTH = 25;
 // 起点容错范围：手指落下点离标准起点多远算“瞄准了”？
-const START_POINT_RADIUS = 20; 
+const START_POINT_RADIUS = 20;
 // 准确率阈值：至少有多少比例的点落在路径内才算过？(0.6 = 60%)
-const PASS_ACCURACY = 0.6; 
+const PASS_ACCURACY = 0.6;
 
 interface TraceCardProps {
   char: string;
@@ -21,7 +21,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   // --- Refs ---
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // 🔥 新增：逻辑检测专用 Canvas (不渲染到屏幕，只在内存里计算)
   // 用 ref 保持它，不用每次重绘都创建
   const logicCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -29,13 +29,13 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   // --- State ---
   const [strokeIndex, setStrokeIndex] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
-  
+
   // 统计算法用的变量
   const statsRef = useRef({
     totalPoints: 0, // 总采样点数
-    hitPoints: 0,   // 命中点数 (在路径内的点)
+    hitPoints: 0, // 命中点数 (在路径内的点)
     lastX: 0,
-    lastY: 0
+    lastY: 0,
   });
 
   const paths = KANA_PATHS[char] || [];
@@ -61,16 +61,16 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     const rect = container.getBoundingClientRect();
     const size = rect.width;
     const dpr = window.devicePixelRatio || 1;
-    
+
     canvas.width = size * dpr;
     canvas.height = size * dpr;
-    
+
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.scale(dpr, dpr);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.lineWidth = size * 0.055; 
+      ctx.lineWidth = size * 0.055;
       ctx.strokeStyle = '#000000';
     }
   }, []);
@@ -90,7 +90,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     logicCtx.lineWidth = HIT_STROKE_WIDTH;
     logicCtx.lineCap = 'round';
     logicCtx.lineJoin = 'round';
-    
+
     const p = new Path2D(pathData);
     logicCtx.stroke(p); // 在内存里把这条线“画”出来，供后续检测
     return { ctx: logicCtx, path: p };
@@ -121,7 +121,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   const startDrawing = (e: any) => {
     e.stopPropagation();
     if (isFinished) return;
-    
+
     // 获取当前笔画数据
     const currentPathData = paths[strokeIndex];
     if (!currentPathData) return;
@@ -136,19 +136,24 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     // B. 起点检测：如果你离起点太远，根本不让你开始画 (防止倒着写)
     const startPt = getStartPoint(currentPathData);
     if (startPt) {
-      const dist = Math.sqrt(Math.pow(logicX - startPt.x, 2) + Math.pow(logicY - startPt.y, 2));
+      const dist = Math.sqrt(
+        Math.pow(logicX - startPt.x, 2) + Math.pow(logicY - startPt.y, 2)
+      );
       if (dist > START_POINT_RADIUS) {
-        console.log("离起点太远，忽略");
-        return; 
+        console.log('离起点太远，忽略');
+        return;
       }
     }
 
     // C. 准备开始
     setIsDrawing(true);
     statsRef.current = { totalPoints: 0, hitPoints: 0, lastX: x, lastY: y };
-    
+
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) { ctx.beginPath(); ctx.moveTo(x, y); }
+    if (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
   };
 
   // 2. 绘画中 (增加了命中率采样)
@@ -157,7 +162,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     if (!isDrawing || isFinished) return;
 
     const { x, y } = getPos(e);
-    
+
     // --- 视觉绘制 ---
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) {
@@ -175,7 +180,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     // 准备检测环境
     const currentPathData = paths[strokeIndex];
     const logicCheck = prepareHitTestPath(currentPathData);
-    
+
     if (logicCheck) {
       statsRef.current.totalPoints++;
       // 🔥 核心 API: isPointInStroke
@@ -193,7 +198,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     setIsDrawing(false);
 
     const { hitPoints, totalPoints } = statsRef.current;
-    
+
     // 防止点击一下就触发：必须有一定的采样数
     if (totalPoints < 10) {
       clearCanvas();
@@ -207,9 +212,9 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     if (accuracy >= PASS_ACCURACY) {
       handleStrokeSuccess();
     } else {
-      console.log("写歪了，重来");
+      console.log('写歪了，重来');
       clearCanvas(); // 失败，擦除笔迹
-      
+
       // 可选：给个震动反馈
       if (navigator.vibrate) navigator.vibrate(200);
     }
@@ -239,21 +244,37 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
       </div>
 
       <div className={styles.canvasArea} ref={containerRef}>
-        
         {/* 底纹 (KanjiVG 数据是 109，所以 strokeWidth 设为 6-7 很合适) */}
         <svg className={styles.bgSvg} viewBox={STANDARD_VIEWBOX}>
           {paths.map((d, i) => (
-            <path key={i} d={d} fill="none" stroke="#e5e5ea" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              key={i}
+              d={d}
+              fill="none"
+              stroke="#e5e5ea"
+              strokeWidth="6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           ))}
         </svg>
 
         {/* 已完成部分 */}
         <svg className={styles.bgSvg} viewBox={STANDARD_VIEWBOX}>
-          {paths.map((d, i) => (
-             i < strokeIndex && (
-               <path key={i} d={d} fill="none" stroke="#1c1c1e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-             )
-          ))}
+          {paths.map(
+            (d, i) =>
+              i < strokeIndex && (
+                <path
+                  key={i}
+                  d={d}
+                  fill="none"
+                  stroke="#1c1c1e"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              )
+          )}
         </svg>
 
         {/* 动画引导 */}
@@ -270,7 +291,12 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
                 strokeLinejoin="round"
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.3 }}
+                transition={{
+                  duration: 1.5,
+                  ease: 'easeInOut',
+                  repeat: Infinity,
+                  repeatDelay: 0.3,
+                }}
               />
             </svg>
           )}
@@ -279,13 +305,24 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
         <canvas
           ref={canvasRef}
           className={styles.drawCanvas}
-          onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing}
-          onTouchStart={startDrawing} onTouchMove={draw} onTouchEnd={stopDrawing}
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
         />
       </div>
 
       <div className={styles.controls}>
-        <button className={styles.btn} onClick={() => { setStrokeIndex(0); clearCanvas(); }}>
+        <button
+          className={styles.btn}
+          onClick={() => {
+            setStrokeIndex(0);
+            clearCanvas();
+          }}
+        >
           Restart
         </button>
       </div>

@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 40px 16px 0 16px; 
+  padding: 40px 16px 0 16px;
   position: relative;
   touch-action: none;
   user-select: none;
@@ -36,40 +36,42 @@
   max-width: 380px;
   /* 强制保持 1:1 比例 */
   aspect-ratio: 1 / 1;
-  height: auto; 
+  height: auto;
 
   /* --- 田字格虚线样式开始 --- */
   background-color: #ffffff;
-  
+
   /* 核心逻辑：定义两个渐变层，分别画水平和垂直的“小短线” */
   background-image: 
     /* 1. 水平虚线：灰色 6px，透明 6px */
     linear-gradient(to right, #e5e5ea 6px, transparent 6px),
     /* 2. 垂直虚线：灰色 6px，透明 6px */
     linear-gradient(to bottom, #e5e5ea 6px, transparent 6px);
-  
+
   /* 定义虚线的粗细和重复单元大小 */
   /* 第一个值 (12px 2px): 水平线。12px是(实线+空隙)的循环长度，2px是线条高度(粗细) */
   /* 第二个值 (2px 12px): 垂直线。2px是线条宽度(粗细)，12px是(实线+空隙)的循环长度 */
-  background-size: 12px 2px, 2px 12px;
-  
+  background-size:
+    12px 2px,
+    2px 12px;
+
   /* 强制居中 */
   background-position: center center;
-  
+
   /* 水平线只在X轴重复，垂直线只在Y轴重复 */
   background-repeat: repeat-x, repeat-y;
   /* --- 田字格虚线样式结束 --- */
 
   /* border-radius: 24px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08); */
-  border: 2px solid rgba(0,0,0,0.05); /* 这个淡淡的 border 可以保留增加层次，也可以删掉用上面的 */
-  
+  border: 2px solid rgba(0, 0, 0, 0.05); /* 这个淡淡的 border 可以保留增加层次，也可以删掉用上面的 */
+
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
-  
+
   margin: 20px auto;
 }
 
@@ -81,7 +83,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  padding: 0; 
+  padding: 0;
 }
 
 /* 画布层 */
@@ -97,7 +99,7 @@
 }
 
 .controls {
-  margin-top: auto; 
+  margin-top: auto;
   margin-bottom: 40px;
   z-index: 20;
 }
@@ -112,7 +114,7 @@
   cursor: pointer;
   background: #007aff;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,122,255,0.3);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
   transition: transform 0.1s;
 }
 

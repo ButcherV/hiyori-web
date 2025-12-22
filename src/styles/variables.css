@@ -1,50 +1,52 @@
 /* src/styles/variables.css */
 :root {
-  
   /* --- 调色板 (Palette) --- */
-  
+
   /* 主色：鸟居红 (Torii Red) - 用于重点、按钮 */
-  --color-primary: #FF4500;
-  
+  --color-primary: #ff4500;
+
   /* 背景色：和纸白 (Washi White) - 用于页面背景，稍微带点暖色，护眼 */
-  --color-bg: #F9F9F7;
-  
+  --color-bg: #f9f9f7;
+
   /* 卡片背景：纯白 */
-  --color-card-bg: #FFFFFF;
-  
+  --color-card-bg: #ffffff;
+
   /* 文字色：墨黑 (Sumi Ink) - 不要用纯黑 #000，太刺眼 */
-  --color-text-main: #2D2D2D;
-  --color-text-sub: #6E6E6E;
-  
+  --color-text-main: #2d2d2d;
+  --color-text-sub: #6e6e6e;
+
   /* 辅助色：抹茶绿 (Matcha) - 用于正确选项 */
   --color-success: #34c759;
-  
+
   /* 辅助色：错误红 */
   --color-error: #ff3b30;
 
   /* --- 布局 (Layout) --- */
-  --radius-card: 16px;     /* 卡片圆角 */
-  --radius-button: 99px;   /* 胶囊按钮 */
+  --radius-card: 16px; /* 卡片圆角 */
+  --radius-button: 99px; /* 胶囊按钮 */
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08); /* 柔和的阴影 */
-  
+
   /* --- 动画 (Animation) --- */
   --transition-fast: 0.2s ease;
   --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-
   /* 1. UI 字体：优先简中 (PingFang SC / 微软雅黑) */
   /* 用于：菜单、设置页、按钮、提示语 */
-  --font-family-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-family-ui:
+    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 
   /* 2. 日语字体：优先日文标准 (Hiragino Kaku / Meiryo) */
   /* 用于：TinderCard 的单词、QuizHeader 的题目、罗马音 */
-  --font-family-ja: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-family-ja:
+    'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', 'Yu Gothic',
+    'Noto Sans JP', sans-serif;
 
-  --bg-app: #f9fafb;       /* 页面底色 */
-  --bg-surface: #ffffff;   /* 列表/卡片背景色 */
+  --bg-app: #f9fafb; /* 页面底色 */
+  --bg-surface: #ffffff; /* 列表/卡片背景色 */
   --text-primary: #111827; /* 主要文字色 */
   --text-secondary: #9ca3af; /* 次要文字色 */
-  --primary-color: #3b82f6;  /* 主题色 */
+  --primary-color: #3b82f6; /* 主题色 */
 }
 
 .font-ja {

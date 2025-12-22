@@ -1,10 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 // 定义设置的类型
 interface SettingsState {
-  showRomaji: boolean;    // 显示罗马音
-  autoAudio: boolean;     // 自动发音
-  soundEffect: boolean;   // 音效 (Bingo/Oops)
+  showRomaji: boolean; // 显示罗马音
+  autoAudio: boolean; // 自动发音
+  soundEffect: boolean; // 音效 (Bingo/Oops)
   hapticFeedback: boolean; // 震动反馈
 }
 
@@ -19,7 +25,9 @@ const defaultSettings: SettingsState = {
   hapticFeedback: true,
 };
 
-const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+const SettingsContext = createContext<SettingsContextType | undefined>(
+  undefined
+);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   // 尝试从 localStorage 读取设置，如果没有就用默认
@@ -34,7 +42,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   }, [settings]);
 
   const toggleSetting = (key: keyof SettingsState) => {
-    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+    setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (

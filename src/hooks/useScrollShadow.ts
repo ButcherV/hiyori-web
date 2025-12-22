@@ -20,7 +20,7 @@ export function useScrollShadow(threshold = 10) {
 
     // 监听滚动
     element.addEventListener('scroll', handleScroll);
-    
+
     // 清理
     return () => {
       element.removeEventListener('scroll', handleScroll);

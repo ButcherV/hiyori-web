@@ -2,7 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #F2F2F7;
+  background-color: #f2f2f7;
   font-family: var(--font-ja, sans-serif);
   overflow: hidden; /* 防止页面整体滚动 */
 }
@@ -11,7 +11,7 @@
 .topArea {
   background-color: #fff;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   z-index: 10;
 }
 
@@ -32,7 +32,7 @@
   background: none;
   border: none;
   padding: 8px;
-  color: #007AFF;
+  color: #007aff;
   cursor: pointer;
 }
 
@@ -63,7 +63,7 @@
 
 .tabActive {
   background-color: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-weight: 600;
 }
 
@@ -73,10 +73,10 @@
   align-items: center;
   justify-content: center; /* 整体居中 */
   gap: 24px; /* 左右间距 */
-  
+
   padding: 16px 24px;
   background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   position: relative;
   z-index: 5;
 }
@@ -110,12 +110,12 @@
 .kana {
   font-size: 28px;
   font-weight: 700;
-  color: #007AFF;
+  color: #007aff;
   line-height: 1.1;
 }
 
 .warnText {
-  color: #FF3B30;
+  color: #ff3b30;
 }
 
 .subInfo {
@@ -152,12 +152,12 @@
 }
 
 .dotActive {
-  background-color: #007AFF;
+  background-color: #007aff;
   transform: scale(1.3);
 }
 
 .dotFinished {
-  background-color: #8EBFFF; /* 读过的点稍微淡一点 */
+  background-color: #8ebfff; /* 读过的点稍微淡一点 */
 }
 
 /* --- B. Scrollable Area --- */
@@ -205,7 +205,7 @@
   color: #1c1c1e;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,8 +217,8 @@
 }
 
 .cellIrregular {
-  background-color: #FFF0EB; 
-  color: #FF3B30;
+  background-color: #fff0eb;
+  color: #ff3b30;
 }
 
 .irregularDot {
@@ -228,12 +228,12 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: #FF3B30;
+  background-color: #ff3b30;
   opacity: 0.6;
 }
 
 .cellActive {
-  background-color: #007AFF !important;
+  background-color: #007aff !important;
   color: white !important;
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
   transform: scale(1.1);
@@ -270,9 +270,9 @@
   -webkit-backdrop-filter: blur(20px);
   padding: 8px 24px;
   border-radius: 40px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  border: 1px solid rgba(255,255,255,0.5);
-  
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
   display: flex;
   align-items: center;
   gap: 24px;
@@ -290,7 +290,7 @@
 }
 
 .ctrlActive {
-  color: #007AFF;
+  color: #007aff;
 }
 
 .loopBadge {
@@ -299,7 +299,7 @@
   right: 2px;
   font-size: 8px;
   font-weight: 800;
-  background: #007AFF;
+  background: #007aff;
   color: white;
   width: 12px;
   height: 12px;
@@ -313,7 +313,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: #007AFF;
+  background-color: #007aff;
   color: white;
   border: none;
   display: flex;
@@ -329,7 +329,7 @@
 }
 
 .playIconOffset {
-  margin-left: 3px; 
+  margin-left: 3px;
 }
 
 .progressText {

@@ -16,10 +16,8 @@ export default function App() {
       {/* 1. 最外层包裹 BrowserRouter */}
       <BrowserRouter>
         <div className="app-container">
-          
           {/* 2. 定义路由规则 */}
           <Routes>
-            
             {/* 规则 A: 访问根路径 / -> 显示首页 */}
             <Route path="/" element={<HomePage />} />
 
@@ -27,9 +25,7 @@ export default function App() {
                 :courseId 是参数，比如 /study/hira-a
             */}
             <Route path="/study/:courseId" element={<TestStudySession />} />
-            
           </Routes>
-          
         </div>
       </BrowserRouter>
     </SettingsProvider>

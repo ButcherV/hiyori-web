@@ -5,7 +5,7 @@ import styles from './CategoryTabs.module.css';
 export interface TabOption {
   id: string;
   label: string;
-  [key: string]: any; 
+  [key: string]: any;
 }
 
 interface CategoryTabsProps {
@@ -15,17 +15,17 @@ interface CategoryTabsProps {
   renderTab?: (item: TabOption, isActive: boolean) => React.ReactNode;
 }
 
-export const CategoryTabs: React.FC<CategoryTabsProps> = ({ 
-  options, 
-  activeId, 
-  onChange, 
-  renderTab 
+export const CategoryTabs: React.FC<CategoryTabsProps> = ({
+  options,
+  activeId,
+  onChange,
+  renderTab,
 }) => {
   return (
     <div className={styles.container}>
       {options.map((item) => {
         const isActive = activeId === item.id;
-        
+
         return (
           <button
             key={item.id}
@@ -36,7 +36,7 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
               <motion.div
                 className={styles.activeBackground}
                 layoutId="active-pill" // 只要 ID 一样，它就会自动从上一个位置滑过来
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               />
             )}
 

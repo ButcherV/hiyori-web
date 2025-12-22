@@ -6,12 +6,16 @@ interface MistakeModalProps {
   isOpen: boolean;
   // 🔥 新增：必须把整个题目对象传进来，否则无法还原上下文
   question: QuizQuestion | null;
-  correctOption?: QuizOption; 
-  onNext: () => void; 
+  correctOption?: QuizOption;
+  onNext: () => void;
 }
 
-export function MistakeModal({ isOpen, question, correctOption, onNext }: MistakeModalProps) {
-  
+export function MistakeModal({
+  isOpen,
+  question,
+  correctOption,
+  onNext,
+}: MistakeModalProps) {
   // 根据不同的题型，渲染不同的正确答案展示形式
   const renderCorrectContent = () => {
     if (!question || !correctOption) return null;
@@ -34,8 +38,8 @@ export function MistakeModal({ isOpen, question, correctOption, onNext }: Mistak
           {chars.map((char, index) => {
             const isTarget = index === highlightIndex;
             return (
-              <span 
-                key={index} 
+              <span
+                key={index}
                 className={isTarget ? styles.highlightChar : styles.normalChar}
               >
                 {/* 如果是挖空的位置，显示正确选项的内容；否则显示原来的字 */}
@@ -58,21 +62,21 @@ export function MistakeModal({ isOpen, question, correctOption, onNext }: Mistak
   return (
     <AnimatePresence>
       {isOpen && question && correctOption && (
-        <motion.div 
+        <motion.div
           className={styles.overlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div 
+          <motion.div
             className={styles.modalCard}
             initial={{ scale: 0.8, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           >
             <div className={styles.icon}>😅</div>
-            
+
             <div className={styles.title}>Oops! 选错了</div>
 
             <div className={styles.correctAnswerContainer}>
