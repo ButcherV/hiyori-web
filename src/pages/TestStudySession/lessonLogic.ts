@@ -17,6 +17,7 @@ export interface ReviewItem {
   char: string;
   romaji: string;
   word: string;
+  kanji: string;
   wordRomaji: string;
   meaning: LocalizedText;
 }
@@ -282,6 +283,7 @@ export const generateWaveSequence = (
     char: KANA_DB[char].char,
     romaji: KANA_DB[char].romaji,
     word: KANA_DB[char].word,
+    kanji: KANA_DB[char].kanji,
     wordRomaji: KANA_DB[char].wordRomaji,
     meaning: KANA_DB[char].meaning,
   }));
@@ -307,4 +309,5 @@ export const generateWaveSequence = (
   // === 合并 ===
   // 顺序: 认脸 -> 深化 -> 小抄 -> 考试
   return [...phase1, ...phase2, reviewCard, ...phase3Quizzes];
+  // return [reviewCard, ...phase1, ...phase2, ...phase3Quizzes];
 };

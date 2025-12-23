@@ -195,7 +195,9 @@ export const TestStudySession = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${progress.phase === 'QUIZ' ? styles.quizContainer : ''}`}
+    >
       <div className={styles.topNav}>
         {/* <button className={styles.backBtn} onClick={() => navigate('/')}>Exit</button> */}
         <div style={{ flex: 1, margin: '0 20px' }}>
@@ -279,7 +281,6 @@ export const TestStudySession = () => {
 
                     {/* Learn: Context */}
                     {card.type === 'LEARN' && card.subType === 'CONTEXT' && (
-                      // 🔥🔥🔥 4. 这里也加 🔥🔥🔥
                       <div className={styles.learnContext}>
                         <div className={`${styles.furigana} ${styles.jaFont}`}>
                           {card.word}
@@ -306,10 +307,21 @@ export const TestStudySession = () => {
                       </div>
                     )}
 
-                    {/* 🔥🔥🔥 review Card 渲染逻辑 🔥🔥🔥 */}
+                    {card.type === 'TRACE' && (
+                      // 🔥🔥🔥 5. TraceCard 组件可能不支持 className，所以包一层 div 比较稳妥 🔥🔥🔥
+                      <div style={{ width: '100%', height: '100%' }}>
+                        <TraceCard
+                          char={card.char}
+                          onComplete={() =>
+                            isTopCard && cardRef.current?.swipe('right')
+                          }
+                        />
+                      </div>
+                    )}
+
+                    {/* review Card */}
                     {card.subType === 'REVIEW' && card.reviewItems && (
                       <div className={styles.reviewListContainer}>
-                        {/* 遍历列表，最多5个，绝对能放下不滚动 */}
                         {card.reviewItems.map((item, idx) => (
                           <div key={idx} className={styles.reviewRow}>
                             {/* 左侧：假名 + 罗马音 */}
@@ -322,7 +334,7 @@ export const TestStudySession = () => {
                               </span>
                             </div>
 
-                            {/* 右侧：单词 + 含义 */}
+                            {/* 右侧：kanji + kana + 含义 */}
                             <div className={styles.reviewRight}>
                               <span className={styles.reviewWord}>
                                 {item.kanji} [{item.word}]
@@ -345,18 +357,6 @@ export const TestStudySession = () => {
                             }}
                           />
                         </div>
-                      </div>
-                    )}
-
-                    {card.type === 'TRACE' && (
-                      // 🔥🔥🔥 5. TraceCard 组件可能不支持 className，所以包一层 div 比较稳妥 🔥🔥🔥
-                      <div style={{ width: '100%', height: '100%' }}>
-                        <TraceCard
-                          char={card.char}
-                          onComplete={() =>
-                            isTopCard && cardRef.current?.swipe('right')
-                          }
-                        />
                       </div>
                     )}
 

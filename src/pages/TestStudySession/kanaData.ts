@@ -103,7 +103,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '赤い',
     word: 'あかい',
     wordRomaji: 'akai',
-    meaning: { en: 'red', zh: '红色的' },
+    meaning: { en: 'red; crimson', zh: '红色的；革命的' },
     wordDistractors: ['あがい', 'おかい', 'あやい'],
   },
   き: {
@@ -114,7 +114,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '秋',
     word: 'あき',
     wordRomaji: 'aki',
-    meaning: { en: 'autumn', zh: '秋天' },
+    meaning: { en: 'autumn; fall', zh: '秋季；秋天' },
     wordDistractors: ['あさ', 'あぎ', 'おき'],
   },
   く: {
@@ -125,7 +125,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '靴',
     word: 'くつ',
     wordRomaji: 'kutsu',
-    meaning: { en: 'shoes', zh: '鞋子' },
+    meaning: { en: 'boots; shoes', zh: '鞋；靴子' },
     wordDistractors: ['ぐつ', 'へつ', 'しつ'],
   },
   け: {
@@ -136,7 +136,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '池',
     word: 'いけ',
     wordRomaji: 'ike',
-    meaning: { en: 'pond', zh: '池塘' },
+    meaning: { en: 'pond', zh: '池塘；水池' },
     wordDistractors: ['いげ', 'いは', 'りけ'],
   },
   こ: {

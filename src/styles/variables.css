@@ -47,6 +47,20 @@
   --text-primary: #111827; /* 主要文字色 */
   --text-secondary: #9ca3af; /* 次要文字色 */
   --primary-color: #3b82f6; /* 主题色 */
+
+  --color-Gray1: #f7f8fa;
+  --color-Gray2: #f2f4f6;
+  --color-Gray3: #ebeff3;
+  --color-Gray4: #e1e5eb;
+  --color-Gray5: #b4beca;
+  --color-Gray6: #8e9aa9;
+  --color-Gray7: #5a6779;
+  --color-Gray8: #353f4e;
+  --color-Gray9: #30343a;
+  --color-Gray10: #25282e;
+
+  --color-Blue: #0096ff;
+  --color-xBlue: #33aaff;
 }
 
 .font-ja {
