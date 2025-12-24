@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import type { LessonCard } from './lessonLogic';
+import type { LessonCard, SessionStats } from './lessonLogic';
 
 export const useProgress = (
   lessonQueue: LessonCard[],
-  currentIndex: number
+  currentIndex: number,
+  stats: SessionStats // 👈 核心改变：接收锁死的统计数据
 ) => {
   return useMemo(() => {
     if (!lessonQueue.length) {
@@ -16,58 +17,52 @@ export const useProgress = (
       };
     }
 
-    // 1. 锁定总分母 (Total)
-    // 逻辑：基于 isOriginal 统计。
-    // Learn Total: ReviewCard 及其之前的所有 Original 卡。
-    // Quiz Total: ReviewCard 之后的所有 "Original & Correct" 卡 (即题目数)。
+    // 直接解构传入的固定数据
+    const { learnTotal, quizTotal, reviewCardId } = stats;
 
-    const reviewIndex = lessonQueue.findIndex((c) => c.subType === 'REVIEW');
-    // 如果找不到 reviewIndex (异常情况)，就全算 Learn
-    const splitIndex = reviewIndex === -1 ? lessonQueue.length : reviewIndex;
+    // --- 1. 判断当前阶段 ---
+    // 通过 ID 找 Review 卡 (因为 Index 可能会变，ID 是可靠的)
+    const currentReviewIndex = lessonQueue.findIndex(
+      (c) => c.id === reviewCardId
+    );
 
-    // Learn 阶段总数 (原始卡片数)
-    // slice(0, splitIndex + 1) 包含了 Review 卡
-    const learnTotal = lessonQueue
-      .slice(0, splitIndex + 1)
-      .filter((c) => c.isOriginal).length;
+    // 如果还没滑到 Review 卡，或者当前就是 Review 卡 -> LEARNING
+    const hasPassedReview =
+      currentReviewIndex !== -1 && currentIndex > currentReviewIndex;
+    const isAtReview = lessonQueue[currentIndex]?.id === reviewCardId;
 
-    // Quiz 阶段总数 (题目数)
-    // 只统计 isCorrect=true 且 isOriginal=true 的卡
-    const quizTotal = lessonQueue
-      .slice(splitIndex + 1)
-      .filter((c) => c.isOriginal && c.isCorrect).length;
-
-    // 2. 计算当前分子 (Current)
-    const currentCard = lessonQueue[currentIndex];
-
-    // 判断阶段
-    // 只要滑过了 Review 卡，且当前卡不是 Review 卡，就算进入 QUIZ 阶段
-    const hasPassedReview = currentIndex > reviewIndex;
-    const isAtReview = currentCard?.subType === 'REVIEW';
     const phase = hasPassedReview && !isAtReview ? 'QUIZ' : 'LEARNING';
 
-    // 3. 统计已完成 (Passed)
-    const passedCards = lessonQueue.slice(0, currentIndex);
+    // --- 2. 计算 Learn Passed (分子) ---
+    let learnPassed = 0;
+    if (phase === 'QUIZ') {
+      learnPassed = learnTotal; // 只要进测试了，学习条直接拉满
+    } else {
+      // 学习阶段：统计当前位置之前的 Original 卡
+      learnPassed = lessonQueue
+        .slice(0, currentIndex)
+        .filter((c) => c.isOriginal).length;
+    }
 
-    // Learn Passed: 这里的已完成原始卡 + (如果经过了Review卡，Review卡也算一张)
-    const learnPassedCount = passedCards
-      .slice(0, splitIndex + 1)
-      .filter((c) => c.isOriginal).length;
+    // --- 3. 计算 Quiz Passed (分子) ---
+    // 🔥 核心修复：进度 = 锁死的总数 - 剩余库存
+    // 我们不统计"过去了多少"，因为删卡会导致"过去"的数据丢失。
+    // 我们统计"未来还剩多少原题"，用总数一减，就是完成的进度。
 
-    // Quiz Passed: 这里的已完成且正确的原始卡
-    const quizPassedCount = passedCards
-      .slice(splitIndex + 1)
+    // 从当前位置(含)往后找，还有多少张"原始正确卡"
+    const remainingOriginals = lessonQueue
+      .slice(currentIndex)
       .filter((c) => c.isOriginal && c.isCorrect).length;
 
-    // 修正：如果处于 Quiz 阶段，Learn 条必须是满的
-    const finalLearnPassed = phase === 'QUIZ' ? learnTotal : learnPassedCount;
+    // 进度 = 总分母 - 剩余库存
+    const quizPassed = Math.max(0, quizTotal - remainingOriginals);
 
     return {
-      learnPassed: finalLearnPassed,
-      learnTotal,
-      quizPassed: quizPassedCount,
-      quizTotal,
+      learnPassed,
+      learnTotal, // 透传固定值
+      quizPassed,
+      quizTotal, // 透传固定值
       phase: phase as 'LEARNING' | 'QUIZ',
     };
-  }, [lessonQueue, currentIndex]);
+  }, [lessonQueue, currentIndex, stats]);
 };

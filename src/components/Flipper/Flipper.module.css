@@ -1,0 +1,50 @@
+/* src/components/Flipper/Flipper.module.css */
+
+.flipperContainer {
+  perspective: 1000px;
+  display: flex; /* 保证容器是弹性布局 */
+  position: relative;
+  /* 允许从外部继承字体设置 */
+  font: inherit;
+  color: inherit;
+
+  /* ⚠️ 重要：如果外部 styles.japaneseTitle 有 line-height 或 height，
+     这里需要由内容撑开，或者设置最小高度防止塌陷 */
+  min-height: 1.5em;
+}
+
+.flipperContent {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  position: relative;
+  display: grid; /* 必须 Grid */
+}
+
+.flipperContent.flipped {
+  transform: rotateX(-180deg);
+}
+
+.flipperFace {
+  backface-visibility: hidden;
+  grid-area: 1 / 1; /* 重叠 */
+  width: 100%;
+
+  /* 默认左对齐，垂直居中 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* ⚠️ 关键：强制继承外部传入的 text properties */
+  white-space: nowrap;
+}
+
+.flipperFront {
+  z-index: 2;
+  transform: rotateX(0deg);
+}
+
+.flipperBack {
+  transform: rotateX(180deg);
+}

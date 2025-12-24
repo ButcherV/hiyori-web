@@ -77,7 +77,7 @@ export const TinderCard = forwardRef<TinderCardRef, TinderCardProps>(
     }));
 
     // 处理拖拽结束
-    const handleDragEnd = async (event: any, info: PanInfo) => {
+    const handleDragEnd = async (_: any, info: PanInfo) => {
       const threshold = 100;
       const offset = info.offset.x;
       const velocity = info.velocity.x;

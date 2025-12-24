@@ -1,5 +1,13 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  type CSSProperties,
+} from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import {
   TinderCard,
   type TinderCardRef,
@@ -8,12 +16,12 @@ import { TraceCard } from '../../components/TraceCard/index';
 import {
   generateWaveSequence,
   getRemedialCards,
+  calculateSessionStats,
+  type SessionStats,
   type LessonCard,
 } from './lessonLogic';
 import { Volume2, CheckCircle, X, Check, ChevronRight } from 'lucide-react';
 import styles from './TestStudySession.module.css';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
 // progess and Hook
 import { SegmentedProgressBar } from './SegmentedProgressBar';
@@ -40,12 +48,25 @@ export const TestStudySession = () => {
     'え',
     'お',
   ];
-  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>(() => {
-    return generateWaveSequence(targetChars);
+
+  // 🔥🔥🔥 核心修改开始：一次性初始化队列和统计数据 🔥🔥🔥
+  // 使用 useState 的 lazy initializer 同时生成这两样东西
+  const [{ initialQueue, stats }] = useState<{
+    initialQueue: LessonCard[];
+    stats: SessionStats;
+  }>(() => {
+    // 1. 造数据 (生成 15 题)
+    const queue = generateWaveSequence(targetChars);
+    // 2. 算总数 (立刻记录：分母是 15)
+    const calculatedStats = calculateSessionStats(queue);
+
+    return { initialQueue: queue, stats: calculatedStats };
   });
 
+  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>(initialQueue);
+
   const currentItem = lessonQueue[currentIndex];
-  const progress = useProgress(lessonQueue, currentIndex);
+  const progress = useProgress(lessonQueue, currentIndex, stats);
 
   const visibleCards = useMemo(() => {
     if (!lessonQueue.length || currentIndex >= lessonQueue.length) return [];
@@ -166,7 +187,7 @@ export const TestStudySession = () => {
                 newQueue.splice(i, 1);
             }
           }
-          const targetChar = currentItem.targetChar || currentItem.char;
+          const targetChar = currentItem.char;
           const remedialCards = getRemedialCards(
             targetChar,
             currentItem.subType
@@ -200,7 +221,11 @@ export const TestStudySession = () => {
     >
       <div className={styles.topNav}>
         {/* <button className={styles.backBtn} onClick={() => navigate('/')}>Exit</button> */}
-        <div style={{ flex: 1, margin: '0 20px' }}>
+
+        <button className={styles.closeBtn} onClick={() => navigate('/')}>
+          <X size={32} /> {/* 来自 lucide-react */}
+        </button>
+        <div style={{ flex: 1, margin: '0 0 0 8px' }}>
           <SegmentedProgressBar
             learnCurrent={progress.learnPassed}
             learnTotal={progress.learnTotal}
@@ -238,7 +263,7 @@ export const TestStudySession = () => {
         <div className={styles.cardArea}>
           {visibleCards.map((card, index) => {
             const isTopCard = index === 0;
-            const cardStyle = getStackStyle(index);
+            const cardStyle = getStackStyle(index) as CSSProperties;
 
             // 🔥🔥🔥 1. 定义内容模糊的类名 🔥🔥🔥
             // 如果是顶层卡，用 activeCard (执行变清晰动画)
@@ -259,7 +284,7 @@ export const TestStudySession = () => {
                   ref={isTopCard ? cardRef : null}
                   touchEnabled={isTopCard && isTouchEnabled}
                   preventSwipe={isTopCard ? preventSwipe : []}
-                  onSwipe={isTopCard ? handleSwipe : undefined}
+                  onSwipe={isTopCard ? handleSwipe : () => {}}
                 >
                   <div className={`${styles.cardContent} ${contentBlurClass}`}>
                     {/* Learn: Shape */}

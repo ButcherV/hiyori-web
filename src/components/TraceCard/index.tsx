@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './TraceCard.module.css';
 import { KANA_PATHS } from '../../datas/kanaPaths';

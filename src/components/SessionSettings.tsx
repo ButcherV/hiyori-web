@@ -19,7 +19,7 @@ export function SessionSettings({
   const { showRomaji, autoAudio, soundEffect, hapticFeedback, toggleSetting } =
     useSettings();
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (_: any, info: PanInfo) => {
     // 下滑超过 100px 或 快速甩动，则关闭
     if (info.offset.y > 100 || info.velocity.y > 500) {
       onClose();

@@ -1,8 +1,5 @@
-// src/pages/TestStudySession/lessonLogic.ts
-
 import { KANA_DB, type LocalizedText } from './kanaData';
 
-// --- 1. 类型定义 ---
 export type TaskType = 'LEARN' | 'TRACE' | 'QUIZ';
 export type SubType =
   | 'SHAPE'
@@ -12,7 +9,7 @@ export type SubType =
   | 'WORD'
   | 'REVIEW';
 
-// Review 卡片需要携带的数据结构
+// Review Card
 export interface ReviewItem {
   char: string;
   romaji: string;
@@ -50,13 +47,11 @@ export interface LessonCard {
   // Review 专用
   reviewItems?: ReviewItem[];
 
-  // 🔥🔥🔥 核心字段：用于进度条统计 🔥🔥🔥
   // true = 原始题目 (算进总进度)
   // false = 补救/惩罚题目 (不算进总进度)
   isOriginal: boolean;
 }
 
-// --- 2. 辅助工具 ---
 const shuffleArray = <T>(array: T[]): T[] => {
   const newArr = [...array];
   for (let i = newArr.length - 1; i > 0; i--) {
@@ -102,8 +97,7 @@ const createLearn = (
     headerTitle: subType === 'SHAPE' ? 'New Kana' : 'New Word',
     isHeaderJa: false,
     isContentJa: true,
-    // 默认生成的都是原始卡
-    isOriginal: true,
+    isOriginal: true, // 默认生成的都是原始卡
   };
 };
 
@@ -144,7 +138,7 @@ const createQuiz = (
     case 'ROMAJI':
       questionTitle = data.char;
       correctAnswer = data.romaji;
-      distractorPool = data.romajiDistractors;
+      distractorPool = [...data.romajiDistractors];
       isHeaderJa = true;
       isContentJa = false;
       break;
@@ -152,7 +146,7 @@ const createQuiz = (
     case 'KANA':
       questionTitle = data.romaji;
       correctAnswer = data.char;
-      distractorPool = data.charDistractors;
+      distractorPool = [...data.charDistractors];
       isHeaderJa = false;
       isContentJa = true;
       break;
@@ -161,13 +155,12 @@ const createQuiz = (
       questionTitle = data.kanji;
       questionSub = data.meaning;
       correctAnswer = data.word;
-      distractorPool = data.wordDistractors;
+      distractorPool = [...data.wordDistractors];
       isHeaderJa = true;
       isContentJa = true;
       break;
   }
 
-  // 正确答案卡 (这是我们要统计的"题目")
   cards.push({
     id: `${groupId}-correct`,
     type: 'QUIZ',
@@ -310,4 +303,33 @@ export const generateWaveSequence = (
   // 顺序: 认脸 -> 深化 -> 小抄 -> 考试
   return [...phase1, ...phase2, reviewCard, ...phase3Quizzes];
   // return [reviewCard, ...phase1, ...phase2, ...phase3Quizzes];
+};
+
+// 🔥🔥🔥 只负责计算总数的函数 (静态统计) 🔥🔥🔥
+export interface SessionStats {
+  learnTotal: number;
+  quizTotal: number;
+  reviewCardId?: string;
+}
+
+export const calculateSessionStats = (queue: LessonCard[]): SessionStats => {
+  const reviewIndex = queue.findIndex((c) => c.subType === 'REVIEW');
+  const splitIndex = reviewIndex === -1 ? queue.length : reviewIndex;
+
+  // 1. 学习阶段总数：Review卡及之前的所有 Original 卡
+  const learnTotal = queue
+    .slice(0, splitIndex + 1)
+    .filter((c) => c.isOriginal).length;
+
+  // 2. 测试阶段总数：Review卡之后的所有 Original 且 Correct 的卡 (即题目数)
+  // 这就是我们要锁死的"分母"
+  const quizTotal = queue
+    .slice(splitIndex + 1)
+    .filter((c) => c.isOriginal && c.isCorrect).length;
+
+  return {
+    learnTotal,
+    quizTotal,
+    reviewCardId: queue[reviewIndex]?.id,
+  };
 };

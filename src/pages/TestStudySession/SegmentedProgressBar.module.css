@@ -9,7 +9,7 @@
 .segment {
   position: relative;
   height: 100%;
-  background-color: white;
+  background-color: var(--color-Gray2);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -21,8 +21,8 @@
 }
 
 .learnColor {
-  background-color: #3b82f6;
+  background-color: var(--color-Green);
 } /* 蓝 */
 .quizColor {
-  background-color: #f97316;
+  background-color: var(--color-Orange);
 } /* 橙 */

@@ -19,7 +19,7 @@ export const DatesPage: React.FC<DatesPageProps> = ({ onBack }) => {
   const [passIndex, setPassIndex] = useState(0);
   const [isLoopMode, setIsLoopMode] = useState(false);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<number | null>(null);
 
   // 获取当前数据 (目前只处理 Days)
   const currentDay = datesData[currentIndex];

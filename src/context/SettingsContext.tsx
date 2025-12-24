@@ -1,9 +1,9 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
   useEffect,
-  ReactNode,
+  type ReactNode,
 } from 'react';
 
 // 定义设置的类型

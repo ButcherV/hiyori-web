@@ -5,6 +5,11 @@
     "version": "版本"
   },
   "home": {
+    "common": {
+      "goodMorning": "早上好",
+      "goodAfternoon": "下午好",
+      "goodEvening": "晚上好"
+    },
     "hero": {
       "current_session": "当前课程",
       "next_milestone": "下一里程碑",

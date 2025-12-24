@@ -5,6 +5,11 @@
     "version": "Version"
   },
   "home": {
+    "common": {
+      "goodMorning": "Morning!",
+      "goodAfternoon": "Afternoon!",
+      "goodEvening": "Evening!"
+    },
     "hero": {
       "current_session": "CURRENT SESSION",
       "next_milestone": "NEXT MILESTONE",

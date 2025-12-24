@@ -1,25 +1,7 @@
-// src/pages/TestStudySession/kanaData.ts
-
-// --- 1. 数据类型定义 ---
-
-// 多语言文本接口
 export interface LocalizedText {
   en: string;
   zh: string;
 }
-
-// 辅助类型：限制数组长度
-type FixedLengthArray<
-  T,
-  L extends number,
-  R extends T[] = [],
-> = R['length'] extends L ? R : FixedLengthArray<T, L, [...R, T]>;
-
-type Range3to6<T> =
-  | FixedLengthArray<T, 3>
-  | FixedLengthArray<T, 4>
-  | FixedLengthArray<T, 5>
-  | FixedLengthArray<T, 6>;
 
 export interface KanaEntry {
   char: string;
@@ -27,17 +9,65 @@ export interface KanaEntry {
   word: string;
   wordRomaji: string;
   kanji: string;
-
   meaning: LocalizedText;
-
-  romajiDistractors: Range3to6<string>;
-  charDistractors: Range3to6<string>;
-  wordDistractors: Range3to6<string>;
+  // 保持宽松定义，让 defineKana 处理严格校验
+  romajiDistractors: readonly string[];
+  charDistractors: readonly string[];
+  wordDistractors: readonly string[];
 }
 
-// --- 2. 静态数据库 ---
+// --- 点对点精准验证器 ---
+
+/**
+ * 这是一个映射类型 (Mapped Type)。
+ * 它会遍历 Distractors 数组里的每一项 [K in keyof Distractors]。
+ * * 逻辑：
+ * 1. 先检查数组总长度。如果不合法，返回一个整体报错的类型。
+ * 2. 如果长度合法，逐个检查元素：
+ * - 如果该元素 == Answer，把它的类型强制变成一个只有报错信息的字符串字面量。
+ * - 否则，保持它原来的类型。
+ */
+type PreciseValidator<
+  Distractors extends readonly string[],
+  Answer extends string,
+> =
+  // 检查长度
+  Distractors['length'] extends 3 | 4 | 5 | 6
+    ? {
+        // 遍历每一项
+        [K in keyof Distractors]: Distractors[K] extends Answer
+          ? '❌ 错误：不能包含正确答案' // 👈 只有撞车的这一项会变成这个类型，导致报错
+          : Distractors[K]; // 👈 其他项保持原样
+      }
+    : readonly ['❌ 错误：干扰项数量必须在 3 到 6 个之间']; // 长度错误依然报在整体上
+
+// --- 3. 构造函数 defineKana ---
+
+const defineKana = <
+  const C extends string,
+  const R extends string,
+  const W extends string,
+  const RD extends readonly string[],
+  const CD extends readonly string[],
+  const WD extends readonly string[],
+>(data: {
+  char: C;
+  romaji: R;
+  word: W;
+  wordRomaji: string;
+  kanji: string;
+  meaning: LocalizedText;
+
+  romajiDistractors: PreciseValidator<RD, R>;
+  charDistractors: PreciseValidator<CD, C>;
+  wordDistractors: PreciseValidator<WD, W>;
+}): KanaEntry => {
+  // 强转返回，因为 PreciseValidator 产生的类型在运行时其实就是 string[]
+  return data as unknown as KanaEntry;
+};
+
 export const KANA_DB: Record<string, KanaEntry> = {
-  あ: {
+  あ: defineKana({
     char: 'あ',
     romaji: 'a',
     word: 'あい',
@@ -50,8 +80,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     romajiDistractors: ['o', 'ou', 'au'],
     charDistractors: ['お', 'め', 'ぬ'],
     wordDistractors: ['あり', 'ぬい', 'めい'],
-  },
-  い: {
+  }),
+  い: defineKana({
     char: 'い',
     romaji: 'i',
     word: 'いえ',
@@ -61,8 +91,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     romajiDistractors: ['e', 'ei', 'ie'],
     charDistractors: ['り', 'こ', 'に'],
     wordDistractors: ['りえ', 'いう', 'いら', 'こえ'],
-  },
-  う: {
+  }),
+  う: defineKana({
     char: 'う',
     romaji: 'u',
     word: 'うえ',
@@ -72,8 +102,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     romajiDistractors: ['wu', 'eu', 'ui'],
     charDistractors: ['え', 'ラ', 'ら'],
     wordDistractors: ['うら', 'えう', 'ラら', 'ラえ'],
-  },
-  え: {
+  }),
+  え: defineKana({
     char: 'え',
     charDistractors: ['う', 'ラ', 'ら'],
     romaji: 'e',
@@ -83,19 +113,19 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '駅',
     meaning: { en: '(train) station', zh: '车站' },
     wordDistractors: ['あき', 'うき', 'ラき', 'ラえ', 'えさ', 'ラさ'],
-  },
-  お: {
+  }),
+  お: defineKana({
     char: 'お',
     charDistractors: ['あ', 'む', 'す'],
     romaji: 'o',
-    romajiDistractors: ['ou', 'o', 'wo'],
+    romajiDistractors: ['ou', 'uo', 'wo'],
     kanji: '青い',
     word: 'あおい',
     wordRomaji: 'aoi',
     meaning: { en: 'blue; green', zh: '蓝色；年轻的' },
     wordDistractors: ['あさい', 'おさい', 'おあい'],
-  },
-  か: {
+  }),
+  か: defineKana({
     char: 'か',
     charDistractors: ['が', 'や', 'わ'],
     romaji: 'ka',
@@ -105,8 +135,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'akai',
     meaning: { en: 'red; crimson', zh: '红色的；革命的' },
     wordDistractors: ['あがい', 'おかい', 'あやい'],
-  },
-  き: {
+  }),
+  き: defineKana({
     char: 'き',
     charDistractors: ['ぎ', 'さ', 'ち'],
     romaji: 'ki',
@@ -116,8 +146,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'aki',
     meaning: { en: 'autumn; fall', zh: '秋季；秋天' },
     wordDistractors: ['あさ', 'あぎ', 'おき'],
-  },
-  く: {
+  }),
+  く: defineKana({
     char: 'く',
     charDistractors: ['ぐ', 'へ', 'し'],
     romaji: 'ku',
@@ -127,8 +157,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'kutsu',
     meaning: { en: 'boots; shoes', zh: '鞋；靴子' },
     wordDistractors: ['ぐつ', 'へつ', 'しつ'],
-  },
-  け: {
+  }),
+  け: defineKana({
     char: 'け',
     charDistractors: ['げ', 'は', 'に'],
     romaji: 'ke',
@@ -138,8 +168,8 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'ike',
     meaning: { en: 'pond', zh: '池塘；水池' },
     wordDistractors: ['いげ', 'いは', 'りけ'],
-  },
-  こ: {
+  }),
+  こ: defineKana({
     char: 'こ',
     charDistractors: ['ご', 'に', 'て'],
     romaji: 'ko',
@@ -149,5 +179,5 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'neko',
     meaning: { en: 'cat', zh: '猫' },
     wordDistractors: ['ねご', 'ぬこ', 'ねに'],
-  },
+  }),
 };

@@ -350,7 +350,6 @@ const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
 export type ScriptType = 'hiragana' | 'katakana';
 
 interface LessonMenuProps {
-  // 🔥 onSelect 已移除，因为改用路由跳转了
   script: ScriptType;
 }
 

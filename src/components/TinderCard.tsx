@@ -45,7 +45,7 @@ export function TinderCard({
     });
   }, [index, controls]);
 
-  const handleDragEnd = async (event: any, info: PanInfo) => {
+  const handleDragEnd = async (_: any, info: PanInfo) => {
     // 🔥 如果被禁用了，直接 return，不处理任何滑动逻辑
     if (!isTop || disabled) return;
 

@@ -31,20 +31,31 @@
 }
 
 .topNav {
-  height: 50px;
-  padding: 0 20px;
+  height: 48px;
+  padding: 32px 16px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.backBtn {
+.closeBtn {
   background: none;
   border: none;
-  font-size: 16px;
   font-weight: 600;
-  color: #007aff;
+  color: white;
   cursor: pointer;
+  /* background-color: red; */
+  display: inline-block;
+
+  /* 解决移动端宽度不一致 */
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin-left: -8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .progressText {
   font-size: 14px;
@@ -61,7 +72,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
+  padding: 0 16px;
   text-align: center;
 }
 
@@ -81,9 +92,9 @@
 
 .instructionTitle.passive {
   color: white;
-  font-size: 14px;
+  font-size: 20px;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.4px;
 }
 
 .remedialText {
@@ -97,7 +108,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 10px 32px 104px;
+  padding: 8px 32px 104px;
   /* 增加透视感，让 3D 变换更自然 */
   perspective: 1000px;
 }
@@ -482,20 +493,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 12px;
-  border-radius: 8px;
+  padding: 2px 8px;
+  /* border-radius: 8px; */
   color: white;
-  background: #9cecfb; /* fallback for old browsers */
+  /* background: #9cecfb; 
   background: -webkit-linear-gradient(
     to right,
-    #65c7f7,
+    var(--color-Blue),
     #fcfcfc
-  ); /* Chrome 10-25, Safari 5.1-6 */
+  ); 
   background: linear-gradient(
     to right,
-    #65c7f7,
+    var(--color-Blue),
     #fcfcfc
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  ); */
+  box-shadow: 0px 8px 8px -8px rgba(0, 0, 0, 0.15);
 }
 
 .reviewLeft {
@@ -508,13 +520,18 @@
 
 .reviewChar {
   font-size: 32px;
+  height: 54px;
+  width: 54px;
+  line-height: 54px;
+  color: var(--color-Blue);
   font-weight: 600;
   font-family: var(--font-family-ja);
 }
 
 .reviewRomaji {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 500;
+  color: var(--color-Blue);
 }
 
 .reviewRight {
