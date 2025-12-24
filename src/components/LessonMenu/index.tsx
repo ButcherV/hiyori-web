@@ -351,9 +351,10 @@ export type ScriptType = 'hiragana' | 'katakana';
 
 interface LessonMenuProps {
   script: ScriptType;
+  onSelect?: (lessonId: string) => void;
 }
 
-const LessonMenu: React.FC<LessonMenuProps> = ({ script }) => {
+const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
   // 2. 初始化路由钩子
   const navigate = useNavigate();
 
@@ -434,11 +435,14 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script }) => {
               status={status}
               onClick={() => {
                 const targetChars = item.preview.split(' ');
-                navigate(`/study/${item.id}`, {
-                  state: {
-                    targetChars: targetChars,
-                  },
-                });
+                if (onSelect) {
+                  onSelect(item.id, targetChars);
+                }
+                // navigate(`/study/${item.id}`, {
+                //   state: {
+                //     targetChars: targetChars,
+                //   },
+                // });
               }}
             />
           );

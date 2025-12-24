@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import styles from './HomePage.module.css';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 // --- 引入组件 ---
 import BottomSheet from '../components/BottomSheet';
@@ -10,7 +11,6 @@ import SettingsMenu from '../components/SettingsMenu';
 import DatesPage from './DatesPage';
 
 import type { ScriptType } from '../components/LessonMenu';
-import Flipper from '../components/Flipper';
 import {
   getJapaneseGreeting,
   getJapaneseDateStr,
@@ -33,11 +33,12 @@ import {
 } from 'lucide-react';
 
 interface HomePageProps {
-  onCategorySelect?: (categoryId: string) => void;
+  onCategorySelect: (categoryId: string) => void;
 }
 
-export function HomePage({ onCategorySelect = () => {} }: HomePageProps) {
-  const { t, i18n } = useTranslation();
+export function HomePage({ onCategorySelect }: HomePageProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // --- 状态管理 ---
   const [isSelectionOpen, setSelectionOpen] = useState(false);
@@ -47,60 +48,22 @@ export function HomePage({ onCategorySelect = () => {} }: HomePageProps) {
   // ✅ 2. 新增状态：当前正在进行的练习 (null 代表在首页)
   const [activeDrill, setActiveDrill] = useState<string | null>(null);
 
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // 每分钟更新
-    return () => clearInterval(timer);
-  }, []);
-
   // --- Header 数据 (沉浸式日语) ---
   const headerData = useMemo(() => {
-    const hour = currentTime.getHours();
-    // ... (保留你原有的 isWeekend/isRed 判断)
+    const now = new Date();
+    const datePart = getJapaneseDateStr(now);
+    const weekPart = getJapaneseWeekday(now);
+    const holidayPart = getJapaneseHoliday(now);
+    const isRed = isRedDay(now);
+    let fullDateText = `${datePart} ${weekPart}`;
+    if (holidayPart) fullDateText += ` · ${holidayPart}`;
 
-    // 1. 准备问候语 (中日双语)
-    let greetingJp = 'こんにちは';
-    let greetingLocaleKey = 'home.common.goodAfternoon';
-
-    if (hour >= 5 && hour < 11) {
-      greetingJp = 'おはよう';
-      greetingLocaleKey = 'home.common.goodMorning';
-    } else if (hour >= 18 || hour < 5) {
-      greetingJp = 'こんばんは';
-      greetingLocaleKey = 'home.common.goodEvening';
-    }
-
-    // 构造 "对子"
-    const greetingPair = {
-      jp: greetingJp,
-      locale: t(greetingLocaleKey), // 翻译后的中文/英文
+    return {
+      greeting: getJapaneseGreeting(now),
+      fullDateText,
+      isRed,
     };
-
-    // 2. 准备日期 (中日双语)
-    const jpDateText = new Intl.DateTimeFormat('ja-JP', {
-      // year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long',
-    }).format(currentTime);
-
-    const localeDateText = new Intl.DateTimeFormat(i18n.language, {
-      // year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      weekday: 'short',
-    }).format(currentTime);
-
-    const datePair = {
-      jp: jpDateText,
-      locale: localeDateText,
-    };
-
-    return { greetingPair, datePair, isRed: isRedDay(currentTime) };
-  }, [currentTime, t, i18n.language]);
+  }, []);
 
   // --- 数据定义 ---
   const heroCourses = [
@@ -195,6 +158,20 @@ export function HomePage({ onCategorySelect = () => {} }: HomePageProps) {
     }
   };
 
+  const handleLessonSelect = (lessonId: string, targetChars: string[]) => {
+    console.log(`User Selected: ${lessonId}`);
+    setSelectionOpen(false);
+
+    // 2. 延迟跳转 (配合 CSS 动画时间，通常 250ms - 300ms)
+    setTimeout(() => {
+      navigate(`/study/${lessonId}`, {
+        state: {
+          targetChars: targetChars,
+        },
+      });
+    }, 280);
+  };
+
   // ✅ 3. 修改 Drill 点击逻辑：拦截 'dates'，其他的继续向上层汇报
   const handleDrillClick = (id: string) => {
     if (id === 'dates') {
@@ -221,25 +198,12 @@ export function HomePage({ onCategorySelect = () => {} }: HomePageProps) {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerText}>
-          {/* 👇 1. 日期翻转组件 */}
-          {/* 注意：className 直接传进去，Flipper 会把它加在外层容器上，从而继承字体大小颜色 */}
-          <Flipper
-            frontText={headerData.greetingPair.jp}
-            backText={headerData.greetingPair.locale}
-            interval={6000}
-            frontClassName={`${styles.titleStyle} ${styles.japaneseTitle}`}
-            backClassName={styles.titleStyle}
-          />
-          <Flipper
-            frontText={headerData.datePair.jp}
-            backText={headerData.datePair.locale}
-            interval={6000}
-            frontClassName={`${styles.dateStyle} ${styles.japaneseDate}`}
-            backClassName={styles.dateStyle}
-            className={headerData.isRed ? styles.holidayDate : ''}
-          />
-
-          {/* 👇 2. 问候语翻转组件 */}
+          <div className={styles.japaneseTitle}>{headerData.greeting}</div>
+          <div
+            className={`${styles.date} ${headerData.isRed ? styles.holidayDate : ''}`}
+          >
+            {headerData.fullDateText}
+          </div>
         </div>
 
         <div className={styles.headerActions}>
@@ -326,7 +290,7 @@ export function HomePage({ onCategorySelect = () => {} }: HomePageProps) {
             : t('home.modal.select_katakana')
         }
       >
-        <LessonMenu script={currentScript} />
+        <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
       </BottomSheet>
 
       <BottomSheet

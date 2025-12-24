@@ -18,7 +18,14 @@ export default function App() {
           {/* 2. 定义路由规则 */}
           <Routes>
             {/* 规则 A: 访问根路径 / -> 显示首页 */}
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  onCategorySelect={(id) => console.log('用户点击了:', id)}
+                />
+              }
+            />
 
             {/* 规则 B: 访问 /study/xxx -> 显示测试学习页 
                 :courseId 是参数，比如 /study/hira-a

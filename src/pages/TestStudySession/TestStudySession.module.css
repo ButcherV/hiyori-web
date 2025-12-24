@@ -480,8 +480,7 @@
 /* 🔥 新增：Review Card 样式 */
 .reviewListContainer {
   width: 100%;
-  padding: 8px 16px;
-  margin-top: 10px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   height: 100%;

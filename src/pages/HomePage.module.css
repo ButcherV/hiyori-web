@@ -30,36 +30,42 @@
   margin-right: 16px; /* 和右侧按钮保持距离 */
 }
 
-.titleStyle {
-  font-size: 40px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  color: var(--text-primary, #1c1c1e);
-  line-height: 1.1;
-  /* 防止文字过长换行 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dateStyle {
+.date {
   font-size: 13px;
   font-weight: 600;
   color: #8e8e93; /* 默认灰色 */
   letter-spacing: 0.5px;
+  /* margin-bottom: 4px; */
+  font-family: var(--font-ja); /* 确保使用日语字体 */
   transition: color 0.2s;
-}
-
-.japaneseTitle {
-  font-family: 'Hiragino Sans';
-}
-
-.japaneseDate {
-  font-family: 'Hiragino Sans';
 }
 
 .holidayDate {
   color: #ff3b30; /* 日本日历常用的红色 */
+}
+
+/* ✅ 重点：日语标题样式 */
+.japaneseTitle {
+  font-size: 40px; /* 约等于 2rem */
+  /* padding-top: 8px; */
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-primary, #1c1c1e);
+  line-height: 1.1;
+
+  /* ✅ 使用 global.css 定义的日语字体栈变量 */
+  font-family: var(
+    --font-ja,
+    'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP',
+    sans-serif
+  );
+
+  /* 防止文字过长换行 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ✅ 右侧按钮组容器 */
