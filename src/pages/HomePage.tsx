@@ -24,12 +24,16 @@ import {
   Calendar,
   Zap,
   Type,
-  BookOpen,
   Headphones,
   Mic,
   Trophy,
   Settings,
-  Search,
+  BookOpen,
+  // Search,
+  // BookA,
+  BookOpenText,
+  // BookOpen,
+  // Library,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -169,7 +173,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
           targetChars: targetChars,
         },
       });
-    }, 280);
+    }, 0);
   };
 
   // ✅ 3. 修改 Drill 点击逻辑：拦截 'dates'，其他的继续向上层汇报
@@ -208,7 +212,10 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
 
         <div className={styles.headerActions}>
           <button className={styles.iconBtn} aria-label={t('common.search')}>
-            <Search size={24} strokeWidth={2} />
+            {/* <BookA size={24} strokeWidth={2} /> */}
+            <BookOpenText size={24} strokeWidth={2} />
+            {/* <BookOpenText size={24} strokeWidth={2} /> */}
+            {/* <Library size={24} strokeWidth={2} /> */}
           </button>
 
           <button

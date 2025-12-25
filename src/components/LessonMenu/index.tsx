@@ -1,6 +1,5 @@
 import React, { useState, useLayoutEffect, useMemo } from 'react';
-// 1. 引入路由钩子
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import styles from './LessonMenu.module.css';
 import { MenuRow } from './MenuRow';
@@ -351,12 +350,11 @@ export type ScriptType = 'hiragana' | 'katakana';
 
 interface LessonMenuProps {
   script: ScriptType;
-  onSelect?: (lessonId: string) => void;
+  onSelect?: (lessonId: string, targetChars: string[]) => void;
 }
 
 const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
-  // 2. 初始化路由钩子
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<LessonCategory>('seion');
   const { scrollRef, isScrolled } = useScrollShadow();

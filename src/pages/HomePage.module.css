@@ -1,26 +1,51 @@
 /* 容器：去掉固定内边距，允许内容撑满，保证最小高度 */
 .container {
   min-height: 100vh;
-  /* 使用全局变量或默认色 */
   background-color: var(--bg-app, #f2f2f7);
-  padding-bottom: 40px; /* 底部留白，防止到底部划不动 */
+
+  /* 原有的 padding-bottom */
+  padding-bottom: 40px;
+
+  /* ✅ 新增：给头部留出空间 */
+  /* Header 高度 */
+  padding-top: 102px;
+
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-primary, #1c1c1e);
-  overflow-x: hidden; /* 防止横向出现滚动条 */
+
+  /* ❌ 建议删掉这个，或者确保它不会影响滚动 */
+  /* overflow-x: hidden; */
 }
 
 /* --- 1. Header 区域 (重构版) --- */
+/* src/pages/HomePage.module.css */
+
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* 垂直居中 */
+  align-items: center;
 
-  margin-bottom: 8px;
-  /* 保持左右内边距，防止贴边 */
-  padding: 16px 16px 0px 16px;
+  /* ❌ 删掉 sticky */
+  /* position: sticky; */
+
+  /* ✅ 改用 fixed：强制固定在视口顶部，无视父级 overflow 和动画 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* fixed 元素必须手动设宽度 */
+  box-sizing: border-box; /* 确保 padding 不会撑破 100% 宽度 */
+
+  z-index: 100;
+
+  /* background-color: rgba(242, 242, 247, 0.85); */
+  background-color: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: 32px 16px 8px 16px;
+  margin-bottom: 0;
 }
-
 /* 左侧文字容器：占据剩余空间 */
 .headerText {
   display: flex;

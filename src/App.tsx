@@ -1,13 +1,54 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { SettingsProvider } from './context/SettingsContext';
+import { AnimatePresence } from 'framer-motion'; // 👈 1. 新增引入
 
 // 引入全局样式
 import './styles/global.css';
 
 // 引入页面组件
 import { HomePage } from './pages/HomePage';
-// 引入新的测试页面 (注意：这里指向刚才移动到的 pages 目录)
 import { TestStudySession } from './pages/TestStudySession/TestStudySession';
+
+// 👈 2. 引入刚才写好的动画壳子
+import { PageTransition } from './components/PageTransition';
+
+// 🔥 3. 新增：把路由规则拆分到一个子组件里
+// 为什么要这么做？因为 useLocation 必须在 BrowserRouter 内部使用
+const AnimatedRoutes = () => {
+  const location = useLocation(); // 获取当前路径，用于触发动画
+
+  return (
+    // mode="wait" 表示：旧页面先走完离场动画，新页面再开始进场
+    <AnimatePresence mode="wait">
+      {/* key={location.pathname} 是告诉 React：路径变了，这是个新页面，请播放动画 */}
+      <Routes location={location} key={location.pathname}>
+        {/* 规则 A: 首页 */}
+        <Route
+          path="/"
+          element={
+            // 👇 用 PageTransition 包裹页面
+            <PageTransition>
+              <HomePage
+                onCategorySelect={(id) => console.log('用户点击了:', id)}
+              />
+            </PageTransition>
+          }
+        />
+
+        {/* 规则 B: 学习页 */}
+        <Route
+          path="/study/:courseId"
+          element={
+            // 👇 用 PageTransition 包裹页面
+            <PageTransition>
+              <TestStudySession />
+            </PageTransition>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 export default function App() {
   return (
@@ -15,23 +56,8 @@ export default function App() {
       {/* 1. 最外层包裹 BrowserRouter */}
       <BrowserRouter>
         <div className="app-container">
-          {/* 2. 定义路由规则 */}
-          <Routes>
-            {/* 规则 A: 访问根路径 / -> 显示首页 */}
-            <Route
-              path="/"
-              element={
-                <HomePage
-                  onCategorySelect={(id) => console.log('用户点击了:', id)}
-                />
-              }
-            />
-
-            {/* 规则 B: 访问 /study/xxx -> 显示测试学习页 
-                :courseId 是参数，比如 /study/hira-a
-            */}
-            <Route path="/study/:courseId" element={<TestStudySession />} />
-          </Routes>
+          {/* 🔥 4. 这里直接使用我们拆分出来的组件，替代原来的 <Routes>... */}
+          <AnimatedRoutes />
         </div>
       </BrowserRouter>
     </SettingsProvider>

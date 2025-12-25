@@ -7,7 +7,9 @@ import {
 } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
+import { useSound } from '../../hooks/useSound';
+import { Capacitor } from '@capacitor/core';
 import {
   TinderCard,
   type TinderCardRef,
@@ -48,6 +50,9 @@ export const TestStudySession = () => {
     'え',
     'お',
   ];
+
+  // --- 🔊 音效初始化 ---
+  const playSound = useSound();
 
   // 🔥🔥🔥 核心修改开始：一次性初始化队列和统计数据 🔥🔥🔥
   // 使用 useState 的 lazy initializer 同时生成这两样东西
@@ -162,11 +167,33 @@ export const TestStudySession = () => {
   };
 
   const handleSwipe = (dir: 'left' | 'right') => {
-    if (currentItem.type === 'QUIZ') {
+    // ⬇️⬇️⬇️ 核心音效与震动逻辑 ⬇️⬇️⬇️
+
+    if (currentItem.type === 'TRACE') {
+      playSound('score');
+      // 震动也加个判断，防止电脑端报警 (虽然通常Haptics在web会自动忽略，但加了更稳)
+      if (Capacitor.isNativePlatform()) {
+        Haptics.impact({ style: ImpactStyle.Light });
+      }
+    } else if (currentItem.type === 'QUIZ') {
       const isRightSwipe = dir === 'right';
       const isCorrectAction =
         (currentItem.isCorrect && isRightSwipe) ||
         (!currentItem.isCorrect && !isRightSwipe);
+
+      if (isCorrectAction) {
+        if (currentItem.isCorrect && isRightSwipe) {
+          playSound('score');
+          if (Capacitor.isNativePlatform()) {
+            Haptics.impact({ style: ImpactStyle.Medium });
+          }
+        }
+      } else {
+        playSound('failure');
+        if (Capacitor.isNativePlatform()) {
+          Haptics.notification({ type: NotificationType.Error });
+        }
+      }
 
       setLessonQueue((prev) => {
         const newQueue = [...prev];
@@ -197,6 +224,7 @@ export const TestStudySession = () => {
         return newQueue;
       });
     }
+
     setTimeout(() => setCurrentIndex((prev) => prev + 1), 200);
   };
 
