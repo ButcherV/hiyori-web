@@ -503,11 +503,9 @@ export const TestStudySession = () => {
         title={i18n.language === 'zh' ? '学习设置' : 'Session Settings'}
       >
         <StudySessionSetting
-          // 传入全局变量
           autoAudioEnabled={autoAudio}
           soundEnabled={soundEffect}
           hapticEnabled={hapticFeedback}
-          // 传入全局切换函数
           onToggleAutoAudio={() => toggleSetting('autoAudio')}
           onToggleSound={() => toggleSetting('soundEffect')}
           onToggleHaptic={() => toggleSetting('hapticFeedback')}
