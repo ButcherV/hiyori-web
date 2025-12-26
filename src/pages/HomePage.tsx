@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // --- 引入组件 ---
 import BottomSheet from '../components/BottomSheet';
 import LessonMenu from '../components/LessonMenu';
-import SettingsMenu from '../components/SettingsMenu';
+import AppSettingsMenu from '../components/AppSettingsMenu';
 // ✅ 1. 引入新做好的 DatesPage
 import DatesPage from './DatesPage';
 
@@ -305,7 +305,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         onClose={() => setSettingsOpen(false)}
         title={t('common.settings')}
       >
-        <SettingsMenu />
+        <AppSettingsMenu />
       </BottomSheet>
     </div>
   );

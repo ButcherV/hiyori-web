@@ -8,7 +8,6 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
-import { useSound } from '../../hooks/useSound';
 import { Capacitor } from '@capacitor/core';
 import {
   TinderCard,
@@ -22,12 +21,29 @@ import {
   type SessionStats,
   type LessonCard,
 } from './lessonLogic';
-import { Volume2, CheckCircle, X, Check, ChevronRight } from 'lucide-react';
+import {
+  Volume2,
+  CheckCircle,
+  X,
+  Check,
+  ChevronRight,
+  // Settings,
+  // CircleChevronLeft,
+  CircleX,
+  CircleEqual,
+} from 'lucide-react';
 import styles from './TestStudySession.module.css';
 
 // progess and Hook
 import { SegmentedProgressBar } from './SegmentedProgressBar';
 import { useProgress } from './useProgress';
+
+// sound hook
+import { useSound } from '../../hooks/useSound';
+
+import BottomSheet from '../../components/BottomSheet';
+import { StudySessionSetting } from './StudySessionSetting';
+import { useSettings } from '../../context/SettingsContext';
 
 const MAX_STACK_SIZE = 3;
 const AUTO_REDIRECT_SECONDS = 3;
@@ -38,6 +54,14 @@ export const TestStudySession = () => {
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
 
   const cardRef = useRef<TinderCardRef>(null);
+
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const {
+    soundEffect, // 全局音效状态
+    hapticFeedback, // 全局震动状态
+    autoAudio, // 全局自动发音状态
+    toggleSetting, // 全局切换方法
+  } = useSettings();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
@@ -53,6 +77,25 @@ export const TestStudySession = () => {
 
   // --- 🔊 音效初始化 ---
   const playSound = useSound();
+
+  const triggerSound = (type: Parameters<typeof playSound>[0]) => {
+    if (!soundEffect) return; // 使用全局 soundEffect
+    playSound(type);
+  };
+
+  const triggerHaptic = async (style: ImpactStyle = ImpactStyle.Light) => {
+    if (!hapticFeedback) return; // 使用全局 hapticFeedback
+    if (Capacitor.isNativePlatform()) {
+      await Haptics.impact({ style });
+    }
+  };
+
+  const triggerNotification = async (type: NotificationType) => {
+    if (!hapticFeedback) return; // 使用全局 hapticFeedback
+    if (Capacitor.isNativePlatform()) {
+      await Haptics.notification({ type });
+    }
+  };
 
   // 🔥🔥🔥 核心修改开始：一次性初始化队列和统计数据 🔥🔥🔥
   // 使用 useState 的 lazy initializer 同时生成这两样东西
@@ -167,14 +210,12 @@ export const TestStudySession = () => {
   };
 
   const handleSwipe = (dir: 'left' | 'right') => {
-    // ⬇️⬇️⬇️ 核心音效与震动逻辑 ⬇️⬇️⬇️
+    // ⬇️⬇️⬇️ 🔥 3. 核心修改：使用 trigger 函数替换直接调用 ⬇️⬇️⬇️
 
     if (currentItem.type === 'TRACE') {
-      playSound('score');
-      // 震动也加个判断，防止电脑端报警 (虽然通常Haptics在web会自动忽略，但加了更稳)
-      if (Capacitor.isNativePlatform()) {
-        Haptics.impact({ style: ImpactStyle.Light });
-      }
+      triggerSound('score');
+      // 使用封装的 triggerHaptic
+      triggerHaptic(ImpactStyle.Light);
     } else if (currentItem.type === 'QUIZ') {
       const isRightSwipe = dir === 'right';
       const isCorrectAction =
@@ -183,16 +224,13 @@ export const TestStudySession = () => {
 
       if (isCorrectAction) {
         if (currentItem.isCorrect && isRightSwipe) {
-          playSound('score');
-          if (Capacitor.isNativePlatform()) {
-            Haptics.impact({ style: ImpactStyle.Medium });
-          }
+          triggerSound('score');
+          triggerHaptic(ImpactStyle.Medium);
         }
       } else {
-        playSound('failure');
-        if (Capacitor.isNativePlatform()) {
-          Haptics.notification({ type: NotificationType.Error });
-        }
+        triggerSound('failure');
+        // 错误震动通常比较强，这里用 Notification Error
+        triggerNotification(NotificationType.Error);
       }
 
       setLessonQueue((prev) => {
@@ -251,9 +289,9 @@ export const TestStudySession = () => {
         {/* <button className={styles.backBtn} onClick={() => navigate('/')}>Exit</button> */}
 
         <button className={styles.closeBtn} onClick={() => navigate('/')}>
-          <X size={32} /> {/* 来自 lucide-react */}
+          <CircleX size={28} /> {/* 来自 lucide-react */}
         </button>
-        <div style={{ flex: 1, margin: '0 0 0 8px' }}>
+        <div style={{ flex: 1, margin: '0 8px 0 8px' }}>
           <SegmentedProgressBar
             learnCurrent={progress.learnPassed}
             learnTotal={progress.learnTotal}
@@ -262,6 +300,12 @@ export const TestStudySession = () => {
             phase={progress.phase}
           />
         </div>
+        <button
+          className={styles.closeBtn}
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <CircleEqual size={28} />
+        </button>
         {/* <span className={styles.progressText}>Remaining: {lessonQueue.length - currentIndex}</span> */}
       </div>
 
@@ -451,6 +495,24 @@ export const TestStudySession = () => {
           </button>
         </div>
       )}
+
+      {/* 挂载底部弹窗 */}
+      <BottomSheet
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        title={i18n.language === 'zh' ? '学习设置' : 'Session Settings'}
+      >
+        <StudySessionSetting
+          // 传入全局变量
+          autoAudioEnabled={autoAudio}
+          soundEnabled={soundEffect}
+          hapticEnabled={hapticFeedback}
+          // 传入全局切换函数
+          onToggleAutoAudio={() => toggleSetting('autoAudio')}
+          onToggleSound={() => toggleSetting('soundEffect')}
+          onToggleHaptic={() => toggleSetting('hapticFeedback')}
+        />
+      </BottomSheet>
     </div>
   );
 };
