@@ -8,8 +8,7 @@
 
   /* ✅ 新增：给头部留出空间 */
   /* Header 高度 */
-  padding-top: 102px;
-
+  padding-top: calc(env(safe-area-inset-top) + 94px);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-primary, #1c1c1e);
@@ -31,7 +30,6 @@
 
   /* ✅ 改用 fixed：强制固定在视口顶部，无视父级 overflow 和动画 */
   position: fixed;
-  top: 0;
   left: 0;
   width: 100%; /* fixed 元素必须手动设宽度 */
   box-sizing: border-box; /* 确保 padding 不会撑破 100% 宽度 */
@@ -43,8 +41,12 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  padding: 32px 16px 8px 16px;
+  padding: 24px 16px 8px 16px;
+  padding-top: calc(env(safe-area-inset-top) + 24px);
+
   margin-bottom: 0;
+
+  top: 0px;
 }
 /* 左侧文字容器：占据剩余空间 */
 .headerText {

@@ -9,6 +9,7 @@ body {
   color: var(--color-text-main);
   /* --- 替换成这个（可选）--- */
   min-height: 100vh; /* 保证至少有一屏高 */
+  box-sizing: border-box;
   margin: 0; /* 去掉浏览器默认边距 */
 }
 

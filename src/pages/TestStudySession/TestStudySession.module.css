@@ -31,8 +31,9 @@
 }
 
 .topNav {
-  height: 48px;
-  padding: 32px 16px 32px;
+  /* height: 0; */
+  padding: 24px 16px 0 16px;
+  padding-top: calc(env(safe-area-inset-top) + 24px); /* 刘海屏 */
   display: flex;
   justify-content: space-between;
   align-items: center;
