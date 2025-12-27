@@ -4,15 +4,24 @@
 
 /* =========== IOS -  隐藏滚动条全局方案 =========== */
 
-/* 1. 针对 WebKit 内核 (iOS/Android/Chrome/Safari) */
+/* 1. 【关键】针对 WebKit 内核 (iOS/Android/Chrome/Safari) */
+/* 使用 ::-webkit-scrollbar 伪元素选择器，并强制应用 */
+::-webkit-scrollbar,
 *::-webkit-scrollbar {
-  display: none;
+  display: none !important; /* 强制不显示，权重拉满 */
+  width: 0 !important; /* 强制宽度为 0 */
+  height: 0 !important; /* 强制高度为 0 */
+  background: transparent !important; /* 强制背景透明 */
+  -webkit-appearance: none !important;
 }
 
-/* 2. 针对 Firefox 等支持标准属性的浏览器 (兼容性写法) */
+/* 2. 针对 Firefox / IE / Edge 等标准属性 (你截图里已经有的部分) */
+html,
+body,
+#root,
 * {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE 10+ */
 }
 
 /* =========== IOS - 长按选中文案的全局解决方案  ===========  */

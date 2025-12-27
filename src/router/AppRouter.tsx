@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { HomePage } from '../pages/HomePage';
 import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { PageTransition } from '../components/PageTransition';
+import { DicePage } from '../pages/DicePage';
 
 export const AppRouter = () => {
   const location = useLocation();
@@ -31,6 +32,8 @@ export const AppRouter = () => {
             </PageTransition>
           }
         />
+
+        <Route path="/dice" element={<DicePage />} />
       </Routes>
     </AnimatePresence>
   );

@@ -239,6 +239,26 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         </div>
       </header>
 
+      {/* 👇 临时加个按钮在这里测试 */}
+      <div style={{ padding: '20px' }}>
+        <button
+          onClick={() => navigate('/dice')}
+          style={{
+            width: '100%',
+            padding: '15px',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+          }}
+        >
+          🎲 Try 3D Dice (Test)
+        </button>
+      </div>
+
       <div className={styles.scrollContainer}>
         {heroCourses.map((course) => (
           <div
