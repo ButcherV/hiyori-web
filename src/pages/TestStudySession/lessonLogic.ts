@@ -1,4 +1,4 @@
-import { KANA_DB, type LocalizedText } from './kanaData';
+import { KANA_DB, type LocalizedText } from './studyKanaData';
 
 export type TaskType = 'LEARN' | 'TRACE' | 'QUIZ';
 export type SubType =

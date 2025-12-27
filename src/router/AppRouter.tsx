@@ -23,7 +23,6 @@ export const AppRouter = () => {
           }
         />
 
-        {/* 学习页 (注意：这里我们预留了 :courseId 参数，为下一步做准备) */}
         <Route
           path="/study/:courseId"
           element={

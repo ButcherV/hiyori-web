@@ -1,25 +1,22 @@
 import React, { useState, useLayoutEffect, useMemo } from 'react';
 import styles from './LessonMenu.module.css';
 import { MenuRow } from './MenuRow';
-import type { LessonStatus } from './types'; // types 里如果还有 LessonItem 定义建议删掉，统一用 kanaData 里的
 
 import { CategoryTabs } from '../CategoryTabs';
 import type { TabOption } from '../CategoryTabs';
 
 import { useScrollShadow } from '../../hooks/useScrollShadow';
 
-// [1] 引入刚刚提取的数据和类型
 import {
   HIRAGANA_DATA,
   KATAKANA_DATA,
   type LessonItem,
   type LessonCategory,
+  type LessonStatus,
 } from '../../datas/kanaData';
 
-// [2] 引入真实进度管理
 import { useProgress } from '../../context/ProgressContext';
 
-// --- 逻辑函数 (保持你的原逻辑) ---
 const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
   const statusMap: Record<string, LessonStatus> = {};
   let foundCurrent = false;
@@ -49,9 +46,8 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
   const [activeTab, setActiveTab] = useState<LessonCategory>('seion');
   const { scrollRef, isScrolled } = useScrollShadow();
 
-  // [3] 使用真实数据！不再用 useState 定义假数据
   const { completedLessons } = useProgress();
-  // completedLessons 就是存在 LocalStorage 里的那个字符串数组 ['row-a', 'row-ka', ...]
+  // LocalStorage - ['row-a', 'row-ka', ...]
 
   const tabOptions: TabOption[] = [
     { id: 'seion', label: 'Seion', ja: '(清音)' },
@@ -61,7 +57,6 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
 
   const currentDataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
 
-  // 根据数据源和已完成列表，动态生成状态 Map
   const lessonStatusMap = useMemo(() => {
     return getStatusMap(currentDataSet, completedLessons);
   }, [currentDataSet, completedLessons]);
@@ -74,8 +69,18 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
     setActiveTab(newTabId as LessonCategory);
   };
 
+  // 当 script 变化时，根据进度自动跳转到对应的 Tab
   useLayoutEffect(() => {
-    setActiveTab('seion');
+    const data = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
+    const currentLesson = data.find(
+      (item) => !completedLessons.includes(item.id)
+    );
+
+    if (currentLesson) {
+      setActiveTab(currentLesson.category);
+    } else {
+      setActiveTab('seion');
+    }
   }, [script]);
 
   useLayoutEffect(() => {
@@ -112,7 +117,6 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
               key={item.id}
               item={item}
               status={status}
-              // 保留你的点击逻辑
               onClick={() => {
                 const targetChars = item.preview.split(' ');
                 if (onSelect) {

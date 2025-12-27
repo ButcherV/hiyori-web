@@ -8,7 +8,8 @@ export interface LessonItem {
   preview: string;
 }
 
-// --- 搬运过来的平假名数据 ---
+export type LessonStatus = 'mastered' | 'current' | 'new';
+
 export const HIRAGANA_DATA: LessonItem[] = [
   // --- 清音 (Seion) ---
   {
@@ -161,7 +162,6 @@ export const HIRAGANA_DATA: LessonItem[] = [
   },
 ];
 
-// --- 搬运过来的片假名数据 ---
 export const KATAKANA_DATA: LessonItem[] = [
   // --- 清音 ---
   {

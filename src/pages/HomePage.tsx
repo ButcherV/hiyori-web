@@ -177,10 +177,10 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     }
   };
 
-  const handleLessonSelect = (lessonId: string, targetChars: string[]) => {
+  const handleLessonSelect = (courseId: string, targetChars: string[]) => {
     setSelectionOpen(false);
     setTimeout(() => {
-      navigate(`/study/${lessonId}`, {
+      navigate(`/study/${courseId}`, {
         state: { targetChars: targetChars },
       });
     }, 0);

@@ -180,4 +180,59 @@ export const KANA_DB: Record<string, KanaEntry> = {
     meaning: { en: 'cat', zh: '猫' },
     wordDistractors: ['ねご', 'ぬこ', 'ねに'],
   }),
+  さ: defineKana({
+    char: 'さ',
+    charDistractors: ['き', 'ち', 'ざ'], // 形状相似或读音相似
+    romaji: 'sa',
+    romajiDistractors: ['za', 'so', 'ki'],
+    kanji: '傘',
+    word: 'かさ',
+    wordRomaji: 'kasa',
+    meaning: { en: 'umbrella', zh: '雨伞' },
+    wordDistractors: ['かざ', 'かき', 'がさ'],
+  }),
+  し: defineKana({
+    char: 'し',
+    charDistractors: ['つ', 'も', 'じ'], // 形状相似 (tu) 或浊音
+    romaji: 'shi',
+    romajiDistractors: ['si', 'ji', 'chi'],
+    kanji: '牛',
+    word: 'うし',
+    wordRomaji: 'ushi',
+    meaning: { en: 'cow', zh: '牛' },
+    wordDistractors: ['うじ', 'うつ', 'おし'],
+  }),
+  す: defineKana({
+    char: 'す',
+    charDistractors: ['む', 'ぬ', 'ず'], // 形状极像 (mu) 或浊音
+    romaji: 'su',
+    romajiDistractors: ['zu', 'nu', 'mu'],
+    kanji: '寿司',
+    word: 'すし',
+    wordRomaji: 'sushi',
+    meaning: { en: 'sushi', zh: '寿司' },
+    wordDistractors: ['ずし', 'すじ', 'さし'],
+  }),
+  せ: defineKana({
+    char: 'せ',
+    charDistractors: ['サ', 'ぜ', 'や'], // 形状相似
+    romaji: 'se',
+    romajiDistractors: ['ze', 'sa', 'she'],
+    kanji: '汗',
+    word: 'あせ',
+    wordRomaji: 'ase',
+    meaning: { en: 'sweat', zh: '汗水' },
+    wordDistractors: ['あぜ', 'あさ', 'いせ'],
+  }),
+  そ: defineKana({
+    char: 'そ',
+    charDistractors: ['ぞ', 'ろ', 'て'], // 形状相似 (ro) 或浊音
+    romaji: 'so',
+    romajiDistractors: ['zo', 'se', 'no'],
+    kanji: '空',
+    word: 'そら',
+    wordRomaji: 'sora',
+    meaning: { en: 'sky', zh: '天空' },
+    wordDistractors: ['ぞら', 'さら', 'そろ'],
+  }),
 };
