@@ -2,11 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { useFrame, useThree } from '@react-three/fiber';
-// ✅ 既然你安装了，我们就用它！
 import { RoundedBoxGeometry } from 'three-stdlib';
 
 // --- 常量配置 ---
-const WALL_LIMIT = 9;
+const WALL_LIMIT = 6;
 const BOX_SIZE = 2.5;
 
 // 颜色配置
@@ -35,7 +34,6 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
 
   // --- 初始化 ---
   useEffect(() => {
-    // 1. 初始化物理世界
     const world = new CANNON.World();
     world.gravity.set(0, -40, 0);
     world.broadphase = new CANNON.NaiveBroadphase();
@@ -48,19 +46,14 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
     world.addContactMaterial(
       new CANNON.ContactMaterial(wallMat, diceMat, {
         friction: 0.3,
-        restitution: 0.6,
+        restitution: 0.5,
       })
     );
 
-    // 2. 创建墙壁
     createPhysicsWalls(world, wallMat);
-
-    // 3. 创建骰子 (带 Log)
-    console.log('Creating 2 dice with RoundedBoxGeometry...');
     createDice(2, world, scene, diceMat);
 
     return () => {
-      // 清理
       diceRefs.current.forEach((obj) => {
         scene.remove(obj.mesh);
         scene.remove(obj.outline);
@@ -78,6 +71,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
     const time = performance.now() * 0.01;
 
     if (isHoldingRef.current) {
+      // 拖拽逻辑
       raycaster.current.setFromCamera(mouse.current, camera);
       const targetPoint = new THREE.Vector3();
       const intersect = raycaster.current.ray.intersectPlane(
@@ -90,11 +84,20 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
           const offsetX = Math.sin(time + i) * 1.0;
           const offsetZ = Math.cos(time + i * 2) * 1.0;
 
-          obj.body.position.x +=
-            (targetPoint.x + offsetX - obj.body.position.x) * 0.25;
+          let targetX = targetPoint.x + offsetX;
+          let targetZ = targetPoint.z + offsetZ;
+          targetX = Math.max(
+            -WALL_LIMIT + 1,
+            Math.min(WALL_LIMIT - 1, targetX)
+          );
+          targetZ = Math.max(
+            -WALL_LIMIT + 1,
+            Math.min(WALL_LIMIT - 1, targetZ)
+          );
+
+          obj.body.position.x += (targetX - obj.body.position.x) * 0.25;
           obj.body.position.y += (15 - obj.body.position.y) * 0.25;
-          obj.body.position.z +=
-            (targetPoint.z + offsetZ - obj.body.position.z) * 0.25;
+          obj.body.position.z += (targetZ - obj.body.position.z) * 0.25;
 
           obj.body.quaternion.setFromEuler(
             time * 2 + obj.spinOffset,
@@ -105,10 +108,18 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
           obj.body.velocity.set(0, 0, 0);
           obj.body.angularVelocity.set(0, 0, 0);
           obj.isReturning = false;
+          obj.stableCount = 0; // 拖拽时重置稳定计数
         });
       }
     } else {
+      // 物理模拟
       diceRefs.current.forEach((obj) => {
+        if (obj.body.position.y < -10) {
+          obj.body.position.set(0, 5, 0);
+          obj.body.velocity.set(0, 0, 0);
+          obj.stableCount = 0;
+        }
+
         if (obj.isReturning) {
           obj.body.position.x += (0 - obj.body.position.x) * 0.15;
           obj.body.position.z += (0 - obj.body.position.z) * 0.15;
@@ -116,6 +127,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
           obj.body.quaternion.setFromEuler(time * 5, time * 5, 0);
           obj.body.velocity.set(0, 0, 0);
           obj.body.angularVelocity.set(0, 0, 0);
+          obj.stableCount = 0;
 
           if (
             Math.abs(obj.body.position.x) < WALL_LIMIT &&
@@ -174,6 +186,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
         obj.body.wakeUp();
         obj.spinOffset = Math.random() * 100;
         obj.isReturning = false;
+        obj.stableCount = 0; // 重置稳定计数
       });
     };
 
@@ -220,7 +233,6 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
     scene: THREE.Scene,
     mat: CANNON.Material
   ) => {
-    // ✅ 使用 RoundedBoxGeometry
     const geometry = new RoundedBoxGeometry(
       BOX_SIZE,
       BOX_SIZE,
@@ -251,11 +263,10 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
         diceMaterials.push(
           new THREE.MeshBasicMaterial({
             map: createDiceTexture(j, randomColor),
-            color: 'white', // 确保有底色
+            color: 'white',
           })
         );
       }
-      // 面顺序
       const matArray = [
         diceMaterials[0],
         diceMaterials[5],
@@ -287,6 +298,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
       body.quaternion.setFromEuler(Math.random(), Math.random(), Math.random());
       world.addBody(body);
 
+      // 🔥 新增 stableCount 属性
       diceRefs.current.push({
         mesh,
         outline,
@@ -294,6 +306,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
         body,
         spinOffset: 0,
         isReturning: false,
+        stableCount: 0,
       });
     }
   };
@@ -328,24 +341,40 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
     );
   };
 
+  // 🔥 核心修改：稳定性检测逻辑
   const checkResult = () => {
-    let allStopped = true;
+    let allStable = true;
+
     for (let obj of diceRefs.current) {
       if (obj.isReturning) {
-        allStopped = false;
+        allStable = false;
+        obj.stableCount = 0;
         break;
       }
-      if (
-        obj.body.velocity.lengthSquared() > 0.1 ||
-        obj.body.angularVelocity.lengthSquared() > 0.1
-      ) {
-        allStopped = false;
-        break;
+
+      // 检查当前速度 (更严格的阈值)
+      const speed = obj.body.velocity.lengthSquared();
+      const angularSpeed = obj.body.angularVelocity.lengthSquared();
+
+      // 阈值设为 0.01 (非常小)
+      if (speed < 0.01 && angularSpeed < 0.01) {
+        // 如果速度很慢，增加稳定性计数
+        obj.stableCount += 1;
+      } else {
+        // 只要有一点动，就重置计数
+        obj.stableCount = 0;
+        allStable = false;
+      }
+
+      // 只有连续静止 15 帧 (约 0.25秒) 才算真的停下
+      if (obj.stableCount < 15) {
+        allStable = false;
       }
     }
 
-    if (allStopped) {
-      needsCheckRef.current = false;
+    if (allStable) {
+      needsCheckRef.current = false; // 停止检测
+
       const faceNormals = [
         new THREE.Vector3(1, 0, 0),
         new THREE.Vector3(-1, 0, 0),
@@ -381,7 +410,8 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
       -Math.PI / 2
     );
     world.addBody(floorBody);
-    const wallDistance = 12;
+
+    const wallDistance = WALL_LIMIT + 3;
     const createWall = (x: number, z: number, rot: number) => {
       const body = new CANNON.Body({ mass: 0, material: mat });
       body.addShape(new CANNON.Plane());
@@ -398,8 +428,8 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
   return null;
 };
 
-// 工具函数
-function createDiceTexture(number: number, colorHex: string) {
+// --- 工具函数：生成贴图 (逻辑保持不变 0-5) ---
+function createDiceTexture(logicalNumber: number, colorHex: string) {
   const size = 256;
   const canvas = document.createElement('canvas');
   canvas.width = size;
@@ -407,50 +437,51 @@ function createDiceTexture(number: number, colorHex: string) {
   const ctx = canvas.getContext('2d')!;
   ctx.fillStyle = colorHex;
   ctx.fillRect(0, 0, size, size);
+
+  const visualNumber = logicalNumber - 1;
+
   const isTraditional = colorHex === '#FFFFFF';
   let dotColor = COMMON_COLORS.dots;
   if (isTraditional) {
-    if (number === 1 || number === 4) dotColor = '#E03E3E';
+    if (visualNumber === 1 || visualNumber === 4) dotColor = '#E03E3E';
     else dotColor = '#331e18';
   }
   ctx.fillStyle = dotColor;
+
   const dotSize = size / 5;
   const currentDotSize =
-    isTraditional && number === 1 ? dotSize * 1.5 : dotSize;
+    isTraditional && visualNumber === 1 ? dotSize * 1.5 : dotSize;
   const center = size / 2;
   const q1 = size / 4;
   const q3 = (size * 3) / 4;
+
   const drawDot = (x: number, y: number) => {
     ctx.beginPath();
     ctx.arc(x, y, currentDotSize / 2, 0, Math.PI * 2);
     ctx.fill();
   };
-  if (number === 1) drawDot(center, center);
-  else if (number === 2) {
+
+  if (visualNumber === 1) {
+    drawDot(center, center);
+  } else if (visualNumber === 2) {
     drawDot(q1, q1);
     drawDot(q3, q3);
-  } else if (number === 3) {
+  } else if (visualNumber === 3) {
     drawDot(q1, q1);
     drawDot(center, center);
     drawDot(q3, q3);
-  } else if (number === 4) {
+  } else if (visualNumber === 4) {
     drawDot(q1, q1);
     drawDot(q3, q1);
     drawDot(q1, q3);
     drawDot(q3, q3);
-  } else if (number === 5) {
+  } else if (visualNumber === 5) {
     drawDot(q1, q1);
     drawDot(center, center);
     drawDot(q1, q3);
     drawDot(q3, q3);
     drawDot(q3, q1);
-  } else if (number === 6) {
-    drawDot(q1, q1);
-    drawDot(q3, q1);
-    drawDot(q1, center);
-    drawDot(q3, center);
-    drawDot(q1, q3);
-    drawDot(q3, q3);
   }
+
   return new THREE.CanvasTexture(canvas);
 }

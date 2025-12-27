@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Dialog } from '@capacitor/dialog';
 import { Toast } from '@capacitor/toast';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 // 定义活动日志类型：{ "2023-10-01": 5, "2023-10-02": 1 }
 type ActivityLog = Record<string, number>;
@@ -53,7 +54,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     // B. 不去重：记录今天的活动 (只要学完一次就算一次，不管是不是新课)
-    const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+    const today = format(new Date(), 'yyyy-MM-dd');
     setActivityLog((prev) => ({
       ...prev,
       [today]: (prev[today] || 0) + 1, // 次数 +1
