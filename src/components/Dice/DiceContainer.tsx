@@ -1,73 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { D12Dice } from './D12Dice';
-import { OrbitControls } from '@react-three/drei'; // 移除了 Environment
+import { DoubleDice } from './DoubleDice';
+// ❌ 删除 Environment 的引用，防止去国外 CDN 下载
+import { OrbitControls } from '@react-three/drei';
 
-export const DiceRoller = () => {
-  const [rolling, setRolling] = useState(false);
-  const [result, setResult] = useState<number | null>(null);
+interface DiceRollerProps {
+  onRoll?: (total: number, values: number[]) => void;
+}
 
-  const handleRoll = () => {
-    if (rolling) return;
-    setRolling(true);
-    setResult(null);
+export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
+  const [status, setStatus] = useState('Drag & Release!');
 
-    setTimeout(() => {
-      setRolling(false);
-      const newResult = Math.floor(Math.random() * 12);
-      setResult(newResult);
-      console.log('Rolled:', newResult === 11 ? '⭐️' : newResult);
-    }, 1500);
+  useEffect(() => {
+    console.log('DiceRoller mounted! 🚀');
+  }, []);
+
+  const handleResult = (vals: number[]) => {
+    const total = vals[0] + vals[1];
+    setStatus(`Rolled: ${vals[0]} + ${vals[1]} = ${total}`);
+    if (onRoll) onRoll(total, vals);
   };
 
   return (
-    // 调试用：加个深色背景，确保容器本身有高度
     <div
       style={{
         width: '100%',
-        height: '300px',
+        height: '40vh',
         position: 'relative',
-        background: '#e0e7ff',
-        borderRadius: '16px',
+        background: '#F6F3EB',
+        borderRadius: '24px',
+        overflow: 'hidden',
+        boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
+        touchAction: 'none',
       }}
     >
-      {/* 降低像素比 dpr，防止手机显存爆炸 */}
-      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 0, 6], fov: 50 }}>
-        {/* 1. 基础环境光 */}
-        <ambientLight intensity={0.7} />
-        {/* 2. 定向光 (替代 SpotLight，计算更便宜) */}
-        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        orthographic
+        camera={{
+          position: [50, 50, 50],
+          zoom: 15,
+          near: 0.1,
+          far: 1000,
+        }}
+      >
+        {/* 1. 增强环境光：因为去掉了 Environment，这里要亮一点 */}
+        <ambientLight intensity={1.5} />
 
-        {/* ❌ 暂时移除 Environment，因为它需要联网下载 huge HDR 文件 */}
+        {/* 2. 主光源：模拟太阳光 */}
+        <directionalLight
+          position={[10, 20, 10]}
+          intensity={2}
+          castShadow
+          shadow-mapSize={[1024, 1024]}
+        />
+
+        {/* 3. 补光灯：防止背光面太黑 */}
+        <pointLight
+          position={[-10, -10, -10]}
+          intensity={0.5}
+          color="#818cf8"
+        />
+
+        {/* ❌ 彻底删除这行，它就是罪魁祸首 */}
         {/* <Environment preset="city" /> */}
 
-        <D12Dice rolling={rolling} result={result} />
-        <OrbitControls enableZoom={false} />
+        {/* 调试地板：如果能看到红色网格，说明渲染成功了 */}
+        <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[100, 100]} />
+          <meshBasicMaterial color="red" wireframe opacity={0.1} transparent />
+        </mesh>
+
+        <DoubleDice onResult={handleResult} />
+
+        <OrbitControls target={[0, 0, 0]} enableZoom={true} />
       </Canvas>
 
       <div
         style={{
           position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
+          bottom: '15px',
+          width: '100%',
+          textAlign: 'center',
+          pointerEvents: 'none',
         }}
       >
-        <button
-          onClick={handleRoll}
+        <div
           style={{
-            padding: '12px 24px',
-            fontSize: '18px',
-            background: rolling ? '#ccc' : '#4f46e5',
-            color: 'white',
-            border: 'none',
-            borderRadius: '50px',
+            display: 'inline-block',
+            padding: '6px 16px',
+            background: 'rgba(255,255,255,0.9)',
+            borderRadius: '20px',
+            color: '#725349',
             fontWeight: 'bold',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            fontSize: '14px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}
         >
-          {rolling ? 'Rolling...' : 'Roll Dice 🎲'}
-        </button>
+          {status}
+        </div>
       </div>
     </div>
   );
