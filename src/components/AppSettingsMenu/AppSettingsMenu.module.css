@@ -2,20 +2,26 @@
   padding-bottom: 32px;
   background-color: var(--bg-surface, #ffffff);
   color: var(--text-primary, #1c1c1e);
+
+  /* ✅ 新增：限制最大高度，防止撑破屏幕 */
+  /* 如果你的 BottomSheet 是固定高度的，这里设为 100% 即可；如果是自适应的，建议设个 max-height */
+  height: 100%;
+  max-height: 70vh; /* 或者 80vh，根据你的 BottomSheet 留出的头部高度决定 */
+
+  /* ✅ 新增：允许纵向滚动 */
+  overflow-y: auto;
+
+  /* ✅ 新增：iOS 惯性滚动支持 (丝滑滚动) */
+  -webkit-overflow-scrolling: touch;
+
+  /* ✅ 新增：底部安全距离 */
+  /* 防止最后一个“清除数据”按钮贴底太近，或者被 iPhone 的黑条遮挡 */
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
-.section {
-  margin-bottom: 32px;
-}
-
-.sectionTitle {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary, #9ca3af);
-  margin-bottom: 12px;
-  padding: 0 4px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+/* 隐藏滚动条但保留滚动功能 */
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .controlRow {

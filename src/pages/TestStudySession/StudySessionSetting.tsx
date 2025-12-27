@@ -30,52 +30,42 @@ export const StudySessionSetting: React.FC<StudySessionSettingProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* 第一部分：学习辅助 */}
-      <div className={styles.section}>
-        <div className={styles.sectionTitle}>{t('settings.learning')}</div>
-
-        {/* 自动发音开关 (结构已找回) */}
-        <div className={styles.controlRow} onClick={onToggleAutoAudio}>
-          <div className={styles.labelGroup}>
-            <Volume2 size={20} className={styles.icon} />
-            <span className={styles.label}>{t('settings.autoplay')}</span>
-          </div>
-          <div
-            className={`${styles.switch} ${autoAudioEnabled ? styles.switchOn : ''}`}
-          >
-            <div className={styles.switchHandle} />
-          </div>
+      {/* 自动发音开关*/}
+      <div className={styles.controlRow} onClick={onToggleAutoAudio}>
+        <div className={styles.labelGroup}>
+          <Volume2 size={20} className={styles.icon} />
+          <span className={styles.label}>{t('settings.autoplay')}</span>
+        </div>
+        <div
+          className={`${styles.switch} ${autoAudioEnabled ? styles.switchOn : ''}`}
+        >
+          <div className={styles.switchHandle} />
         </div>
       </div>
 
-      {/* 第二部分：反馈 */}
-      <div className={styles.section}>
-        <div className={styles.sectionTitle}>Feedback</div>
-
-        {/* 音效开关 */}
-        <div className={styles.controlRow} onClick={onToggleSound}>
-          <div className={styles.labelGroup}>
-            <Speaker size={20} className={styles.icon} />
-            <span className={styles.label}>Sound Effects</span>
-          </div>
-          <div
-            className={`${styles.switch} ${soundEnabled ? styles.switchOn : ''}`}
-          >
-            <div className={styles.switchHandle} />
-          </div>
+      {/* 音效开关 */}
+      <div className={styles.controlRow} onClick={onToggleSound}>
+        <div className={styles.labelGroup}>
+          <Speaker size={20} className={styles.icon} />
+          <span className={styles.label}>Sound Effects</span>
         </div>
+        <div
+          className={`${styles.switch} ${soundEnabled ? styles.switchOn : ''}`}
+        >
+          <div className={styles.switchHandle} />
+        </div>
+      </div>
 
-        {/* 震动开关 */}
-        <div className={styles.controlRow} onClick={onToggleHaptic}>
-          <div className={styles.labelGroup}>
-            <Vibrate size={20} className={styles.icon} />
-            <span className={styles.label}>Haptic Feedback</span>
-          </div>
-          <div
-            className={`${styles.switch} ${hapticEnabled ? styles.switchOn : ''}`}
-          >
-            <div className={styles.switchHandle} />
-          </div>
+      {/* 震动开关 */}
+      <div className={styles.controlRow} onClick={onToggleHaptic}>
+        <div className={styles.labelGroup}>
+          <Vibrate size={20} className={styles.icon} />
+          <span className={styles.label}>Haptic Feedback</span>
+        </div>
+        <div
+          className={`${styles.switch} ${hapticEnabled ? styles.switchOn : ''}`}
+        >
+          <div className={styles.switchHandle} />
         </div>
       </div>
     </div>

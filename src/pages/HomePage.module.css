@@ -73,8 +73,8 @@
 
 /* ✅ 重点：日语标题样式 */
 .japaneseTitle {
-  font-size: 40px; /* 约等于 2rem */
-  /* padding-top: 8px; */
+  font-size: 36px; /* 约等于 2rem */
+  margin-left: -4px;
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--text-primary, #1c1c1e);

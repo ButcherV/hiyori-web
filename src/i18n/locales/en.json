@@ -2,7 +2,9 @@
   "common": {
     "settings": "Settings",
     "search": "Search",
-    "version": "Version"
+    "version": "Version",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "home": {
     "common": {
@@ -47,6 +49,11 @@
     "learning": "LEARNING",
     "show_romaji": "Show Romaji",
     "autoplay": "Auto-play Audio",
-    "about": "ABOUT"
+    "about": "ABOUT",
+    "clear_dialog_title": "Clear History",
+    "clear_dialog_message": "Are you sure you want to delete all learning progress? This cannot be undone.",
+    "data_management": "Data Management",
+    "clear_progress_btn": "Clear Learning Progress",
+    "clear_success": "Data cleared successfully"
   }
 }

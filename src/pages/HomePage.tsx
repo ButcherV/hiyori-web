@@ -212,6 +212,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         </div>
         <div className={styles.headerActions}>
           <button className={styles.iconBtn} aria-label={t('common.search')}>
+            <Trophy size={22} strokeWidth={2} color="#ffbb00ff" />
+          </button>
+          <button className={styles.iconBtn} aria-label={t('common.search')}>
             <BookOpenText size={24} strokeWidth={2} />
           </button>
           <button

@@ -2,7 +2,9 @@
   "common": {
     "settings": "设置",
     "search": "搜索",
-    "version": "版本"
+    "version": "版本",
+    "cancel": "取消",
+    "delete": "删除"
   },
   "home": {
     "common": {
@@ -47,6 +49,11 @@
     "learning": "学习设置",
     "show_romaji": "显示罗马音",
     "autoplay": "自动播放音频",
-    "about": "关于"
+    "about": "关于",
+    "clear_dialog_title": "重置学习进度",
+    "clear_dialog_message": "确定要清除所有学习进度吗？此操作无法撤销。",
+    "data_management": "数据管理",
+    "clear_progress_btn": "清除学习进度",
+    "clear_success": "数据清除成功"
   }
 }
