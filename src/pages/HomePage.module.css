@@ -139,12 +139,7 @@
   padding: 8px 16px 32px 16px;
 
   scroll-snap-type: x mandatory;
-  scrollbar-width: none;
   -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
-}
-
-.scrollContainer::-webkit-scrollbar {
-  display: none;
 }
 
 .heroCard {

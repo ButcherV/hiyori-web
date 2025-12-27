@@ -4,7 +4,8 @@
     "search": "Search",
     "version": "Version",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "history": "History"
   },
   "home": {
     "common": {
@@ -55,5 +56,11 @@
     "data_management": "Data Management",
     "clear_progress_btn": "Clear Learning Progress",
     "clear_success": "Data cleared successfully"
+  },
+  "stats": {
+    "title": "My Journey",
+    "total_lessons": "Total Lessons",
+    "streak_label": "Keep Going!",
+    "tooltip": "{{count}} sessions on {{date}}"
   }
 }

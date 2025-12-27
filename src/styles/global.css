@@ -1,4 +1,3 @@
-/* src/styles/global.css */
 body {
   /* 默认用中文 UI 字体，日语教学字体单独设置*/
   font-family: var(--font-family-ui);
@@ -7,7 +6,6 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: var(--color-bg);
   color: var(--color-text-main);
-  /* --- 替换成这个（可选）--- */
   min-height: 100vh; /* 保证至少有一屏高 */
   box-sizing: border-box;
   margin: 0; /* 去掉浏览器默认边距 */
@@ -16,4 +14,40 @@ body {
 #root {
   height: 100%;
   width: 100%;
+}
+
+/* =========== IOS -  隐藏滚动条全局方案 =========== */
+
+/* 1. 针对 WebKit 内核 (iOS/Android/Chrome/Safari) */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* 2. 针对 Firefox 等支持标准属性的浏览器 (兼容性写法) */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* =========== IOS - 长按选中文案的全局解决方案  ===========  */
+:root {
+  /* :root 相当于 <html> 标签 */
+  /* 禁止 iOS 长按弹出菜单 (保存图片/链接预览等) */
+  -webkit-touch-callout: none;
+
+  /* 禁止文本选择 (这是消除放大镜和光标的关键) */
+  -webkit-user-select: none; /* Safari */
+  user-select: none; /* Standard syntax */
+
+  /* 禁止点击时的高亮背景色 (原生 App 点击没有那个灰色的背景块) */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- ⚠️ 重要例外：输入框必须允许选择，否则无法打字 --- */
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-appearance: none;
 }

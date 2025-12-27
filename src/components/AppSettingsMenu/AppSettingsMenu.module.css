@@ -19,11 +19,6 @@
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
-/* 隐藏滚动条但保留滚动功能 */
-.container::-webkit-scrollbar {
-  display: none;
-}
-
 .controlRow {
   display: flex;
   align-items: center;

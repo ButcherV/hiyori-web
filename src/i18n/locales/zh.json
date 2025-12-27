@@ -4,7 +4,8 @@
     "search": "搜索",
     "version": "版本",
     "cancel": "取消",
-    "delete": "删除"
+    "delete": "删除",
+    "history": "历史"
   },
   "home": {
     "common": {
@@ -55,5 +56,11 @@
     "data_management": "数据管理",
     "clear_progress_btn": "清除学习进度",
     "clear_success": "数据清除成功"
+  },
+  "stats": {
+    "title": "学习旅程",
+    "total_lessons": "累计学习",
+    "streak_label": "坚持下去!",
+    "tooltip": "{{date}} 完成了 {{count}} 次"
   }
 }

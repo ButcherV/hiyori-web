@@ -8,6 +8,7 @@ import BottomSheet from '../components/BottomSheet';
 import LessonMenu from '../components/LessonMenu';
 import AppSettingsMenu from '../components/AppSettingsMenu';
 import DatesPage from './DatesPage';
+import { StatsHeatmap } from '../components/StatsHeatmap';
 
 import type { ScriptType } from '../components/LessonMenu';
 import {
@@ -45,8 +46,13 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   // --- 状态管理 ---
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [isStatsOpen, setStatsOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
   const [activeDrill, setActiveDrill] = useState<string | null>(null);
+
+  const { activityLog } = useProgress();
+  // 计算是否有任何活动 (只要 log 里有任何记录)
+  const hasActivity = Object.values(activityLog).some((count) => count > 0);
 
   // ✅ [改动2] 获取用户已完成的课程列表
   const { completedLessons } = useProgress();
@@ -211,9 +217,15 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
           </div>
         </div>
         <div className={styles.headerActions}>
-          <button className={styles.iconBtn} aria-label={t('common.search')}>
-            <Trophy size={22} strokeWidth={2} color="#ffbb00ff" />
-          </button>
+          {hasActivity && (
+            <button
+              className={styles.iconBtn}
+              aria-label={t('common.history')}
+              onClick={() => setStatsOpen(true)}
+            >
+              <Trophy size={22} strokeWidth={2} color="#ffbb00ff" />
+            </button>
+          )}
           <button className={styles.iconBtn} aria-label={t('common.search')}>
             <BookOpenText size={24} strokeWidth={2} />
           </button>
@@ -302,6 +314,14 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         title={t('common.settings')}
       >
         <AppSettingsMenu />
+      </BottomSheet>
+
+      <BottomSheet
+        isOpen={isStatsOpen}
+        onClose={() => setStatsOpen(false)}
+        title={t('stats.title')}
+      >
+        <StatsHeatmap />
       </BottomSheet>
     </div>
   );

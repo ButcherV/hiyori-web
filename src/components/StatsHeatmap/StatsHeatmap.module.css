@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 0;
+  width: 100%;
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 800;
+  color: #333;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.calendarWrapper {
+  /* 让日历在手机上居中 */
+  display: flex;
+  justify-content: center;
+  /* 允许横向滚动，防止小屏溢出 */
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
