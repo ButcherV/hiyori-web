@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import BottomSheet from '../components/BottomSheet';
 import LessonMenu from '../components/LessonMenu';
 import AppSettingsMenu from '../components/AppSettingsMenu';
-// ✅ 1. 引入新做好的 DatesPage
 import DatesPage from './DatesPage';
 
 import type { ScriptType } from '../components/LessonMenu';
@@ -28,13 +27,12 @@ import {
   Mic,
   Trophy,
   Settings,
-  BookOpen,
-  // Search,
-  // BookA,
   BookOpenText,
-  // BookOpen,
-  // Library,
 } from 'lucide-react';
+
+// ✅ [改动1] 引入我们刚才提取的公共数据（分母）和进度 Context（分子）
+import { HIRAGANA_DATA, KATAKANA_DATA } from '../datas/kanaData';
+import { useProgress } from '../context/ProgressContext';
 
 interface HomePageProps {
   onCategorySelect: (categoryId: string) => void;
@@ -48,11 +46,30 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
-
-  // ✅ 2. 新增状态：当前正在进行的练习 (null 代表在首页)
   const [activeDrill, setActiveDrill] = useState<string | null>(null);
 
-  // --- Header 数据 (沉浸式日语) ---
+  // ✅ [改动2] 获取用户已完成的课程列表
+  const { completedLessons } = useProgress();
+
+  // ✅ [改动3] 新增计算函数：算出真实的百分比
+  const calculateProgress = (script: 'hiragana' | 'katakana') => {
+    // 1. 确定分母：是平假名数据还是片假名数据
+    const dataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
+    const total = dataSet.length;
+
+    if (total === 0) return '0%';
+
+    // 2. 计算分子：有多少个 ID 出现在了 completedLessons 里
+    const completedCount = dataSet.filter((item) =>
+      completedLessons.includes(item.id)
+    ).length;
+
+    // 3. 算出百分比字符串
+    const percent = Math.round((completedCount / total) * 100);
+    return `${percent}%`;
+  };
+
+  // --- Header 数据 (保持不变) ---
   const headerData = useMemo(() => {
     const now = new Date();
     const datePart = getJapaneseDateStr(now);
@@ -76,7 +93,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       label: t('home.hero.current_session'),
       title: t('home.hero.hiragana_title'),
       char: 'あ',
-      progress: '45%',
+      progress: calculateProgress('hiragana'),
       color: '#007AFF',
       trackColor: 'rgba(255,255,255,0.3)',
     },
@@ -85,7 +102,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       label: t('home.hero.next_milestone'),
       title: t('home.hero.katakana_title'),
       char: 'ア',
-      progress: '10%',
+      progress: calculateProgress('katakana'),
       color: '#FF2D55',
       trackColor: 'rgba(255,255,255,0.3)',
     },
@@ -99,7 +116,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       icon: Hash,
       color: '#FF9500',
     },
-    // ✅ 注意这个 id 必须是 'dates'，对应下面的判断
     {
       id: 'dates',
       title: t('home.drills.dates'),
@@ -125,9 +141,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       id: 'grammar',
       title: t('home.drills.grammar'),
       sub: t('home.drills.grammar_sub'),
-      icon: BookOpen,
+      icon: BookOpenText,
       color: '#5856D6',
-    },
+    }, // 这里改回 BookOpenText 避免报错
     {
       id: 'listening',
       title: t('home.drills.listening'),
@@ -151,8 +167,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     },
   ];
 
-  // --- 交互逻辑 ---
-
+  // --- 交互逻辑 (保持不变) ---
   const handleHeroClick = (id: string) => {
     if (id === 'hiragana' || id === 'katakana') {
       setCurrentScript(id as ScriptType);
@@ -163,43 +178,29 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
   };
 
   const handleLessonSelect = (lessonId: string, targetChars: string[]) => {
-    console.log(`User Selected: ${lessonId}`);
     setSelectionOpen(false);
-
-    // 2. 延迟跳转 (配合 CSS 动画时间，通常 250ms - 300ms)
     setTimeout(() => {
       navigate(`/study/${lessonId}`, {
-        state: {
-          targetChars: targetChars,
-        },
+        state: { targetChars: targetChars },
       });
     }, 0);
   };
 
-  // ✅ 3. 修改 Drill 点击逻辑：拦截 'dates'，其他的继续向上层汇报
   const handleDrillClick = (id: string) => {
     if (id === 'dates') {
-      // 切换到日期页面
       setActiveDrill('dates');
     } else {
-      // 其他功能还没做，保持原样
       onCategorySelect(id);
     }
   };
 
-  // ✅ 4. 条件渲染：如果 activeDrill 是 dates，直接显示 DatesPage
   if (activeDrill === 'dates') {
-    return (
-      <DatesPage
-        onBack={() => setActiveDrill(null)} // 传进去一个回调，让它能切回来
-      />
-    );
+    return <DatesPage onBack={() => setActiveDrill(null)} />;
   }
 
-  // --- 下面是原本的 Dashboard 渲染 ---
+  // --- 渲染 (保持不变) ---
   return (
     <div className={styles.container}>
-      {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerText}>
           <div className={styles.japaneseTitle}>{headerData.greeting}</div>
@@ -209,15 +210,10 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
             {headerData.fullDateText}
           </div>
         </div>
-
         <div className={styles.headerActions}>
           <button className={styles.iconBtn} aria-label={t('common.search')}>
-            {/* <BookA size={24} strokeWidth={2} /> */}
             <BookOpenText size={24} strokeWidth={2} />
-            {/* <BookOpenText size={24} strokeWidth={2} /> */}
-            {/* <Library size={24} strokeWidth={2} /> */}
           </button>
-
           <button
             className={styles.iconBtn}
             onClick={() => setSettingsOpen(true)}
@@ -228,7 +224,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         </div>
       </header>
 
-      {/* Hero Banner */}
       <div className={styles.scrollContainer}>
         {heroCourses.map((course) => (
           <div
@@ -252,6 +247,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
                 className={styles.progressTrack}
                 style={{ background: course.trackColor }}
               >
+                {/* 这里的 width 就会变成真实的百分比了 */}
                 <div
                   className={styles.progressFill}
                   style={{ width: course.progress }}
@@ -263,11 +259,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         ))}
       </div>
 
-      {/* Grid Section */}
       <div className={styles.sectionHeader}>{t('home.drills.title')}</div>
       <div className={styles.grid}>
         {drills.map((item) => (
-          // ✅ 修改：onClick 这里调用新的 handleDrillClick
           <div
             key={item.id}
             className={styles.card}
@@ -287,7 +281,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         ))}
       </div>
 
-      {/* Bottom Sheets */}
       <BottomSheet
         isOpen={isSelectionOpen}
         onClose={() => setSelectionOpen(false)}

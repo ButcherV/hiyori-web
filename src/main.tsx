@@ -1,22 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-
-// --- CSS 架构引入顺序 (保持你原有的不变) ---
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import './styles/reset.css';
-import './styles/variables.css';
 import './styles/global.css';
-
+import './styles/variables.css';
 import './i18n';
+import App from './App.tsx';
+import { SettingsProvider } from './context/SettingsContext.tsx';
+import { ProgressProvider } from './context/ProgressContext.tsx';
 
-// 🔥 1. 引入我们刚才写的设置 Context
-import { SettingsProvider } from './context/SettingsContext';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    {/* 🔥 2. 用 Provider 包裹 App，这样全应用都能读取设置了 */}
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
     <SettingsProvider>
-      <App />
+      <ProgressProvider>
+        <App />
+      </ProgressProvider>
     </SettingsProvider>
-  </React.StrictMode>
+  </StrictMode>
 );

@@ -1,4 +1,4 @@
-// 数据来自开源项目 KanjiVG (http://kanjivg.tagaini.net)
+// KanjiVG (http://kanjivg.tagaini.net)
 // 坐标系标准：109x109
 export const KANA_PATHS: Record<string, string[]> = {
   あ: [

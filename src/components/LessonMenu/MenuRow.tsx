@@ -1,7 +1,6 @@
 import React from 'react';
 import { Check, Play, ChevronRight } from 'lucide-react';
 import styles from './LessonMenu.module.css';
-// ✅ 从 types 文件引入接口
 import type { LessonItem, LessonStatus } from './types';
 
 interface MenuRowProps {
@@ -11,7 +10,6 @@ interface MenuRowProps {
 }
 
 export const MenuRow: React.FC<MenuRowProps> = ({ item, status, onClick }) => {
-  // ... (下面的代码完全不用动)
   const className = `${styles.rowItem} ${styles[status]}`;
 
   return (

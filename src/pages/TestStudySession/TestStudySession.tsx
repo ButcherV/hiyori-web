@@ -5,7 +5,7 @@ import {
   useMemo,
   type CSSProperties,
 } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
@@ -37,6 +37,7 @@ import styles from './TestStudySession.module.css';
 // progess and Hook
 import { SegmentedProgressBar } from './SegmentedProgressBar';
 import { useProgress } from './useProgress';
+import { useProgress as useGlobalProgress } from '../../context/ProgressContext';
 
 // sound hook
 import { useSound } from '../../hooks/useSound';
@@ -50,6 +51,8 @@ const AUTO_REDIRECT_SECONDS = 3;
 
 export const TestStudySession = () => {
   const navigate = useNavigate();
+  const { courseId: id } = useParams<{ courseId: string }>();
+  const { markLessonComplete } = useGlobalProgress();
   const { i18n } = useTranslation();
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
 
@@ -128,6 +131,11 @@ export const TestStudySession = () => {
 
   useEffect(() => {
     if (isFinished) {
+      // 课程完成后调用
+      if (id) {
+        console.log(`Marking lesson ${id} as complete!`);
+        markLessonComplete(id);
+      }
       const interval = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
