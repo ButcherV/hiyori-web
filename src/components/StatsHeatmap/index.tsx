@@ -25,7 +25,6 @@ export const StatsHeatmap = () => {
 
     for (let i = 0; i <= daysToShow; i++) {
       const date = subDays(today, daysToShow - i);
-      //  const dateStr = date.toISOString().split('T')[0];
       const dateStr = format(date, 'yyyy-MM-dd');
       const count = activityLog[dateStr] || 0;
 
@@ -44,7 +43,7 @@ export const StatsHeatmap = () => {
     return result;
   }, [activityLog]);
 
-  const totalActivities = Object.values(activityLog).reduce((a, b) => a + b, 0);
+  //   const totalActivities = Object.values(activityLog).reduce((a, b) => a + b, 0);
 
   // 节流逻辑
   const handleBlockClick = async (activity: ActivityType) => {
@@ -70,7 +69,7 @@ export const StatsHeatmap = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.statsRow}>
+      {/* <div className={styles.statsRow}>
         <div className={styles.statItem}>
           <div className={styles.statValue}>{totalActivities}</div>
           <div className={styles.statLabel}>{t('stats.total_lessons')}</div>
@@ -79,7 +78,7 @@ export const StatsHeatmap = () => {
           <div className={styles.statValue}>🔥</div>
           <div className={styles.statLabel}>{t('stats.streak_label')}</div>
         </div>
-      </div>
+      </div> */}
 
       <div className={styles.calendarWrapper}>
         <ActivityCalendar

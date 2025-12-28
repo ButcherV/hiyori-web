@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DiceRoller } from '../components/Dice/DiceContainer';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2 } from 'lucide-react';
@@ -35,7 +35,7 @@ export const DicePage = () => {
   const [animateCard, setAnimateCard] = useState(false);
 
   // 处理骰子结果
-  const handleRollComplete = (total: number, values: number[]) => {
+  const handleRollComplete = (total: number) => {
     setCurrentNumber(total);
 
     // 触发卡片弹入动画

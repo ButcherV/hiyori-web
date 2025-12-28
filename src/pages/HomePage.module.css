@@ -155,10 +155,38 @@
   cursor: pointer;
   scroll-snap-align: center; /* 居中吸附 */
   transition: transform 0.2s;
-}
 
-.heroCard:active {
-  transform: scale(0.98);
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.hiragana {
+    background: #1a2980; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #26d0ce,
+      #1a2980
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #26d0ce,
+      #1a2980
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  &.katakana {
+    background: #c31432; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to left,
+      #240b36,
+      #c31432
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to left,
+      #240b36,
+      #c31432
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
 }
 
 .heroDecor {
@@ -241,6 +269,20 @@
   /* 确保卡片高度统一 */
   aspect-ratio: 1 / 0.85;
   justify-content: space-between;
+
+  &.numbers {
+    background: #f12711; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #f5af19,
+      #f12711
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #f5af19,
+      #f12711
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
 }
 
 .card:active {
@@ -260,12 +302,16 @@
 
 .cardTitle {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 900;
   margin-bottom: 2px;
-  color: var(--text-primary, #000);
+  color: white;
 }
 .cardSub {
   font-size: 12px;
-  color: #8e8e93;
+  color: white;
   font-weight: 500;
+  /* 文案过长甚至会破坏外部 grid 的布局 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

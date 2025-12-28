@@ -3,11 +3,9 @@ import styles from './HomePage.module.css';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-// --- 引入组件 ---
 import BottomSheet from '../components/BottomSheet';
 import LessonMenu from '../components/LessonMenu';
 import AppSettingsMenu from '../components/AppSettingsMenu';
-import DatesPage from './DatesPage';
 import { StatsHeatmap } from '../components/StatsHeatmap';
 
 import type { ScriptType } from '../components/LessonMenu';
@@ -29,88 +27,68 @@ import {
   Trophy,
   Settings,
   BookOpenText,
+  Clock,
+  CircleDollarSign,
 } from 'lucide-react';
 
-// ✅ [改动1] 引入我们刚才提取的公共数据（分母）和进度 Context（分子）
 import { HIRAGANA_DATA, KATAKANA_DATA } from '../datas/kanaData';
 import { useProgress } from '../context/ProgressContext';
 
-interface HomePageProps {
-  onCategorySelect: (categoryId: string) => void;
-}
-
-export function HomePage({ onCategorySelect }: HomePageProps) {
+export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   // --- 状态管理 ---
+  // 1. 假名选择弹窗（Hero 卡片共用）
   const [isSelectionOpen, setSelectionOpen] = useState(false);
+  const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
+
+  // 2. 专项练习弹窗（Numbers）
+  const [isNumbersOpen, setNumbersOpen] = useState(false);
+
+  // 3. Header 弹窗
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isStatsOpen, setStatsOpen] = useState(false);
-  const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
-  const [activeDrill, setActiveDrill] = useState<string | null>(null);
 
-  const { activityLog } = useProgress();
-  // 计算是否有任何活动 (只要 log 里有任何记录)
+  const { activityLog, completedLessons } = useProgress();
   const hasActivity = Object.values(activityLog).some((count) => count > 0);
 
-  // ✅ [改动2] 获取用户已完成的课程列表
-  const { completedLessons } = useProgress();
-
-  // ✅ [改动3] 新增计算函数：算出真实的百分比
+  // 进度计算逻辑
   const calculateProgress = (script: 'hiragana' | 'katakana') => {
-    // 1. 确定分母：是平假名数据还是片假名数据
     const dataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
     const total = dataSet.length;
-
     if (total === 0) return '0%';
-
-    // 2. 计算分子：有多少个 ID 出现在了 completedLessons 里
     const completedCount = dataSet.filter((item) =>
       completedLessons.includes(item.id)
     ).length;
-
-    // 3. 算出百分比字符串
-    const percent = Math.round((completedCount / total) * 100);
-    return `${percent}%`;
+    return `${Math.round((completedCount / total) * 100)}%`;
   };
 
-  // --- Header 数据 (保持不变) ---
   const headerData = useMemo(() => {
     const now = new Date();
-    const datePart = getJapaneseDateStr(now);
-    const weekPart = getJapaneseWeekday(now);
-    const holidayPart = getJapaneseHoliday(now);
     const isRed = isRedDay(now);
-    let fullDateText = `${datePart} ${weekPart}`;
-    if (holidayPart) fullDateText += ` · ${holidayPart}`;
-
-    return {
-      greeting: getJapaneseGreeting(now),
-      fullDateText,
-      isRed,
-    };
+    let fullDateText = `${getJapaneseDateStr(now)} ${getJapaneseWeekday(now)}`;
+    const holiday = getJapaneseHoliday(now);
+    if (holiday) fullDateText += ` · ${holiday}`;
+    return { greeting: getJapaneseGreeting(now), fullDateText, isRed };
   }, []);
 
-  // --- 数据定义 ---
   const heroCourses = [
     {
       id: 'hiragana',
+      char: 'あ',
+      color: '#007AFF',
+      progress: calculateProgress('hiragana'),
       label: t('home.hero.current_session'),
       title: t('home.hero.hiragana_title'),
-      char: 'あ',
-      progress: calculateProgress('hiragana'),
-      color: '#007AFF',
-      trackColor: 'rgba(255,255,255,0.3)',
     },
     {
       id: 'katakana',
+      char: 'ア',
+      color: '#FF2D55',
+      progress: calculateProgress('katakana'),
       label: t('home.hero.next_milestone'),
       title: t('home.hero.katakana_title'),
-      char: 'ア',
-      progress: calculateProgress('katakana'),
-      color: '#FF2D55',
-      trackColor: 'rgba(255,255,255,0.3)',
     },
   ];
 
@@ -127,6 +105,20 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       title: t('home.drills.dates'),
       sub: t('home.drills.dates_sub'),
       icon: Calendar,
+      color: '#30B0C7',
+    },
+    {
+      id: 'times',
+      title: t('home.drills.times'),
+      sub: t('home.drills.times_sub'),
+      icon: Clock,
+      color: '#30B0C7',
+    },
+    {
+      id: 'money',
+      title: t('home.drills.money'),
+      sub: t('home.drills.moeny_sub'),
+      icon: CircleDollarSign,
       color: '#30B0C7',
     },
     {
@@ -149,7 +141,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       sub: t('home.drills.grammar_sub'),
       icon: BookOpenText,
       color: '#5856D6',
-    }, // 这里改回 BookOpenText 避免报错
+    },
     {
       id: 'listening',
       title: t('home.drills.listening'),
@@ -173,38 +165,30 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
     },
   ];
 
-  // --- 交互逻辑 (保持不变) ---
   const handleHeroClick = (id: string) => {
     if (id === 'hiragana' || id === 'katakana') {
       setCurrentScript(id as ScriptType);
       setSelectionOpen(true);
-    } else {
-      onCategorySelect(id);
     }
-  };
-
-  const handleLessonSelect = (courseId: string, targetChars: string[]) => {
-    setSelectionOpen(false);
-    setTimeout(() => {
-      navigate(`/study/${courseId}`, {
-        state: { targetChars: targetChars },
-      });
-    }, 0);
   };
 
   const handleDrillClick = (id: string) => {
     if (id === 'dates') {
-      setActiveDrill('dates');
-    } else {
-      onCategorySelect(id);
+      navigate('/study/dates');
+    } else if (id === 'numbers') {
+      setNumbersOpen(true);
     }
+    // 其他暂时不处理
   };
 
-  if (activeDrill === 'dates') {
-    return <DatesPage onBack={() => setActiveDrill(null)} />;
-  }
+  const handleLessonSelect = (courseId: string, targetChars: string[]) => {
+    setSelectionOpen(false);
+    setNumbersOpen(false);
+    setTimeout(() => {
+      navigate(`/study/kana/${courseId}`, { state: { targetChars } });
+    }, 0);
+  };
 
-  // --- 渲染 (保持不变) ---
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -220,50 +204,28 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
           {hasActivity && (
             <button
               className={styles.iconBtn}
-              aria-label={t('common.history')}
               onClick={() => setStatsOpen(true)}
             >
-              <Trophy size={22} strokeWidth={2} color="#ffbb00ff" />
+              <Trophy size={22} color="#ffbb00ff" />
             </button>
           )}
-          <button className={styles.iconBtn} aria-label={t('common.search')}>
-            <BookOpenText size={24} strokeWidth={2} />
+          <button className={styles.iconBtn}>
+            <BookOpenText size={24} />
           </button>
           <button
             className={styles.iconBtn}
             onClick={() => setSettingsOpen(true)}
-            aria-label={t('common.settings')}
           >
-            <Settings size={24} strokeWidth={2} />
+            <Settings size={24} />
           </button>
         </div>
       </header>
-
-      {/* 👇 临时加个按钮在这里测试 */}
-      <div style={{ padding: '20px' }}>
-        <button
-          onClick={() => navigate('/dice')}
-          style={{
-            width: '100%',
-            padding: '15px',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
-          }}
-        >
-          🎲 Try 3D Dice (Test)
-        </button>
-      </div>
 
       <div className={styles.scrollContainer}>
         {heroCourses.map((course) => (
           <div
             key={course.id}
-            className={styles.heroCard}
+            className={`${styles.heroCard} ${styles[course.id]}`}
             style={{ backgroundColor: course.color }}
             onClick={() => handleHeroClick(course.id)}
           >
@@ -280,9 +242,8 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
             <div className={styles.heroBottom}>
               <div
                 className={styles.progressTrack}
-                style={{ background: course.trackColor }}
+                style={{ background: 'rgba(255,255,255,0.3)' }}
               >
-                {/* 这里的 width 就会变成真实的百分比了 */}
                 <div
                   className={styles.progressFill}
                   style={{ width: course.progress }}
@@ -295,11 +256,12 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       </div>
 
       <div className={styles.sectionHeader}>{t('home.drills.title')}</div>
+
       <div className={styles.grid}>
         {drills.map((item) => (
           <div
             key={item.id}
-            className={styles.card}
+            className={`${styles.card} ${styles[item.id]}`}
             onClick={() => handleDrillClick(item.id)}
           >
             <div
@@ -308,7 +270,7 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
             >
               <item.icon size={24} strokeWidth={2.5} />
             </div>
-            <div>
+            <div style={{ minWidth: 0 }}>
               <div className={styles.cardTitle}>{item.title}</div>
               <div className={styles.cardSub}>{item.sub}</div>
             </div>
@@ -316,6 +278,9 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         ))}
       </div>
 
+      {/* --- 所有的 BottomSheet --- */}
+
+      {/* 假名选择弹窗 */}
       <BottomSheet
         isOpen={isSelectionOpen}
         onClose={() => setSelectionOpen(false)}
@@ -328,6 +293,17 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
         <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
       </BottomSheet>
 
+      {/* Numbers 专用弹窗 */}
+      <BottomSheet
+        isOpen={isNumbersOpen}
+        onClose={() => setNumbersOpen(false)}
+        title={t('home.drills.numbers')}
+      >
+        {/* 注意：此处 script 设为 numbers 是为了让 LessonMenu 知道该加载数字数据 */}
+        <LessonMenu script={'numbers' as any} onSelect={handleLessonSelect} />
+      </BottomSheet>
+
+      {/* Header 相关弹窗 */}
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -335,7 +311,6 @@ export function HomePage({ onCategorySelect }: HomePageProps) {
       >
         <AppSettingsMenu />
       </BottomSheet>
-
       <BottomSheet
         isOpen={isStatsOpen}
         onClose={() => setStatsOpen(false)}

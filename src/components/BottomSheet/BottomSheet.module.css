@@ -26,8 +26,8 @@
   max-height: 85vh;
 
   background-color: white;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 
   display: flex;
   flex-direction: column;

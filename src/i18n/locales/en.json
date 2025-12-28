@@ -22,7 +22,7 @@
     "drills": {
       "title": "Quick Drills",
       "numbers": "Numbers",
-      "numbers_sub": "1 - 100 & Prices",
+      "numbers_sub": "0 - 999999...",
       "dates": "Dates",
       "dates_sub": "Week & Month",
       "vocab": "Vocab",
@@ -36,7 +36,11 @@
       "speaking": "Speaking",
       "speaking_sub": "Pronunciation",
       "challenge": "Challenge",
-      "challenge_sub": "Weekly Quiz"
+      "challenge_sub": "Weekly Quiz",
+      "money": "货币",
+      "money_sub": "认识货币",
+      "times": "时间",
+      "times_sub": "认识时间"
     },
     "modal": {
       "select_hiragana": "Select Hiragana Row",

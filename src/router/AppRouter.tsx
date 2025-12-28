@@ -5,6 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';
+import { DatesPage } from '../pages/DatesPage';
 
 export const AppRouter = () => {
   const location = useLocation();
@@ -17,18 +18,25 @@ export const AppRouter = () => {
           path="/"
           element={
             <PageTransition>
-              <HomePage
-                onCategorySelect={(id) => console.log('用户点击了:', id)}
-              />
+              <HomePage />
             </PageTransition>
           }
         />
 
         <Route
-          path="/study/:courseId"
+          path="/study/kana/:courseId"
           element={
             <PageTransition>
               <TestStudySession />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/study/dates"
+          element={
+            <PageTransition>
+              <DatesPage />
             </PageTransition>
           }
         />
