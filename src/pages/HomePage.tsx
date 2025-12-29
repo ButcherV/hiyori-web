@@ -255,7 +255,13 @@ export function HomePage() {
         ))}
       </div>
 
-      <div className={styles.sectionHeader}>{t('home.drills.title')}</div>
+      <div className={styles.testBtnContainer}>
+        <button onClick={() => navigate('/dice')} className={styles.testBtn}>
+          🎲 Try 3D Dice (Test)
+        </button>
+      </div>
+
+      {/* <div className={styles.sectionHeader}>{t('home.drills.title')}</div> */}
 
       <div className={styles.grid}>
         {drills.map((item) => (

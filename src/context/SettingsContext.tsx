@@ -1,22 +1,24 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import i18n from 'i18next';
 
-// 1. 定义设置项的数据结构
+export type UILang = 'en' | 'zh' | 'zh-Hant';
+
 interface AppSettings {
-  // 学习页用的 (Study Session)
-  autoAudio: boolean; // 自动发音
-  soundEffect: boolean; // 音效 (Ding/Buzz)
-  hapticFeedback: boolean; // 震动反馈
+  autoAudio: boolean;
+  soundEffect: boolean;
+  hapticFeedback: boolean;
+  showRomaji: boolean;
+  theme: 'light' | 'dark';
 
-  // 首页设置用的 (Global)
-  showRomaji: boolean; // 显示罗马音
-  theme: 'light' | 'dark'; // 主题 (预留)
+  uiLanguage: UILang;
+  nativeLanguage: 'en' | 'zh'; // 教学逻辑母语 (非中文/中文)
+  hasFinishedOnboarding: boolean;
 }
 
-// 定义 Context 提供的方法
 interface SettingsContextType extends AppSettings {
-  // 通用的切换方法 (key 必须是上面的属性名之一)
   toggleSetting: (key: keyof AppSettings) => void;
-  // 单独设置主题的方法
+  // 新增：支持直接更新多个字段的方法
+  updateSettings: (newSettings: Partial<AppSettings>) => void;
   setTheme: (mode: 'light' | 'dark') => void;
 }
 
@@ -27,6 +29,10 @@ const defaultSettings: AppSettings = {
   hapticFeedback: true,
   showRomaji: true,
   theme: 'light',
+  // --- 新增默认值 ---
+  uiLanguage: 'en',
+  nativeLanguage: 'en',
+  hasFinishedOnboarding: false,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
@@ -36,11 +42,9 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // 2. 初始化状态：优先从 localStorage 读取
   const [settings, setSettings] = useState<AppSettings>(() => {
     try {
       const saved = localStorage.getItem('app_settings');
-      // 如果有存档，就合并（防止新加字段丢失）；没存档就用默认
       return saved
         ? { ...defaultSettings, ...JSON.parse(saved) }
         : defaultSettings;
@@ -50,7 +54,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   });
 
-  // 3. 监听变化：只要 settings 一变，自动保存到手机
+  // 关键逻辑：监听 uiLanguage 变化，强制同步给 i18next 插件
+  useEffect(() => {
+    i18n.changeLanguage(settings.uiLanguage);
+  }, [settings.uiLanguage]);
+
   useEffect(() => {
     try {
       localStorage.setItem('app_settings', JSON.stringify(settings));
@@ -59,9 +67,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [settings]);
 
-  // 提供给组件的修改方法
   const toggleSetting = (key: keyof AppSettings) => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // 新增：更新方法
+  const updateSettings = (newSettings: Partial<AppSettings>) => {
+    setSettings((prev) => ({ ...prev, ...newSettings }));
   };
 
   const setTheme = (mode: 'light' | 'dark') => {
@@ -69,13 +81,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <SettingsContext.Provider value={{ ...settings, toggleSetting, setTheme }}>
+    <SettingsContext.Provider
+      value={{ ...settings, toggleSetting, updateSettings, setTheme }}
+    >
       {children}
     </SettingsContext.Provider>
   );
 };
 
-// 4. 自定义 Hook：让组件方便调用
 export const useSettings = () => {
   const context = useContext(SettingsContext);
   if (!context) {

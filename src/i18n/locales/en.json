@@ -66,5 +66,14 @@
     "total_lessons": "Total Lessons",
     "streak_label": "Keep Going!",
     "tooltip": "{{count}} sessions on {{date}}"
+  },
+  "onboarding": {
+    "step2_title": "Japanese Kanji",
+    "step2_desc": "Japanese Kanji share roots with Chinese characters. Do you want to see them while learning?",
+    "option_kanji_label": "Yes, show Kanji",
+    "option_kanji_desc": "Use Kanji to understand meanings faster. Recommended if you have some background.",
+    "option_kana_label": "No, Kana only",
+    "option_kana_desc": "I'm a total beginner. Just show me basic Hiragana.",
+    "back": "← Back"
   }
 }

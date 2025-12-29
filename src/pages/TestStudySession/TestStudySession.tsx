@@ -26,7 +26,7 @@ import {
   CheckCircle,
   X,
   Check,
-  ChevronRight,
+  // ChevronRight,
   // Settings,
   // CircleChevronLeft,
   CircleX,
@@ -78,16 +78,15 @@ export const TestStudySession = () => {
     'お',
   ];
 
-  // --- 🔊 音效初始化 ---
   const playSound = useSound();
 
   const triggerSound = (type: Parameters<typeof playSound>[0]) => {
-    if (!soundEffect) return; // 使用全局 soundEffect
+    if (!soundEffect) return;
     playSound(type);
   };
 
   const triggerHaptic = async (style: ImpactStyle = ImpactStyle.Light) => {
-    if (!hapticFeedback) return; // 使用全局 hapticFeedback
+    if (!hapticFeedback) return;
     if (Capacitor.isNativePlatform()) {
       await Haptics.impact({ style });
     }
@@ -297,7 +296,7 @@ export const TestStudySession = () => {
         {/* <button className={styles.backBtn} onClick={() => navigate('/')}>Exit</button> */}
 
         <button className={styles.closeBtn} onClick={() => navigate('/')}>
-          <CircleX size={28} /> {/* 来自 lucide-react */}
+          <CircleX size={28} />
         </button>
         <div style={{ flex: 1, margin: '0 8px 0 8px' }}>
           <SegmentedProgressBar
@@ -452,7 +451,7 @@ export const TestStudySession = () => {
                         ))}
 
                         {/* 底部提示 */}
-                        <div className={styles.swipeHint}>
+                        {/* <div className={styles.swipeHint}>
                           Swipe right to start quiz{' '}
                           <ChevronRight
                             size={14}
@@ -461,7 +460,7 @@ export const TestStudySession = () => {
                               display: 'inline-block',
                             }}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     )}
 
@@ -504,7 +503,6 @@ export const TestStudySession = () => {
         </div>
       )}
 
-      {/* 挂载底部弹窗 */}
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

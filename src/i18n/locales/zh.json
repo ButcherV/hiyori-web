@@ -66,5 +66,14 @@
     "total_lessons": "累计学习",
     "streak_label": "坚持下去!",
     "tooltip": "{{date}} 完成了 {{count}} 次"
+  },
+  "onboarding": {
+    "step2_title": "关于日文汉字",
+    "step2_desc": "日文汉字和中文有些像但并不完全一样。我们建议带上汉字一起学，记意思会快很多。",
+    "option_kanji_label": "带上汉字学",
+    "option_kanji_desc": "我们会把假名和汉字对应起来，利用你的汉字基础加速记忆。",
+    "option_kana_label": "先不看汉字",
+    "option_kana_desc": "我想先专注练习最基础的假名读音。",
+    "back": "← 返回"
   }
 }

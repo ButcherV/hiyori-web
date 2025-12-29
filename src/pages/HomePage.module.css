@@ -136,7 +136,8 @@
   overflow-x: auto;
   gap: 16px;
 
-  padding: 8px 16px 32px 16px;
+  padding: 8px 16px;
+  padding-bottom: 24px;
 
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
@@ -314,4 +315,42 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.testBtnContainer {
+  padding: 8px 16px;
+  padding-bottom: 32px;
+}
+
+/* 按钮类 */
+.testBtn {
+  width: 100%;
+  padding: 15px;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+
+  background: #aa076b; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #b9418b,
+    #61045f
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #b9418b,
+    #61045f
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.testBtn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
 }

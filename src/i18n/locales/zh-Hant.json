@@ -1,0 +1,11 @@
+{
+  "onboarding": {
+    "step2_title": "關於日文漢字",
+    "step2_desc": "日文漢字與中文有些像但並不完全一樣。我們建議帶上漢字一起學，記意思會快很多。",
+    "option_kanji_label": "帶上漢字學",
+    "option_kanji_desc": "我們會把假名與漢字對應起來，利用你的漢字基礎加速記憶。",
+    "option_kana_label": "先不看漢字",
+    "option_kana_desc": "我想先專注練習最基礎的假名讀音。",
+    "back": "← 返回"
+  }
+}

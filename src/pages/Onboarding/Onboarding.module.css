@@ -1,0 +1,169 @@
+/* src/pages/Onboarding/Onboarding.module.css */
+
+.container {
+  position: fixed;
+  inset: 0;
+  /* 使用你定义的和纸白背景 */
+  background-color: var(--color-bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 使用你定义的墨黑文字色 */
+  color: var(--color-text-main);
+  padding: 24px;
+}
+
+.content {
+  max-width: 420px;
+  width: 100%;
+}
+
+.bilingualTitle {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+.subTitle {
+  font-weight: 400;
+  /* 使用你定义的次要文字色 */
+  color: var(--color-text-sub);
+}
+
+.btnStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mainBtn {
+  /* 使用你定义的纯白卡片背景 */
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-Gray4);
+  color: var(--color-text-main);
+  padding: 20px;
+  /* 使用你定义的卡片圆角 */
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  /* 使用你定义的柔和阴影 */
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast);
+}
+
+.mainBtn:active {
+  transform: scale(0.98);
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.desc {
+  font-size: 15px;
+  color: var(--color-text-sub);
+  text-align: center;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.cardStack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.logicCard {
+  background: var(--color-card-bg);
+  border: 1.5px solid var(--color-Gray3);
+  padding: 22px;
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-fast);
+}
+
+.logicCard:hover {
+  /* 悬停时显示你的主色调：鸟居红 */
+  border-color: var(--color-primary);
+}
+
+.logicCard h3 {
+  margin: 0 0 6px 0;
+  color: var(--color-primary);
+  font-size: 17px;
+}
+
+.logicCard p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+/* 中文预判卡片 */
+.previewCard {
+  /* 浅红色背景，配合鸟居红标题 */
+  background: rgba(255, 69, 0, 0.03);
+  border: 1px dashed var(--color-primary);
+  padding: 24px;
+  border-radius: var(--radius-card);
+  margin-bottom: 24px;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.previewCard h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: var(--color-text-main);
+}
+
+.finishBtn {
+  width: 100%;
+  /* 主操作按钮使用鸟居红 */
+  background: var(--color-primary);
+  border: none;
+  color: white;
+  padding: 18px;
+  /* 使用胶囊按钮圆角 */
+  border-radius: var(--radius-button);
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
+}
+
+.altLink {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--color-text-sub);
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.backLink {
+  display: block;
+  margin: 32px auto 0;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
+}
