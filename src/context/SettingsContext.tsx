@@ -11,7 +11,7 @@ interface AppSettings {
   theme: 'light' | 'dark';
 
   uiLanguage: UILang;
-  nativeLanguage: 'en' | 'zh'; // 教学逻辑母语 (非中文/中文)
+  kanjiBackground: boolean;
   hasFinishedOnboarding: boolean;
 }
 
@@ -31,7 +31,7 @@ const defaultSettings: AppSettings = {
   theme: 'light',
   // --- 新增默认值 ---
   uiLanguage: 'en',
-  nativeLanguage: 'en',
+  kanjiBackground: false,
   hasFinishedOnboarding: false,
 };
 

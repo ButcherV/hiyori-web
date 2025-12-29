@@ -29,6 +29,7 @@ export interface LessonCard {
   romaji: string;
   word?: string;
   kanji?: string;
+  kanjiOrigin?: string;
   meaning?: LocalizedText;
   wordRomaji?: string;
   displayContent: string;
@@ -91,6 +92,7 @@ const createLearn = (
     romaji: data.romaji,
     word: data.word,
     kanji: data.kanji,
+    kanjiOrigin: data.kanjiOrigin,
     wordRomaji: data.wordRomaji,
     meaning: data.meaning,
     displayContent: subType === 'SHAPE' ? data.char : data.kanji,

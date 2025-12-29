@@ -9,6 +9,7 @@ export interface KanaEntry {
   word: string;
   wordRomaji: string;
   kanji: string;
+  kanjiOrigin?: string;
   meaning: LocalizedText;
   // 保持宽松定义，让 defineKana 处理严格校验
   romajiDistractors: readonly string[];
@@ -56,6 +57,7 @@ const defineKana = <
   wordRomaji: string;
   kanji: string;
   meaning: LocalizedText;
+  kanjiOrigin?: string;
 
   romajiDistractors: PreciseValidator<RD, R>;
   charDistractors: PreciseValidator<CD, C>;
@@ -68,6 +70,7 @@ const defineKana = <
 export const KANA_DB: Record<string, KanaEntry> = {
   あ: defineKana({
     char: 'あ',
+    kanjiOrigin: '安',
     romaji: 'a',
     word: 'あい',
     wordRomaji: 'a·i',
@@ -82,6 +85,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   い: defineKana({
     char: 'い',
+    kanjiOrigin: '以',
     romaji: 'i',
     word: 'いえ',
     wordRomaji: 'i·e',
@@ -93,6 +97,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   う: defineKana({
     char: 'う',
+    kanjiOrigin: '宇',
     romaji: 'u',
     word: 'うえ',
     wordRomaji: 'u·e',
@@ -104,6 +109,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   え: defineKana({
     char: 'え',
+    kanjiOrigin: '衣',
     charDistractors: ['う', 'ラ', 'ら'],
     romaji: 'e',
     romajiDistractors: ['wu', 'eu', 'ui'],
@@ -115,6 +121,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   お: defineKana({
     char: 'お',
+    kanjiOrigin: '於',
     charDistractors: ['あ', 'む', 'す'],
     romaji: 'o',
     romajiDistractors: ['ou', 'uo', 'wo'],
@@ -126,6 +133,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   か: defineKana({
     char: 'か',
+    kanjiOrigin: '加',
     charDistractors: ['が', 'や', 'わ'],
     romaji: 'ka',
     romajiDistractors: ['ga', 'ko', 'kya'],
@@ -137,6 +145,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   き: defineKana({
     char: 'き',
+    kanjiOrigin: '幾',
     charDistractors: ['ぎ', 'さ', 'ち'],
     romaji: 'ki',
     romajiDistractors: ['gi', 'ky', 'ke'],
@@ -148,6 +157,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   く: defineKana({
     char: 'く',
+    kanjiOrigin: '久',
     charDistractors: ['ぐ', 'へ', 'し'],
     romaji: 'ku',
     romajiDistractors: ['gu', 'qu', 'ko'],
@@ -159,6 +169,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   け: defineKana({
     char: 'け',
+    kanjiOrigin: '計',
     charDistractors: ['げ', 'は', 'に'],
     romaji: 'ke',
     romajiDistractors: ['ge', 'ki', 'ka'],
@@ -170,6 +181,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   こ: defineKana({
     char: 'こ',
+    kanjiOrigin: '己',
     charDistractors: ['ご', 'に', 'て'],
     romaji: 'ko',
     romajiDistractors: ['go', 'kou', 'ka'],
@@ -181,28 +193,31 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   さ: defineKana({
     char: 'さ',
+    kanjiOrigin: '左',
     charDistractors: ['き', 'ち', 'ざ'],
     romaji: 'sa',
     romajiDistractors: ['zo', 'so', 'ki', 'so'],
     kanji: '傘',
     word: 'かさ',
     wordRomaji: 'ka·sa',
-    meaning: { en: 'umbrella; pileus', zh: '伞；伞状物' },
+    meaning: { en: 'umbrella', zh: '伞；伞状物' },
     wordDistractors: ['かざ', 'かき', 'がさ'],
   }),
   し: defineKana({
     char: 'し',
+    kanjiOrigin: '之',
     charDistractors: ['つ', 'も', 'じ'],
     romaji: 'shi',
     romajiDistractors: ['si', 'ji', 'chi'],
     kanji: '牛',
     word: 'うし',
     wordRomaji: 'u·shi',
-    meaning: { en: 'cattle; bovine', zh: '牛' },
+    meaning: { en: 'cattle', zh: '牛' },
     wordDistractors: ['うじ', 'うつ', 'おし'],
   }),
   す: defineKana({
     char: 'す',
+    kanjiOrigin: '寸',
     charDistractors: ['む', 'ぬ', 'ず'],
     romaji: 'su',
     romajiDistractors: ['zu', 'si', 'cu', 'ci'],
@@ -214,17 +229,19 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   せ: defineKana({
     char: 'せ',
+    kanjiOrigin: '世',
     charDistractors: ['サ', 'ぜ', 'や'],
     romaji: 'se',
     romajiDistractors: ['ze', 'sa', 'she', 'ci'],
     kanji: '汗',
     word: 'あせ',
     wordRomaji: 'a·se',
-    meaning: { en: 'sweat; perspiration', zh: '汗水；汗液' },
+    meaning: { en: 'sweat', zh: '汗水；汗液' },
     wordDistractors: ['あぜ', 'あさ', 'おせ'],
   }),
   そ: defineKana({
     char: 'そ',
+    kanjiOrigin: '曾',
     charDistractors: ['ぞ', 'ろ', 'て'],
     romaji: 'so',
     romajiDistractors: ['zo', 'zo', 'no'],

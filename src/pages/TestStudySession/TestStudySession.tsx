@@ -53,17 +53,18 @@ export const TestStudySession = () => {
   const navigate = useNavigate();
   const { courseId: id } = useParams<{ courseId: string }>();
   const { markLessonComplete } = useGlobalProgress();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
 
   const cardRef = useRef<TinderCardRef>(null);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const {
-    soundEffect, // 全局音效状态
-    hapticFeedback, // 全局震动状态
-    autoAudio, // 全局自动发音状态
-    toggleSetting, // 全局切换方法
+    soundEffect,
+    hapticFeedback,
+    autoAudio,
+    toggleSetting,
+    kanjiBackground,
   } = useSettings();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -370,6 +371,18 @@ export const TestStudySession = () => {
                     {card.type === 'LEARN' && card.subType === 'SHAPE' && (
                       // 🔥🔥🔥 3. 把类名加到具体内容容器上 🔥🔥🔥
                       <div className={styles.learnShape}>
+                        {kanjiBackground && card.kanjiOrigin && (
+                          <div className={styles.originBadge}>
+                            <span className={styles.originLabel}>
+                              {t('studyKana.kanjiOrigin')}
+                            </span>
+                            <div className={styles.originCharBox}>
+                              <span className={styles.originChar}>
+                                {card.kanjiOrigin}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                         <div className={`${styles.bigChar} ${styles.jaFont}`}>
                           {card.char}
                         </div>

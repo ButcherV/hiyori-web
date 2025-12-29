@@ -1,48 +1,54 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
+import type { UILang } from '../../context/SettingsContext';
 import styles from './Onboarding.module.css';
 
 export const Onboarding: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { updateSettings } = useSettings();
   const [step, setStep] = useState<1 | 2>(1);
-  const [tempUI, setTempUI] = useState<'en' | 'zh'>('en');
+  const [tempUI, setTempUI] = useState<UILang>('en');
 
-  // 处理最终提交
-  const handleFinish = (nativeLang: 'en' | 'zh') => {
+  // 第一步：选语言
+  const handleLangSelect = (lang: UILang) => {
+    setTempUI(lang);
+    // 选完立刻切换 i18n，这样第二步看到的翻译就是对的
+    i18n.changeLanguage(lang);
+    setStep(2);
+  };
+
+  const handleFinish = (hasBackground: boolean) => {
     updateSettings({
       uiLanguage: tempUI,
-      nativeLanguage: nativeLang,
+      kanjiBackground: hasBackground,
       hasFinishedOnboarding: true,
     });
   };
 
-  // 第一步：双语入口
   if (step === 1) {
     return (
       <div className={styles.container}>
         <div className={styles.content}>
-          <h1 className={styles.bilingualTitle}>
-            Select Language <br />
-            <span className={styles.subTitle}>选择界面语言</span>
-          </h1>
+          <h1 className={styles.bilingualTitle}>Language / 语言 / 語言</h1>
           <div className={styles.btnStack}>
             <button
               className={styles.mainBtn}
-              onClick={() => {
-                setTempUI('en');
-                setStep(2);
-              }}
+              onClick={() => handleLangSelect('zh')}
             >
-              English
+              简体中文
             </button>
             <button
               className={styles.mainBtn}
-              onClick={() => {
-                setTempUI('zh');
-                setStep(2);
-              }}
+              onClick={() => handleLangSelect('zh-Hant')}
             >
-              简体中文
+              繁體中文
+            </button>
+            <button
+              className={styles.mainBtn}
+              onClick={() => handleLangSelect('en')}
+            >
+              English
             </button>
           </div>
         </div>
@@ -50,67 +56,60 @@ export const Onboarding: React.FC = () => {
     );
   }
 
-  // 第二步：智能分支逻辑
-  const isEnUI = tempUI === 'en';
+  // 第二步：根据 tempUI 决定是展示“询问”还是“智能建议”
+  const isChineseUI = tempUI === 'zh' || tempUI === 'zh-Hant';
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        {isEnUI ? (
-          /* 分支 A：英文界面 -> 询问背景 */
-          <>
-            <h1 className={styles.title}>Kanji Foundation</h1>
-            <p className={styles.desc}>
-              Do you have experience with Chinese characters
-              (Kanji/Hanzi/Hanja)?
-            </p>
-            <div className={styles.cardStack}>
+        <h1 className={styles.title}>{t('onboarding.step2_title')}</h1>
+        <p className={styles.desc}>{t('onboarding.step2_desc')}</p>
+
+        <div className={styles.cardStack}>
+          {isChineseUI ? (
+            /* 中文界面分支：直接放一个巨大的推荐按钮 */
+            <>
+              <div className={styles.previewCard}>
+                <div className={styles.badge}>推荐方案</div>
+                <h3>{t('onboarding.option_kanji_label')}</h3>
+                <p>{t('onboarding.option_kanji_desc')}</p>
+              </div>
+              <button
+                className={styles.finishBtn}
+                onClick={() => handleFinish(true)}
+              >
+                这就开始
+              </button>
+              <button
+                className={styles.altLink}
+                onClick={() => handleFinish(false)}
+              >
+                {t('onboarding.option_kana_label')}
+              </button>
+            </>
+          ) : (
+            /* 英文界面分支：老老实实二选一 */
+            <>
               <div
                 className={styles.logicCard}
-                onClick={() => handleFinish('zh')}
+                onClick={() => handleFinish(false)}
               >
-                <h3>Yes, I know Kanji</h3>
-                <p>Use characters as semantic anchors to learn faster.</p>
+                <h3>{t('onboarding.option_kana_label')}</h3>
+                <p>{t('onboarding.option_kana_desc')}</p>
               </div>
               <div
                 className={styles.logicCard}
-                onClick={() => handleFinish('en')}
+                onClick={() => handleFinish(true)}
               >
-                <h3>No, I'm a beginner</h3>
-                <p>Focus on phonetic shapes with visual noise reduction.</p>
+                <h3>{t('onboarding.option_kanji_label')}</h3>
+                <p>{t('onboarding.option_kanji_desc')}</p>
               </div>
-            </div>
-          </>
-        ) : (
-          /* 分支 B：中文界面 -> 智能推断 */
-          <>
-            <h1 className={styles.title}>教学逻辑已就绪</h1>
-            <p className={styles.desc}>
-              检测到您使用中文界面，系统已自动为您开启<b>“汉字锚点模式”</b>
-              ，利用您的汉字储备加速记忆。
-            </p>
-            <div className={styles.previewCard}>
-              <div className={styles.badge}>已智能开启</div>
-              <h3>语义加速算法</h3>
-              <p>我们将利用汉字与假名的对应关系，为您规划最高效的学习路径。</p>
-            </div>
-            <button
-              className={styles.finishBtn}
-              onClick={() => handleFinish('zh')}
-            >
-              开启学习之旅
-            </button>
-            <button
-              className={styles.altLink}
-              onClick={() => handleFinish('en')}
-            >
-              我不熟悉汉字，切换为基础模式
-            </button>
-          </>
-        )}
+            </>
+          )}
+        </div>
 
         <button className={styles.backLink} onClick={() => setStep(1)}>
-          {isEnUI ? '← Back' : '← 返回修改语言'}
+          {t('onboarding.back')}
         </button>
       </div>
     </div>

@@ -581,3 +581,98 @@
     opacity: 0.4;
   }
 }
+
+/* 
+
+.originLabel {
+}
+
+.originChar {
+  font-family: 'Klee One', 'Yuji Mai', 'YuKyokasho', cursive;
+  font-weight: 900;
+  font-size: 40px;
+  margin-left: 8px;
+} */
+
+.originBadge {
+  /* margin-bottom: 16px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 徽章容器：放在假名的侧上方 */
+.originCharBox {
+  position: relative;
+  width: 54px; /* 稍微加大一点，给田字格留出空间 */
+  height: 54px;
+  background-color: rgba(0, 122, 255, 0.03); /* 极淡的底色 */
+  border: 1px solid rgba(0, 122, 255, 0.2); /* 淡蓝色外边框 */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* 确保虚线不溢出圆角 */
+}
+
+/* 2. 田字格：横向虚线 */
+.originCharBox::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+  /* 使用线性渐变绘制虚线 */
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 122, 255, 0.2) 50%,
+    transparent 50%
+  );
+  background-size: 8px 1px; /* 虚线的密度 */
+  pointer-events: none;
+}
+
+/* 3. 田字格：纵向虚线 */
+.originCharBox::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+  /* 使用线性渐变绘制虚线 */
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 122, 255, 0.2) 50%,
+    transparent 50%
+  );
+  background-size: 1px 8px; /* 虚线的密度 */
+  pointer-events: none;
+}
+
+/* 4. 来源汉字本身 */
+.originChar {
+  position: relative;
+  z-index: 2; /* 确保文字在虚线之上 */
+  font-size: 36px;
+  color: var(--color-Blue);
+  transform: rotate(-2deg);
+
+  /* 增加墨迹呼吸感 */
+  text-shadow: 0 0 1px rgba(0, 122, 255, 0.15);
+  font-family: 'Yuji Syuku', 'YuKyokasho', 'Klee One', 'Hibi Satsuki', serif;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* 5. 顶部的微小标签 */
+.originLabel {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}

@@ -59,7 +59,9 @@
     "clear_dialog_message": "Are you sure you want to delete all learning progress? This cannot be undone.",
     "data_management": "Data Management",
     "clear_progress_btn": "Clear Learning Progress",
-    "clear_success": "Data cleared successfully"
+    "clear_success": "Data cleared successfully",
+    "kanji_background": "Kanji Background",
+    "ui_language": "Language"
   },
   "stats": {
     "title": "My Journey",
@@ -68,12 +70,15 @@
     "tooltip": "{{count}} sessions on {{date}}"
   },
   "onboarding": {
-    "step2_title": "Japanese Kanji",
-    "step2_desc": "Japanese Kanji share roots with Chinese characters. Do you want to see them while learning?",
-    "option_kanji_label": "Yes, show Kanji",
-    "option_kanji_desc": "Use Kanji to understand meanings faster. Recommended if you have some background.",
-    "option_kana_label": "No, Kana only",
-    "option_kana_desc": "I'm a total beginner. Just show me basic Hiragana.",
+    "step2_title": "Your Background",
+    "step2_desc": "Do you have a background in Chinese characters (Hanzi / Kanji / Hanja / Chữ Hán)?",
+    "option_kanji_label": "Yes, I know them",
+    "option_kanji_desc": "Use them as a powerful shortcut to learn Kana faster.",
+    "option_kana_label": "No, I'm starting from scratch",
+    "option_kana_desc": "Focus purely on Kana for a clean, distraction-free start.",
     "back": "← Back"
+  },
+  "studyKana": {
+    "kanjiOrigin": "Origin from "
   }
 }

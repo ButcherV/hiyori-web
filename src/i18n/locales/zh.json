@@ -50,7 +50,6 @@
   "settings": {
     "display": "显示设置",
     "appearance": "外观模式",
-    "language": "界面语言",
     "learning": "学习设置",
     "show_romaji": "显示罗马音",
     "autoplay": "自动播放音频",
@@ -59,7 +58,9 @@
     "clear_dialog_message": "确定要清除所有学习进度吗？此操作无法撤销。",
     "data_management": "数据管理",
     "clear_progress_btn": "清除学习进度",
-    "clear_success": "数据清除成功"
+    "clear_success": "数据清除成功",
+    "kanji_background": "汉字基础",
+    "ui_language": "界面语言"
   },
   "stats": {
     "title": "学习旅程",
@@ -68,12 +69,15 @@
     "tooltip": "{{date}} 完成了 {{count}} 次"
   },
   "onboarding": {
-    "step2_title": "关于日文汉字",
-    "step2_desc": "日文汉字和中文有些像但并不完全一样。我们建议带上汉字一起学，记意思会快很多。",
-    "option_kanji_label": "带上汉字学",
-    "option_kanji_desc": "我们会把假名和汉字对应起来，利用你的汉字基础加速记忆。",
-    "option_kana_label": "先不看汉字",
-    "option_kana_desc": "我想先专注练习最基础的假名读音。",
+    "step2_title": "Kanji：日文中的汉字",
+    "step2_desc": "日文汉字与中文汉字系出同源。结合 Kanji 学习假名，可以提升记忆效率。",
+    "option_kanji_label": "结合 Kanji 学习",
+    "option_kanji_desc": "将假名与 Kanji 关联，利用你的汉字基础作为脚手架，加速假名记忆。",
+    "option_kana_label": "先不涉及 Kanji",
+    "option_kana_desc": "",
     "back": "← 返回"
+  },
+  "studyKana": {
+    "kanjiOrigin": "源自汉字"
   }
 }

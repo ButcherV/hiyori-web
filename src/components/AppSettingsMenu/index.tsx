@@ -1,5 +1,13 @@
 import React from 'react';
-import { Info, Globe, Volume2, Speaker, Vibrate, Trash2 } from 'lucide-react';
+import {
+  Info,
+  Globe,
+  Volume2,
+  Speaker,
+  Vibrate,
+  Trash2,
+  BookOpen,
+} from 'lucide-react';
 import styles from './AppSettingsMenu.module.css';
 
 import { useTranslation } from 'react-i18next';
@@ -15,12 +23,21 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
   onClose,
 }) => {
   const { t, i18n } = useTranslation();
-  const { autoAudio, soundEffect, hapticFeedback, toggleSetting } =
-    useSettings();
+
+  const {
+    uiLanguage,
+    kanjiBackground,
+    autoAudio,
+    soundEffect,
+    hapticFeedback,
+    toggleSetting,
+    updateSettings,
+  } = useSettings();
 
   const { clearHistory } = useProgress();
 
-  const handleLanguageChange = (code: string) => {
+  const handleLanguageChange = (code: 'en' | 'zh' | 'zh-Hant') => {
+    updateSettings({ uiLanguage: code });
     i18n.changeLanguage(code);
   };
 
@@ -31,30 +48,52 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* 1. 语言设置 */}
+      {/* UI Language - (En/简/繁) */}
       <div className={styles.controlRow}>
         <div className={styles.labelGroup}>
           <Globe size={20} className={styles.icon} />
-          <span className={styles.label}>{t('settings.language')}</span>
+          <span className={styles.label}>{t('settings.ui_language')}</span>
         </div>
 
         <div className={styles.pillGroup}>
           <button
-            className={`${styles.pillBtn} ${i18n.language.startsWith('en') ? styles.active : ''}`}
+            className={`${styles.pillBtn} ${uiLanguage === 'en' ? styles.active : ''}`}
             onClick={() => handleLanguageChange('en')}
           >
             En
           </button>
           <button
-            className={`${styles.pillBtn} ${i18n.language.startsWith('zh') ? styles.active : ''}`}
+            className={`${styles.pillBtn} ${uiLanguage === 'zh' ? styles.active : ''}`}
             onClick={() => handleLanguageChange('zh')}
           >
-            中
+            简
+          </button>
+          <button
+            className={`${styles.pillBtn} ${uiLanguage === 'zh-Hant' ? styles.active : ''}`}
+            onClick={() => handleLanguageChange('zh-Hant')}
+          >
+            繁
           </button>
         </div>
       </div>
 
-      {/* 2. 自动发音 */}
+      {/* 汉字基础 */}
+      <div
+        className={styles.controlRow}
+        onClick={() => toggleSetting('kanjiBackground')}
+      >
+        <div className={styles.labelGroup}>
+          <BookOpen size={20} className={styles.icon} />
+          <span className={styles.label}>{t('settings.kanji_background')}</span>
+        </div>
+        <div
+          className={`${styles.switch} ${kanjiBackground ? styles.switchOn : ''}`}
+        >
+          <div className={styles.switchHandle} />
+        </div>
+      </div>
+
+      {/* 自动发音 */}
       <div
         className={styles.controlRow}
         onClick={() => toggleSetting('autoAudio')}
@@ -68,7 +107,7 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
         </div>
       </div>
 
-      {/* 3. 音效 */}
+      {/* 音效 */}
       <div
         className={styles.controlRow}
         onClick={() => toggleSetting('soundEffect')}
@@ -84,7 +123,7 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
         </div>
       </div>
 
-      {/* 4. 触感反馈 */}
+      {/* 触感反馈 */}
       <div
         className={styles.controlRow}
         onClick={() => toggleSetting('hapticFeedback')}
@@ -100,7 +139,7 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
         </div>
       </div>
 
-      {/* 6. 版本号 (放在最后比较合适) */}
+      {/* 版本号 */}
       <div className={styles.controlRow}>
         <div className={styles.labelGroup}>
           <Info size={20} className={styles.icon} />
@@ -109,7 +148,7 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
         <span className={styles.value}>1.0.0 (Beta)</span>
       </div>
 
-      {/* 5. 清除数据 (红色) */}
+      {/* 清除数据 */}
       <div
         className={styles.controlRow}
         onClick={handleClearData}
