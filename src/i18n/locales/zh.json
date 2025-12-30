@@ -78,6 +78,6 @@
     "back": "← 返回"
   },
   "studyKana": {
-    "kanjiOrigin": "源自汉字"
+    "kanjiOrigin": "源自汉字「{{char}}」的草书"
   }
 }

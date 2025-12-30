@@ -15,3 +15,11 @@ body {
   height: 100%;
   width: 100%;
 }
+
+@font-face {
+  font-family: 'HengShanSosho'; /* 这是你在 CSS 中调用的名字 */
+  src: url('../assets/fonts/HengShanMaoBiCaoShu-2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* 确保字体未加载完时先显示默认字体，避免白屏 */
+}

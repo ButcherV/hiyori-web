@@ -171,26 +171,45 @@ export const TestStudySession = () => {
   const getHeader = () => {
     if (!currentItem)
       return { title: '', sub: '', isPassive: true, isJa: false };
+
+    // 🔥 1. 核心逻辑拦截：大英语、无中文 (仅限单词考试卡且关闭汉字背景)
+    if (
+      !kanjiBackground &&
+      currentItem.type === 'QUIZ' &&
+      currentItem.subType === 'WORD'
+    ) {
+      // 直接从已有的 headerSub (含义对象) 中提取英文
+      // 在 WORD Quiz 中，headerSub 必定是 LocalizedText 对象
+      const meaningObj = currentItem.headerSub as any;
+      const englishText = meaningObj?.en || '';
+
+      return {
+        title: englishText, // 👈 这里的标题就是大写的英语含义
+        sub: '', // 👈 这里的副标题强制为空，彻底消失
+        isPassive: false,
+        isJa: false,
+      };
+    }
+
+    // 2. 正常逻辑 (其他所有情况)
     if (currentItem.headerTitle) {
-      // 🔥🔥🔥 核心修改：解析 sub 文本 🔥🔥🔥
       let displaySub = '';
       if (currentItem.headerSub) {
-        if (typeof currentItem.headerSub === 'string') {
-          // 如果是普通的字符串（比如以后有不需要翻译的情况），直接显示
-          displaySub = currentItem.headerSub;
-        } else {
-          // 如果是 LocalizedText 对象，根据当前语言取值
-          displaySub = currentItem.headerSub[currentLang];
-        }
+        displaySub =
+          typeof currentItem.headerSub === 'string'
+            ? currentItem.headerSub
+            : currentItem.headerSub[currentLang];
       }
 
       return {
         title: currentItem.customTitle || currentItem.headerTitle,
-        sub: displaySub, // 使用解析后的文本
+        sub: displaySub,
         isPassive: currentItem.type !== 'QUIZ',
         isJa: !!currentItem.isHeaderJa,
       };
     }
+
+    // 3. 兜底逻辑
     if (currentItem.customTitle) {
       return {
         title: currentItem.customTitle,
@@ -369,18 +388,22 @@ export const TestStudySession = () => {
                   <div className={`${styles.cardContent} ${contentBlurClass}`}>
                     {/* Learn: Shape */}
                     {card.type === 'LEARN' && card.subType === 'SHAPE' && (
-                      // 🔥🔥🔥 3. 把类名加到具体内容容器上 🔥🔥🔥
                       <div className={styles.learnShape}>
                         {kanjiBackground && card.kanjiOrigin && (
                           <div className={styles.originBadge}>
-                            <span className={styles.originLabel}>
-                              {t('studyKana.kanjiOrigin')}
-                            </span>
-                            <div className={styles.originCharBox}>
+                            <div
+                              className={styles.originCharBox}
+                              data-char={card.kanjiOrigin}
+                            >
                               <span className={styles.originChar}>
                                 {card.kanjiOrigin}
                               </span>
                             </div>
+                            <span className={styles.originLabel}>
+                              {t('studyKana.kanjiOrigin', {
+                                char: card.kanjiOrigin,
+                              })}
+                            </span>
                           </div>
                         )}
                         <div className={`${styles.bigChar} ${styles.jaFont}`}>
@@ -399,12 +422,35 @@ export const TestStudySession = () => {
                     {/* Learn: Context */}
                     {card.type === 'LEARN' && card.subType === 'CONTEXT' && (
                       <div className={styles.learnContext}>
-                        <div className={`${styles.furigana} ${styles.jaFont}`}>
-                          {card.word}
-                        </div>
-                        <div className={`${styles.kanjiMain} ${styles.jaFont}`}>
-                          {card.kanji}
-                        </div>
+                        {kanjiBackground ? (
+                          /* 模式 A：汉字在上，读音在下 */
+                          <>
+                            <div
+                              className={`${styles.furigana} ${styles.jaFont}`}
+                            >
+                              {card.word}
+                            </div>
+                            <div
+                              className={`${styles.kanjiMain} ${styles.jaFont}`}
+                            >
+                              {card.kanji}
+                            </div>
+                          </>
+                        ) : (
+                          /* 模式 B：只显示假名，不显示汉字 */
+                          <>
+                            {/* <div
+                              className={`${styles.furigana} ${styles.jaFont}`}
+                            >
+                              {card.kanji}
+                            </div> */}
+                            <div
+                              className={`${styles.kanjiMain} ${styles.jaFont}`}
+                            >
+                              {card.word}
+                            </div>
+                          </>
+                        )}
                         <div className={styles.romajiBottom}>
                           {card.wordRomaji}
                         </div>
@@ -453,9 +499,15 @@ export const TestStudySession = () => {
 
                             {/* 右侧：kanji + kana + 含义 */}
                             <div className={styles.reviewRight}>
-                              <span className={styles.reviewWord}>
-                                {item.kanji} [{item.word}]
-                              </span>
+                              {kanjiBackground ? (
+                                <span className={styles.reviewWord}>
+                                  {item.kanji} [{item.word}]
+                                </span>
+                              ) : (
+                                <span className={styles.reviewWord}>
+                                  {item.word}
+                                </span>
+                              )}
                               <span className={styles.reviewMeaning}>
                                 {item.meaning[currentLang]}
                               </span>

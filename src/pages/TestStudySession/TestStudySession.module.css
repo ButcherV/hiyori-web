@@ -151,10 +151,10 @@
 /* --- 🔊 喇叭图标 --- */
 .speakerBtn {
   position: absolute;
-  bottom: 25px;
-  right: 25px;
-  width: 44px;
-  height: 44px;
+  bottom: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -183,10 +183,11 @@
   align-items: center;
 }
 .bigChar {
-  font-size: 120px;
+  font-size: 160px;
+  line-height: 1.2;
   font-weight: 800;
   color: var(--color-Gray9);
-  margin: 10px 0;
+  margin: 16px 0 0 0;
 }
 .romajiSub {
   font-size: 28px;
@@ -582,18 +583,6 @@
   }
 }
 
-/* 
-
-.originLabel {
-}
-
-.originChar {
-  font-family: 'Klee One', 'Yuji Mai', 'YuKyokasho', cursive;
-  font-weight: 900;
-  font-size: 40px;
-  margin-left: 8px;
-} */
-
 .originBadge {
   /* margin-bottom: 16px; */
   display: flex;
@@ -601,78 +590,67 @@
   align-items: center;
 }
 
-/* 徽章容器：放在假名的侧上方 */
 .originCharBox {
   position: relative;
-  width: 54px; /* 稍微加大一点，给田字格留出空间 */
-  height: 54px;
-  background-color: rgba(0, 122, 255, 0.03); /* 极淡的底色 */
-  border: 1px solid rgba(0, 122, 255, 0.2); /* 淡蓝色外边框 */
+  width: 66px;
+  height: 66px;
+  background-color: rgba(0, 122, 255, 0.02);
+  border: 1px solid rgba(0, 122, 255, 0.45);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* 确保虚线不溢出圆角 */
+  overflow: hidden;
+
+  /* 🔥 核心修改：用背景实现田字格虚线 */
+  background-image:
+    linear-gradient(to bottom, rgba(0, 122, 255, 0.2) 50%, transparent 50%),
+    linear-gradient(to right, rgba(0, 122, 255, 0.2) 50%, transparent 50%);
+  background-size:
+    1px 10px,
+    10px 1px; /* 虚线密度 */
+  background-position: center;
+  background-repeat: repeat-y, repeat-x;
 }
 
-/* 2. 田字格：横向虚线 */
+/* 🔥 使用 ::before 显示标准汉字底纹 (楷书/教科书体) */
 .originCharBox::before {
-  content: '';
+  content: attr(data-char);
   position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  transform: translateY(-50%);
-  /* 使用线性渐变绘制虚线 */
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 122, 255, 0.2) 50%,
-    transparent 50%
-  );
-  background-size: 8px 1px; /* 虚线的密度 */
-  pointer-events: none;
-}
-
-/* 3. 田字格：纵向虚线 */
-.originCharBox::after {
-  content: '';
-  position: absolute;
+  top: 46%;
   left: 50%;
-  top: 0;
-  width: 1px;
-  height: 100%;
-  transform: translateX(-50%);
-  /* 使用线性渐变绘制虚线 */
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 122, 255, 0.2) 50%,
-    transparent 50%
-  );
-  background-size: 1px 8px; /* 虚线的密度 */
+  transform: translate(-50%, -50%);
+
+  /* 使用标准、好认的日文字体 */
+  font-family: 'Noto Serif JP', sans-serif;
+  font-size: 64px;
+  font-weight: 900;
+  /* 颜色要极其淡，作为草书的“影子” */
+  color: rgba(0, 122, 255, 0.1);
+  z-index: 1;
   pointer-events: none;
 }
 
-/* 4. 来源汉字本身 */
+/* 🔥 originChar 保持为你下载的飘逸草书 */
 .originChar {
   position: relative;
-  z-index: 2; /* 确保文字在虚线之上 */
-  font-size: 36px;
+  z-index: 2; /* 确保草书在底纹之上 */
+  font-size: 56px;
   color: var(--color-Blue);
-  transform: rotate(-2deg);
-
-  /* 增加墨迹呼吸感 */
-  text-shadow: 0 0 1px rgba(0, 122, 255, 0.15);
-  font-family: 'Yuji Syuku', 'YuKyokasho', 'Klee One', 'Hibi Satsuki', serif;
-  font-weight: 400;
+  /* 使用你下载并引用的衡山草书 */
+  font-family: 'HengShanSosho', serif;
+  font-weight: 900;
   line-height: 1;
+  /* 稍微倾斜，增加动感 */
+  transform: rotate(-2deg);
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.8); /* 给草书加一点白边，防止被底纹干扰 */
 }
 
 /* 5. 顶部的微小标签 */
 .originLabel {
-  font-size: 10px;
+  font-size: 13px;
   color: #9ca3af;
-  margin-bottom: 4px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  margin-top: 4px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
 }

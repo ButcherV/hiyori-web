@@ -79,6 +79,6 @@
     "back": "← Back"
   },
   "studyKana": {
-    "kanjiOrigin": "Origin from "
+    "kanjiOrigin": "Origin from「{{char}}」"
   }
 }
