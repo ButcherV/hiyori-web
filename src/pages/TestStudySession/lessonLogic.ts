@@ -33,6 +33,7 @@ export interface LessonCard {
   meaning?: LocalizedText;
   wordRomaji?: string;
   displayContent: string;
+  noteKey?: string;
 
   // Quiz 专用
   quizGroupId?: string;
@@ -95,6 +96,7 @@ const createLearn = (
     kanjiOrigin: data.kanjiOrigin,
     wordRomaji: data.wordRomaji,
     meaning: data.meaning,
+    noteKey: data.noteKey,
     displayContent: subType === 'SHAPE' ? data.char : data.kanji,
     headerTitle: subType === 'SHAPE' ? 'New Kana' : 'New Word',
     isHeaderJa: false,
@@ -174,6 +176,7 @@ const createQuiz = (
     kanji: data.kanji,
     wordRomaji: data.wordRomaji,
     meaning: data.meaning,
+    noteKey: data.noteKey,
     headerTitle: questionTitle,
     headerSub: questionSub,
     displayContent: correctAnswer,

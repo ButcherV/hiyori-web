@@ -60,7 +60,7 @@
     "data_management": "Data Management",
     "clear_progress_btn": "Clear Learning Progress",
     "clear_success": "Data cleared successfully",
-    "kanji_background": "Kanji Background",
+    "kanji_background": "Kana first",
     "ui_language": "Language"
   },
   "stats": {
@@ -79,6 +79,11 @@
     "back": "← Back"
   },
   "studyKana": {
-    "kanjiOrigin": "Origin from「{{char}}」"
+    "katakanaKanjiOrigin": "Origin from「{{char}}」",
+    "hiraganaKanjiOrigin": "Origin from「{{char}}」",
+    "notes": {
+      "chi": "Note: Romaji is \"chi\" (instead of \"ti\").",
+      "wo": "Note: This is an object marker particle and is rarely used in common words."
+    }
   }
 }

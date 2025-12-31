@@ -108,7 +108,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 8px 32px 104px;
+  padding: 8px 32px 64px;
+  max-height: 640px;
   /* 增加透视感，让 3D 变换更自然 */
   perspective: 1000px;
 }
@@ -184,7 +185,7 @@
 }
 .bigChar {
   font-size: 160px;
-  line-height: 1.2;
+  line-height: 1.1;
   font-weight: 800;
   color: var(--color-Gray9);
   margin: 16px 0 0 0;
@@ -583,74 +584,49 @@
   }
 }
 
-.originBadge {
-  /* margin-bottom: 16px; */
-  display: flex;
-  flex-direction: column;
+/* 胶囊型备注标签 */
+.cardNoteLabel {
+  display: inline-flex;
   align-items: center;
+  gap: 6px; /* 图标与文字的间距 */
+
+  margin-top: 16px;
+  margin-bottom: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
+  padding: 8px 16px;
+  text-align: left;
+  /* 柔和的配色方案 */
+  /* 浅红色背景，配合鸟居红标题 */
+  background: rgba(255, 69, 0, 0.03);
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+
+  border-radius: 8px; /* 完美胶囊型 */
+  font-size: 14px;
+  line-height: 1.4;
+  /* font-weight: 500; */
+  text-align: left;
+
+  /* 居中显示 */
+  align-self: center;
+
+  /* 动画效果：卡片切换时更丝滑 */
+  animation: fadeIn 0.3s ease-out;
 }
 
-.originCharBox {
-  position: relative;
-  width: 66px;
-  height: 66px;
-  background-color: rgba(0, 122, 255, 0.02);
-  border: 1px solid rgba(0, 122, 255, 0.45);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-  /* 🔥 核心修改：用背景实现田字格虚线 */
-  background-image:
-    linear-gradient(to bottom, rgba(0, 122, 255, 0.2) 50%, transparent 50%),
-    linear-gradient(to right, rgba(0, 122, 255, 0.2) 50%, transparent 50%);
-  background-size:
-    1px 10px,
-    10px 1px; /* 虚线密度 */
-  background-position: center;
-  background-repeat: repeat-y, repeat-x;
+.noteIcon {
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
-/* 🔥 使用 ::before 显示标准汉字底纹 (楷书/教科书体) */
-.originCharBox::before {
-  content: attr(data-char);
-  position: absolute;
-  top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  /* 使用标准、好认的日文字体 */
-  font-family: 'Noto Serif JP', sans-serif;
-  font-size: 64px;
-  font-weight: 900;
-  /* 颜色要极其淡，作为草书的“影子” */
-  color: rgba(0, 122, 255, 0.1);
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* 🔥 originChar 保持为你下载的飘逸草书 */
-.originChar {
-  position: relative;
-  z-index: 2; /* 确保草书在底纹之上 */
-  font-size: 56px;
-  color: var(--color-Blue);
-  /* 使用你下载并引用的衡山草书 */
-  font-family: 'HengShanSosho', serif;
-  font-weight: 900;
-  line-height: 1;
-  /* 稍微倾斜，增加动感 */
-  transform: rotate(-2deg);
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.8); /* 给草书加一点白边，防止被底纹干扰 */
-}
-
-/* 5. 顶部的微小标签 */
-.originLabel {
-  font-size: 13px;
-  color: #9ca3af;
-  margin-top: 4px;
-  font-weight: 400;
-  letter-spacing: 0.1px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

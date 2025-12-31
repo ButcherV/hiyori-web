@@ -1,0 +1,97 @@
+.originBadge {
+  /* margin-bottom: 16px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.originCharBox {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  background-color: rgba(0, 122, 255, 0.02);
+  border: 1px solid rgba(0, 122, 255, 0.45);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  /* 🔥 核心修改：用背景实现田字格虚线 */
+  background-image:
+    linear-gradient(to bottom, rgba(0, 122, 255, 0.2) 50%, transparent 50%),
+    linear-gradient(to right, rgba(0, 122, 255, 0.2) 50%, transparent 50%);
+  background-size:
+    1px 10px,
+    10px 1px; /* 虚线密度 */
+  background-position: center;
+  background-repeat: repeat-y, repeat-x;
+}
+
+/* 🔥 使用 ::before 显示标准汉字底纹 (楷书/教科书体) */
+.originCharBox::before {
+  content: attr(data-char);
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* 使用标准、好认的日文字体 */
+  font-family: 'Noto Serif JP', sans-serif;
+  font-size: 64px;
+  font-weight: 900;
+  /* 颜色要极其淡，作为草书的“影子” */
+  color: rgba(0, 122, 255, 0.1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 🔥 originChar 保持为你下载的飘逸草书 */
+.originChar {
+  position: relative;
+  z-index: 2; /* 确保草书在底纹之上 */
+  font-size: 56px;
+  color: var(--color-Blue);
+  /* 使用你下载并引用的衡山草书 */
+  font-family: 'HengShanSosho', 'Yuji Syuku', 'Klee One', serif;
+  font-weight: 900;
+  line-height: 1;
+  /* 稍微倾斜，增加动感 */
+  transform: rotate(-2deg);
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.8); /* 给草书加一点白边，防止被底纹干扰 */
+}
+
+/* 5. 顶部的微小标签 */
+.originLabel {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 4px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+}
+
+/* 片假名 */
+:global(.kana-origin-char) path {
+  stroke: var(--color-Gray5) !important;
+  stroke-width: 8;
+  transition: stroke 0.3s ease;
+}
+
+:global(.kana-radical) path {
+  stroke: var(--color-Blue) !important;
+  stroke-width: 8 !important;
+  stroke-linecap: round;
+}
+
+/* 容器样式（配合 OriginBadge 组件） */
+.originSvgBox {
+  width: 64px;
+  height: 64px;
+  /* ... 其他样式 */
+}
+
+.originSvg {
+  width: 100%;
+  height: 100%;
+  /* 确保 SVG 能响应容器大小 */
+}

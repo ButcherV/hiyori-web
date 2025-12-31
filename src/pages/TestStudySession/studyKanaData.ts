@@ -10,6 +10,7 @@ export interface KanaEntry {
   wordRomaji: string;
   kanji: string;
   kanjiOrigin?: string;
+  noteKey?: string;
   meaning: LocalizedText;
   // 保持宽松定义，让 defineKana 处理严格校验
   romajiDistractors: readonly string[];
@@ -58,6 +59,7 @@ const defineKana = <
   kanji: string;
   meaning: LocalizedText;
   kanjiOrigin?: string;
+  noteKey?: string;
 
   romajiDistractors: PreciseValidator<RD, R>;
   charDistractors: PreciseValidator<CD, C>;
@@ -208,6 +210,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanjiOrigin: '之',
     charDistractors: ['つ', 'も', 'じ'],
     romaji: 'shi',
+    noteKey: 'studyKana.notes.shi',
     romajiDistractors: ['si', 'ji', 'chi'],
     kanji: '牛',
     word: 'うし',
@@ -272,6 +275,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     romajiDistractors: ['ti', 'shi', 'ji'],
     kanji: '口',
     word: 'くち',
+    noteKey: 'studyKana.notes.chi',
     wordRomaji: 'ku·chi',
     meaning: { en: 'mouth', zh: '嘴巴' },
     wordDistractors: ['くじ', 'ぐち', 'くら'],
@@ -281,6 +285,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanjiOrigin: '川',
     charDistractors: ['づ', 'す', 'ぬ'],
     romaji: 'tsu',
+    noteKey: 'studyKana.notes.tsu',
     romajiDistractors: ['tu', 'su', 'chu'],
     kanji: '地下鉄',
     word: 'ちかてつ',
@@ -385,6 +390,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanji: '花',
     word: 'はな',
     wordRomaji: 'ha·na',
+    noteKey: 'studyKana.notes.ha',
     meaning: { en: 'flower', zh: '花' },
     wordDistractors: ['ほな', 'ばな', 'はた'],
   }),
@@ -405,6 +411,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     kanjiOrigin: '不',
     charDistractors: ['ぶ', 'ぷ', 'う'],
     romaji: 'fu',
+    noteKey: 'studyKana.notes.fu',
     romajiDistractors: ['hu', 'bu', 'pu'],
     kanji: '冬',
     word: 'ふゆ',
@@ -419,6 +426,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     romaji: 'he',
     romajiDistractors: ['be', 'e', 'pe'],
     kanji: '部屋',
+    noteKey: 'studyKana.notes.he',
     word: 'へや',
     wordRomaji: 'he·ya',
     meaning: { en: 'room', zh: '房间' },
@@ -586,7 +594,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
   }),
   ろ: defineKana({
     char: 'ろ',
-    kanjiOrigin: '吕',
+    kanjiOrigin: '呂',
     charDistractors: ['る', 'ら', 'わ'],
     romaji: 'ro',
     romajiDistractors: ['lo', 'ru', 'o'],
@@ -618,6 +626,7 @@ export const KANA_DB: Record<string, KanaEntry> = {
     word: 'を',
     wordRomaji: 'wo',
     meaning: { en: 'object marker', zh: '助词（宾格）' },
+    noteKey: 'studyKana.notes.wo',
     wordDistractors: ['お', 'わ', 'え'],
   }),
   ん: defineKana({
@@ -631,5 +640,84 @@ export const KANA_DB: Record<string, KanaEntry> = {
     wordRomaji: 'ho·n',
     meaning: { en: 'book', zh: '书' },
     wordDistractors: ['ほわ', 'ほり', 'ほも'],
+  }),
+
+  // -------- 片假名 ------- 片假名 ----- 片假名 ----- 片假名 ----- 片假名 ----- 片假名 -----
+
+  // --- A 行  ---
+  ア: defineKana({
+    char: 'ア',
+    kanjiOrigin: '阿',
+    romaji: 'a',
+    word: 'アイス',
+    wordRomaji: 'a·i·su',
+    kanji: 'アイス',
+    meaning: {
+      en: 'ice; ice cream',
+      zh: '冰；冰激凌',
+    },
+    romajiDistractors: ['o', 'u', 'e'],
+    charDistractors: ['マ', 'ヤ', 'イ'],
+    wordDistractors: ['マイス', 'ヤイス', 'アイヌ'],
+  }),
+  イ: defineKana({
+    char: 'イ',
+    kanjiOrigin: '伊',
+    romaji: 'i',
+    word: 'インク',
+    wordRomaji: 'i·n·ku',
+    kanji: 'インク',
+    meaning: {
+      en: 'ink',
+      zh: '墨水',
+    },
+    romajiDistractors: ['e', 'u', 'a'],
+    charDistractors: ['ア', 'ト', 'ニ'],
+    wordDistractors: ['アンク', 'ウンク', 'イソク'],
+  }),
+  ウ: defineKana({
+    char: 'ウ',
+    kanjiOrigin: '宇',
+    romaji: 'u',
+    word: 'ウエスト',
+    wordRomaji: 'u·e·su·to',
+    kanji: 'ウエスト',
+    meaning: {
+      en: 'waist; west',
+      zh: '腰部；西方',
+    },
+    romajiDistractors: ['o', 'a', 'e'],
+    charDistractors: ['ワ', 'ラ', 'フ'],
+    wordDistractors: ['ワエスト', 'ラエスト', 'ウイスト'],
+  }),
+  エ: defineKana({
+    char: 'エ',
+    kanjiOrigin: '江',
+    romaji: 'e',
+    word: 'エアコン',
+    wordRomaji: 'e·a·ko·n',
+    kanji: 'エアコン',
+    meaning: {
+      en: 'air conditioner',
+      zh: '空调',
+    },
+    romajiDistractors: ['i', 'a', 'o'],
+    charDistractors: ['工', 'ユ', 'コ'],
+    wordDistractors: ['ユアコン', 'コアコン', 'エアドン'],
+  }),
+  オ: defineKana({
+    char: 'オ',
+    kanjiOrigin: '於',
+    romaji: 'o',
+    word: 'オレンジ',
+    wordRomaji: 'o·re·n·ji',
+    kanji: 'オレンジ',
+    meaning: {
+      en: 'orange',
+      zh: '橙子；橙色',
+    },
+    romajiDistractors: ['a', 'u', 'e'],
+    charDistractors: ['ホ', 'ナ', 'メ'],
+    wordDistractors: ['ナレンジ', 'ホレンジ', 'オレソジ'],
   }),
 };

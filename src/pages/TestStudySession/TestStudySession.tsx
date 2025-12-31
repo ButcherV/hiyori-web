@@ -14,6 +14,7 @@ import {
   type TinderCardRef,
 } from '../../components/TinderCard/index';
 import { TraceCard } from '../../components/TraceCard/index';
+import { OriginBadge } from '../../components/OriginBadge';
 import {
   generateWaveSequence,
   getRemedialCards,
@@ -31,6 +32,7 @@ import {
   // CircleChevronLeft,
   CircleX,
   CircleEqual,
+  Lightbulb,
 } from 'lucide-react';
 import styles from './TestStudySession.module.css';
 
@@ -390,26 +392,22 @@ export const TestStudySession = () => {
                     {card.type === 'LEARN' && card.subType === 'SHAPE' && (
                       <div className={styles.learnShape}>
                         {kanjiBackground && card.kanjiOrigin && (
-                          <div className={styles.originBadge}>
-                            <div
-                              className={styles.originCharBox}
-                              data-char={card.kanjiOrigin}
-                            >
-                              <span className={styles.originChar}>
-                                {card.kanjiOrigin}
-                              </span>
-                            </div>
-                            <span className={styles.originLabel}>
-                              {t('studyKana.kanjiOrigin', {
-                                char: card.kanjiOrigin,
-                              })}
-                            </span>
-                          </div>
+                          <OriginBadge
+                            char={card.char}
+                            romaji={card.romaji}
+                            kanjiOrigin={card.kanjiOrigin}
+                          />
                         )}
                         <div className={`${styles.bigChar} ${styles.jaFont}`}>
                           {card.char}
                         </div>
                         <div className={styles.romajiSub}>{card.romaji}</div>
+                        {card.noteKey && (
+                          <div className={styles.cardNoteLabel}>
+                            <Lightbulb size={14} className={styles.noteIcon} />
+                            <span>{t(card.noteKey)}</span>
+                          </div>
+                        )}
                         <div
                           className={styles.speakerBtn}
                           onClick={handlePlaySound}
