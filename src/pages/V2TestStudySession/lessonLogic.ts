@@ -1,0 +1,284 @@
+// src/pages/TestStudySession/lessonLogic.ts
+
+import { KANA_DB, type AnyKanaData, type LocalizedText } from './studyKanaData';
+
+// ==========================================
+// 1. 卡片类型定义
+// ==========================================
+
+export type CardType =
+  | 'KANA_LEARN'
+  | 'WORD_LEARN'
+  | 'TRACE'
+  | 'REVIEW'
+  | 'QUIZ';
+
+export type QuizType = 'ROMAJI' | 'KANA' | 'WORD';
+
+// 通用卡片结构
+export interface LessonCard {
+  uniqueId: string;
+  type: CardType;
+  data: AnyKanaData;
+  headerTitle?: string;
+  headerSub?: string | LocalizedText;
+  quizGroupId?: string;
+  quizType?: QuizType;
+  isCorrect?: boolean;
+  displayContent?: string;
+  reviewItems?: ReviewItem[];
+  isOriginal: boolean;
+}
+
+export interface ReviewItem {
+  char: string;
+  romaji: string;
+  word?: string;
+  wordRomaji?: string;
+  meaning?: LocalizedText;
+  kind: AnyKanaData['kind'];
+}
+
+export interface SessionStats {
+  learnTotal: number;
+  quizTotal: number;
+  reviewCardId?: string;
+}
+
+// ==========================================
+// 2. 基础生成器
+// ==========================================
+
+const uuid = () => Math.random().toString(36).slice(2, 9);
+const shuffle = <T>(array: T[]): T[] => array.sort(() => 0.5 - Math.random());
+
+// 生成一组 Quiz 卡 (1对 + 3错)
+// 返回的是 LessonCard[]，即一组卡片
+const createQuizGroup = (
+  data: AnyKanaData,
+  quizType: QuizType,
+  isOriginal: boolean
+): LessonCard[] => {
+  const groupId = `quiz-${data.id}-${quizType}-${uuid()}`;
+  const cards: LessonCard[] = [];
+
+  // 1. 准备内容
+  let title = '';
+  let sub: string | LocalizedText | undefined = '';
+  let answer = '';
+  let distractors: readonly string[] = [];
+
+  if (quizType === 'ROMAJI') {
+    title = data.kana;
+    answer = data.romaji;
+    distractors = data.romajiDistractors;
+  } else if (quizType === 'KANA') {
+    title = data.romaji;
+    answer = data.kana;
+    distractors = data.kanaDistractors;
+  } else if (quizType === 'WORD') {
+    if (!data.word || !data.wordKana || !data.wordDistractors) return [];
+    title = data.word;
+    sub = data.wordMeaning;
+    answer = data.wordKana;
+    distractors = data.wordDistractors;
+  }
+
+  // 2. 正确卡
+  cards.push({
+    uniqueId: `${groupId}-correct`,
+    type: 'QUIZ',
+    data,
+    quizGroupId: groupId,
+    quizType,
+    headerTitle: title,
+    headerSub: sub,
+    isCorrect: true,
+    displayContent: answer,
+    isOriginal,
+  });
+
+  // 3. 错误卡
+  const selectedDistractors = shuffle([...distractors]).slice(0, 3);
+  selectedDistractors.forEach((d, i) => {
+    cards.push({
+      uniqueId: `${groupId}-wrong-${i}`,
+      type: 'QUIZ',
+      data,
+      quizGroupId: groupId,
+      quizType,
+      headerTitle: title,
+      headerSub: sub,
+      isCorrect: false,
+      displayContent: d,
+      isOriginal,
+    });
+  });
+
+  // 组内洗牌：保证选项顺序随机，但它们还是一家人
+  return shuffle(cards);
+};
+
+// ==========================================
+// 3. 排课策略
+// ==========================================
+
+/**
+ * 策略 A: 平假名清音排课逻辑
+ */
+const generateHiraganaSeionFlow = (
+  data: AnyKanaData
+): {
+  learn: LessonCard[];
+  quizGroups: LessonCard[][]; // 🔥 核心改变 1：返回“组的数组”，而不是散卡数组
+} => {
+  const learn: LessonCard[] = [];
+  const quizGroups: LessonCard[][] = [];
+
+  // 1. 认脸
+  learn.push({
+    uniqueId: `learn-kana-${data.id}`,
+    type: 'KANA_LEARN',
+    data,
+    headerTitle: 'New Kana',
+    isOriginal: true,
+  });
+
+  // 2. 单词
+  if (data.word) {
+    learn.push({
+      uniqueId: `learn-word-${data.id}`,
+      type: 'WORD_LEARN',
+      data,
+      headerTitle: 'Word Context',
+      isOriginal: true,
+    });
+  }
+
+  // 3. 描红
+  learn.push({
+    uniqueId: `trace-${data.id}`,
+    type: 'TRACE',
+    data,
+    headerTitle: 'Stroke Practice',
+    isOriginal: true,
+  });
+
+  // 4. 生成 3 组测验（保持分组）
+  quizGroups.push(createQuizGroup(data, 'ROMAJI', true));
+  quizGroups.push(createQuizGroup(data, 'KANA', true));
+
+  if (data.word) {
+    quizGroups.push(createQuizGroup(data, 'WORD', true));
+  }
+
+  return { learn, quizGroups };
+};
+
+// ==========================================
+// 4. 主流程生成器
+// ==========================================
+
+export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
+  const validData = targetChars
+    .map((c) => KANA_DB[c])
+    .filter((d): d is AnyKanaData => !!d);
+
+  if (validData.length === 0) return [];
+
+  const allLearn: LessonCard[] = [];
+  // 🔥 核心改变 2：这里存放的是“题组列表”，类型是 Array<Array<LessonCard>>
+  const allQuizGroups: LessonCard[][] = [];
+  const reviewItems: ReviewItem[] = [];
+
+  validData.forEach((data) => {
+    reviewItems.push({
+      char: data.kana,
+      romaji: data.romaji,
+      word: data.word,
+      wordRomaji: data.wordRomaji,
+      meaning: data.wordMeaning,
+      kind: data.kind,
+    });
+
+    switch (data.kind) {
+      case 'h-seion': {
+        const { learn, quizGroups } = generateHiraganaSeionFlow(data);
+        allLearn.push(...learn);
+        allQuizGroups.push(...quizGroups); // 保持组的完整性，不要拆开
+        break;
+      }
+      default:
+        console.warn(`Unknown kana kind: ${data.kind}`);
+        break;
+    }
+  });
+
+  const reviewCard: LessonCard = {
+    uniqueId: `review-${uuid()}`,
+    type: 'REVIEW',
+    data: validData[0], // 占位
+    reviewItems,
+    headerTitle: 'Final Review',
+    isOriginal: true,
+  };
+
+  // 🔥🔥🔥 核心改变 3：以“组”为单位洗牌，然后再拍平 🔥🔥🔥
+  // 1. shuffle(allQuizGroups): 把“题目A”、“题目B”的顺序打乱
+  // 2. .flat(): 把打乱后的题组拆成单张卡片
+  // 结果：同一题的 4 个选项依然紧紧挨在一起，不会被拆散！
+  const shuffledQuizzes = shuffle(allQuizGroups).flat();
+
+  return [...allLearn, reviewCard, ...shuffledQuizzes];
+};
+
+// ==========================================
+// 5. 补救逻辑
+// ==========================================
+
+export const getRemedialCards = (failedCard: LessonCard): LessonCard[] => {
+  const { data, quizType } = failedCard;
+  if (!quizType) return [];
+
+  const cards: LessonCard[] = [];
+
+  if (quizType === 'WORD' && data.word) {
+    cards.push({
+      uniqueId: `remedial-word-${uuid()}`,
+      type: 'WORD_LEARN',
+      data,
+      headerTitle: 'Review Word',
+      isOriginal: false,
+    });
+  } else {
+    cards.push({
+      uniqueId: `remedial-kana-${uuid()}`,
+      type: 'KANA_LEARN',
+      data,
+      headerTitle: 'Review Kana',
+      isOriginal: false,
+    });
+  }
+
+  // 生成新的一组 Quiz，不用改，因为它本身就是返回一组挨着的卡
+  const newGroup = createQuizGroup(data, quizType, false);
+  cards.push(...newGroup);
+
+  return cards.filter((c) => !!c);
+};
+
+// 统计逻辑
+export const calculateSessionStats = (queue: LessonCard[]): SessionStats => {
+  const reviewIndex = queue.findIndex((c) => c.type === 'REVIEW');
+  const splitIndex = reviewIndex === -1 ? queue.length : reviewIndex;
+
+  const learnTotal = queue
+    .slice(0, splitIndex + 1)
+    .filter((c) => c.isOriginal).length;
+
+  const quizTotal = queue
+    .slice(splitIndex + 1)
+    .filter((c) => c.isOriginal && c.isCorrect).length;
+
+  return { learnTotal, quizTotal, reviewCardId: queue[reviewIndex]?.uniqueId };
+};

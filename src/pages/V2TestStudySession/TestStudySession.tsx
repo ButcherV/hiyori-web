@@ -1,0 +1,475 @@
+import {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  type CSSProperties,
+} from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
+import { Capacitor } from '@capacitor/core';
+import {
+  Volume2,
+  CheckCircle,
+  X,
+  Check,
+  CircleX,
+  CircleEqual,
+} from 'lucide-react';
+
+// --- 1. 引入组件 ---
+import {
+  TinderCard,
+  type TinderCardRef,
+} from '../../components/TinderCard/index';
+import { TraceCard } from '../../components/TraceCard/index'; // 保持原有的 TraceCard
+import BottomSheet from '../../components/BottomSheet';
+import { SegmentedProgressBar } from './SegmentedProgressBar';
+import { StudySessionSetting } from './StudySessionSetting';
+
+// --- 2. 引入我们新写的自治组件 ---
+import { KanaCard } from './cards/KanaCard';
+import { WordCard } from './cards/WordCard';
+import { ReviewCard } from './cards/ReviewCard';
+import { QuizCard } from './cards/QuizCard';
+
+// --- 3. 引入逻辑与数据 ---
+import {
+  generateWaveSequence,
+  getRemedialCards,
+  calculateSessionStats,
+  type SessionStats,
+  type LessonCard,
+} from './lessonLogic';
+import type { LocalizedText } from './studyKanaData'; // 用于类型断言
+
+import styles from './TestStudySession.module.css';
+
+// --- 4. Context Hooks ---
+import { useProgress } from './useProgress';
+import { useProgress as useGlobalProgress } from '../../context/ProgressContext';
+import { useSound } from '../../hooks/useSound';
+import { useSettings } from '../../context/SettingsContext';
+
+const MAX_STACK_SIZE = 3;
+const AUTO_REDIRECT_SECONDS = 3;
+
+export const TestStudySession = () => {
+  const navigate = useNavigate();
+  const { courseId: id } = useParams<{ courseId: string }>();
+  const { markLessonComplete } = useGlobalProgress();
+  const { i18n } = useTranslation();
+
+  // 语言辅助
+  const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
+  const getLangText = (text?: string | LocalizedText) => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    // @ts-ignore
+    return text[currentLang] || text.en || '';
+  };
+
+  const cardRef = useRef<TinderCardRef>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // 全局设置
+  const {
+    soundEffect,
+    hapticFeedback,
+    autoAudio,
+    toggleSetting,
+    kanjiBackground,
+  } = useSettings();
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
+  const [countdown, setCountdown] = useState(AUTO_REDIRECT_SECONDS);
+
+  const location = useLocation();
+  const targetChars = location.state?.targetChars || [
+    'あ',
+    'い',
+    'う',
+    'え',
+    'お',
+  ];
+
+  const playSound = useSound();
+
+  // --- 交互辅助函数 ---
+  const triggerSound = (type: Parameters<typeof playSound>[0]) => {
+    if (soundEffect) playSound(type);
+  };
+
+  const triggerHaptic = async (style: ImpactStyle = ImpactStyle.Light) => {
+    if (!hapticFeedback) return;
+    if (Capacitor.isNativePlatform()) {
+      await Haptics.impact({ style });
+    }
+  };
+
+  const triggerNotification = async (type: NotificationType) => {
+    if (!hapticFeedback) return;
+    if (Capacitor.isNativePlatform()) {
+      await Haptics.notification({ type });
+    }
+  };
+
+  // --- 初始化队列 (Lazy Init) ---
+  const [{ initialQueue, stats }] = useState<{
+    initialQueue: LessonCard[];
+    stats: SessionStats;
+  }>(() => {
+    const queue = generateWaveSequence(targetChars);
+    const calculatedStats = calculateSessionStats(queue);
+    return { initialQueue: queue, stats: calculatedStats };
+  });
+
+  const [lessonQueue, setLessonQueue] = useState<LessonCard[]>(initialQueue);
+  const currentItem = lessonQueue[currentIndex];
+
+  // 进度条 Hook
+  const progress = useProgress(lessonQueue, currentIndex, stats);
+
+  // 计算可见卡片堆叠
+  const visibleCards = useMemo(() => {
+    if (!lessonQueue.length || currentIndex >= lessonQueue.length) return [];
+    return lessonQueue.slice(currentIndex, currentIndex + MAX_STACK_SIZE);
+  }, [lessonQueue, currentIndex]);
+
+  const isFinished =
+    !currentItem &&
+    currentIndex >= lessonQueue.length &&
+    lessonQueue.length > 0;
+
+  // --- 完成逻辑 ---
+  useEffect(() => {
+    if (isFinished) {
+      if (id) markLessonComplete(id);
+      triggerSound('success'); // 播放完成音效
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            navigate('/');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isFinished]);
+
+  // --- 自动播放发音 ---
+  useEffect(() => {
+    if (autoAudio && currentItem && !isFinished) {
+      // 只有 KANA 和 WORD 类型才自动播放
+      if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
+        // 稍微延迟一点，体验更好
+        const timer = setTimeout(() => {
+          playSound(currentItem.data.kana);
+        }, 500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [currentIndex, autoAudio, currentItem]);
+
+  // --- Header 计算逻辑 (包含大英语模式) ---
+  const getHeader = () => {
+    if (!currentItem) return { title: '', sub: '', isJa: false };
+
+    // 🔥 场景：Word Quiz 且 关掉汉字背景
+    // 此时 Header 应该显示“英文含义”，而不是默认的“汉字”
+    if (
+      !kanjiBackground &&
+      currentItem.type === 'QUIZ' &&
+      currentItem.quizType === 'WORD'
+    ) {
+      // Logic 层把 meaning 放在了 headerSub 里
+      const meaningText = getLangText(currentItem.headerSub);
+      return {
+        title: meaningText, // 标题变英文含义
+        sub: '', // 副标题隐藏
+        isJa: false, // 英文用标准字体
+      };
+    }
+
+    // 默认情况：使用 Logic 层计算好的标题
+    return {
+      title: currentItem.headerTitle || '',
+      sub: getLangText(currentItem.headerSub),
+      isJa: true, // 默认标题通常是日文或 "New Kana" (New Kana其实不是Ja，但Logic没细分，此处可优化)
+      // 优化：如果是 "New Kana" 等英文标题，isJa 无所谓，因为 CSS 里 .jaFont 对英文影响不大，或者可以在 Logic 层细分
+    };
+  };
+
+  const headerInfo = getHeader();
+
+  // --- 滑动处理 (核心业务) ---
+  const handleSwipe = (dir: 'left' | 'right') => {
+    if (!currentItem) return;
+
+    // 1. 描红卡：右滑算完成
+    if (currentItem.type === 'TRACE') {
+      triggerSound('score');
+      triggerHaptic(ImpactStyle.Light);
+    }
+    // 2. Quiz 卡：判分
+    else if (currentItem.type === 'QUIZ') {
+      const isRightSwipe = dir === 'right';
+      // 逻辑：向右滑且是正确卡 = 对；向左滑且是错误卡 = 对
+      // 这里简化逻辑：用户认为"接受/右滑"是选这个答案
+      const isUserCorrect =
+        (currentItem.isCorrect && isRightSwipe) ||
+        (!currentItem.isCorrect && !isRightSwipe);
+
+      if (isUserCorrect) {
+        // 只有选中正确答案才算真正的得分动作
+        if (currentItem.isCorrect && isRightSwipe) {
+          triggerSound('score');
+          triggerHaptic(ImpactStyle.Medium);
+
+          // 🎉 答对了：移除同组剩余的卡片 (Logic 层的 quizGroupId 发挥作用)
+          setLessonQueue((prev) => {
+            const newQueue = [...prev];
+            if (currentItem.quizGroupId) {
+              // 从后往前删，避免索引错乱
+              for (let i = newQueue.length - 1; i > currentIndex; i--) {
+                if (newQueue[i].quizGroupId === currentItem.quizGroupId) {
+                  newQueue.splice(i, 1);
+                }
+              }
+            }
+            return newQueue;
+          });
+        }
+      } else {
+        // ❌ 答错了
+        triggerSound('failure');
+        triggerNotification(NotificationType.Error);
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 500);
+
+        // 惩罚逻辑：移除同组剩余卡片，并插入补救卡
+        setLessonQueue((prev) => {
+          const newQueue = [...prev];
+          // A. 移除同组
+          if (currentItem.quizGroupId) {
+            for (let i = newQueue.length - 1; i > currentIndex; i--) {
+              if (newQueue[i].quizGroupId === currentItem.quizGroupId) {
+                newQueue.splice(i, 1);
+              }
+            }
+          }
+          // B. 插入补救卡 (调用 Logic)
+          const remedial = getRemedialCards(currentItem as any); // 类型断言
+          newQueue.splice(currentIndex + 1, 0, ...remedial);
+
+          return newQueue;
+        });
+      }
+    }
+
+    // 延迟切换 index，等待飞出动画
+    setTimeout(() => setCurrentIndex((prev) => prev + 1), 200);
+  };
+
+  // --- 渲染器 (Switch Dispatcher) ---
+  const renderCardContent = (card: LessonCard) => {
+    switch (card.type) {
+      case 'KANA_LEARN':
+        return <KanaCard data={card.data} onPlaySound={playSound} />;
+
+      case 'WORD_LEARN':
+        // 透传 settings 给组件，让组件自己决定显示逻辑
+        return <WordCard data={card.data} onPlaySound={playSound} />;
+
+      case 'TRACE':
+        return (
+          <div
+            style={{ width: '100%', height: '100%' }}
+            // 🔥 核心修复：添加以下两行，阻止事件冒泡
+            // 这样手指在描红时，TinderCard 就不会收到拖拽指令，卡片就会完全锁死
+            onTouchStart={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            // 可选：加上 no-swipe 类，某些库会自动识别此作为禁止拖拽区域
+            className="no-swipe"
+          >
+            <TraceCard
+              char={card.data.kana}
+              onComplete={() => cardRef.current?.swipe('right')}
+            />
+          </div>
+        );
+
+      case 'REVIEW':
+        return (
+          <ReviewCard
+            items={card.reviewItems || []}
+            settings={{ kanjiBackground, language: currentLang as any }}
+            onPlaySound={playSound}
+          />
+        );
+
+      case 'QUIZ':
+        return (
+          <QuizCard
+            // 使用 Logic 层计算好的 displayContent (答案或干扰项)
+            // 如果 displayContent 没填(防御)，兜底用 data.kana
+            displayContent={card.displayContent || card.data.kana}
+            // 简单的字体判断：只要不是 ROMAJI 题，内容基本都是日文
+            isContentJa={card.quizType !== 'ROMAJI'}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  // --- 界面渲染 ---
+  if (isFinished) {
+    return (
+      <div className={styles.completeContainer}>
+        <div className={styles.celebrationIcon}>
+          <CheckCircle size={80} strokeWidth={2.5} />
+        </div>
+        <h1 className={styles.completeTitle}>All Done!</h1>
+        <p className={styles.completeSub}>Great job learning today.</p>
+        <button className={styles.fillingBtn} onClick={() => navigate('/')}>
+          <span className={styles.btnText}>Back to Home ({countdown})</span>
+        </button>
+      </div>
+    );
+  }
+
+  if (lessonQueue.length === 0) return null;
+
+  return (
+    <div
+      className={`${styles.container} ${progress.phase === 'QUIZ' ? styles.quizContainer : ''}`}
+    >
+      {/* Top Nav */}
+      <div className={styles.topNav}>
+        <button className={styles.closeBtn} onClick={() => navigate('/')}>
+          <CircleX size={28} />
+        </button>
+        <div style={{ flex: 1, margin: '0 8px' }}>
+          <SegmentedProgressBar
+            learnCurrent={progress.learnPassed}
+            learnTotal={progress.learnTotal}
+            quizCurrent={progress.quizPassed}
+            quizTotal={progress.quizTotal}
+            phase={progress.phase}
+          />
+        </div>
+        <button
+          className={styles.closeBtn}
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <CircleEqual size={28} />
+        </button>
+      </div>
+
+      {/* Header */}
+      <div className={styles.instructionBar}>
+        <div
+          className={`
+          ${styles.instructionTitle} 
+          ${currentItem?.type !== 'QUIZ' ? styles.passive : ''}
+          ${headerInfo.isJa ? styles.jaFont : ''}
+          ${currentItem?.id?.includes('remedial') ? styles.remedialText : ''}
+        `}
+        >
+          {headerInfo.title}
+        </div>
+        {headerInfo.sub && (
+          <div className={styles.instructionSub}>{headerInfo.sub}</div>
+        )}
+      </div>
+
+      {/* Card Area */}
+      <div
+        className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}
+      >
+        <div className={styles.cardArea}>
+          {visibleCards.map((card, index) => {
+            const isTopCard = index === 0;
+            // 样式计算 (保留旧代码的堆叠逻辑)
+            const cardStyle = {
+              zIndex: MAX_STACK_SIZE - index,
+              transform: `translateY(${index * 18}px) scale(${1 - index * 0.05})`,
+              pointerEvents: isTopCard ? 'auto' : 'none',
+            } as CSSProperties;
+
+            const contentBlurClass = isTopCard
+              ? styles.activeCard
+              : styles.backgroundCard;
+
+            // 锁定方向逻辑
+            let preventSwipe: ('left' | 'right')[] = [];
+            if (card.type === 'TRACE')
+              preventSwipe = ['left', 'right']; // 描红必须自己完成
+            else if (card.type !== 'QUIZ') preventSwipe = ['left']; // 学习卡只能右滑
+            const isSwipeEnabled = card.type !== 'TRACE';
+
+            return (
+              <div
+                key={card.uniqueId}
+                className={styles.stackWrapper}
+                style={cardStyle}
+              >
+                <TinderCard
+                  ref={isTopCard ? cardRef : null}
+                  touchEnabled={isTopCard && isSwipeEnabled}
+                  preventSwipe={preventSwipe}
+                  onSwipe={isTopCard ? handleSwipe : () => {}}
+                >
+                  <div className={`${styles.cardContent} ${contentBlurClass}`}>
+                    {renderCardContent(card)}
+                  </div>
+                </TinderCard>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Quiz Actions (Only for Quiz) */}
+      {currentItem?.type === 'QUIZ' && (
+        <div className={styles.quizActions}>
+          <button
+            className={`${styles.actionBtn} ${styles.reject}`}
+            onClick={() => cardRef.current?.swipe('left')}
+          >
+            <X size={32} strokeWidth={3} />
+          </button>
+          <button
+            className={`${styles.actionBtn} ${styles.accept}`}
+            onClick={() => cardRef.current?.swipe('right')}
+          >
+            <Check size={32} strokeWidth={3} />
+          </button>
+        </div>
+      )}
+
+      {/* Settings Sheet */}
+      <BottomSheet
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        title={i18n.language === 'zh' ? '学习设置' : 'Session Settings'}
+      >
+        <StudySessionSetting
+          autoAudioEnabled={autoAudio}
+          soundEnabled={soundEffect}
+          hapticEnabled={hapticFeedback}
+          onToggleAutoAudio={() => toggleSetting('autoAudio')}
+          onToggleSound={() => toggleSetting('soundEffect')}
+          onToggleHaptic={() => toggleSetting('hapticFeedback')}
+        />
+      </BottomSheet>
+    </div>
+  );
+};

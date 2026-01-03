@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 6px;
+  gap: 4px;
+}
+
+.segment {
+  position: relative;
+  height: 100%;
+  background-color: var(--color-Gray2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  transition: width 0.3s ease-out;
+  border-radius: 3px;
+}
+
+.learnColor {
+  background-color: var(--color-Green);
+} /* 蓝 */
+.quizColor {
+  background-color: var(--color-Orange);
+} /* 橙 */
