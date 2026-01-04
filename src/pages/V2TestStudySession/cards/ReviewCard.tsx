@@ -32,49 +32,99 @@ export const ReviewCard: React.FC<Props> = ({ items }) => {
 
   return (
     <div className={styles.container}>
-      {items.map((item, idx) => (
-        <div key={`${item.char}-${idx}`} className={styles.reviewRow}>
-          <div className={styles.reviewLeft}>
-            <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
-              {item.char}
-            </span>
-            <span className={styles.reviewRomaji}>{item.romaji}</span>
-          </div>
+      {items.map((item, idx) => {
+        // 🔥🔥🔥 核心修改：在这里做判断 🔥🔥🔥
 
-          <div className={styles.reviewRight}>
-            {kanjiBackground ? (
-              <div>
-                <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
-                  {item.word ? `${item.word}` : ''}
+        // =================================================
+        // 🟢 情况 1: 平假名清音 (Hiragana Seion)
+        // =================================================
+        if (item.kind === 'h-seion') {
+          return (
+            <div key={`${item.char}-${idx}`} className={styles.reviewRow}>
+              {/* 左侧 */}
+              <div className={styles.reviewLeft}>
+                <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
+                  {item.char}
                 </span>
-                {item.word && (
-                  <span
-                    style={{
-                      margin: '0 4px',
-                      color: '#484848ff',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    ·
-                  </span>
+                <span className={styles.reviewRomaji}>{item.romaji}</span>
+              </div>
+
+              {/* 右侧 */}
+              <div className={styles.reviewRight}>
+                {kanjiBackground ? (
+                  // 汉字模式：显示 汉字 · 读音
+                  <div>
+                    <span
+                      className={`${styles.reviewWord} ${commonStyles.jaFont}`}
+                    >
+                      {item.word ? `${item.word}` : ''}
+                    </span>
+                    {item.word && (
+                      <span
+                        style={{
+                          margin: '0 4px',
+                          color: '#484848',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        ·
+                      </span>
+                    )}
+                    <span className={styles.reviewWord}>{item.wordKana}</span>
+                  </div>
+                ) : (
+                  // 无汉字背景：假名 [罗马音]
+                  <div>
+                    <span className={styles.reviewWord}>{item.wordKana}</span>
+                    {item.wordRomaji && (
+                      <span className={styles.reviewWord}>
+                        {` [${item.wordRomaji}]`}
+                      </span>
+                    )}
+                  </div>
                 )}
-                <span className={styles.reviewWord}>{item.wordKana}</span>
-              </div>
-            ) : (
-              <div>
-                <span className={styles.reviewWord}>{item.wordKana}</span>
-                <span className={styles.reviewWord}>
-                  {` [${item.wordRomaji}]`}
+                <span className={styles.reviewMeaning}>
+                  {getMeaning(item.meaning)}
                 </span>
               </div>
-            )}
+            </div>
+          );
+        }
 
-            <span className={styles.reviewMeaning}>
-              {getMeaning(item.meaning)}
-            </span>
-          </div>
-        </div>
-      ))}
+        // =================================================
+        // 🔵 情况 2: 片假名清音 (Katakana Seion)
+        // =================================================
+        if (item.kind === 'k-seion') {
+          return (
+            <div key={`${item.char}-${idx}`} className={styles.reviewRow}>
+              <div className={styles.reviewLeft}>
+                <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
+                  {item.char}
+                </span>
+                <span className={styles.reviewRomaji}>{item.romaji}</span>
+              </div>
+
+              {/* 右侧 */}
+              <div className={styles.reviewRight}>
+                {/* 片假名单词[罗马音]*/}
+                <div>
+                  <span className={styles.reviewWord}>{item.word}</span>
+                  {item.wordRomaji && (
+                    <span className={styles.reviewWord}>
+                      {` [${item.wordRomaji}]`}
+                    </span>
+                  )}
+                </div>
+                <span className={styles.reviewMeaning}>
+                  {getMeaning(item.meaning)}
+                </span>
+              </div>
+            </div>
+          );
+        }
+
+        return null;
+      })}
     </div>
   );
 };

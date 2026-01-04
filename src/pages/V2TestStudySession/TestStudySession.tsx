@@ -42,7 +42,7 @@ import {
   type SessionStats,
   type LessonCard,
 } from './lessonLogic';
-import type { LocalizedText } from './studyKanaData'; // 用于类型断言
+import type { LocalizedText } from './kanaData'; // 用于类型断言
 
 import styles from './TestStudySession.module.css';
 
@@ -180,17 +180,22 @@ export const TestStudySession = () => {
   const getHeader = () => {
     if (!currentItem) return { title: '', sub: '', isJa: false };
 
-    // 1. 特殊情况：Word Quiz 且 关掉汉字背景
-    // 此时标题被强制替换为英文含义 (例如 "Love")，所以绝对不是 Ja
-    if (
-      !kanjiBackground &&
-      currentItem.type === 'QUIZ' &&
-      currentItem.quizType === 'WORD'
-    ) {
+    // 🔥 核心修改：判定何时把“翻译/含义”提升为“大标题”
+    // 满足以下任一条件，大标题显示“意思 (Meaning)”：
+    // 1. 单词题 且 关掉了汉字背景
+    // 2. 单词题 且 是片假名 (因为片假名不能把单词本身写在标题上)
+
+    const isWordQuiz =
+      currentItem.type === 'QUIZ' && currentItem.quizType === 'WORD';
+    const isKatakana = currentItem.data.kind === 'k-seion';
+
+    // 如果是单词测试，并且 (无汉字背景 OR 是片假名)
+    if (isWordQuiz && (!kanjiBackground || isKatakana)) {
       return {
+        // 把副标题(意思) 拿来当 标题
         title: getLangText(currentItem.headerSub),
         sub: '',
-        isJa: false,
+        isJa: false, // 标题是中文/英文，不需要日文字体
       };
     }
 
@@ -216,7 +221,7 @@ export const TestStudySession = () => {
     return {
       title: currentItem.headerTitle || '',
       sub: getLangText(currentItem.headerSub),
-      isJa, // ✅ 使用精准判断的结果
+      isJa,
     };
   };
 

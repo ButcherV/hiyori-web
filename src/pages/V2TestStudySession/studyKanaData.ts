@@ -1,5 +1,3 @@
-// src/pages/TestStudySession/studyKanaData.ts
-
 // ==========================================
 // 1. 基础工具类型 (Infrastructure)
 // ==========================================
@@ -56,11 +54,13 @@ export interface HiraganaSeion {
   wordMeaning?: LocalizedText; // 对应旧代码 meaning
 
   wordEmoji?: string;
-  // 单词干扰项 (校验目标是 wordKana)
+  // 单词干扰项
+  // 平假名的校验目标是 wordKana
+  // 片假名的校验目标是 word
   wordDistractors?: readonly string[]; // 对应 wordDistractors
 
   // --- 额外信息 ---
-  noteKey?: string; // ✅ 必须保留：用于显示 Lightbulb 提示
+  noteKey?: string; // 用于显示 Lightbulb 提示
 }
 
 // 联合类型，目前只有一种，未来扩展 KatakanaSeion | Dakuon 等

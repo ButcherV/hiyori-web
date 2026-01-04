@@ -2,7 +2,7 @@ import React from 'react';
 import { Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../../context/SettingsContext';
-import type { AnyKanaData } from '../studyKanaData';
+import type { AnyKanaData } from '../kanaData';
 
 import styles from './WordCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
@@ -69,6 +69,35 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
           {data.wordKana}
         </div>
+      );
+    };
+
+    return (
+      <div className={styles.container}>
+        {renderMainContent()}
+        <div className={styles.romajiBottom}>{data.wordRomaji}</div>
+        <div className={styles.meaningText}>{meaningText}</div>
+        <div className={commonStyles.speakerBtn} onClick={handlePlay}>
+          <Volume2 />
+        </div>
+      </div>
+    );
+  }
+
+  if (data.kind === 'k-seion') {
+    const renderMainContent = () => {
+      return (
+        <>
+          <div className={`${styles.furigana} ${commonStyles.jaFont}`}>
+            {data.wordKana}
+          </div>
+          <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
+            {data.word}
+          </div>
+          {data.wordEmoji && (
+            <div className={styles.emoji}>{data.wordEmoji}</div>
+          )}
+        </>
       );
     };
 

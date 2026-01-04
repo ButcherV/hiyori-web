@@ -1,6 +1,4 @@
-// src/pages/TestStudySession/lessonLogic.ts
-
-import { KANA_DB, type AnyKanaData, type LocalizedText } from './studyKanaData';
+import { KANA_DB, type AnyKanaData, type LocalizedText } from './kanaData';
 
 // ==========================================
 // 1. 卡片类型定义
@@ -79,10 +77,23 @@ const createQuizGroup = (
     distractors = data.kanaDistractors;
   } else if (quizType === 'WORD') {
     if (!data.word || !data.wordKana || !data.wordDistractors) return [];
-    title = data.word;
-    sub = data.wordMeaning;
-    answer = data.wordKana;
-    distractors = data.wordDistractors;
+    if (data.kind === 'h-seion') {
+      // 题目逻辑：用户看着汉字，选读音
+      title = data.word;
+      sub = data.wordMeaning;
+      answer = data.wordKana;
+      distractors = data.wordDistractors; // 这里是 ['あえ', 'うえ'...]
+    } else if (data.kind === 'k-seion') {
+      // 🔵 片假名模式：答案是“写法” (显示 アイス)
+      // 题目逻辑：用户看着意思，选写法
+      title = '';
+      sub = data.wordMeaning;
+      answer = data.word;
+      distractors = data.wordDistractors; // 这里现在是 ['ウエ', 'アエ'...]
+    } else {
+      console.warn('遇到未知的假名类型，跳过出题');
+      return [];
+    }
   }
 
   // 2. 正确卡
@@ -176,6 +187,60 @@ const generateHiraganaSeionFlow = (
   return { learn, quizGroups };
 };
 
+/**
+ * 策略 B: 片假名清音排课逻辑
+ * 逻辑：认脸 -> 单词 -> 描红 -> 测验
+ */
+const generateKatakanaSeionFlow = (
+  data: AnyKanaData
+): {
+  learn: LessonCard[];
+  quizGroups: LessonCard[][];
+} => {
+  const learn: LessonCard[] = [];
+  const quizGroups: LessonCard[][] = [];
+
+  // 1. 认脸 (KanaCard)
+  // 片假名也是 New Kana
+  learn.push({
+    uniqueId: `learn-kana-${data.id}`,
+    type: 'KANA_LEARN',
+    data,
+    headerTitle: 'studyKana.session.newKana',
+    isOriginal: true,
+  });
+
+  // 2. 单词 (WordCard)
+  if (data.word) {
+    learn.push({
+      uniqueId: `learn-word-${data.id}`,
+      type: 'WORD_LEARN',
+      data,
+      headerTitle: 'studyKana.session.wordContext',
+      isOriginal: true,
+    });
+  }
+
+  // 3. 描红
+  learn.push({
+    uniqueId: `trace-${data.id}`,
+    type: 'TRACE',
+    data,
+    headerTitle: 'studyKana.session.strokePractice',
+    isOriginal: true,
+  });
+
+  // 4. 生成测验 (逻辑同平假名)
+  quizGroups.push(createQuizGroup(data, 'ROMAJI', true));
+  quizGroups.push(createQuizGroup(data, 'KANA', true));
+
+  if (data.word) {
+    quizGroups.push(createQuizGroup(data, 'WORD', true));
+  }
+
+  return { learn, quizGroups };
+};
+
 // ==========================================
 // 4. 主流程生成器
 // ==========================================
@@ -210,8 +275,14 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
         allQuizGroups.push(...quizGroups); // 保持组的完整性，不要拆开
         break;
       }
+      case 'k-seion': {
+        const { learn, quizGroups } = generateKatakanaSeionFlow(data);
+        allLearn.push(...learn);
+        allQuizGroups.push(...quizGroups);
+        break;
+      }
       default:
-        console.warn(`Unknown kana kind: ${data.kind}`);
+        console.warn(`Unknown kana kind: ${(data as any).kind}`);
         break;
     }
   });
