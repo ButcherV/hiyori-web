@@ -1,0 +1,25 @@
+/* 根容器 (原 .quizMode) */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.quizText {
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--color-Gray9);
+  margin: 20px 0;
+}
+
+.hint {
+  margin-top: auto;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #c7c7cc;
+  font-weight: 600;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 20px;
+}

@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { OriginBadge } from '../../../components/OriginBadge';
 import { useSettings } from '../../../context/SettingsContext';
 import type { AnyKanaData } from '../studyKanaData';
-import styles from '../TestStudySession.module.css';
+
+import styles from './KanaCard.module.css';
+import commonStyles from '../TestStudySession.module.css';
 
 interface Props {
   data: AnyKanaData;
@@ -12,12 +14,8 @@ interface Props {
 }
 
 export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { kanjiBackground } = useSettings();
-
-  // 🔥 2. 定义语言判断逻辑
-  //   // i18n.language 可能是 'zh-CN', 'zh-TW', 'en-US' 等
-  //   const isChinese = i18n.language.startsWith('zh');
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -26,7 +24,7 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
 
   if (data.kind === 'h-seion') {
     return (
-      <div className={styles.learnShape}>
+      <div className={styles.container}>
         {kanjiBackground && (
           <OriginBadge
             char={data.kana}
@@ -35,7 +33,9 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
           />
         )}
 
-        <div className={`${styles.bigChar} ${styles.jaFont}`}>{data.kana}</div>
+        <div className={`${styles.bigChar} ${commonStyles.jaFont}`}>
+          {data.kana}
+        </div>
 
         <div className={styles.romajiSub}>{data.romaji}</div>
 
@@ -46,7 +46,7 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
           </div>
         )}
 
-        <div className={styles.speakerBtn} onClick={handlePlay}>
+        <div className={commonStyles.speakerBtn} onClick={handlePlay}>
           <Volume2 />
         </div>
       </div>

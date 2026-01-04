@@ -35,6 +35,7 @@ export interface ReviewItem {
   romaji: string;
   word?: string;
   wordRomaji?: string;
+  wordKana?: string;
   meaning?: LocalizedText;
   kind: AnyKanaData['kind'];
 }
@@ -130,7 +131,7 @@ const generateHiraganaSeionFlow = (
   data: AnyKanaData
 ): {
   learn: LessonCard[];
-  quizGroups: LessonCard[][]; // 🔥 核心改变 1：返回“组的数组”，而不是散卡数组
+  quizGroups: LessonCard[][];
 } => {
   const learn: LessonCard[] = [];
   const quizGroups: LessonCard[][] = [];
@@ -140,7 +141,7 @@ const generateHiraganaSeionFlow = (
     uniqueId: `learn-kana-${data.id}`,
     type: 'KANA_LEARN',
     data,
-    headerTitle: 'New Kana',
+    headerTitle: 'studyKana.session.newKana',
     isOriginal: true,
   });
 
@@ -150,7 +151,7 @@ const generateHiraganaSeionFlow = (
       uniqueId: `learn-word-${data.id}`,
       type: 'WORD_LEARN',
       data,
-      headerTitle: 'Word Context',
+      headerTitle: 'studyKana.session.wordContext',
       isOriginal: true,
     });
   }
@@ -160,7 +161,7 @@ const generateHiraganaSeionFlow = (
     uniqueId: `trace-${data.id}`,
     type: 'TRACE',
     data,
-    headerTitle: 'Stroke Practice',
+    headerTitle: 'studyKana.session.strokePractice',
     isOriginal: true,
   });
 
@@ -197,6 +198,7 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
       romaji: data.romaji,
       word: data.word,
       wordRomaji: data.wordRomaji,
+      wordKana: data.wordKana,
       meaning: data.wordMeaning,
       kind: data.kind,
     });
@@ -219,7 +221,7 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
     type: 'REVIEW',
     data: validData[0], // 占位
     reviewItems,
-    headerTitle: 'Final Review',
+    headerTitle: 'studyKana.session.finalReview',
     isOriginal: true,
   };
 
@@ -247,7 +249,7 @@ export const getRemedialCards = (failedCard: LessonCard): LessonCard[] => {
       uniqueId: `remedial-word-${uuid()}`,
       type: 'WORD_LEARN',
       data,
-      headerTitle: 'Review Word',
+      headerTitle: 'studyKana.session.reviewWord',
       isOriginal: false,
     });
   } else {
@@ -255,7 +257,7 @@ export const getRemedialCards = (failedCard: LessonCard): LessonCard[] => {
       uniqueId: `remedial-kana-${uuid()}`,
       type: 'KANA_LEARN',
       data,
-      headerTitle: 'Review Kana',
+      headerTitle: 'studyKana.session.reviewKana',
       isOriginal: false,
     });
   }

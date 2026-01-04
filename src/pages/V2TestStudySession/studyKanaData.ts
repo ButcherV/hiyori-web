@@ -7,7 +7,7 @@
 export interface LocalizedText {
   en: string;
   zh: string;
-  zhHant: string; // ✅ 必须保留三项，满足您最初的要求
+  zhHant: string;
 }
 
 /**
@@ -150,12 +150,12 @@ export const KANA_DB: Record<string, AnyKanaData> = {
     word: '家',
     wordKana: 'いえ',
     wordRomaji: 'i·e',
-    wordMeaning: { en: 'house', zh: '房子', zhHant: '房子；家' },
+    wordMeaning: { en: 'house', zh: '房子', zhHant: '房子' },
 
     wordEmoji: '🏠',
     kanaDistractors: ['り', 'こ', 'に'],
     romajiDistractors: ['e', 'ei', 'ie'],
-    wordDistractors: ['いい', 'ええ', 'りえ'],
+    wordDistractors: ['にえ', 'えい', 'りえ'],
   }),
 
   う: defineHSeion({

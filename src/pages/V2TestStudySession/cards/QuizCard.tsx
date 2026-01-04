@@ -1,24 +1,26 @@
 import React from 'react';
-import styles from '../TestStudySession.module.css'; // ✅ 向上引用样式
+// 🔥 引入样式
+import styles from './QuizCard.module.css';
+import commonStyles from '../TestStudySession.module.css';
 
 interface Props {
   displayContent: string;
-  isContentJa: boolean; // Logic 层在 Quiz 生成时通常知道这是否是日文
+  isContentJa: boolean;
 }
 
 export const QuizCard: React.FC<Props> = ({ displayContent, isContentJa }) => {
   return (
-    <div className={styles.quizMode}>
+    <div className={styles.container}>
       <div
         className={`
           ${styles.quizText} 
-          ${isContentJa ? styles.jaFont : ''}
+          ${isContentJa ? commonStyles.jaFont : ''}
         `}
       >
         {displayContent}
       </div>
 
-      <div className={styles.hint}>Swipe Right if Correct</div>
+      {/* <div className={styles.hint}>Swipe Right if Correct</div> */}
     </div>
   );
 };

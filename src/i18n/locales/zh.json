@@ -88,6 +88,19 @@
       "he": "注意：单词中读作 \"he\"，作为方向助词读作\"e\"。",
       "ha": "注意：单词中读作 \"ha\"，作为主语助词读作\"wa\"。",
       "wo": "注意：现代日语中\"を\"只被用作宾格助词，发音为\"o\"。所有单词的发音均无\"wo\"，没有任何单词会使用「を」来拼写。"
+    },
+    "session": {
+      "newKana": "学习新假名",
+      "wordContext": "单词示例",
+      "strokePractice": "描红练习",
+      "finalReview": "测前复习",
+      "reviewWord": "单词回顾",
+      "reviewKana": "假名回顾"
     }
+  },
+  "trace": {
+    "traceFinished": "完成！",
+    "traceProgress": "笔画 {{current}} / {{total}}",
+    "restart": "重写"
   }
 }

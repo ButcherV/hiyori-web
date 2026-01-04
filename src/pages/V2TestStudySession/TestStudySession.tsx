@@ -29,10 +29,10 @@ import { SegmentedProgressBar } from './SegmentedProgressBar';
 import { StudySessionSetting } from './StudySessionSetting';
 
 // --- 2. 引入我们新写的自治组件 ---
-import { KanaCard } from './cards/KanaCard';
-import { WordCard } from './cards/WordCard';
-import { ReviewCard } from './cards/ReviewCard';
-import { QuizCard } from './cards/QuizCard';
+import { KanaCard } from './Cards/KanaCard';
+import { WordCard } from './Cards/WordCard';
+import { ReviewCard } from './Cards/ReviewCard';
+import { QuizCard } from './Cards/QuizCard';
 
 // --- 3. 引入逻辑与数据 ---
 import {
@@ -59,7 +59,7 @@ export const TestStudySession = () => {
   const navigate = useNavigate();
   const { courseId: id } = useParams<{ courseId: string }>();
   const { markLessonComplete } = useGlobalProgress();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // 语言辅助
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
@@ -176,32 +176,47 @@ export const TestStudySession = () => {
     }
   }, [currentIndex, autoAudio, currentItem]);
 
-  // --- Header 计算逻辑 (包含大英语模式) ---
+  // --- Header 计算逻辑 ---
   const getHeader = () => {
     if (!currentItem) return { title: '', sub: '', isJa: false };
 
-    // 🔥 场景：Word Quiz 且 关掉汉字背景
-    // 此时 Header 应该显示“英文含义”，而不是默认的“汉字”
+    // 1. 特殊情况：Word Quiz 且 关掉汉字背景
+    // 此时标题被强制替换为英文含义 (例如 "Love")，所以绝对不是 Ja
     if (
       !kanjiBackground &&
       currentItem.type === 'QUIZ' &&
       currentItem.quizType === 'WORD'
     ) {
-      // Logic 层把 meaning 放在了 headerSub 里
-      const meaningText = getLangText(currentItem.headerSub);
       return {
-        title: meaningText, // 标题变英文含义
-        sub: '', // 副标题隐藏
-        isJa: false, // 英文用标准字体
+        title: getLangText(currentItem.headerSub),
+        sub: '',
+        isJa: false,
       };
     }
 
-    // 默认情况：使用 Logic 层计算好的标题
+    // 2. 正常情况：根据“当前卡片类型”来精准判断
+    let isJa = false;
+
+    if (currentItem.type === 'QUIZ') {
+      // 只有以下两种测试题，标题才会显示日文：
+      // - ROMAJI 题型：标题是假名 (例如 "あ") -> 需要日文字体
+      // - WORD 题型：标题是汉字 (例如 "愛") -> 需要日文字体
+      if (
+        currentItem.quizType === 'ROMAJI' ||
+        currentItem.quizType === 'WORD'
+      ) {
+        isJa = true;
+      }
+      // 注意：'KANA' 题型的标题是罗马音 (例如 "a")，所以不需要日文字体
+    }
+
+    // 对于其他类型 (KANA_LEARN, WORD_LEARN, TRACE, REVIEW)
+    // 标题都是 "session.newKana" 这种翻译 Key，显示出来的是中文或英文 -> 不需要日文字体
+
     return {
       title: currentItem.headerTitle || '',
       sub: getLangText(currentItem.headerSub),
-      isJa: true, // 默认标题通常是日文或 "New Kana" (New Kana其实不是Ja，但Logic没细分，此处可优化)
-      // 优化：如果是 "New Kana" 等英文标题，isJa 无所谓，因为 CSS 里 .jaFont 对英文影响不大，或者可以在 Logic 层细分
+      isJa, // ✅ 使用精准判断的结果
     };
   };
 
@@ -306,11 +321,7 @@ export const TestStudySession = () => {
 
       case 'REVIEW':
         return (
-          <ReviewCard
-            items={card.reviewItems || []}
-            settings={{ kanjiBackground, language: currentLang as any }}
-            onPlaySound={playSound}
-          />
+          <ReviewCard items={card.reviewItems || []} onPlaySound={playSound} />
         );
 
       case 'QUIZ':
@@ -383,7 +394,7 @@ export const TestStudySession = () => {
           ${currentItem?.id?.includes('remedial') ? styles.remedialText : ''}
         `}
         >
-          {headerInfo.title}
+          {t(headerInfo.title)}
         </div>
         {headerInfo.sub && (
           <div className={styles.instructionSub}>{headerInfo.sub}</div>

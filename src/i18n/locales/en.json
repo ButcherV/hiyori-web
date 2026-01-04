@@ -84,6 +84,19 @@
     "notes": {
       "chi": "Note: Romaji is \"chi\" (instead of \"ti\").",
       "wo": "Note: This is an object marker particle and is rarely used in common words."
+    },
+    "session": {
+      "newKana": "New Kana",
+      "wordContext": "New Word",
+      "strokePractice": "Stroke Practice",
+      "finalReview": "Final Review",
+      "reviewWord": "Review Word",
+      "reviewKana": "Review Kana"
     }
+  },
+  "trace": {
+    "traceFinished": "Done!",
+    "traceProgress": "Stroke {{current}} / {{total}}",
+    "restart": "Restart"
   }
 }

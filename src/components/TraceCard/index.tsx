@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './TraceCard.module.css';
 import { KANA_PATHS } from '../../datas/kanaPaths';
+import { useTranslation } from 'react-i18next';
 
 // --- 常量配置 ---
 const STANDARD_VIEWBOX = '0 0 109 109';
@@ -21,6 +22,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   // --- Refs ---
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   // 🔥 新增：逻辑检测专用 Canvas (不渲染到屏幕，只在内存里计算)
   // 用 ref 保持它，不用每次重绘都创建
@@ -240,7 +242,12 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        {isFinished ? 'Done!' : `Stroke ${strokeIndex + 1} / ${paths.length}`}
+        {isFinished
+          ? t('trace.traceFinished')
+          : t('trace.traceProgress', {
+              current: strokeIndex + 1,
+              total: paths.length,
+            })}
       </div>
 
       <div className={styles.canvasArea} ref={containerRef}>
@@ -323,7 +330,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
             clearCanvas();
           }}
         >
-          Restart
+          {t('trace.restart')}
         </button>
       </div>
     </div>
