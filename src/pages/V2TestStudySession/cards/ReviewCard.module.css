@@ -54,13 +54,14 @@
 }
 
 .reviewWord {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   /* Font family 会在组件里组合使用公共样式 */
 }
 
 .reviewMeaning {
-  font-size: 12px;
+  font-size: 13px;
+  color: var(--color-Gray6);
 }
 
 /* 提示文字 */

@@ -404,7 +404,6 @@ export const TestStudySession = () => {
           ${styles.instructionTitle} 
           ${currentItem?.type !== 'QUIZ' ? styles.passive : ''}
           ${headerInfo.isJa ? styles.jaFont : ''}
-          ${currentItem?.uniqueId?.includes('remedial') ? styles.remedialText : ''}
         `}
         >
           {t(headerInfo.title)}

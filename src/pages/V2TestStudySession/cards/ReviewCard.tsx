@@ -54,44 +54,38 @@ export const ReviewCard: React.FC<Props> = ({ items }) => {
               {item.word && (
                 <div className={styles.reviewRight}>
                   {kanjiBackground ? (
-                    // 有汉字背景：汉字 [读音的平假名]
-                    <div>
+                    // 有汉字背景：
+                    // 读音的平假名
+                    // 汉字
+
+                    <>
+                      <span
+                        className={`${commonStyles.jaFont} ${styles.reviewMeaning}`}
+                      >
+                        {item.wordKana}
+                      </span>
                       <span
                         className={`${styles.reviewWord} ${commonStyles.jaFont}`}
                       >
                         {item.word ? `${item.word}` : ''}
                       </span>
-                      {/* {item.word && (
-                      <span
-                        style={{
-                          margin: '0 4px',
-                          color: '#484848',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        ·
-                      </span>
-                    )} */}
-                      <span
-                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
-                      >
-                        {` [${item.wordKana}]`}
-                      </span>
-                    </div>
+                    </>
                   ) : (
-                    // 无汉字背景：平假名 [罗马音]
-                    <div>
+                    // 无汉字背景：
+                    // 罗马音
+                    // 平假名
+                    <>
+                      {item.wordRomaji && (
+                        <span className={styles.reviewMeaning}>
+                          {item.wordRomaji}
+                        </span>
+                      )}
                       <span
                         className={`${styles.reviewWord} ${commonStyles.jaFont}`}
                       >
                         {item.wordKana}
                       </span>
-                      {item.wordRomaji && (
-                        <span className={styles.reviewWord}>
-                          {` [${item.wordRomaji}]`}
-                        </span>
-                      )}
-                    </div>
+                    </>
                   )}
                   <span className={styles.reviewMeaning}>
                     {getMeaning(item.meaning)}

@@ -61,7 +61,7 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     word: '絵',
     wordKana: 'え',
     wordRomaji: 'e',
-    wordMeaning: { en: 'picture/drawing', zh: '画/图画', zhHant: '畫/圖畫' },
+    wordMeaning: { en: 'picture; drawing', zh: '画；图画', zhHant: '畫；圖畫' },
     wordEmoji: '🖼️',
     kanaDistractors: ['ん', 'あ', 'そ'],
     romajiDistractors: ['i', 'ei', 'ye'],
@@ -260,7 +260,7 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     word: '土',
     wordKana: 'つち',
     wordRomaji: 'tsu·chi',
-    wordMeaning: { en: 'soil/earth', zh: '泥土/土地', zhHant: '泥土/土地' },
+    wordMeaning: { en: 'soil; earth', zh: '泥土；土地', zhHant: '泥土；土地' },
     wordEmoji: '🌱',
     kanaDistractors: ['ら', 'さ', 'ぢ'],
     romajiDistractors: ['ti', 'shi', 'ji'],
@@ -390,6 +390,92 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     wordDistractors: ['ぬめ', 'ぬぬ', 'ぬあ'],
   }),
 
+  // ま行 (M-Column)
+  ま: defineHSeion({
+    id: 'h-ma',
+    kana: 'ま',
+    romaji: 'ma',
+    kanaKanjiOrigin: '末', // "末"的草书
+
+    word: '豆',
+    wordKana: 'まめ',
+    wordRomaji: 'ma·me',
+    wordMeaning: { en: 'beans', zh: '豆子', zhHant: '豆子' },
+
+    wordEmoji: '🫘',
+    kanaDistractors: ['ほ', 'は', 'よ'],
+    romajiDistractors: ['mo', 'na', 'ho'],
+    wordDistractors: ['ほめ', 'はめ', 'よめ'],
+  }),
+
+  み: defineHSeion({
+    id: 'h-mi',
+    kana: 'み',
+    romaji: 'mi',
+    kanaKanjiOrigin: '美',
+
+    word: '耳',
+    wordKana: 'みみ',
+    wordRomaji: 'mi·mi',
+    wordMeaning: { en: 'ear', zh: '耳朵', zhHant: '耳朵' },
+
+    wordEmoji: '👂',
+    kanaDistractors: ['ゐ', 'ぬ', 'ね'],
+    romajiDistractors: ['ni', 'me', 'mu'],
+    wordDistractors: ['ゐゐ', 'ぬぬ', 'ねね'],
+  }),
+
+  む: defineHSeion({
+    id: 'h-mu',
+    kana: 'む',
+    romaji: 'mu',
+    kanaKanjiOrigin: '武',
+
+    word: '虫',
+    wordKana: 'むし',
+    wordRomaji: 'mu·shi',
+    wordMeaning: { en: 'insect; bug', zh: '虫子', zhHant: '蟲子' },
+
+    wordEmoji: '🐛',
+    kanaDistractors: ['す', 'ま', 'お'],
+    romajiDistractors: ['su', 'nu', 'fu'],
+    wordDistractors: ['すし', 'まし', 'おし'],
+  }),
+
+  め: defineHSeion({
+    id: 'h-me',
+    kana: 'め',
+    romaji: 'me',
+    kanaKanjiOrigin: '女',
+
+    word: '目',
+    wordKana: 'め',
+    wordRomaji: 'me',
+    wordMeaning: { en: 'eye', zh: '眼睛', zhHant: '眼睛' },
+
+    wordEmoji: '👁️',
+    kanaDistractors: ['ぬ', 'あ', 'の'],
+    romajiDistractors: ['nu', 'ne', 'ma'],
+    wordDistractors: ['ぬ', 'あ', 'の'],
+  }),
+
+  も: defineHSeion({
+    id: 'h-mo',
+    kana: 'も',
+    romaji: 'mo',
+    kanaKanjiOrigin: '毛',
+
+    word: '桃',
+    wordKana: 'もも',
+    wordRomaji: 'mo·mo',
+    wordMeaning: { en: 'peach', zh: '桃子', zhHant: '桃子' },
+
+    wordEmoji: '🍑',
+    kanaDistractors: ['ま', 'し', 'き'],
+    romajiDistractors: ['ma', 'yo', 'no'],
+    wordDistractors: ['まま', 'きき', 'きも'],
+  }),
+
   // は行 (H-Column)
   は: defineHSeion({
     id: 'h-ha',
@@ -430,7 +516,7 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     word: '船',
     wordKana: 'ふね',
     wordRomaji: 'fu·ne',
-    wordMeaning: { en: 'ship/boat', zh: '船', zhHant: '船' },
+    wordMeaning: { en: 'ship; boat', zh: '船', zhHant: '船' },
     wordEmoji: '🚢',
     kanaDistractors: ['ぶ', 'ぷ', 'や'],
     romajiDistractors: ['hu', 'bu', 'pu'],
