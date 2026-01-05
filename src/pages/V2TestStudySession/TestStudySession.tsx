@@ -9,7 +9,8 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
-import { CheckCircle, X, Check, CircleX, CircleEqual } from 'lucide-react';
+import { X, Check, CircleX, CircleEqual } from 'lucide-react';
+import { CompletionScreen } from '../../components/CompletionScreen';
 
 import {
   TinderCard,
@@ -42,7 +43,6 @@ import { useSound } from '../../hooks/useSound';
 import { useSettings } from '../../context/SettingsContext';
 
 const MAX_STACK_SIZE = 3;
-const AUTO_REDIRECT_SECONDS = 3;
 
 export const TestStudySession = () => {
   const navigate = useNavigate();
@@ -73,7 +73,6 @@ export const TestStudySession = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_REDIRECT_SECONDS);
 
   const location = useLocation();
   const targetChars = location.state?.targetChars || [
@@ -88,6 +87,9 @@ export const TestStudySession = () => {
 
   const handlePlayContent = (text: string) => {
     if (!text) return;
+
+    // 播放新声音前，强制打断旧声音
+    window.speechSynthesis.cancel();
 
     // 暂时使用浏览器自带的日语朗读
     const utterance = new SpeechSynthesisUtterance(text);
@@ -147,29 +149,19 @@ export const TestStudySession = () => {
   useEffect(() => {
     if (isFinished) {
       if (id) markLessonComplete(id);
-      // 暂时没有成功音效
-      // triggerSound('success');
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            navigate('/');
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
+      triggerSound('success');
     }
   }, [isFinished]);
 
   // --- 自动播放发音 ---
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+
     if (autoAudio && currentItem && !isFinished) {
       // 只有 KANA 和 WORD 类型才自动播放
       if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
         // 稍微延迟一点，体验更好
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           const textToRead =
             currentItem.type === 'WORD_LEARN'
               ? currentItem.data.word || currentItem.data.kana
@@ -177,10 +169,16 @@ export const TestStudySession = () => {
 
           handlePlayContent(textToRead);
         }, 500);
-        return () => clearTimeout(timer);
       }
     }
-  }, [currentIndex, autoAudio, currentItem]);
+    return () => {
+      // 1. 如果声音还没来得及播（还在500ms等待期），直接取消定时器，这样它永远不会响了
+      if (timer) clearTimeout(timer);
+
+      // 2. 如果声音已经开始播了，甚至可以在这里再次 cancel，确保万无一失
+      window.speechSynthesis.cancel();
+    };
+  }, [currentIndex, autoAudio, currentItem, isFinished]);
 
   // --- Header 计算逻辑 ---
   const getHeader = () => {
@@ -236,6 +234,9 @@ export const TestStudySession = () => {
   // --- 滑动处理 (核心业务) ---
   const handleSwipe = (dir: 'left' | 'right') => {
     if (!currentItem) return;
+
+    // 只要用户决定滑走，当前如果正在发音就立即停止
+    window.speechSynthesis.cancel();
 
     // 1. 描红卡：右滑算完成
     if (currentItem.type === 'TRACE') {
@@ -355,18 +356,7 @@ export const TestStudySession = () => {
 
   // --- 界面渲染 ---
   if (isFinished) {
-    return (
-      <div className={styles.completeContainer}>
-        <div className={styles.celebrationIcon}>
-          <CheckCircle size={80} strokeWidth={2.5} />
-        </div>
-        <h1 className={styles.completeTitle}>All Done!</h1>
-        <p className={styles.completeSub}>Great job learning today.</p>
-        <button className={styles.fillingBtn} onClick={() => navigate('/')}>
-          <span className={styles.btnText}>Back to Home ({countdown})</span>
-        </button>
-      </div>
-    );
+    return <CompletionScreen onGoHome={() => navigate('/')} />;
   }
 
   if (lessonQueue.length === 0) return null;

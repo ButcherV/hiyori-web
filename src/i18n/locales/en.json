@@ -98,5 +98,10 @@
     "traceFinished": "Done!",
     "traceProgress": "Stroke {{current}} / {{total}}",
     "restart": "Restart"
+  },
+  "completion": {
+    "title": "All Done!",
+    "subMessage": "Great job learning today.",
+    "backHome": "Back to Home ({{seconds}})"
   }
 }

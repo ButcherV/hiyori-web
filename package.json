@@ -21,6 +21,7 @@
     "@react-three/fiber": "^9.4.2",
     "@types/three": "^0.182.0",
     "cannon-es": "^0.20.0",
+    "canvas-confetti": "^1.9.4",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.26",
     "i18next": "^25.7.3",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/japanese-holidays": "^1.0.3",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.1",

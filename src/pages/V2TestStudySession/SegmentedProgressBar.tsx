@@ -42,7 +42,7 @@ export const SegmentedProgressBar: React.FC<Props> = ({
       {/* 左段：学习 */}
       {/* 只有当 flex > 0 时才渲染，或者利用 flex: 0 自动收缩 */}
       <div
-        className={`${styles.segment} ${styles.segmentA}`}
+        className={`${styles.segment}`}
         style={{ flex: learnFlex, display: learnFlex === 0 ? 'none' : 'block' }}
       >
         <div
@@ -56,7 +56,7 @@ export const SegmentedProgressBar: React.FC<Props> = ({
 
       {/* 右段：测试 */}
       <div
-        className={`${styles.segment} ${styles.segmentB}`}
+        className={`${styles.segment}`}
         style={{ flex: quizFlex, display: quizFlex === 0 ? 'none' : 'block' }}
       >
         <div

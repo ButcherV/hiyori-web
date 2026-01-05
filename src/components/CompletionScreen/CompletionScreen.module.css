@@ -1,0 +1,93 @@
+.completeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.celebrationIcon {
+  color: #ffcc00;
+  margin-bottom: 20px;
+  animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.completeTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1c1c1e;
+  margin-bottom: 10px;
+}
+
+.completeSub {
+  font-size: 16px;
+  color: #8e8e93;
+  margin-bottom: 60px;
+}
+
+.fillingBtn {
+  position: relative;
+  width: 240px;
+  height: 56px;
+  border-radius: 28px;
+  border: none;
+  background-color: #f2f2f7;
+  color: #1c1c1e;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.fillingBtn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: rgba(0, 122, 255, 0.15);
+  z-index: 0;
+  animation: fillProgress 3s linear forwards;
+}
+
+.btnText {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes fillProgress {
+  to {
+    width: 100%;
+  }
+}

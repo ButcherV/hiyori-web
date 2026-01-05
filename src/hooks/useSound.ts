@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef } from 'react';
 const SOUND_PATHS = {
   score: '/sounds/score.mp3',
   failure: '/sounds/failure.mp3',
+  success: '/sounds/success.mp3',
 };
 
 export const useSound = () => {
@@ -14,7 +15,8 @@ export const useSound = () => {
 
   useEffect(() => {
     // 1. 初始化 AudioContext (兼容 Safari)
-    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioContext =
+      window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
 
     const ctx = new AudioContext();
