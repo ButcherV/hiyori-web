@@ -23,6 +23,15 @@
   text-align: center;
 }
 
+.kanjiMainSmall {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-Gray9);
+  line-height: 1.1;
+  margin: 5px 0;
+  text-align: center;
+}
+
 .romajiBottom {
   font-size: 24px;
   color: var(--color-Gray6);
@@ -42,4 +51,31 @@
   font-size: 100px;
   line-height: 1.2;
   font-family: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+}
+
+.originTag {
+  display: inline-flex;
+  align-items: center;
+
+  background-color: var(--color-Gray3);
+  border-radius: 999px;
+  padding: 6px 12px;
+
+  font-size: 1rem;
+  color: var(--color-Gray7);
+  font-weight: 500;
+
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.flag {
+  font-size: 1.4em;
+  margin-right: 8px;
+  line-height: 1;
+  display: flex;
+}
+
+.originWord {
+  letter-spacing: 0.02em;
 }

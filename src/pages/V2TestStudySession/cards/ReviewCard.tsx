@@ -50,16 +50,18 @@ export const ReviewCard: React.FC<Props> = ({ items }) => {
               </div>
 
               {/* 右侧 */}
-              <div className={styles.reviewRight}>
-                {kanjiBackground ? (
-                  // 汉字模式：显示 汉字 · 读音
-                  <div>
-                    <span
-                      className={`${styles.reviewWord} ${commonStyles.jaFont}`}
-                    >
-                      {item.word ? `${item.word}` : ''}
-                    </span>
-                    {item.word && (
+              {/* 有的假名没法组词，比如 "を” */}
+              {item.word && (
+                <div className={styles.reviewRight}>
+                  {kanjiBackground ? (
+                    // 有汉字背景：汉字 [读音的平假名]
+                    <div>
+                      <span
+                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
+                      >
+                        {item.word ? `${item.word}` : ''}
+                      </span>
+                      {/* {item.word && (
                       <span
                         style={{
                           margin: '0 4px',
@@ -69,24 +71,33 @@ export const ReviewCard: React.FC<Props> = ({ items }) => {
                       >
                         ·
                       </span>
-                    )}
-                    <span className={styles.reviewWord}>{item.wordKana}</span>
-                  </div>
-                ) : (
-                  // 无汉字背景：假名 [罗马音]
-                  <div>
-                    <span className={styles.reviewWord}>{item.wordKana}</span>
-                    {item.wordRomaji && (
-                      <span className={styles.reviewWord}>
-                        {` [${item.wordRomaji}]`}
+                    )} */}
+                      <span
+                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
+                      >
+                        {` [${item.wordKana}]`}
                       </span>
-                    )}
-                  </div>
-                )}
-                <span className={styles.reviewMeaning}>
-                  {getMeaning(item.meaning)}
-                </span>
-              </div>
+                    </div>
+                  ) : (
+                    // 无汉字背景：平假名 [罗马音]
+                    <div>
+                      <span
+                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
+                      >
+                        {item.wordKana}
+                      </span>
+                      {item.wordRomaji && (
+                        <span className={styles.reviewWord}>
+                          {` [${item.wordRomaji}]`}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <span className={styles.reviewMeaning}>
+                    {getMeaning(item.meaning)}
+                  </span>
+                </div>
+              )}
             </div>
           );
         }
@@ -106,15 +117,17 @@ export const ReviewCard: React.FC<Props> = ({ items }) => {
 
               {/* 右侧 */}
               <div className={styles.reviewRight}>
-                {/* 片假名单词[罗马音]*/}
-                <div>
-                  <span className={styles.reviewWord}>{item.word}</span>
-                  {item.wordRomaji && (
-                    <span className={styles.reviewWord}>
-                      {` [${item.wordRomaji}]`}
-                    </span>
-                  )}
-                </div>
+                {/* 
+                    罗马音
+                    片假名单词
+                    翻译
+                */}
+                {item.wordRomaji && (
+                  <span className={styles.reviewMeaning}>
+                    {item.wordRomaji}
+                  </span>
+                )}
+                <span className={styles.reviewWord}>{item.word}</span>
                 <span className={styles.reviewMeaning}>
                   {getMeaning(item.meaning)}
                 </span>

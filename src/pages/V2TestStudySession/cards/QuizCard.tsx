@@ -1,5 +1,4 @@
 import React from 'react';
-// 🔥 引入样式
 import styles from './QuizCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
 

@@ -9,6 +9,12 @@ export interface LocalizedText {
   zhHant: string;
 }
 
+export interface WordOrigin {
+  lang: 'en' | 'de' | 'fr' | 'pt' | 'nl' | 'it' | 'ja' | 'sv' | 'other'; // 语言代码
+  word: string; // 原词写法 (例如 "Arbeit", "Pão")
+  desc?: string; // 备注 (可选，例如 "和制英语", "拟声词")
+}
+
 export type PreciseValidator<
   Distractors extends readonly string[],
   Answer extends string,
@@ -55,12 +61,15 @@ export interface KatakanaSeion {
   romajiDistractors: readonly string[];
 
   word?: string;
-  wordKana?: string;
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
   wordEmoji?: string;
+  wordOrigin?: WordOrigin;
+  wordKana?: string; // 片假名一般不写。为了逻辑统一。
   wordDistractors?: readonly string[];
+
   noteKey?: string;
+  wordNoteKey?: string;
 }
 
 export type AnyKanaData = HiraganaSeion | KatakanaSeion;
@@ -121,10 +130,11 @@ export const defineKSeion = <
   romajiDistractors: PreciseValidator<RD, R>;
 
   word?: W;
-  wordKana?: WK;
+  wordOrigin?: WordOrigin;
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
   wordEmoji?: string;
+  wordKana?: WK;
 
   // 校验目标是 W (word/写法)
   // 片假名：如果有单词(W)，则校验干扰项(WD)不能包含正确单词(W)
@@ -134,6 +144,7 @@ export const defineKSeion = <
     : readonly string[];
 
   noteKey?: string;
+  wordNoteKey?: string;
 }): KatakanaSeion => {
   return {
     kind: 'k-seion',

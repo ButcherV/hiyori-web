@@ -1,9 +1,9 @@
 import React from 'react';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Lightbulb } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../../context/SettingsContext';
 import type { AnyKanaData } from '../kanaData';
-
+import type { WordOrigin } from '../kanaData/core';
 import styles from './WordCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
 
@@ -14,13 +14,35 @@ interface Props {
 
 export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
   if (!data.word) return null;
-
-  const { i18n } = useTranslation();
+  console.log('data', data);
+  const { i18n, t } = useTranslation();
   const { kanjiBackground } = useSettings();
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onPlaySound(data.kana);
+    onPlaySound(data.word!);
+  };
+
+  const getOriginBadge = (origin: WordOrigin) => {
+    switch (origin.lang) {
+      case 'en':
+        return { icon: '🇺🇸', label: 'English' };
+      case 'de':
+        return { icon: '🇩🇪', label: 'German' };
+      case 'fr':
+        return { icon: '🇫🇷', label: 'French' };
+      case 'pt':
+        return { icon: '🇵🇹', label: 'Portuguese' };
+      case 'nl':
+        return { icon: '🇳🇱', label: 'Dutch' };
+      case 'sv':
+        return { icon: '🇸🇪', label: 'Sweden' };
+      case 'ja':
+        return { icon: '🇯🇵', label: 'Japan Origin' };
+
+      default:
+        return null;
+    }
   };
 
   let targetKey: 'zh' | 'zhHant' | 'en' = 'en';
@@ -85,13 +107,17 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
   }
 
   if (data.kind === 'k-seion') {
+    const badge = data.wordOrigin ? getOriginBadge(data.wordOrigin) : null;
     const renderMainContent = () => {
       return (
         <>
-          <div className={`${styles.furigana} ${commonStyles.jaFont}`}>
-            {data.wordKana}
-          </div>
-          <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
+          {data.wordOrigin && (
+            <div className={styles.originTag}>
+              {badge && <span className={styles.flag}>{badge.icon}</span>}
+              <span className={styles.originWord}>{data.wordOrigin.word}</span>
+            </div>
+          )}
+          <div className={`${styles.kanjiMainSmall} ${commonStyles.jaFont}`}>
             {data.word}
           </div>
           {data.wordEmoji && (
@@ -106,6 +132,12 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         {renderMainContent()}
         <div className={styles.romajiBottom}>{data.wordRomaji}</div>
         <div className={styles.meaningText}>{meaningText}</div>
+        {data.wordNoteKey && (
+          <div className={commonStyles.cardNoteLabel}>
+            <Lightbulb size={14} className={commonStyles.noteIcon} />
+            <span>{t(data.wordNoteKey)}</span>
+          </div>
+        )}
         <div className={commonStyles.speakerBtn} onClick={handlePlay}>
           <Volume2 />
         </div>

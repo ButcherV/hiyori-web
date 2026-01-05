@@ -9,32 +9,22 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
-import {
-  Volume2,
-  CheckCircle,
-  X,
-  Check,
-  CircleX,
-  CircleEqual,
-} from 'lucide-react';
+import { CheckCircle, X, Check, CircleX, CircleEqual } from 'lucide-react';
 
-// --- 1. 引入组件 ---
 import {
   TinderCard,
   type TinderCardRef,
 } from '../../components/TinderCard/index';
-import { TraceCard } from '../../components/TraceCard/index'; // 保持原有的 TraceCard
+import { TraceCard } from '../../components/TraceCard/index';
 import BottomSheet from '../../components/BottomSheet';
 import { SegmentedProgressBar } from './SegmentedProgressBar';
 import { StudySessionSetting } from './StudySessionSetting';
 
-// --- 2. 引入我们新写的自治组件 ---
 import { KanaCard } from './Cards/KanaCard';
 import { WordCard } from './Cards/WordCard';
 import { ReviewCard } from './Cards/ReviewCard';
 import { QuizCard } from './Cards/QuizCard';
 
-// --- 3. 引入逻辑与数据 ---
 import {
   generateWaveSequence,
   getRemedialCards,
@@ -42,11 +32,10 @@ import {
   type SessionStats,
   type LessonCard,
 } from './lessonLogic';
-import type { LocalizedText } from './kanaData'; // 用于类型断言
+import type { LocalizedText } from './kanaData';
 
 import styles from './TestStudySession.module.css';
 
-// --- 4. Context Hooks ---
 import { useProgress } from './useProgress';
 import { useProgress as useGlobalProgress } from '../../context/ProgressContext';
 import { useSound } from '../../hooks/useSound';
@@ -97,6 +86,16 @@ export const TestStudySession = () => {
 
   const playSound = useSound();
 
+  const handlePlayContent = (text: string) => {
+    if (!text) return;
+
+    // 暂时使用浏览器自带的日语朗读
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP'; // 设置为日语
+    utterance.rate = 0.8; // 语速
+    window.speechSynthesis.speak(utterance);
+  };
+
   // --- 交互辅助函数 ---
   const triggerSound = (type: Parameters<typeof playSound>[0]) => {
     if (soundEffect) playSound(type);
@@ -122,6 +121,7 @@ export const TestStudySession = () => {
     stats: SessionStats;
   }>(() => {
     const queue = generateWaveSequence(targetChars);
+    console.log('queue', queue);
     const calculatedStats = calculateSessionStats(queue);
     return { initialQueue: queue, stats: calculatedStats };
   });
@@ -147,7 +147,8 @@ export const TestStudySession = () => {
   useEffect(() => {
     if (isFinished) {
       if (id) markLessonComplete(id);
-      triggerSound('success'); // 播放完成音效
+      // 暂时没有成功音效
+      // triggerSound('success');
       const interval = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
@@ -169,7 +170,12 @@ export const TestStudySession = () => {
       if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
         // 稍微延迟一点，体验更好
         const timer = setTimeout(() => {
-          playSound(currentItem.data.kana);
+          const textToRead =
+            currentItem.type === 'WORD_LEARN'
+              ? currentItem.data.word || currentItem.data.kana
+              : currentItem.data.kana;
+
+          handlePlayContent(textToRead);
         }, 500);
         return () => clearTimeout(timer);
       }
@@ -300,11 +306,10 @@ export const TestStudySession = () => {
   const renderCardContent = (card: LessonCard) => {
     switch (card.type) {
       case 'KANA_LEARN':
-        return <KanaCard data={card.data} onPlaySound={playSound} />;
+        return <KanaCard data={card.data} onPlaySound={handlePlayContent} />;
 
       case 'WORD_LEARN':
-        // 透传 settings 给组件，让组件自己决定显示逻辑
-        return <WordCard data={card.data} onPlaySound={playSound} />;
+        return <WordCard data={card.data} onPlaySound={handlePlayContent} />;
 
       case 'TRACE':
         return (
@@ -326,7 +331,10 @@ export const TestStudySession = () => {
 
       case 'REVIEW':
         return (
-          <ReviewCard items={card.reviewItems || []} onPlaySound={playSound} />
+          <ReviewCard
+            items={card.reviewItems || []}
+            onPlaySound={handlePlayContent}
+          />
         );
 
       case 'QUIZ':
@@ -396,7 +404,7 @@ export const TestStudySession = () => {
           ${styles.instructionTitle} 
           ${currentItem?.type !== 'QUIZ' ? styles.passive : ''}
           ${headerInfo.isJa ? styles.jaFont : ''}
-          ${currentItem?.id?.includes('remedial') ? styles.remedialText : ''}
+          ${currentItem?.uniqueId?.includes('remedial') ? styles.remedialText : ''}
         `}
         >
           {t(headerInfo.title)}

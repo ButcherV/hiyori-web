@@ -49,7 +49,17 @@ export interface SessionStats {
 // ==========================================
 
 const uuid = () => Math.random().toString(36).slice(2, 9);
-const shuffle = <T>(array: T[]): T[] => array.sort(() => 0.5 - Math.random());
+// Fisher-Yates 洗牌算法 (真正的完全随机)
+const shuffle = <T>(array: T[]): T[] => {
+  const newArr = [...array]; // 复制一份，不修改原数组
+  for (let i = newArr.length - 1; i > 0; i--) {
+    // 随机选一个前面的位置 j
+    const j = Math.floor(Math.random() * (i + 1));
+    // 交换位置 i 和 j 的元素
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};
 
 // 生成一组 Quiz 卡 (1对 + 3错)
 // 返回的是 LessonCard[]，即一组卡片
@@ -76,14 +86,16 @@ const createQuizGroup = (
     answer = data.kana;
     distractors = data.kanaDistractors;
   } else if (quizType === 'WORD') {
-    if (!data.word || !data.wordKana || !data.wordDistractors) return [];
+    if (!data.word) return [];
     if (data.kind === 'h-seion') {
+      if (!data.wordKana || !data.wordDistractors) return [];
       // 题目逻辑：用户看着汉字，选读音
       title = data.word;
       sub = data.wordMeaning;
       answer = data.wordKana;
       distractors = data.wordDistractors; // 这里是 ['あえ', 'うえ'...]
     } else if (data.kind === 'k-seion') {
+      if (!data.wordDistractors) return [];
       // 🔵 片假名模式：答案是“写法” (显示 アイス)
       // 题目逻辑：用户看着意思，选写法
       title = '';
@@ -234,6 +246,7 @@ const generateKatakanaSeionFlow = (
   quizGroups.push(createQuizGroup(data, 'ROMAJI', true));
   quizGroups.push(createQuizGroup(data, 'KANA', true));
 
+  // 没有词的就不添加了。比如 wo
   if (data.word) {
     quizGroups.push(createQuizGroup(data, 'WORD', true));
   }

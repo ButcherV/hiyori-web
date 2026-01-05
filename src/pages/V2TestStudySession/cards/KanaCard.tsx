@@ -40,8 +40,8 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
         <div className={styles.romajiSub}>{data.romaji}</div>
 
         {data.noteKey && (
-          <div className={styles.cardNoteLabel}>
-            <Lightbulb size={14} className={styles.noteIcon} />
+          <div className={commonStyles.cardNoteLabel}>
+            <Lightbulb size={14} className={commonStyles.noteIcon} />
             <span>{t(data.noteKey)}</span>
           </div>
         )}

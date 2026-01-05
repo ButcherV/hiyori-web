@@ -82,8 +82,8 @@
     "katakanaKanjiOrigin": "Origin from「{{char}}」",
     "hiraganaKanjiOrigin": "Origin from「{{char}}」",
     "notes": {
-      "chi": "Note: Romaji is \"chi\" (instead of \"ti\").",
-      "wo": "Note: This is an object marker particle and is rarely used in common words."
+      "hchi": "Note: Romaji is \"chi\" (instead of \"ti\").",
+      "hwo": "Note: This is an object marker particle and is rarely used in common words."
     },
     "session": {
       "newKana": "New Kana",
