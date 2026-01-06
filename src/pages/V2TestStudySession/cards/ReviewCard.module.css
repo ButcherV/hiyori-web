@@ -45,13 +45,13 @@
   font-size: 28px;
   line-height: 1.2;
   font-weight: 700;
-  color: var(--color-Blue, #2563eb);
+  color: var(--color-Blue);
 }
 
 .reviewRomaji {
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-Blue, #2563eb);
+  color: var(--color-Blue);
   text-transform: uppercase;
   opacity: 0.8;
   margin-top: 2px;
@@ -70,7 +70,7 @@
 /* 单词上方的注音 (Furigana/Romaji) */
 .wordReading {
   font-size: 14px;
-  color: var(--color-Gray6, #6b7280);
+  color: var(--color-Gray6);
   line-height: 1;
   font-weight: 500;
 }
@@ -79,7 +79,7 @@
 .reviewWord {
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-Gray9, #111827);
+  color: var(--color-Gray9);
   line-height: 1.4;
 
   /* 长单词省略号 */
@@ -105,13 +105,15 @@
 /* 空状态占位 (有的假名没有单词) */
 .emptyWord {
   font-size: 14px;
-  color: var(--color-Gray4, #d1d5db);
+  color: var(--color-Gray4);
   font-style: italic;
 }
 
 /* --- 右侧：喇叭 --- */
 .soundBtn {
-  display: flex;
+  position: static;
+  box-shadow: none;
+  /* display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -119,15 +121,15 @@
   border-radius: 50%;
   border: none;
   background-color: transparent;
-  color: var(--color-Gray4, #d1d5db);
-  cursor: pointer;
+  cursor: pointer; */
+  color: var(--color-Gray5);
   transition: all 0.2s;
 
-  svg {
+  /* svg {
     width: 22px;
     height: 22px;
     stroke-width: 1.6px;
-  }
+  } */
 }
 
 /* 只有有单词时，喇叭才显示活跃颜色，否则显示灰色 */

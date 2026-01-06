@@ -110,5 +110,8 @@
     "title": "学习完成！",
     "subMessage": "今天也完成得很棒。",
     "backHome": "返回主页 ({{seconds}})"
+  },
+  "borrowedWords": {
+    "origin": "词源"
   }
 }

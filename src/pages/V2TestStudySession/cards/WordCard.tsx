@@ -113,8 +113,17 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         <>
           {data.wordOrigin && (
             <div className={styles.originTag}>
-              {badge && <span className={styles.flag}>{badge.icon}</span>}
-              <span className={styles.originWord}>{data.wordOrigin.word}</span>
+              <span className={styles.originLabel}>
+                {t('borrowedWords.origin')}
+              </span>
+              {/* 加一个竖线分割，可选 */}
+              <div className={styles.divider} />
+              <div className={styles.originContent}>
+                {badge && <span className={styles.flag}>{badge.icon}</span>}
+                <span className={styles.originWord}>
+                  {data.wordOrigin.word}
+                </span>
+              </div>
             </div>
           )}
           <div className={`${styles.kanjiMainSmall} ${commonStyles.jaFont}`}>

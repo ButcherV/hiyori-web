@@ -101,7 +101,7 @@ export const ReviewCard: React.FC<Props> = ({ items, onPlaySound }) => {
 
             {/* 3. 右侧：喇叭按钮 */}
             <div
-              className={`${styles.soundBtn} ${item.word ? styles.active : ''}`}
+              className={`${commonStyles.speakerBtn} ${styles.soundBtn} ${item.word ? styles.active : ''}`}
               onClick={(e) => {
                 e.stopPropagation(); // 防止冒泡触发整行点击
                 handlePlayClick(item);

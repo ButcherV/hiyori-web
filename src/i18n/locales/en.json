@@ -103,5 +103,9 @@
     "title": "All Done!",
     "subMessage": "Great job learning today.",
     "backHome": "Back to Home ({{seconds}})"
+  },
+
+  "borrowedWords": {
+    "origin": "Origin"
   }
 }
