@@ -16,7 +16,7 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     wordEmoji: '❤️', // 该单词尽可能是简单名词，有对应的 emoji
     kanaDistractors: ['お', 'め', 'ぬ'], // 该假名的形近
     romajiDistractors: ['o', 'ou', 'au'], // 该假名的音近
-    wordDistractors: ['あえ', 'ぬえ', 'めい'], // 与 wordKana 的形似
+    wordDistractors: ['あえ', 'めい', 'おい'], // 与 wordKana 的形似
   }),
 
   い: defineHSeion({
@@ -304,14 +304,14 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     kana: 'と',
     romaji: 'to',
     kanaKanjiOrigin: '止',
-    word: '外',
-    wordKana: 'そと',
-    wordRomaji: 'so·to',
-    wordMeaning: { en: 'outside', zh: '外面', zhHant: '外面' },
-    wordEmoji: '🏞️',
+    word: '時計',
+    wordKana: 'とけい',
+    wordRomaji: 'to·ke·i',
+    wordMeaning: { en: 'clock', zh: '钟；表', zhHant: '钟；表' },
+    wordEmoji: '🕓',
     kanaDistractors: ['て', 'ど', 'を'],
     romajiDistractors: ['do', 'ta', 'so'],
-    wordDistractors: ['そて', 'そど', 'そを'],
+    wordDistractors: ['てけい', 'そけい', 'そをい'],
   }),
 
   // な行 (N-Column)
@@ -729,7 +729,7 @@ export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
     wordMeaning: { en: 'book', zh: '书', zhHant: '書' },
     wordEmoji: '📚',
     kanaDistractors: ['そ', 'え', 'し'],
-    romajiDistractors: ['m', 'ng', 'so'],
+    romajiDistractors: ['en', 'ng', 'on'],
     wordDistractors: ['ほそ', 'ほえ', 'ほし'],
   }),
 

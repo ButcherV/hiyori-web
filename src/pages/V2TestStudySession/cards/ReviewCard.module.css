@@ -1,89 +1,135 @@
-/* 根容器 (原 .reviewListContainer) */
 .container {
   width: 100%;
-  padding: 16px;
+  height: 100%;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
-  position: relative;
+  gap: 3px;
 }
 
 .reviewRow {
-  display: flex;
+  display: grid;
+  /* 🔥 核心布局： [假名固定宽] [自动填充单词区域] [喇叭固定宽] */
+  grid-template-columns: 68px 1fr 40px;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 16px;
+
+  padding: 6px;
+  background-color: #fff;
+  border-radius: 16px; /* 圆润的卡片感 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* 极淡的阴影，增加层次 */
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease;
 }
 
-.reviewRow:last-of-type {
-  border-bottom-width: 0;
+/* 稍微按下的效果 */
+.reviewRow:active {
+  transform: scale(0.96);
 }
 
-.reviewLeft {
+/* --- 左侧：假名胶囊 --- */
+.kanaBox {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  min-width: 60px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-Blue-Light, #eff6ff); /* 浅蓝色背景 */
+  border-radius: 12px;
+  padding: 8px 0;
+  height: 100%;
+  min-height: 72px;
 }
 
 .reviewChar {
-  font-size: 32px;
-  height: 54px;
-  min-width: 54px;
-  line-height: 54px;
-  margin-left: -16px;
-  color: var(--color-Blue);
-  font-weight: 600;
-  /* Font family 会在组件里组合使用公共样式 */
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--color-Blue, #2563eb);
 }
 
 .reviewRomaji {
-  font-size: 24px;
-  min-width: 24px;
-  font-weight: 500;
-  color: var(--color-Blue);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-Blue, #2563eb);
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-top: 2px;
 }
 
-.reviewRight {
+/* --- 中间：单词详情 --- */
+.wordInfo {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  color: var(--color-Gray8);
+  justify-content: center;
+  align-items: flex-start; /* 🔥 关键：左对齐，阅读更舒服 */
+  gap: 2px;
+  overflow: hidden; /* 防止长文本撑开 */
 }
 
+/* 单词上方的注音 (Furigana/Romaji) */
+.wordReading {
+  font-size: 14px;
+  color: var(--color-Gray6, #6b7280);
+  line-height: 1;
+  font-weight: 500;
+}
+
+/* 单词本体 */
 .reviewWord {
   font-size: 18px;
-  font-weight: 600;
-  /* Font family 会在组件里组合使用公共样式 */
+  font-weight: 700;
+  color: var(--color-Gray9, #111827);
+  line-height: 1.4;
+
+  /* 长单词省略号 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
+/* 单词意思 */
 .reviewMeaning {
   font-size: 14px;
-  color: var(--color-Gray6);
-}
-
-/* 提示文字 */
-.swipeHint {
-  position: absolute;
-  bottom: 8px;
-  width: calc(100% - 32px);
-  text-align: center;
-  font-size: 14px;
-  color: var(--color-Gray7);
   font-weight: 500;
-  animation: pulse 2s infinite;
+  color: var(--color-Gray6);
+
+  /* 长文本省略 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.4;
-  }
+/* 空状态占位 (有的假名没有单词) */
+.emptyWord {
+  font-size: 14px;
+  color: var(--color-Gray4, #d1d5db);
+  font-style: italic;
+}
+
+/* --- 右侧：喇叭 --- */
+.soundBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-Gray4, #d1d5db);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* 只有有单词时，喇叭才显示活跃颜色，否则显示灰色 */
+.soundBtn.active {
+  color: var(--color-Blue, #3b82f6);
+  background-color: var(--color-Blue-Lighter, #eff6ff);
+}
+
+.soundBtn:active {
+  transform: scale(0.9);
 }

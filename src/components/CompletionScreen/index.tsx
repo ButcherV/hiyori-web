@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
@@ -15,6 +15,24 @@ export const CompletionScreen: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const [countdown, setCountdown] = useState(autoRedirectSeconds);
+
+  const [isExiting, setIsExiting] = useState(false);
+
+  // 防止重复触发跳转的锁
+  const hasTriggeredExit = useRef(false);
+
+  // 封装退出逻辑：先动画，后跳转
+  const handleExit = () => {
+    if (hasTriggeredExit.current) return;
+    hasTriggeredExit.current = true;
+
+    setIsExiting(true); // 触发 CSS 动画
+
+    // 等待 300ms (与 CSS transition 时间匹配) 后执行真正的跳转
+    setTimeout(() => {
+      onGoHome();
+    }, 300);
+  };
 
   // 专门处理礼花效果
   useEffect(() => {
@@ -55,7 +73,7 @@ export const CompletionScreen: React.FC<Props> = ({
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          onGoHome(); // 倒计时结束，调用父组件传来的回调
+          handleExit();
           return 0;
         }
         return prev - 1;
@@ -64,17 +82,29 @@ export const CompletionScreen: React.FC<Props> = ({
 
     // 清理定时器 (防止用户手动点击按钮离开后，定时器还在跑)
     return () => clearInterval(interval);
-  }, [onGoHome]);
+  }, []);
 
   return (
-    <div className={styles.completeContainer}>
+    <div
+      className={`
+        ${styles.completeContainer} 
+        ${isExiting ? styles.exiting : ''}
+      `}
+    >
       <div className={styles.celebrationIcon}>
         <CheckCircle size={80} strokeWidth={2.5} />
       </div>
       <h1 className={styles.completeTitle}>{t('completion.title')}</h1>
       <p className={styles.completeSub}>{t('completion.subMessage')}</p>
 
-      <button className={styles.fillingBtn} onClick={onGoHome}>
+      {/* 🔥 优化：将 animationDuration 设为动态，与倒计时秒数同步 */}
+      <button
+        className={styles.fillingBtn}
+        onClick={handleExit}
+        style={
+          { '--duration': `${autoRedirectSeconds}s` } as React.CSSProperties
+        }
+      >
         <span className={styles.btnText}>
           {t('completion.backHome', { seconds: countdown })}
         </span>

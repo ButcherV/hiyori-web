@@ -5,132 +5,112 @@ import { useSettings } from '../../../context/SettingsContext';
 
 import styles from './ReviewCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
+import { Volume2 } from 'lucide-react';
 
 interface Props {
   items: ReviewItem[];
   onPlaySound: (char: string) => void;
 }
 
-export const ReviewCard: React.FC<Props> = ({ items }) => {
+export const ReviewCard: React.FC<Props> = ({ items, onPlaySound }) => {
   const { i18n } = useTranslation();
   const { kanjiBackground } = useSettings();
 
   const getMeaning = (m: any) => {
     if (!m) return '';
-
     const lang = i18n.language;
-    if (lang === 'zh-Hant') {
-      return m.zhHant;
-    }
-
-    if (lang.startsWith('zh')) {
-      return m.zh;
-    }
-
+    if (lang === 'zh-Hant') return m.zhHant;
+    if (lang.startsWith('zh')) return m.zh;
     return m.en;
+  };
+
+  const handlePlayClick = (item: ReviewItem) => {
+    const text = item.word || item.wordKana || item.char;
+    onPlaySound(text);
+  };
+
+  const renderWordInfo = (item: ReviewItem) => {
+    // 如果没有单词，显示占位符或空白
+    if (!item.word) {
+      return <span className={styles.emptyWord}>-</span>;
+    }
+
+    // 汉字背景模式 (显示假名注音、汉字、 意义)
+    if (kanjiBackground) {
+      return (
+        <>
+          <span className={`${styles.wordReading} ${commonStyles.jaFont}`}>
+            {item.wordKana}
+          </span>
+          <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
+            {item.word}
+          </span>
+          <span className={styles.reviewMeaning}>
+            {getMeaning(item.meaning)}
+          </span>
+        </>
+      );
+    }
+
+    // 无汉字背景模式
+    // 平假名相关, word 是汉字： 显示罗马音 + 假名 + 意义
+    // 片假名相关，没有 wordKana, word 本身就是平假名： 显示罗马音 + 假名（单词本身）+ 意义
+    return (
+      <>
+        {item.wordRomaji && (
+          <span className={styles.wordReading}>{item.wordRomaji}</span>
+        )}
+        {item.wordKana && (
+          <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
+            {item.wordKana}
+          </span>
+        )}
+        {['k-seion', 'k-dakuon', 'k-yoon'].includes(item.kind) && (
+          <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
+            {item.word}
+          </span>
+        )}
+        <span className={styles.reviewMeaning}>{getMeaning(item.meaning)}</span>
+      </>
+    );
   };
 
   return (
     <div className={styles.container}>
       {items.map((item, idx) => {
-        // 🔥🔥🔥 核心修改：在这里做判断 🔥🔥🔥
+        // 过滤掉非 h-seion / k-seion 的情况 (防御性编程)
+        // if (!['h-seion', 'k-seion'].includes(item.kind)) return null;
 
-        // =================================================
-        // 🟢 情况 1: 平假名清音 (Hiragana Seion)
-        // =================================================
-        if (item.kind === 'h-seion') {
-          return (
-            <div key={`${item.char}-${idx}`} className={styles.reviewRow}>
-              {/* 左侧 */}
-              <div className={styles.reviewLeft}>
-                <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
-                  {item.char}
-                </span>
-                <span className={styles.reviewRomaji}>{item.romaji}</span>
-              </div>
-
-              {/* 右侧 */}
-              {/* 有的假名没法组词，比如 "を” */}
-              {item.word && (
-                <div className={styles.reviewRight}>
-                  {kanjiBackground ? (
-                    // 有汉字背景：
-                    // 读音的平假名
-                    // 汉字
-
-                    <>
-                      <span
-                        className={`${commonStyles.jaFont} ${styles.reviewMeaning}`}
-                      >
-                        {item.wordKana}
-                      </span>
-                      <span
-                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
-                      >
-                        {item.word ? `${item.word}` : ''}
-                      </span>
-                    </>
-                  ) : (
-                    // 无汉字背景：
-                    // 罗马音
-                    // 平假名
-                    <>
-                      {item.wordRomaji && (
-                        <span className={styles.reviewMeaning}>
-                          {item.wordRomaji}
-                        </span>
-                      )}
-                      <span
-                        className={`${styles.reviewWord} ${commonStyles.jaFont}`}
-                      >
-                        {item.wordKana}
-                      </span>
-                    </>
-                  )}
-                  <span className={styles.reviewMeaning}>
-                    {getMeaning(item.meaning)}
-                  </span>
-                </div>
-              )}
+        return (
+          <div
+            key={`${item.char}-${idx}`}
+            className={styles.reviewRow}
+            // 点击整行也可以播放，体验更好，如果不想要可以删掉
+            onClick={() => handlePlayClick(item)}
+          >
+            {/* 1. 左侧：假名胶囊 */}
+            <div className={styles.kanaBox}>
+              <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
+                {item.char}
+              </span>
+              <span className={styles.reviewRomaji}>{item.romaji}</span>
             </div>
-          );
-        }
 
-        // =================================================
-        // 🔵 情况 2: 片假名清音 (Katakana Seion)
-        // =================================================
-        if (item.kind === 'k-seion') {
-          return (
-            <div key={`${item.char}-${idx}`} className={styles.reviewRow}>
-              <div className={styles.reviewLeft}>
-                <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
-                  {item.char}
-                </span>
-                <span className={styles.reviewRomaji}>{item.romaji}</span>
-              </div>
+            {/* 2. 中间：单词详情 (左对齐) */}
+            <div className={styles.wordInfo}>{renderWordInfo(item)}</div>
 
-              {/* 右侧 */}
-              <div className={styles.reviewRight}>
-                {/* 
-                    罗马音
-                    片假名单词
-                    翻译
-                */}
-                {item.wordRomaji && (
-                  <span className={styles.reviewMeaning}>
-                    {item.wordRomaji}
-                  </span>
-                )}
-                <span className={styles.reviewWord}>{item.word}</span>
-                <span className={styles.reviewMeaning}>
-                  {getMeaning(item.meaning)}
-                </span>
-              </div>
-            </div>
-          );
-        }
-
-        return null;
+            {/* 3. 右侧：喇叭按钮 */}
+            <button
+              className={`${styles.soundBtn} ${item.word ? styles.active : ''}`}
+              onClick={(e) => {
+                e.stopPropagation(); // 防止冒泡触发整行点击
+                handlePlayClick(item);
+              }}
+            >
+              <Volume2 size={20} />
+            </button>
+          </div>
+        );
       })}
     </div>
   );

@@ -17,7 +17,6 @@ interface AppSettings {
 
 interface SettingsContextType extends AppSettings {
   toggleSetting: (key: keyof AppSettings) => void;
-  // 新增：支持直接更新多个字段的方法
   updateSettings: (newSettings: Partial<AppSettings>) => void;
   setTheme: (mode: 'light' | 'dark') => void;
 }

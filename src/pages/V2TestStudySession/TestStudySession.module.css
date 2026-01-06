@@ -240,12 +240,12 @@
 
 .reject {
   color: #ff3b30;
-  border: 1px solid #ff3b3020;
+  border: 0px solid #ff3b3020;
 }
 
 .accept {
   color: #34c759;
-  border: 1px solid #34c75920;
+  border: 0px solid #34c75920;
 }
 
 /* 胶囊型备注标签 */

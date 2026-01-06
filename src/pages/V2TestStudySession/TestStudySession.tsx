@@ -11,6 +11,7 @@ import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
 import { X, Check, CircleX, CircleEqual } from 'lucide-react';
 import { CompletionScreen } from '../../components/CompletionScreen';
+import { useTTS } from '../../hooks/useTTS';
 
 import {
   TinderCard,
@@ -84,21 +85,8 @@ export const TestStudySession = () => {
   ];
 
   const playSound = useSound();
+  const { speak, cancel } = useTTS();
 
-  const handlePlayContent = (text: string) => {
-    if (!text) return;
-
-    // 播放新声音前，强制打断旧声音
-    window.speechSynthesis.cancel();
-
-    // 暂时使用浏览器自带的日语朗读
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ja-JP'; // 设置为日语
-    utterance.rate = 0.8; // 语速
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // --- 交互辅助函数 ---
   const triggerSound = (type: Parameters<typeof playSound>[0]) => {
     if (soundEffect) playSound(type);
   };
@@ -167,18 +155,18 @@ export const TestStudySession = () => {
               ? currentItem.data.word || currentItem.data.kana
               : currentItem.data.kana;
 
-          handlePlayContent(textToRead);
-        }, 500);
+          speak(textToRead);
+        }, 400);
       }
     }
     return () => {
-      // 1. 如果声音还没来得及播（还在500ms等待期），直接取消定时器，这样它永远不会响了
+      // 1. 如果声音还没来得及播（还在 500ms 等待期），直接取消定时器，这样它永远不会响了
       if (timer) clearTimeout(timer);
 
       // 2. 如果声音已经开始播了，甚至可以在这里再次 cancel，确保万无一失
-      window.speechSynthesis.cancel();
+      // cancel();
     };
-  }, [currentIndex, autoAudio, currentItem, isFinished]);
+  }, [currentIndex, autoAudio, currentItem, isFinished, speak, cancel]);
 
   // --- Header 计算逻辑 ---
   const getHeader = () => {
@@ -236,7 +224,7 @@ export const TestStudySession = () => {
     if (!currentItem) return;
 
     // 只要用户决定滑走，当前如果正在发音就立即停止
-    window.speechSynthesis.cancel();
+    // cancel();
 
     // 1. 描红卡：右滑算完成
     if (currentItem.type === 'TRACE') {
@@ -307,10 +295,10 @@ export const TestStudySession = () => {
   const renderCardContent = (card: LessonCard) => {
     switch (card.type) {
       case 'KANA_LEARN':
-        return <KanaCard data={card.data} onPlaySound={handlePlayContent} />;
+        return <KanaCard data={card.data} onPlaySound={speak} />;
 
       case 'WORD_LEARN':
-        return <WordCard data={card.data} onPlaySound={handlePlayContent} />;
+        return <WordCard data={card.data} onPlaySound={speak} />;
 
       case 'TRACE':
         return (
@@ -332,10 +320,7 @@ export const TestStudySession = () => {
 
       case 'REVIEW':
         return (
-          <ReviewCard
-            items={card.reviewItems || []}
-            onPlaySound={handlePlayContent}
-          />
+          <ReviewCard items={card.reviewItems || []} onPlaySound={speak} />
         );
 
       case 'QUIZ':
