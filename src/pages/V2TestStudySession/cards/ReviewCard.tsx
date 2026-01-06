@@ -100,15 +100,15 @@ export const ReviewCard: React.FC<Props> = ({ items, onPlaySound }) => {
             <div className={styles.wordInfo}>{renderWordInfo(item)}</div>
 
             {/* 3. 右侧：喇叭按钮 */}
-            <button
+            <div
               className={`${styles.soundBtn} ${item.word ? styles.active : ''}`}
               onClick={(e) => {
                 e.stopPropagation(); // 防止冒泡触发整行点击
                 handlePlayClick(item);
               }}
             >
-              <Volume2 size={20} />
-            </button>
+              <Volume2 />
+            </div>
           </div>
         );
       })}
