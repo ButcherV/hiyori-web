@@ -1,0 +1,163 @@
+/* src/pages/HomePage/HeroScroll.module.css */
+
+.scrollContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 8px 16px;
+  padding-bottom: 24px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* 1. 卡片基础样式 */
+.heroCard {
+  min-width: 85%;
+  position: relative;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  scroll-snap-align: center;
+
+  /* 默认过渡：恢复时慢一点(0.3s)，更有质感 */
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    filter 0.3s ease;
+
+  /* 解决移动端点击闪烁问题 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.heroCardInactive {
+  /* transform: scale(0.95); */
+  /* 平时就比中间的小 */
+  opacity: 0.6; /* 半透明 */
+}
+
+.heroCard:not(.heroCardInactive):active {
+  transform: scale(0.97);
+  transition: transform 0.2s ease;
+}
+
+.heroCardLocked {
+  filter: grayscale(0.8) brightness(0.7);
+  cursor: not-allowed;
+}
+
+/* 锁定卡片点击时也可以微微动一下 */
+/* .heroCardLocked:active {
+  transform: scale(0.94);
+} */
+
+/* 背景色定义 */
+.hiragana {
+  background: linear-gradient(to right, #26d0ce, #1a2980);
+}
+.katakana {
+  background: linear-gradient(to left, #240b36, #c31432);
+}
+.kanji {
+  background: #16222a;
+  background: linear-gradient(to right, #3a6073, #16222a);
+}
+
+/* 装饰大字 */
+.heroDecor {
+  position: absolute;
+  bottom: -20px;
+  right: 0px;
+  font-size: 120px;
+  font-weight: 800;
+  opacity: 0.15;
+  pointer-events: none;
+  font-family: var(--font-ja, 'Hiragino Kaku Gothic ProN', sans-serif);
+  transition: opacity 0.3s ease;
+}
+
+.heroCardInactive .heroDecor {
+  opacity: 0.05;
+}
+
+/* 卡片内部布局 */
+.heroTop {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statusBadge.COMPLETED {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.statusBadge.LOCKED {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.heroTitle {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: pre-wrap;
+}
+
+.heroBottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 20px;
+}
+
+.lockedText {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.progressText {
+  font-size: 14px;
+  font-weight: 600;
+}

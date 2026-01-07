@@ -36,7 +36,11 @@ export const ReviewCard: React.FC<Props> = ({ items, onPlaySound }) => {
     }
 
     // 汉字背景模式 (显示假名注音、汉字、 意义)
-    if (kanjiBackground) {
+    // 又是平假名
+    if (
+      ['h-seion', 'h-dakuon', 'h-yoon'].includes(item.kind) &&
+      kanjiBackground
+    ) {
       return (
         <>
           <span className={`${styles.wordReading} ${commonStyles.jaFont}`}>

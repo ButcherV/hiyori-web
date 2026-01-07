@@ -7,6 +7,12 @@
     "delete": "删除",
     "history": "历史"
   },
+  "status": {
+    "completed": "COMPLETED",
+    "locked": "LOCKED",
+    "in_progress": "IN PROGRESS",
+    "start": "START"
+  },
   "home": {
     "common": {
       "goodMorning": "早上好",
@@ -17,7 +23,8 @@
       "current_session": "当前课程",
       "next_milestone": "下一里程碑",
       "hiragana_title": "平假名\n基础入门",
-      "katakana_title": "片假名\n进阶掌握"
+      "katakana_title": "片假名\n进阶掌握",
+      "kanji_title": "汉字\n进阶掌握"
     },
     "drills": {
       "title": "快速练习",

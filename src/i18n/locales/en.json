@@ -17,7 +17,8 @@
       "current_session": "CURRENT SESSION",
       "next_milestone": "NEXT MILESTONE",
       "hiragana_title": "Hiragana\nBasics",
-      "katakana_title": "Katakana\nMastery"
+      "katakana_title": "Katakana\nMastery",
+      "kanji_title": "Kanji\nMaster"
     },
     "drills": {
       "title": "Quick Drills",
@@ -107,5 +108,11 @@
 
   "borrowedWords": {
     "origin": "Origin"
+  },
+  "status": {
+    "completed": "COMPLETED",
+    "locked": "LOCKED",
+    "in_progress": "IN PROGRESS",
+    "start": "START"
   }
 }

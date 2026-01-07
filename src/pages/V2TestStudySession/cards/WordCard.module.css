@@ -55,34 +55,34 @@
 
 .originTag {
   display: inline-flex;
-  align-items: center;
-  /* 使用 gap 代替 margin-right，更现代 */
-  gap: 8px;
+  flex-direction: column;
 
   background-color: var(--color-xxxBlue); /* 比如 #eff6ff */
   /* border: 1px solid rgba(0, 0, 0, 0.04); 极淡的边框增加精致感 */
-  border-radius: 4px; /* 不需要完全圆角(999px)，稍微方一点更像标签 */
-  padding: 4px 8px 4px 10px; /* 上下压扁一点 */
+  border-radius: 4px;
+  padding: 8px;
+  padding-bottom: 5px;
 
   margin-bottom: 16px;
-  /* 去掉阴影，看起来更轻盈 */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .originLabel {
-  color: var(--color-Gray6); /* 颜色要淡 */
-  font-size: 11px; /* 字号要极其小 */
-  font-weight: 700;
-  text-transform: uppercase; /* 全大写，显得像系统标签 */
+  color: var(--color-Gray6);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
   letter-spacing: 0.05em;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .divider {
-  width: 2px;
-  height: 12px;
-  background-color: var(--color-Gray5); /* 竖线颜色 */
-  opacity: 0.5;
+  width: 100%;
+  height: 1.2px;
+  background-color: var(--color-Gray4);
+  opacity: 0.8;
+  margin-top: 4px;
+  margin-bottom: 2px;
 }
 
 .originContent {
@@ -92,7 +92,7 @@
 }
 
 .flag {
-  font-size: 1.2em; /* 图标稍微大一点点 */
+  font-size: 1.2em;
   line-height: 1;
   display: flex;
 }
@@ -100,5 +100,5 @@
 .originWord {
   color: var(--color-Blue);
   font-size: 14px;
-  font-weight: 600; /* 内容加粗，突出重点 */
+  font-weight: 600;
 }

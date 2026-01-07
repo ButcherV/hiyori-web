@@ -1,21 +1,24 @@
+// src/pages/HomePage/HomePage.tsx
 import { useState, useMemo } from 'react';
 import styles from './HomePage.module.css';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import BottomSheet from '../components/BottomSheet';
-import LessonMenu from '../components/LessonMenu';
-import AppSettingsMenu from '../components/AppSettingsMenu';
-import { StatsHeatmap } from '../components/StatsHeatmap';
+import BottomSheet from '../../components/BottomSheet';
+import LessonMenu from '../../components/LessonMenu';
+import AppSettingsMenu from '../../components/AppSettingsMenu';
+import { StatsHeatmap } from '../../components/StatsHeatmap';
 
-import type { ScriptType } from '../components/LessonMenu';
+import { HeroScroll } from './HeroScroll';
+
+import type { ScriptType } from '../../components/LessonMenu';
 import {
   getJapaneseGreeting,
   getJapaneseDateStr,
   getJapaneseWeekday,
   getJapaneseHoliday,
   isRedDay,
-} from '../utils/dateHelper';
+} from '../../utils/dateHelper';
 
 import {
   Hash,
@@ -29,41 +32,30 @@ import {
   BookOpenText,
   Clock,
   CircleDollarSign,
+  ChevronRight, // ✅ 新增：引入箭头图标
 } from 'lucide-react';
-
-import { HIRAGANA_DATA, KATAKANA_DATA } from '../datas/kanaData';
-import { useProgress } from '../context/ProgressContext';
+import { useProgress } from '../../context/ProgressContext';
 
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   // --- 状态管理 ---
-  // 1. 假名选择弹窗（Hero 卡片共用）
+  // 1. 假名选择弹窗
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
 
-  // 2. 专项练习弹窗（Numbers）
+  // 2. 专项练习弹窗
   const [isNumbersOpen, setNumbersOpen] = useState(false);
 
   // 3. Header 弹窗
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isStatsOpen, setStatsOpen] = useState(false);
 
-  const { activityLog, completedLessons } = useProgress();
+  const { activityLog } = useProgress();
   const hasActivity = Object.values(activityLog).some((count) => count > 0);
 
-  // 进度计算逻辑
-  const calculateProgress = (script: 'hiragana' | 'katakana') => {
-    const dataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
-    const total = dataSet.length;
-    if (total === 0) return '0%';
-    const completedCount = dataSet.filter((item) =>
-      completedLessons.includes(item.id)
-    ).length;
-    return `${Math.round((completedCount / total) * 100)}%`;
-  };
-
+  // Header 数据计算
   const headerData = useMemo(() => {
     const now = new Date();
     const isRed = isRedDay(now);
@@ -72,25 +64,6 @@ export function HomePage() {
     if (holiday) fullDateText += ` · ${holiday}`;
     return { greeting: getJapaneseGreeting(now), fullDateText, isRed };
   }, []);
-
-  const heroCourses = [
-    {
-      id: 'hiragana',
-      char: 'あ',
-      color: '#007AFF',
-      progress: calculateProgress('hiragana'),
-      label: t('home.hero.current_session'),
-      title: t('home.hero.hiragana_title'),
-    },
-    {
-      id: 'katakana',
-      char: 'ア',
-      color: '#FF2D55',
-      progress: calculateProgress('katakana'),
-      label: t('home.hero.next_milestone'),
-      title: t('home.hero.katakana_title'),
-    },
-  ];
 
   const drills = [
     {
@@ -165,11 +138,12 @@ export function HomePage() {
     },
   ];
 
-  const handleHeroClick = (id: string) => {
-    if (id === 'hiragana' || id === 'katakana') {
-      setCurrentScript(id as ScriptType);
-      setSelectionOpen(true);
-    }
+  // --- 事件处理 ---
+
+  // ✅ 处理从 HeroScroll 传来的点击
+  const handleCourseClick = (script: ScriptType) => {
+    setCurrentScript(script);
+    setSelectionOpen(true);
   };
 
   const handleDrillClick = (id: string) => {
@@ -178,7 +152,6 @@ export function HomePage() {
     } else if (id === 'numbers') {
       setNumbersOpen(true);
     }
-    // 其他暂时不处理
   };
 
   const handleLessonSelect = (courseId: string, targetChars: string[]) => {
@@ -221,39 +194,8 @@ export function HomePage() {
         </div>
       </header>
 
-      <div className={styles.scrollContainer}>
-        {heroCourses.map((course) => (
-          <div
-            key={course.id}
-            className={`${styles.heroCard} ${styles[course.id]}`}
-            style={{ backgroundColor: course.color }}
-            onClick={() => handleHeroClick(course.id)}
-          >
-            <div className={styles.heroDecor}>{course.char}</div>
-            <div className={styles.heroTop}>
-              <div className={styles.heroLabel}>{course.label}</div>
-              <div
-                className={styles.heroTitle}
-                style={{ whiteSpace: 'pre-wrap' }}
-              >
-                {course.title}
-              </div>
-            </div>
-            <div className={styles.heroBottom}>
-              <div
-                className={styles.progressTrack}
-                style={{ background: 'rgba(255,255,255,0.3)' }}
-              >
-                <div
-                  className={styles.progressFill}
-                  style={{ width: course.progress }}
-                />
-              </div>
-              <div className={styles.progressText}>{course.progress}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* HeroScroll 组件 */}
+      <HeroScroll onCourseClick={handleCourseClick} />
 
       <div className={styles.testBtnContainer}>
         <button onClick={() => navigate('/dice')} className={styles.testBtn}>
@@ -261,22 +203,36 @@ export function HomePage() {
         </button>
       </div>
 
-      {/* <div className={styles.sectionHeader}>{t('home.drills.title')}</div> */}
+      {/* ✅ 新增：Section Header */}
+      <div className={styles.sectionHeader}>
+        {t('home.drills.title') || 'Practice Drills'}
+      </div>
 
       <div className={styles.grid}>
         {drills.map((item) => (
           <div
             key={item.id}
-            className={`${styles.card} ${styles[item.id]}`}
+            className={styles.drillCard} // ✅ 使用新样式
             onClick={() => handleDrillClick(item.id)}
+            style={
+              {
+                // ✅ 动态传递 CSS 变量，实现高级透明色
+                '--drill-color': item.color,
+                '--drill-tint-bg': `linear-gradient(135deg, #ffffff 40%, ${item.color}15 100%)`,
+                '--drill-bg': `${item.color}15`, // 约 8% 透明度的背景色
+              } as React.CSSProperties
+            }
           >
-            <div
-              className={styles.iconBox}
-              style={{ backgroundColor: item.color }}
-            >
-              <item.icon size={24} strokeWidth={2.5} />
+            {/* 上半部分：图标 + 箭头 */}
+            <div className={styles.cardTop}>
+              <div className={styles.drillIconBox}>
+                <item.icon size={22} strokeWidth={2.5} />
+              </div>
+              <ChevronRight size={18} className={styles.arrowIcon} />
             </div>
-            <div style={{ minWidth: 0 }}>
+
+            {/* 下半部分：文字信息 */}
+            <div className={styles.cardContent}>
               <div className={styles.cardTitle}>{item.title}</div>
               <div className={styles.cardSub}>{item.sub}</div>
             </div>
@@ -284,9 +240,7 @@ export function HomePage() {
         ))}
       </div>
 
-      {/* --- 所有的 BottomSheet --- */}
-
-      {/* 假名选择弹窗 */}
+      {/* --- BottomSheets --- */}
       <BottomSheet
         isOpen={isSelectionOpen}
         onClose={() => setSelectionOpen(false)}
@@ -299,17 +253,14 @@ export function HomePage() {
         <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
       </BottomSheet>
 
-      {/* Numbers 专用弹窗 */}
       <BottomSheet
         isOpen={isNumbersOpen}
         onClose={() => setNumbersOpen(false)}
         title={t('home.drills.numbers')}
       >
-        {/* 注意：此处 script 设为 numbers 是为了让 LessonMenu 知道该加载数字数据 */}
         <LessonMenu script={'numbers' as any} onSelect={handleLessonSelect} />
       </BottomSheet>
 
-      {/* Header 相关弹窗 */}
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -317,6 +268,7 @@ export function HomePage() {
       >
         <AppSettingsMenu />
       </BottomSheet>
+
       <BottomSheet
         isOpen={isStatsOpen}
         onClose={() => setStatsOpen(false)}

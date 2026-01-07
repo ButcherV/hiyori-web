@@ -13,6 +13,7 @@ interface AppSettings {
   uiLanguage: UILang;
   kanjiBackground: boolean;
   hasFinishedOnboarding: boolean;
+  lastActiveCourseId: string;
 }
 
 interface SettingsContextType extends AppSettings {
@@ -32,6 +33,7 @@ const defaultSettings: AppSettings = {
   uiLanguage: 'en',
   kanjiBackground: false,
   hasFinishedOnboarding: false,
+  lastActiveCourseId: 'hiragana',
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
