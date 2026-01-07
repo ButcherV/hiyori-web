@@ -16,13 +16,12 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
   const { t } = useTranslation();
   const { completedLessons } = useProgress();
 
-  // ✅ 获取全局设置中的 lastActiveCourseId 和更新方法
+  // 获取全局设置中的 lastActiveCourseId 和更新方法
   const { lastActiveCourseId, updateSettings } = useSettings();
 
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // ... (getProgressNum 和 hiraganaProgress/katakanaProgress 保持不变) ...
   const getProgressNum = (script: 'hiragana' | 'katakana') => {
     const dataSet = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
     const total = dataSet.length;
@@ -35,7 +34,6 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
   const hiraganaProgress = getProgressNum('hiragana');
   const katakanaProgress = getProgressNum('katakana');
 
-  // ... (heroCourses 数据构造保持不变) ...
   const heroCourses = useMemo(() => {
     const getStatus = (progress: number, isLocked: boolean) => {
       if (isLocked)
@@ -88,14 +86,11 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
     ];
   }, [hiraganaProgress, katakanaProgress, t]);
 
-  // 🔥 3. 自动聚焦逻辑 (使用 Context 里的值)
   useEffect(() => {
-    // 找到 Context 里存的 ID 对应的 index
     const targetIndex = heroCourses.findIndex(
       (c) => c.id === lastActiveCourseId
     );
 
-    // 如果找到了，且不是第0个，则滚动过去
     if (targetIndex > 0 && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const cardWidth = container.offsetWidth * 0.85;
@@ -109,11 +104,10 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         setActiveHeroIndex(targetIndex);
       }, 100);
     }
-  }, []); // 仅在挂载时执行
+  }, []);
 
   const handleHeroClick = (id: string, index: number, isLocked: boolean) => {
     if (index !== activeHeroIndex) {
-      // 滚动逻辑
       const container = scrollContainerRef.current;
       if (container) {
         const cardWidth = container.offsetWidth * 0.85;
@@ -125,10 +119,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         setActiveHeroIndex(index);
       }
     } else {
-      // 点击当前卡片
       if (isLocked) return;
-
-      // 🔥 使用 Context 更新全局状态
       updateSettings({ lastActiveCourseId: id });
 
       if (id === 'hiragana' || id === 'katakana') {
@@ -170,7 +161,6 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
             `}
             onClick={() => handleHeroClick(course.id, index, isLocked)}
           >
-            {/* ... 渲染内容保持不变 ... */}
             <div className={styles.heroDecor}>{course.char}</div>
 
             <div className={styles.heroTop}>

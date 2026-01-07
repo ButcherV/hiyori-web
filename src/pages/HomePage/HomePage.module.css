@@ -1,6 +1,3 @@
-/* src/pages/HomePage/HomePage.module.css */
-
-/* --- 基础容器 --- */
 .container {
   min-height: 100vh;
   background-color: var(--bg-app, #f2f2f7);
@@ -53,7 +50,7 @@
 }
 
 .holidayDate {
-  color: #ff3b30;
+  color: var(--color-primary);
 }
 
 .japaneseTitle {

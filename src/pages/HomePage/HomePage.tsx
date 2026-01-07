@@ -1,4 +1,3 @@
-// src/pages/HomePage/HomePage.tsx
 import { useState, useMemo } from 'react';
 import styles from './HomePage.module.css';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +31,7 @@ import {
   BookOpenText,
   Clock,
   CircleDollarSign,
-  ChevronRight, // ✅ 新增：引入箭头图标
+  ChevronRight,
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
 
@@ -41,16 +40,16 @@ export function HomePage() {
   const navigate = useNavigate();
 
   // --- 状态管理 ---
-  // 1. 假名选择弹窗
+  // 假名选择弹窗
   const [isSelectionOpen, setSelectionOpen] = useState(false);
   const [currentScript, setCurrentScript] = useState<ScriptType>('hiragana');
 
-  // 2. 专项练习弹窗
-  const [isNumbersOpen, setNumbersOpen] = useState(false);
-
-  // 3. Header 弹窗
+  // Header 弹窗
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isStatsOpen, setStatsOpen] = useState(false);
+
+  // 占位 - 专项练习弹窗
+  const [isNumbersOpen, setNumbersOpen] = useState(false);
 
   const { activityLog } = useProgress();
   const hasActivity = Object.values(activityLog).some((count) => count > 0);
@@ -140,7 +139,6 @@ export function HomePage() {
 
   // --- 事件处理 ---
 
-  // ✅ 处理从 HeroScroll 传来的点击
   const handleCourseClick = (script: ScriptType) => {
     setCurrentScript(script);
     setSelectionOpen(true);
@@ -203,7 +201,6 @@ export function HomePage() {
         </button>
       </div>
 
-      {/* ✅ 新增：Section Header */}
       <div className={styles.sectionHeader}>
         {t('home.drills.title') || 'Practice Drills'}
       </div>
