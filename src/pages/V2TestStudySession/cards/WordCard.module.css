@@ -7,9 +7,9 @@
 }
 
 .furigana {
-  font-size: 24px;
-  color: var(--color-Gray6);
-  font-weight: 500;
+  font-size: 32px;
+  color: var(--color-Blue);
+  font-weight: 800;
   letter-spacing: 2px;
   margin-bottom: -5px;
 }
@@ -40,10 +40,10 @@
 }
 
 .meaningText {
-  font-size: 16px;
+  font-size: 24px;
   color: var(--color-Gray6);
   margin-top: 8px;
-  font-weight: 400;
+  font-weight: 600;
   text-align: center;
 }
 

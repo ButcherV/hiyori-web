@@ -25,6 +25,12 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
   if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
     return (
       <div className={styles.container}>
+        <div className={styles.romajiSub}>{data.romaji}</div>
+
+        <div className={`${styles.bigChar} ${commonStyles.jaFont}`}>
+          {data.kana}
+        </div>
+
         {kanjiBackground && (
           <OriginBadge
             char={data.kana}
@@ -32,12 +38,6 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
             kanjiOrigin={data.kanaKanjiOrigin}
           />
         )}
-
-        <div className={`${styles.bigChar} ${commonStyles.jaFont}`}>
-          {data.kana}
-        </div>
-
-        <div className={styles.romajiSub}>{data.romaji}</div>
 
         {data.noteKey && (
           <div className={commonStyles.cardNoteLabel}>
@@ -56,6 +56,12 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
   if (data.kind === 'k-seion') {
     return (
       <div className={styles.container}>
+        <div className={styles.romajiSub}>{data.romaji}</div>
+
+        <div className={`${styles.bigChar} ${commonStyles.jaFont}`}>
+          {data.kana}
+        </div>
+
         {kanjiBackground && (
           <OriginBadge
             char={data.kana}
@@ -63,12 +69,6 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
             kanjiOrigin={data.kanaKanjiOrigin}
           />
         )}
-
-        <div className={`${styles.bigChar} ${commonStyles.jaFont}`}>
-          {data.kana}
-        </div>
-
-        <div className={styles.romajiSub}>{data.romaji}</div>
 
         {data.noteKey && (
           <div className={styles.cardNoteLabel}>
