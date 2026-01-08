@@ -115,7 +115,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'Time', zh: '时间', zhHant: '時間' },
     wordEmoji: '⏰',
     wordDistractors: ['しかん', 'ちかん', 'じがん'],
-    wordNoteKey: 'studyKana.wordNotes.hza',
+    noteKey: 'studyKana.notes.hji',
   }),
 
   ず: defineHDakuon({

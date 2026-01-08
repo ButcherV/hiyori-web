@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './BottomSheet.module.css';
 import { X } from 'lucide-react';
 
@@ -31,11 +32,12 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
   // 全局滚动锁定 (Body Scroll Lock)，同时锁死 html 和 body
   useEffect(() => {
     if (shouldRender) {
-      document.body.style.overflow = 'hidden';
+      // 锁死 body 会导致其他 sticky 的组件出问题
+      // document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
     } else {
       // 恢复
-      document.body.style.overflow = '';
+      // document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
     }
 
@@ -49,7 +51,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   const animationClass = isOpen ? '' : styles.closing;
 
-  return (
+  const content = (
     <div className={`${styles.overlay} ${animationClass}`} onClick={onClose}>
       <div
         className={`${styles.content} ${animationClass}`}
@@ -65,6 +67,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       </div>
     </div>
   );
+  return createPortal(content, document.body);
 };
 
 export default BottomSheet;
