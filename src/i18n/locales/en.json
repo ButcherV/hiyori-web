@@ -8,10 +8,10 @@
     "history": "History"
   },
   "home": {
-    "common": {
-      "goodMorning": "Morning!",
-      "goodAfternoon": "Afternoon!",
-      "goodEvening": "Evening!"
+    "greeting": {
+      "morning": "Morning!",
+      "afternoon": "Afternoon!",
+      "evening": "Evening!"
     },
     "hero": {
       "current_session": "CURRENT SESSION",

@@ -57,7 +57,7 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
     ? data.wordMeaning[targetKey] || data.wordMeaning.en
     : '';
 
-  if (data.kind === 'h-seion') {
+  if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
     const renderMainContent = () => {
       // 场景 A: 汉字背景开启
       if (kanjiBackground) {
@@ -99,6 +99,12 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         {renderMainContent()}
         <div className={styles.romajiBottom}>{data.wordRomaji}</div>
         <div className={styles.meaningText}>{meaningText}</div>
+        {data.wordNoteKey && (
+          <div className={commonStyles.cardNoteLabel}>
+            <Lightbulb size={14} className={commonStyles.noteIcon} />
+            <span>{t(data.wordNoteKey)}</span>
+          </div>
+        )}
         <div className={commonStyles.speakerBtn} onClick={handlePlay}>
           <Volume2 />
         </div>

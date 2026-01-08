@@ -48,6 +48,7 @@ export interface HiraganaSeion {
   // 片假名的校验目标是 word
   wordDistractors?: readonly string[];
   noteKey?: string;
+  wordNoteKey?: string;
 }
 
 export interface KatakanaSeion {
@@ -72,7 +73,26 @@ export interface KatakanaSeion {
   wordNoteKey?: string;
 }
 
-export type AnyKanaData = HiraganaSeion | KatakanaSeion;
+// --- 🔥 [新增] 平假名浊音 (Dakuon) ---
+export interface HiraganaDakuon {
+  kind: 'h-dakuon'; // 唯一标识
+  id: string;
+  kana: string;
+  romaji: string;
+  kanaKanjiOrigin: string;
+  kanaDistractors: readonly string[];
+  romajiDistractors: readonly string[];
+  word?: string;
+  wordKana?: string;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordDistractors?: readonly string[];
+  noteKey?: string;
+  wordNoteKey?: string;
+}
+
+export type AnyKanaData = HiraganaSeion | KatakanaSeion | HiraganaDakuon;
 
 // ==========================================
 // 3. 构造工厂
@@ -103,6 +123,7 @@ export const defineHSeion = <
     ? PreciseValidator<WD, WK>
     : readonly string[];
   noteKey?: string;
+  wordNoteKey?: string;
 }): HiraganaSeion => {
   return {
     kind: 'h-seion',
@@ -148,6 +169,41 @@ export const defineKSeion = <
 }): KatakanaSeion => {
   return {
     kind: 'k-seion',
+    ...data,
+    kanaDistractors: data.kanaDistractors as unknown as readonly string[],
+    romajiDistractors: data.romajiDistractors as unknown as readonly string[],
+    wordDistractors: data.wordDistractors as unknown as readonly string[],
+  };
+};
+
+export const defineHDakuon = <
+  K extends string,
+  R extends string,
+  W extends string | undefined = undefined,
+  WK extends string | undefined = undefined,
+  KD extends readonly string[] = [],
+  RD extends readonly string[] = [],
+  WD extends readonly string[] = [],
+>(data: {
+  id: string;
+  kana: K;
+  kanaKanjiOrigin: string;
+  kanaDistractors: PreciseValidator<KD, K>;
+  romaji: R;
+  romajiDistractors: PreciseValidator<RD, R>;
+  word?: W;
+  wordKana?: WK;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordDistractors?: WK extends string
+    ? PreciseValidator<WD, WK>
+    : readonly string[];
+  noteKey?: string;
+  wordNoteKey?: string;
+}): HiraganaDakuon => {
+  return {
+    kind: 'h-dakuon',
     ...data,
     kanaDistractors: data.kanaDistractors as unknown as readonly string[],
     romajiDistractors: data.romajiDistractors as unknown as readonly string[],

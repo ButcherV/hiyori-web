@@ -22,7 +22,7 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
     onPlaySound(data.kana);
   };
 
-  if (data.kind === 'h-seion') {
+  if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
     return (
       <div className={styles.container}>
         {kanjiBackground && (

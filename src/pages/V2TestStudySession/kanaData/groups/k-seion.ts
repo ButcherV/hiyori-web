@@ -84,9 +84,9 @@
 // イクラ	Ikura	三文鱼籽	🇷🇺 俄语	Ikra	Salmon roe
 // ノルマ	Noruma	定额/任务指标	🇷🇺 俄语	Norma	Quota
 
-import { defineKSeion, type AnyKanaData } from '../core';
+import { defineKSeion, type KatakanaSeion } from '../core';
 
-export const KATAKANA_SEION: Record<string, AnyKanaData> = {
+export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
   // --- A 行 (片假名) ---
   ア: defineKSeion({
     id: 'k-a',

@@ -87,7 +87,7 @@ const createQuizGroup = (
     distractors = data.kanaDistractors;
   } else if (quizType === 'WORD') {
     if (!data.word) return [];
-    if (data.kind === 'h-seion') {
+    if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
       if (!data.wordKana || !data.wordDistractors) return [];
       // 题目逻辑：用户看着汉字，选读音
       title = data.word;
@@ -148,9 +148,9 @@ const createQuizGroup = (
 // ==========================================
 
 /**
- * 策略 A: 平假名清音排课逻辑
+ * 策略 A: 平假名清音、平假名浊音 - 排课逻辑
  */
-const generateHiraganaSeionFlow = (
+const generateHiraganaFlow = (
   data: AnyKanaData
 ): {
   learn: LessonCard[];
@@ -282,8 +282,9 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
     });
 
     switch (data.kind) {
-      case 'h-seion': {
-        const { learn, quizGroups } = generateHiraganaSeionFlow(data);
+      case 'h-seion':
+      case 'h-dakuon': {
+        const { learn, quizGroups } = generateHiraganaFlow(data);
         allLearn.push(...learn);
         allQuizGroups.push(...quizGroups); // 保持组的完整性，不要拆开
         break;

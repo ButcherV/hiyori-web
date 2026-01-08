@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  margin-right: 16px;
+}
+
+.greetingBox {
+  height: 48px; /* 必须给高度，因为里面的文字absolute了，撑不开盒子 */
+  position: relative; /* 必须有这个，作为定位基准 */
+  display: flex;
+  align-items: center;
+}
+
+.dateBox {
+  height: 20px;
+  position: relative;
+  /* margin-top: 4px; */
+}
+
+.jpFont {
+  font-family: var(--font-ja, 'Hiragino Sans', sans-serif);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-primary, #1c1c1e);
+  white-space: nowrap;
+}
+
+.enFont {
+  font-family: 'Arial Black', 'Roboto', sans-serif; /* 英文专用超粗字体 */
+  font-size: 34px; /* 英文通常稍微大一点点 */
+  font-weight: 900;
+  letter-spacing: -1px; /* 英文太粗时稍微挤一点更好看 */
+  color: var(--text-primary, #1c1c1e);
+  white-space: nowrap;
+}
+
+.zhFont {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-primary, #1c1c1e);
+  white-space: nowrap;
+  letter-spacing: 2px; /* 描边后字变胖，拉开间距 */
+}
+
+.dateText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8e8e93;
+  letter-spacing: 0.5px;
+}
+
+.jpFontSmall {
+  font-family: var(--font-ja);
+}
+
+.holiday {
+  color: var(--color-primary, #ff3b30); /* 或是你定义的红色变量 */
+}

@@ -7,17 +7,11 @@ import BottomSheet from '../../components/BottomSheet';
 import LessonMenu from '../../components/LessonMenu';
 import AppSettingsMenu from '../../components/AppSettingsMenu';
 import { StatsHeatmap } from '../../components/StatsHeatmap';
+import { GreetingHeader } from './GreetingHeader';
 
 import { HeroScroll } from './HeroScroll';
 
 import type { ScriptType } from '../../components/LessonMenu';
-import {
-  getJapaneseGreeting,
-  getJapaneseDateStr,
-  getJapaneseWeekday,
-  getJapaneseHoliday,
-  isRedDay,
-} from '../../utils/dateHelper';
 
 import {
   Hash,
@@ -53,16 +47,6 @@ export function HomePage() {
 
   const { activityLog } = useProgress();
   const hasActivity = Object.values(activityLog).some((count) => count > 0);
-
-  // Header 数据计算
-  const headerData = useMemo(() => {
-    const now = new Date();
-    const isRed = isRedDay(now);
-    let fullDateText = `${getJapaneseDateStr(now)} ${getJapaneseWeekday(now)}`;
-    const holiday = getJapaneseHoliday(now);
-    if (holiday) fullDateText += ` · ${holiday}`;
-    return { greeting: getJapaneseGreeting(now), fullDateText, isRed };
-  }, []);
 
   const drills = [
     {
@@ -163,14 +147,7 @@ export function HomePage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div className={styles.headerText}>
-          <div className={styles.japaneseTitle}>{headerData.greeting}</div>
-          <div
-            className={`${styles.date} ${headerData.isRed ? styles.holidayDate : ''}`}
-          >
-            {headerData.fullDateText}
-          </div>
-        </div>
+        <GreetingHeader />
         <div className={styles.headerActions}>
           {hasActivity && (
             <button

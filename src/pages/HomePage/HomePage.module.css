@@ -3,9 +3,7 @@
   background-color: var(--bg-app, #f2f2f7);
   padding-bottom: 40px;
   /* 适配刘海屏 Header 高度 */
-  padding-top: calc(env(safe-area-inset-top) + 94px);
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding-top: calc(env(safe-area-inset-top) + var(--header-height));
   color: var(--text-primary, #1c1c1e);
 }
 
@@ -30,6 +28,7 @@
   padding: 24px 16px 8px 16px;
   padding-top: calc(env(safe-area-inset-top) + 24px);
   margin-bottom: 0;
+  height: var(--header-height);
 }
 
 .headerText {

@@ -1,6 +1,6 @@
-import { defineHSeion, type AnyKanaData } from '../core';
+import { defineHSeion, type HiraganaSeion } from '../core';
 
-export const HIRAGANA_SEION: Record<string, AnyKanaData> = {
+export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
   // --- A 行 ---
   あ: defineHSeion({
     id: 'h-a',
