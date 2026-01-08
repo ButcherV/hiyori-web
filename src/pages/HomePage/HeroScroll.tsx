@@ -64,7 +64,8 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         char: 'あ',
         colorClass: 'hiragana',
         progressVal: hiraganaProgress,
-        title: t('home.hero.hiragana_title'),
+        title: t('home.hero.hiragana.title'),
+        subTitle: t('home.hero.hiragana.subtitle'),
         status: getStatus(hiraganaProgress, false),
       },
       {
@@ -72,7 +73,8 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         char: 'サ',
         colorClass: 'katakana',
         progressVal: katakanaProgress,
-        title: t('home.hero.katakana_title'),
+        title: t('home.hero.katakana.title'),
+        subTitle: t('home.hero.katakana.subtitle'),
         status: getStatus(katakanaProgress, false),
       },
       {
@@ -80,7 +82,8 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         char: '漢',
         colorClass: 'kanji',
         progressVal: 0,
-        title: t('home.hero.kanji_title'),
+        title: t('home.hero.kanji.title'),
+        subTitle: t('home.hero.kanji.subtitle'),
         status: getStatus(0, isKanjiLocked),
       },
     ];
@@ -156,7 +159,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
             className={`
               ${styles.heroCard} 
               ${styles[course.colorClass]} 
-              ${!isActive ? styles.heroCardInactive : styles.heroCardActive} 
+              ${!isActive ? styles.heroCardInactive : ''} 
               ${isLocked ? styles.heroCardLocked : ''}
             `}
             onClick={() => handleHeroClick(course.id, index, isLocked)}
@@ -169,6 +172,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
                 <span>{course.status.label}</span>
               </div>
               <div className={styles.heroTitle}>{course.title}</div>
+              <div className={styles.heroSubTitle}>{course.subTitle}</div>
             </div>
 
             <div

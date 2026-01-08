@@ -20,11 +20,18 @@
       "evening": "晚上好！"
     },
     "hero": {
-      "current_session": "当前课程",
-      "next_milestone": "下一里程碑",
-      "hiragana_title": "平假名\n基础入门",
-      "katakana_title": "片假名\n进阶掌握",
-      "kanji_title": "汉字\n进阶掌握"
+      "hiragana": {
+        "title": "平假名",
+        "subtitle": "日语基石"
+      },
+      "katakana": {
+        "title": "片假名",
+        "subtitle": "舶来拓展"
+      },
+      "kanji": {
+        "title": "汉字",
+        "subtitle": "语义启蒙"
+      }
     },
     "drills": {
       "title": "快速练习",

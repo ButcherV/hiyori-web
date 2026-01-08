@@ -10,7 +10,17 @@ export interface LocalizedText {
 }
 
 export interface WordOrigin {
-  lang: 'en' | 'de' | 'fr' | 'pt' | 'nl' | 'it' | 'ja' | 'sv' | 'other'; // 语言代码
+  lang:
+    | 'en-US'
+    | 'en-GB'
+    | 'de'
+    | 'fr'
+    | 'pt'
+    | 'nl'
+    | 'it'
+    | 'ja'
+    | 'sv'
+    | 'other'; // 语言代码
   word: string; // 原词写法 (例如 "Arbeit", "Pão")
   desc?: string; // 备注 (可选，例如 "和制英语", "拟声词")
 }

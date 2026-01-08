@@ -16,9 +16,18 @@
     "hero": {
       "current_session": "CURRENT SESSION",
       "next_milestone": "NEXT MILESTONE",
-      "hiragana_title": "Hiragana\nBasics",
-      "katakana_title": "Katakana\nMastery",
-      "kanji_title": "Kanji\nMaster"
+      "hiragana": {
+        "title": "Hiragana",
+        "subtitle": "The Cornerstone"
+      },
+      "katakana": {
+        "title": "Katakana",
+        "subtitle": "Loanword Expansion"
+      },
+      "kanji": {
+        "title": "Kanji",
+        "subtitle": "Semantic Primer"
+      }
     },
     "drills": {
       "title": "Quick Drills",

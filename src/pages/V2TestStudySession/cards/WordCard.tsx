@@ -25,8 +25,10 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
 
   const getOriginBadge = (origin: WordOrigin) => {
     switch (origin.lang) {
-      case 'en':
-        return { icon: '🇺🇸', label: 'English' };
+      case 'en-US':
+        return { icon: '🇺🇸', label: 'English(US)' };
+      case 'en-GB':
+        return { icon: '🇬🇧', label: 'English(UK)' };
       case 'de':
         return { icon: '🇩🇪', label: 'German' };
       case 'fr':

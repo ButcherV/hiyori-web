@@ -101,7 +101,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     word: 'アメリカ', // 包含该片假名的单词。要求是知名词汇，比如品牌名、人名、地名、国名、等等。必须是名词，尽可能知名，在保证知名的前提下，总发音尽量少、发音中未学假名的数量尽量少。总体需符合日语入门人群的水平。
     wordRomaji: 'a·me·ri·ka',
     wordOrigin: {
-      lang: 'en', // 如果是舶来词，就著名是什么国家。如果是日语词，就著名日语。
+      lang: 'en-US', // 如果是舶来词，就著名是什么国家。如果是日语词，就著名日语。
       word: 'America', // 如果是舶来词，就写原词写法 (例如 "Arbeit", "Pão")。
       desc: '', // 备注 (可选，例如 "和制英语", "拟声词")
     },
@@ -144,7 +144,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     word: 'ウール', // Wool (羊毛)。常见的衣服材质标签。
     wordRomaji: 'u·u·ru', // 长音
     wordOrigin: {
-      lang: 'en',
+      lang: 'en-GB',
       word: 'Wool',
       desc: '',
     },
@@ -166,7 +166,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     word: 'エアコン', // 空调 (Air Conditioner 的缩写)。
     wordRomaji: 'e·a·ko·n',
     wordOrigin: {
-      lang: 'en', // 和制英语 (Wasei-Eigo)
+      lang: 'en-US', // 和制英语 (Wasei-Eigo)
       word: 'Air Conditioner',
       // desc: 'Wasei-Eigo (缩略语)',
     },

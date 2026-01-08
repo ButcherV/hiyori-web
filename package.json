@@ -16,6 +16,7 @@
     "@capacitor/haptics": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
     "@capacitor/toast": "^8.0.0",
+    "@fontsource/noto-sans-sc": "^5.2.8",
     "@ionic/pwa-elements": "^3.3.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",

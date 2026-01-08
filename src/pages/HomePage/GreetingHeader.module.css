@@ -4,6 +4,7 @@
   flex: 1;
   min-width: 0;
   margin-right: 16px;
+  /* background-color: green; */
 }
 
 .greetingBox {
@@ -11,6 +12,7 @@
   position: relative; /* 必须有这个，作为定位基准 */
   display: flex;
   align-items: center;
+  margin-left: -2px;
 }
 
 .dateBox {
@@ -28,24 +30,27 @@
 }
 
 .enFont {
-  font-family: 'Arial Black', 'Roboto', sans-serif; /* 英文专用超粗字体 */
   font-size: 34px; /* 英文通常稍微大一点点 */
   font-weight: 900;
-  letter-spacing: -1px; /* 英文太粗时稍微挤一点更好看 */
+  letter-spacing: -1px;
   color: var(--text-primary, #1c1c1e);
   white-space: nowrap;
 }
 
 .zhFont {
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 32px;
   color: var(--text-primary, #1c1c1e);
   white-space: nowrap;
-  letter-spacing: 2px; /* 描边后字变胖，拉开间距 */
+  /* pingfang 字体没有粗体版本。最大 600
+  视觉上加粗。 */
+  -webkit-text-stroke: 2px currentColor;
+
+  /* 描边会把字撑大，稍微增加一点字间距 */
+  letter-spacing: 1px;
 }
 
 .dateText {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #8e8e93;
   letter-spacing: 0.5px;
