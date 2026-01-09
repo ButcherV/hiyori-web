@@ -1,4 +1,8 @@
-import { KANA_DB, type AnyKanaData, type LocalizedText } from './kanaData';
+import {
+  KANA_DB,
+  type AnyKanaData,
+  type LocalizedText,
+} from '../../datas/kanaData';
 
 // ==========================================
 // 1. 卡片类型定义

@@ -34,7 +34,7 @@ import {
   type SessionStats,
   type LessonCard,
 } from './lessonLogic';
-import type { LocalizedText } from './kanaData';
+import type { LocalizedText } from '../../datas/kanaData';
 
 import styles from './TestStudySession.module.css';
 

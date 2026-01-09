@@ -13,7 +13,7 @@ import {
   type LessonItem,
   type LessonCategory,
   type LessonStatus,
-} from '../../datas/kanaData';
+} from '../../datas/kanaDataCategory';
 
 import { useProgress } from '../../context/ProgressContext';
 

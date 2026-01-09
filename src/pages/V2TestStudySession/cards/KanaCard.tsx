@@ -3,7 +3,7 @@ import { Volume2, Lightbulb } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { OriginBadge } from '../../../components/OriginBadge';
 import { useSettings } from '../../../context/SettingsContext';
-import type { AnyKanaData } from '../kanaData';
+import type { AnyKanaData } from '../../../datas/kanaData';
 
 import styles from './KanaCard.module.css';
 import commonStyles from '../TestStudySession.module.css';

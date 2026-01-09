@@ -169,7 +169,6 @@ export function HomePage() {
         </div>
       </header>
 
-      {/* HeroScroll 组件 */}
       <HeroScroll onCourseClick={handleCourseClick} />
 
       <div className={styles.testBtnContainer}>

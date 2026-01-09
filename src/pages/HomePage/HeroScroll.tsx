@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './HeroScroll.module.css';
-import { HIRAGANA_DATA, KATAKANA_DATA } from '../../datas/kanaData';
+import { HIRAGANA_DATA, KATAKANA_DATA } from '../../datas/kanaDataCategory';
 import { useProgress } from '../../context/ProgressContext';
 import { useSettings } from '../../context/SettingsContext';
 import type { ScriptType } from '../../components/LessonMenu';

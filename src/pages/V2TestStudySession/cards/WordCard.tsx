@@ -2,8 +2,8 @@ import React from 'react';
 import { Volume2, Lightbulb } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../../context/SettingsContext';
-import type { AnyKanaData } from '../kanaData';
-import type { WordOrigin } from '../kanaData/core';
+import type { AnyKanaData } from '../../../datas/kanaData';
+import type { WordOrigin } from '../../../datas/kanaData/core';
 import styles from './WordCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
 

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Check, Play, ChevronRight } from 'lucide-react';
 import styles from './LessonMenu.module.css';
-import { type LessonItem, type LessonStatus } from '../../datas/kanaData';
+import {
+  type LessonItem,
+  type LessonStatus,
+} from '../../datas/kanaDataCategory';
 
 interface MenuRowProps {
   item: LessonItem;
