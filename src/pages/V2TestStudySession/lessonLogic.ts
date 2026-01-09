@@ -87,7 +87,11 @@ const createQuizGroup = (
     distractors = data.kanaDistractors;
   } else if (quizType === 'WORD') {
     if (!data.word) return [];
-    if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
+    if (
+      data.kind === 'h-seion' ||
+      data.kind === 'h-dakuon' ||
+      data.kind === 'h-yoon'
+    ) {
       if (!data.wordKana || !data.wordDistractors) return [];
       // 题目逻辑：用户看着汉字，选读音
       title = data.word;
@@ -149,6 +153,7 @@ const createQuizGroup = (
 
 /**
  * 策略 A: 平假名清音、平假名浊音 - 排课逻辑
+ * 逻辑：认脸 -> 单词 -> 描红 -> 测验
  */
 const generateHiraganaFlow = (
   data: AnyKanaData
@@ -254,6 +259,53 @@ const generateKatakanaSeionFlow = (
   return { learn, quizGroups };
 };
 
+/**
+ * 策略 C: 平假名拗音排课策略 (无描红)
+ * 逻辑：认脸 -> 单词 -> 测验
+ */
+const generateHiraganaYoonFlow = (
+  data: AnyKanaData
+): {
+  learn: LessonCard[];
+  quizGroups: LessonCard[][];
+} => {
+  const learn: LessonCard[] = [];
+  const quizGroups: LessonCard[][] = [];
+
+  // 1. 认脸
+  learn.push({
+    uniqueId: `learn-kana-${data.id}`,
+    type: 'KANA_LEARN',
+    data,
+    headerTitle: 'studyKana.session.newKana',
+    isOriginal: true,
+  });
+
+  // 2. 单词 (拗音通常都有单词)
+  if (data.word) {
+    learn.push({
+      uniqueId: `learn-word-${data.id}`,
+      type: 'WORD_LEARN',
+      data,
+      headerTitle: 'studyKana.session.wordContext',
+      isOriginal: true,
+    });
+  }
+
+  // ❌ 3. 描红：跳过！
+  // 因为 KanjiSVG 没有对应的数据
+
+  // 4. 测验
+  quizGroups.push(createQuizGroup(data, 'ROMAJI', true));
+  quizGroups.push(createQuizGroup(data, 'KANA', true));
+
+  if (data.word) {
+    quizGroups.push(createQuizGroup(data, 'WORD', true));
+  }
+
+  return { learn, quizGroups };
+};
+
 // ==========================================
 // 4. 主流程生成器
 // ==========================================
@@ -266,7 +318,6 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
   if (validData.length === 0) return [];
 
   const allLearn: LessonCard[] = [];
-  // 🔥 核心改变 2：这里存放的是“题组列表”，类型是 Array<Array<LessonCard>>
   const allQuizGroups: LessonCard[][] = [];
   const reviewItems: ReviewItem[] = [];
 
@@ -287,6 +338,12 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
         const { learn, quizGroups } = generateHiraganaFlow(data);
         allLearn.push(...learn);
         allQuizGroups.push(...quizGroups); // 保持组的完整性，不要拆开
+        break;
+      }
+      case 'h-yoon': {
+        const { learn, quizGroups } = generateHiraganaYoonFlow(data);
+        allLearn.push(...learn);
+        allQuizGroups.push(...quizGroups);
         break;
       }
       case 'k-seion': {

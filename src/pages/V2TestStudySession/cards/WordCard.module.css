@@ -12,15 +12,19 @@
   font-weight: 800;
   letter-spacing: 2px;
   margin-bottom: -5px;
+  /* 开启比例宽度替代，自动消除拗音间距 */
+  font-feature-settings: 'palt';
 }
 
 .kanjiMain {
-  font-size: 72px;
+  font-size: 56px;
   font-weight: 800;
   color: var(--color-Gray9);
   line-height: 1.1;
   margin: 5px 0;
   text-align: center;
+  /* 开启比例宽度替代，自动消除拗音间距 */
+  font-feature-settings: 'palt';
 }
 
 .kanjiMainSmall {
@@ -30,6 +34,8 @@
   line-height: 1.1;
   margin: 5px 0;
   text-align: center;
+  /* 开启比例宽度替代，自动消除拗音间距 */
+  font-feature-settings: 'palt';
 }
 
 .romajiBottom {

@@ -53,6 +53,29 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
     );
   }
 
+  if (data.kind === 'h-yoon') {
+    return (
+      <div className={styles.container}>
+        <div className={styles.romajiSub}>{data.romaji}</div>
+
+        <div className={`${styles.midChar} ${commonStyles.jaFont}`}>
+          {data.kana}
+        </div>
+
+        {data.noteKey && (
+          <div className={styles.cardNoteLabel}>
+            <Lightbulb size={14} className={styles.noteIcon} />
+            <span>{t(data.noteKey)}</span>
+          </div>
+        )}
+
+        <div className={commonStyles.speakerBtn} onClick={handlePlay}>
+          <Volume2 />
+        </div>
+      </div>
+    );
+  }
+
   if (data.kind === 'k-seion') {
     return (
       <div className={styles.container}>

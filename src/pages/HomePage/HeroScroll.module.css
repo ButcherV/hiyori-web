@@ -67,9 +67,9 @@
 
 .heroDecor {
   position: absolute;
-  bottom: -64px;
-  right: -8px;
-  font-size: 184px;
+  bottom: -40px;
+  right: 0px;
+  font-size: 160px;
   font-weight: 900;
   opacity: 0.1;
   pointer-events: none;
@@ -91,12 +91,12 @@
   /* 动画设置 */
   transition:
     opacity 0.3s ease,
-    transform 1s cubic-bezier(0.34, 1.56, 0.64, 1); /* 贝塞尔曲线让旋转带一点弹性和惯性，更有立体感 */
-  /* transform 1s
-      cubic-bezier(0.34, 2.5, 0.64, 1); */
+    transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 贝塞尔曲线让旋转带一点弹性和惯性，更有立体感 */ /* transform 1s
+      cubic-bezier(0.34, 2.5, 0.64, 1);  */
 
-  /* ⭐️ 核心：延迟 0.3s 执行。等卡片滑过来停稳了，文字再“转”过来 */
-  transition-delay: 0.3s;
+  /* ⭐️ 核心：延迟执行。等卡片滑过来停稳了，文字再“转”过来 */
+  transition-delay: 0.18s;
 }
 
 .heroCardInactive .heroDecor {
@@ -104,7 +104,7 @@
 
   /* 初始态：没选中的时候是什么角度 (比如向右偏 20度，形成反差) */
   /* 当卡片变成 Active 时，就会从这个 20deg 转到上面的 -10deg */
-  transform: perspective(400px) rotateX(20deg) rotateY(8deg);
+  transform: perspective(400px) rotateX(20deg) rotateY(32deg);
 
   /* 离开选中状态时，立刻复位，不要延迟 */
   transition-delay: 0s;

@@ -121,6 +121,8 @@
 .jaFont {
   font-family: var(--font-family-ja), sans-serif;
   font-weight: 800;
+  /* 开启比例宽度替代，自动消除拗音间距 */
+  font-feature-settings: 'palt';
 }
 
 /* 喇叭按钮 */

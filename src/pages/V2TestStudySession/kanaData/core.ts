@@ -83,7 +83,7 @@ export interface KatakanaSeion {
   wordNoteKey?: string;
 }
 
-// --- 🔥 [新增] 平假名浊音 (Dakuon) ---
+// --- 平假名浊音 (Dakuon) ---
 export interface HiraganaDakuon {
   kind: 'h-dakuon'; // 唯一标识
   id: string;
@@ -102,7 +102,33 @@ export interface HiraganaDakuon {
   wordNoteKey?: string;
 }
 
-export type AnyKanaData = HiraganaSeion | KatakanaSeion | HiraganaDakuon;
+export interface HiraganaYoon {
+  kind: 'h-yoon'; // 唯一标识
+  id: string;
+  kana: string; // 例如 "きゃ"
+  romaji: string; // 例如 "kya"
+  kanaKanjiOrigin: string; // 例如 "From き + small や"
+  kanaDistractors: readonly string[];
+  romajiDistractors: readonly string[];
+
+  word?: string;
+  wordKana?: string;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+
+  // 校验目标是 wordKana
+  wordDistractors?: readonly string[];
+
+  noteKey?: string;
+  wordNoteKey?: string;
+}
+
+export type AnyKanaData =
+  | HiraganaSeion
+  | KatakanaSeion
+  | HiraganaDakuon
+  | HiraganaYoon;
 
 // ==========================================
 // 3. 构造工厂
@@ -214,6 +240,42 @@ export const defineHDakuon = <
 }): HiraganaDakuon => {
   return {
     kind: 'h-dakuon',
+    ...data,
+    kanaDistractors: data.kanaDistractors as unknown as readonly string[],
+    romajiDistractors: data.romajiDistractors as unknown as readonly string[],
+    wordDistractors: data.wordDistractors as unknown as readonly string[],
+  };
+};
+
+export const defineHYoon = <
+  K extends string,
+  R extends string,
+  W extends string | undefined = undefined,
+  WK extends string | undefined = undefined,
+  KD extends readonly string[] = [],
+  RD extends readonly string[] = [],
+  WD extends readonly string[] = [],
+>(data: {
+  id: string;
+  kana: K;
+  kanaKanjiOrigin: string;
+  kanaDistractors: PreciseValidator<KD, K>;
+  romaji: R;
+  romajiDistractors: PreciseValidator<RD, R>;
+  word?: W;
+  wordKana?: WK;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  // 校验目标是 wordKana
+  wordDistractors?: WK extends string
+    ? PreciseValidator<WD, WK>
+    : readonly string[];
+  noteKey?: string;
+  wordNoteKey?: string;
+}): HiraganaYoon => {
+  return {
+    kind: 'h-yoon',
     ...data,
     kanaDistractors: data.kanaDistractors as unknown as readonly string[],
     romajiDistractors: data.romajiDistractors as unknown as readonly string[],

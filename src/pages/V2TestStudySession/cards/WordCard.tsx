@@ -59,7 +59,11 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
     ? data.wordMeaning[targetKey] || data.wordMeaning.en
     : '';
 
-  if (data.kind === 'h-seion' || data.kind === 'h-dakuon') {
+  if (
+    data.kind === 'h-seion' ||
+    data.kind === 'h-dakuon' ||
+    data.kind === 'h-yoon'
+  ) {
     const renderMainContent = () => {
       // 场景 A: 汉字背景开启
       if (kanjiBackground) {
@@ -88,12 +92,12 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         );
       }
 
-      // B2. 纯假名
-      return (
-        <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
-          {data.wordKana}
-        </div>
-      );
+      // // B2. 纯假名
+      // return (
+      //   <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
+      //     {data.wordKana}
+      //   </div>
+      // );
     };
 
     return (
@@ -124,7 +128,6 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
               <span className={styles.originLabel}>
                 {t('borrowedWords.origin')}
               </span>
-              {/* 加一个竖线分割，可选 */}
               <div className={styles.divider} />
               <div className={styles.originContent}>
                 {badge && <span className={styles.flag}>{badge.icon}</span>}

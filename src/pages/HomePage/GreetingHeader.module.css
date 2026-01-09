@@ -43,7 +43,7 @@
   white-space: nowrap;
   /* pingfang 字体没有粗体版本。最大 600
   视觉上加粗。 */
-  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-stroke: 1.6px currentColor;
 
   /* 描边会把字撑大，稍微增加一点字间距 */
   letter-spacing: 1px;
