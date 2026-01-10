@@ -7,12 +7,14 @@
 }
 
 /* --- 顶部导航栏 (Page Sticky Header) --- */
+
 .stickyHeader {
   padding-top: calc(env(safe-area-inset-top) + 24px);
-  background-color: #fff;
   position: sticky;
   top: 0;
   z-index: 20;
+  background-color: var(--color-bg);
+  height: 150px;
 }
 
 .stickyHeaderCol {

@@ -1,7 +1,7 @@
 // src/pages/KanaDictionary/index.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, CircleX } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { KanaTable } from './KanaTable';
 import {
   SEION_ROWS,

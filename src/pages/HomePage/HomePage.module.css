@@ -53,7 +53,7 @@
   font-weight: 600;
   color: #8e8e93;
   letter-spacing: 0.5px;
-  font-family: var(-font-family-ja);
+  font-family: var(--font-family-ja);
   transition: color 0.2s;
 }
 
@@ -68,8 +68,9 @@
   letter-spacing: -0.5px;
   color: var(--text-primary, #1c1c1e);
   line-height: 1.1;
+  font-feature-settings: 'palt';
   font-family: var(
-    -font-family-ja,
+    --font-family-ja,
     'Hiragino Sans',
     'Hiragino Kaku Gothic ProN',
     'Noto Sans JP',

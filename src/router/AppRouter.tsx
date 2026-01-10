@@ -13,13 +13,13 @@ export const AppRouter = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence initial={false}>
       <Routes location={location} key={location.pathname}>
         {/* 首页 */}
         <Route
           path="/"
           element={
-            <PageTransition>
+            <PageTransition isHome={true}>
               <HomePage />
             </PageTransition>
           }
