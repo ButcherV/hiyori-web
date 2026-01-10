@@ -19,7 +19,7 @@ export const AppRouter = () => {
         <Route
           path="/"
           element={
-            <PageTransition isHome={true}>
+            <PageTransition preset="home">
               <HomePage />
             </PageTransition>
           }
@@ -28,7 +28,7 @@ export const AppRouter = () => {
         <Route
           path="/study/kana/:courseId"
           element={
-            <PageTransition>
+            <PageTransition preset="scale">
               <TestStudySession />
             </PageTransition>
           }
@@ -37,16 +37,7 @@ export const AppRouter = () => {
         <Route
           path="/study/dates"
           element={
-            <PageTransition>
-              <DatesPage />
-            </PageTransition>
-          }
-        />
-
-        <Route
-          path="/study/dates"
-          element={
-            <PageTransition>
+            <PageTransition preset="slide">
               <DatesPage />
             </PageTransition>
           }
@@ -55,7 +46,7 @@ export const AppRouter = () => {
         <Route
           path="/kana-dictionary"
           element={
-            <PageTransition>
+            <PageTransition preset="slide">
               <KanaDictionaryPage />
             </PageTransition>
           }
