@@ -1,0 +1,84 @@
+/* src/pages/KanaDictAndQuiz/PageQuizSelection/KanaQuizSelectionPage.module.css */
+
+.resetBtn {
+  font-size: 14px;
+  color: #007aff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* 底部悬浮栏容器 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 100; /* 保证在最上层 */
+
+  /* 阴影让它浮起来 */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.footerContent {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  max-width: 600px; /* 和 KanaTable 保持一致的宽限 */
+  margin: 0 auto;
+}
+
+.counterInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.countNumber {
+  font-size: 24px;
+  font-weight: 700;
+  color: #007aff;
+  font-variant-numeric: tabular-nums;
+}
+
+.countLabel {
+  font-size: 13px;
+  color: #8e8e93;
+  font-weight: 500;
+}
+
+.startBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007aff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
+}
+
+.startBtn:disabled {
+  background-color: #e5e5ea;
+  color: #aeaeb2;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.startBtn:active:not(:disabled) {
+  transform: scale(0.96);
+  opacity: 0.9;
+}

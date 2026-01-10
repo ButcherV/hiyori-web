@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { HomePage } from '../pages/HomePage/HomePage';
 import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { KanaDictionaryPage } from '../pages/KanaDictAndQuiz/PageKanaDictionary/KanaDictionaryPage';
+import { KanaQuizSelectionPage } from '../pages/KanaDictAndQuiz/PageKanaQuiz/KanaQuizSelectionPage';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
@@ -48,6 +49,16 @@ export const AppRouter = () => {
             <PageTransition preset="slide">
               {/* <KanaDictionaryPage /> */}
               <KanaDictionaryPage />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/random-test/setup"
+          element={
+            <PageTransition preset="slide">
+              {/* <KanaDictionaryPage /> */}
+              <KanaQuizSelectionPage />
             </PageTransition>
           }
         />

@@ -151,3 +151,15 @@
     aspect-ratio: 2.4/1.6;
   }
 }
+
+/* 选中态 */
+.selectedCell {
+  background-color: #007aff;
+  transform: scale(0.96);
+
+  .mainChar,
+  .romaji,
+  .subChar {
+    color: white;
+  }
+}
