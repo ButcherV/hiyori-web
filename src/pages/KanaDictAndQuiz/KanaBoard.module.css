@@ -90,12 +90,13 @@
   letter-spacing: 0.5px;
   font-weight: 600;
   width: 100%;
-  position: sticky;
+  /* position: sticky;
   left: 0;
-  right: 0;
+  right: 0; */
   text-align: center;
   z-index: 15;
   height: var(--section-header-height);
   background-color: var(--color-bg);
-  top: calc(env(safe-area-inset-top) + var(--header-height) - 1px);
+  /* top: calc(env(safe-area-inset-top) + var(--header-height) - 2px); */
+  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，在浏览器端是正常的。打包进 IOS 就不正常了。 */
 }

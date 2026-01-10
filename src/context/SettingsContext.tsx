@@ -14,6 +14,10 @@ interface AppSettings {
   kanjiBackground: boolean;
   hasFinishedOnboarding: boolean;
   lastActiveCourseId: string;
+
+  // --- 记录假名页面的 Tab ---
+  lastHiraganaTab: string; // 'seion' | 'dakuon' | 'yoon'
+  lastKatakanaTab: string;
 }
 
 interface SettingsContextType extends AppSettings {
@@ -34,6 +38,8 @@ const defaultSettings: AppSettings = {
   kanjiBackground: false,
   hasFinishedOnboarding: false,
   lastActiveCourseId: 'hiragana',
+  lastHiraganaTab: 'seion',
+  lastKatakanaTab: 'seion',
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(

@@ -4,11 +4,12 @@
 .container {
   --header-height: 149px;
   --section-header-height: 32px;
-  --sticky-top: calc(
+  /* --sticky-top: calc(
     env(safe-area-inset-top) + var(--header-height) +
-      var(--section-header-height) - 1px
-  );
-  /* 打包进 IOS，像素有时候会计算一半。 */
+      var(--section-header-height) - 2px
+  ); */
+  --sticky-top: calc(env(safe-area-inset-top) + var(--header-height) - 2px);
+  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，在浏览器端是正常的。打包进 IOS 就不正常了。 */
   display: flex;
   flex-direction: column;
   width: 100%;

@@ -16,6 +16,7 @@ import {
 } from '../../datas/kanaDataCategory';
 
 import { useProgress } from '../../context/ProgressContext';
+import { useSettings } from '../../context/SettingsContext';
 
 const getStatusMap = (allLessons: LessonItem[], finishedIds: string[]) => {
   const statusMap: Record<string, LessonStatus> = {};
@@ -48,6 +49,7 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
 
   const { completedLessons } = useProgress();
   // LocalStorage - ['row-a', 'row-ka', ...]
+  const { lastHiraganaTab, lastKatakanaTab, updateSettings } = useSettings();
 
   const tabOptions: TabOption[] = [
     { id: 'seion', label: 'Seion', ja: '(清音)' },
@@ -67,21 +69,37 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
 
   const handleTabChange = (newTabId: string) => {
     setActiveTab(newTabId as LessonCategory);
+
+    if (script === 'hiragana') {
+      updateSettings({ lastHiraganaTab: newTabId });
+    } else {
+      updateSettings({ lastKatakanaTab: newTabId });
+    }
   };
 
-  // 当 script 变化时，根据进度自动跳转到对应的 Tab
   useLayoutEffect(() => {
-    const data = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
-    const currentLesson = data.find(
-      (item) => !completedLessons.includes(item.id)
-    );
+    // 1. 获取当前应该显示的 Tab (从设置里读)
+    const savedTab = script === 'hiragana' ? lastHiraganaTab : lastKatakanaTab;
 
-    if (currentLesson) {
-      setActiveTab(currentLesson.category);
+    // 2. 判断逻辑：
+    // 如果 savedTab 不是默认的 'seion'，说明用户手动切换过，我们要尊重用户的选择。
+    // 如果 savedTab 是 'seion' (或者没存)，我们保留“智能进度跳转”功能，帮用户定位到没学的课。
+
+    if (savedTab && savedTab !== 'seion') {
+      setActiveTab(savedTab as LessonCategory);
     } else {
-      setActiveTab('seion');
+      // --- 智能跳转逻辑 (你原来的逻辑) ---
+      const data = script === 'hiragana' ? HIRAGANA_DATA : KATAKANA_DATA;
+      const currentLesson = data.find(
+        (item) => !completedLessons.includes(item.id)
+      );
+      if (currentLesson) {
+        setActiveTab(currentLesson.category);
+      } else {
+        setActiveTab('seion');
+      }
     }
-  }, [script]);
+  }, [script]); // 注意：依赖项不要加 settings，只在 script 改变时触发一次初始化
 
   useLayoutEffect(() => {
     if (scrollRef.current) {

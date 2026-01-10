@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import { HomePage } from '../pages/HomePage/HomePage';
 import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
-import { KanaDictionaryPage } from '../pages/KanaDictionary';
+import { KanaDictionaryPage } from '../pages/KanaDictAndQuiz/PageKanaDictionary/KanaDictionaryPage';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
@@ -46,6 +46,7 @@ export const AppRouter = () => {
           path="/kana-dictionary"
           element={
             <PageTransition preset="slide">
+              {/* <KanaDictionaryPage /> */}
               <KanaDictionaryPage />
             </PageTransition>
           }

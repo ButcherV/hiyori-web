@@ -22,10 +22,6 @@ export const KanaTable: React.FC<Props> = ({
   colHeaders,
   hideColHeaders = false,
 }) => {
-  // ... (idMap 和 renderCell 逻辑完全不变，省略以节省篇幅) ...
-  // ... (请保留原有的 useMemo 和 renderCell 代码) ...
-  // 这里只展示 return 部分的修改：
-
   const idMap = useMemo(() => {
     const map: Record<string, any> = {};
     Object.values(KANA_DB).forEach((item) => {
@@ -37,11 +33,6 @@ export const KanaTable: React.FC<Props> = ({
   }, []);
 
   const renderCell = (romajiKey: string | null) => {
-    // ... 保持你之前的 renderCell 代码不变 ...
-    // 只需要确认一点：renderCell 里的逻辑不用动
-    // 哪怕是 'kya'，逻辑也是一样的
-
-    // 为了完整性，这里简写一下，你直接用你原来的即可
     if (!romajiKey) return <div className={styles.emptyCell} />;
     const prefix = activeScript === 'hiragana' ? 'h-' : 'k-';
     let id = `${prefix}${romajiKey}`;
@@ -74,7 +65,6 @@ export const KanaTable: React.FC<Props> = ({
     );
   };
 
-  // 🔥 核心修改：判断列数，决定使用哪个 CSS 类
   const is3Col = colHeaders.length === 3;
   const headerClass = is3Col ? styles.headerRow3Col : styles.headerRow;
   const rowClass = is3Col ? styles.row3Col : styles.row;
