@@ -20,7 +20,7 @@
   align-items: center;
 
   /* 固定定位 */
-  position: sticky;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
@@ -342,6 +342,7 @@
 
 .kanaSection {
   padding-bottom: 16px;
+  padding-top: calc(env(safe-area-inset-top) + 100px);
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
@@ -350,11 +351,13 @@
     to bottom,
     var(--color-bg),
     var(--color-bg),
+    var(--color-bg),
     #a8ff78,
     #78ffd6
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     to bottom,
+    var(--color-bg),
     var(--color-bg),
     var(--color-bg),
     #a8ff78,

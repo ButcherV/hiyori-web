@@ -1,20 +1,22 @@
-/* src/pages/KanaDictionary/Dictionary.module.css */
-
 .container {
   min-height: 100vh;
   background-color: var(--color-bg);
   padding-bottom: 60px;
+  --header-height: 149px;
+  --section-header-height: 32px;
 }
 
 /* --- 顶部导航栏 (Page Sticky Header) --- */
 
 .stickyHeader {
   padding-top: calc(env(safe-area-inset-top) + 24px);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 20;
   background-color: var(--color-bg);
-  height: 150px;
+  height: var(--header-height);
 }
 
 .stickyHeaderCol {
@@ -66,68 +68,10 @@
   font-weight: 500;
 }
 
-/* --- Toggle Switch --- */
-.toggle {
-  width: 44px;
-  height: 24px;
-  background-color: #e9e9ea;
-  border-radius: 12px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.toggleChecked {
-  background-color: #34c759;
-}
-
-.toggleHandle {
-  width: 20px;
-  height: 20px;
-  background-color: #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: left 0.2s;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.toggleHandleChecked {
-  left: 22px;
-}
-
 /* --- Content Area --- */
 .content {
   padding: 16px 8px;
-}
-
-/* --- Tab Switcher --- */
-.tabContainer {
-  display: flex;
-  background-color: #e5e5ea;
-  padding: 3px;
-  border-radius: 12px;
-}
-
-.tabBtn {
-  flex: 1;
-  padding: 8px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: transparent;
-  color: #8e8e93;
-  box-shadow: none;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-
-.tabBtnActive {
-  background-color: #fff;
-  color: #000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding-top: calc(env(safe-area-inset-top) + 149px);
 }
 
 /* --- Sections --- */
@@ -138,11 +82,20 @@
 }
 
 .sectionHeader {
-  font-size: 14px;
-  color: #8e8e93;
-  margin-bottom: 12px;
+  font-size: 16px;
+  color: var(--color-Gray7);
+  padding-bottom: 12px;
   margin-left: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
+  width: 100%;
+  position: sticky;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 15;
+  height: var(--section-header-height);
+  background-color: var(--color-bg);
+  top: calc(env(safe-area-inset-top) + var(--header-height) - 1px);
 }

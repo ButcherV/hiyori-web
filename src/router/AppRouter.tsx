@@ -2,8 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import { HomePage } from '../pages/HomePage/HomePage';
-// import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
-import { TestStudySession } from '../pages/V2TestStudySession/TestStudySession';
+import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { KanaDictionaryPage } from '../pages/KanaDictionary';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';

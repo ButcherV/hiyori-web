@@ -1,0 +1,33 @@
+.switch {
+  width: 50px;
+  height: 30px;
+  background-color: #e5e5ea;
+  border-radius: 15px;
+  position: relative;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  flex-shrink: 0;
+  /* 移除触摸高亮背景色 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.switchOn {
+  background-color: var(--color-Green);
+}
+
+.switchHandle {
+  width: 26px;
+  height: 26px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.7, 1);
+}
+
+/* 当父级有 switchOn 类时，控制子级 handle 的位移 */
+.switchOn .switchHandle {
+  transform: translateX(20px);
+}

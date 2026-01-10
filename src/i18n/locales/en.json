@@ -65,6 +65,19 @@
       "select_katakana": "Select Katakana Row"
     }
   },
+  "kana_dictionary": {
+    "title": "Kana Table",
+    "romaji_label": "Romaji",
+    "tabs": {
+      "hiragana": "Hiragana",
+      "katakana": "Katakana"
+    },
+    "sections": {
+      "seion": "Seion (Clear Sounds)",
+      "dakuon": "Dakuon (Muddy Sounds)",
+      "yoon": "Yoon (Contracted Sounds)"
+    }
+  },
   "settings": {
     "display": "DISPLAY",
     "appearance": "Appearance",

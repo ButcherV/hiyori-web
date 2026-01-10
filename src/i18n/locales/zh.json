@@ -70,6 +70,19 @@
       "select_katakana": "选择片假名课程"
     }
   },
+  "kana_dictionary": {
+    "title": "五十音图",
+    "romaji_label": "罗马音",
+    "tabs": {
+      "hiragana": "平假名 (Hiragana)",
+      "katakana": "片假名 (Katakana)"
+    },
+    "sections": {
+      "seion": "清音 (Seion)",
+      "dakuon": "浊音/半浊音 (Dakuon)",
+      "yoon": "拗音 (Yoon)"
+    }
+  },
   "settings": {
     "display": "显示设置",
     "appearance": "外观模式",

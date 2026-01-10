@@ -13,6 +13,7 @@ import styles from './AppSettingsMenu.module.css';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
 import { useProgress } from '../../context/ProgressContext';
+import { Switch } from '../../components/Switch';
 
 interface AppSettingsMenuProps {
   initialTheme?: 'light' | 'dark';
@@ -86,11 +87,10 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
           <BookOpen size={20} className={styles.icon} />
           <span className={styles.label}>{t('settings.kanji_background')}</span>
         </div>
-        <div
-          className={`${styles.switch} ${kanjiBackground ? styles.switchOn : ''}`}
-        >
-          <div className={styles.switchHandle} />
-        </div>
+        <Switch
+          checked={kanjiBackground}
+          onChange={() => toggleSetting('kanjiBackground')}
+        />
       </div>
 
       {/* 自动发音 */}
@@ -102,9 +102,10 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
           <Volume2 size={20} className={styles.icon} />
           <span className={styles.label}>{t('settings.autoplay')}</span>
         </div>
-        <div className={`${styles.switch} ${autoAudio ? styles.switchOn : ''}`}>
-          <div className={styles.switchHandle} />
-        </div>
+        <Switch
+          checked={autoAudio}
+          onChange={() => toggleSetting('autoAudio')}
+        />
       </div>
 
       {/* 音效 */}
@@ -116,11 +117,10 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
           <Speaker size={20} className={styles.icon} />
           <span className={styles.label}>Sound Effects</span>
         </div>
-        <div
-          className={`${styles.switch} ${soundEffect ? styles.switchOn : ''}`}
-        >
-          <div className={styles.switchHandle} />
-        </div>
+        <Switch
+          checked={soundEffect}
+          onChange={() => toggleSetting('soundEffect')}
+        />
       </div>
 
       {/* 触感反馈 */}
@@ -132,11 +132,10 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
           <Vibrate size={20} className={styles.icon} />
           <span className={styles.label}>Haptic Feedback</span>
         </div>
-        <div
-          className={`${styles.switch} ${hapticFeedback ? styles.switchOn : ''}`}
-        >
-          <div className={styles.switchHandle} />
-        </div>
+        <Switch
+          checked={hapticFeedback}
+          onChange={() => toggleSetting('hapticFeedback')}
+        />
       </div>
 
       {/* 版本号 */}
