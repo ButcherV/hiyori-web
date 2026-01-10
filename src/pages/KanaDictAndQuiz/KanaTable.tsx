@@ -60,7 +60,7 @@ export const KanaTable: React.FC<Props> = ({
     const crossData = idMap[crossId];
 
     // 🔥 2. 判断选中状态
-    const isSelected = selectedIds?.has(id);
+    const isSelected = isSelectionMode && selectedIds?.has(id);
 
     // 🔥 3. 计算样式
     // 如果开启了选择模式：
