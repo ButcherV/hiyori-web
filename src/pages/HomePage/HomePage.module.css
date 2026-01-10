@@ -53,7 +53,7 @@
   font-weight: 600;
   color: #8e8e93;
   letter-spacing: 0.5px;
-  font-family: var(--font-ja);
+  font-family: var(-font-family-ja);
   transition: color 0.2s;
 }
 
@@ -69,7 +69,7 @@
   color: var(--text-primary, #1c1c1e);
   line-height: 1.1;
   font-family: var(
-    --font-ja,
+    -font-family-ja,
     'Hiragino Sans',
     'Hiragino Kaku Gothic ProN',
     'Noto Sans JP',
@@ -269,4 +269,94 @@
 .testBtn:active {
   transform: scale(0.98);
   opacity: 0.9;
+}
+
+/* --- 快捷入口区域 --- */
+
+.quickActionsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.quickActionBtn {
+  flex: 1;
+  /* 两个按钮平分宽度 */
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  /* gap: 4px; */
+  padding: 4px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    background-color 0.2s;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quickActionBtn:active {
+  transform: scale(0.96);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* 图标容器：圆形背景，颜色由变量决定 */
+.quickIconBox {
+  width: 24px;
+  height: 24px;
+  /* border-radius: 8px; */
+  /* 使用按钮定义的颜色，做 10% 透明度背景 */
+  /* background-color: color-mix(in srgb, var(--btn-color), transparent 90%); */
+  color: var(--btn-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quickText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quickTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary, #1c1c1e);
+  line-height: 1.1;
+  margin-left: 4px;
+}
+
+.quickSub {
+  font-size: 12px;
+  /* font-weight: 500; */
+  /* color: var(--text-secondary, #8e8e93); */
+  line-height: 1.2;
+}
+
+.kanaSection {
+  padding-bottom: 16px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  background: #005aa7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    var(--color-bg),
+    var(--color-bg),
+    #a8ff78,
+    #78ffd6
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg),
+    var(--color-bg),
+    #a8ff78,
+    #78ffd6
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

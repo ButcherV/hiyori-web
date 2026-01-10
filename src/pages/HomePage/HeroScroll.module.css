@@ -44,7 +44,7 @@
 }
 
 .heroCardLocked {
-  filter: grayscale(0.9) brightness(0.7);
+  /* filter: grayscale(0.9) brightness(0.7); */
   cursor: not-allowed;
 }
 
@@ -73,7 +73,7 @@
   font-weight: 900;
   opacity: 0.1;
   pointer-events: none;
-  font-family: var(--font-ja, 'Hiragino Kaku Gothic ProN', sans-serif);
+  font-family: var(-font-family-ja, 'Hiragino Kaku Gothic ProN', sans-serif);
 
   /* 终态：定格在什么角度 (比如向左偏 10度) */
   transform: perspective(400px) rotateX(20deg) rotateY(-16deg);

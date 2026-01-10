@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { HomePage } from '../pages/HomePage/HomePage';
 // import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { TestStudySession } from '../pages/V2TestStudySession/TestStudySession';
+import { KanaDictionaryPage } from '../pages/KanaDictionary';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
@@ -38,6 +39,24 @@ export const AppRouter = () => {
           element={
             <PageTransition>
               <DatesPage />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/study/dates"
+          element={
+            <PageTransition>
+              <DatesPage />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/kana-dictionary"
+          element={
+            <PageTransition>
+              <KanaDictionaryPage />
             </PageTransition>
           }
         />

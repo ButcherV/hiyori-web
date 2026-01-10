@@ -26,6 +26,8 @@ import {
   Clock,
   CircleDollarSign,
   ChevronRight,
+  Shuffle,
+  BookX,
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
 
@@ -168,14 +170,74 @@ export function HomePage() {
           </button>
         </div>
       </header>
+      <div className={styles.kanaSection}>
+        <HeroScroll onCourseClick={handleCourseClick} />
 
-      <HeroScroll onCourseClick={handleCourseClick} />
+        <div className={styles.quickActionsContainer}>
+          {/* 随机测试 */}
+          <div
+            className={styles.quickActionBtn}
+            onClick={() => navigate('/random-test/setup')}
+            style={{ '--btn-color': '#FF2D55' } as React.CSSProperties}
+          >
+            <div className={styles.quickIconBox}>
+              <Shuffle size={18} strokeWidth={2} />
+            </div>
+            <div className={styles.quickText}>
+              <span className={styles.quickTitle}>
+                {t('home.kanaTest.random_test') || 'Random Quiz'}
+              </span>
+              {/* <span className={styles.quickSub}>
+                {t('home.kanaTest.random_test_sub') || 'Custom Test'}
+              </span> */}
+            </div>
+          </div>
 
-      <div className={styles.testBtnContainer}>
+          {/* 错题本 */}
+          <div
+            className={styles.quickActionBtn}
+            onClick={() => navigate('/mistake-book')}
+            style={{ '--btn-color': '#FF9500' } as React.CSSProperties}
+          >
+            <div className={styles.quickIconBox}>
+              <BookX size={18} strokeWidth={2} />
+            </div>
+            <div className={styles.quickText}>
+              <span className={styles.quickTitle}>
+                {t('home.kanaTest.mistake_book') || 'Review'}
+              </span>
+              {/* <span className={styles.quickSub}>
+                {t('home.kanaTest.mistake_book_sub') || 'Fix Errors'}
+              </span> */}
+            </div>
+          </div>
+
+          {/* 假名查询 */}
+          <div
+            className={styles.quickActionBtn}
+            onClick={() => navigate('/kana-dictionary')}
+            style={{ '--btn-color': '#007AFF' } as React.CSSProperties}
+          >
+            <div className={styles.quickIconBox}>
+              <BookOpenText size={18} strokeWidth={2} />
+            </div>
+            <div className={styles.quickText}>
+              <span className={styles.quickTitle}>
+                {t('home.kanaTest.dictionary') || 'Kana Dict'}
+              </span>
+              {/* <span className={styles.quickSub}>
+                {t('home.kanaTest.dictionary_sub') || 'Search & Ref'}
+              </span> */}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className={styles.testBtnContainer}>
         <button onClick={() => navigate('/dice')} className={styles.testBtn}>
           🎲 Try 3D Dice (Test)
         </button>
-      </div>
+      </div> */}
 
       <div className={styles.sectionHeader}>
         {t('home.drills.title') || 'Practice Drills'}

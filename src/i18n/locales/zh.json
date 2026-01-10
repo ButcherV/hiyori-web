@@ -19,6 +19,14 @@
       "afternoon": "下午好！",
       "evening": "晚上好！"
     },
+    "kanaTest": {
+      "dictionary": "五十音图",
+      "dictionary_sub": "五十音图检索",
+      "random_test": "随机自测",
+      "random_test_sub": "自定义选题",
+      "mistake_book": "错题记录",
+      "mistake_book_sub": "查漏补缺"
+    },
     "hero": {
       "hiragana": {
         "title": "平假名",
@@ -33,6 +41,7 @@
         "subtitle": "语义启蒙"
       }
     },
+
     "drills": {
       "title": "快速练习",
       "numbers": "数字",

@@ -22,7 +22,7 @@
 }
 
 .jpFont {
-  font-family: var(--font-ja, 'Hiragino Sans', sans-serif);
+  font-family: var(-font-family-ja, 'Hiragino Sans', sans-serif);
   font-size: 36px;
   font-weight: 800;
   color: var(--text-primary, #1c1c1e);
@@ -57,7 +57,7 @@
 }
 
 .jpFontSmall {
-  font-family: var(--font-ja);
+  font-family: var(-font-family-ja);
 }
 
 .holiday {

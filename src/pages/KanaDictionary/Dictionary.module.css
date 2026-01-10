@@ -1,0 +1,146 @@
+/* src/pages/KanaDictionary/Dictionary.module.css */
+
+.container {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  padding-bottom: 60px;
+}
+
+/* --- 顶部导航栏 (Page Sticky Header) --- */
+.stickyHeader {
+  padding-top: calc(env(safe-area-inset-top) + 24px);
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.stickyHeaderCol {
+  padding: 0 16px 16px 16px;
+  /* padding-bottom: 16px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stickyHeaderCol2 {
+  padding: 16px;
+  background-color: var(--color-bg);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backBtn {
+  border: none;
+  background: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #007aff;
+}
+
+.pageTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1c1e;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.romajiLabel {
+  font-size: 13px;
+  color: #8e8e93;
+  font-weight: 500;
+}
+
+/* --- Toggle Switch --- */
+.toggle {
+  width: 44px;
+  height: 24px;
+  background-color: #e9e9ea;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggleChecked {
+  background-color: #34c759;
+}
+
+.toggleHandle {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toggleHandleChecked {
+  left: 22px;
+}
+
+/* --- Content Area --- */
+.content {
+  padding: 16px 8px;
+}
+
+/* --- Tab Switcher --- */
+.tabContainer {
+  display: flex;
+  background-color: #e5e5ea;
+  padding: 3px;
+  border-radius: 12px;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: transparent;
+  color: #8e8e93;
+  box-shadow: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.tabBtnActive {
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Sections --- */
+.sectionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sectionHeader {
+  font-size: 14px;
+  color: #8e8e93;
+  margin-bottom: 12px;
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}

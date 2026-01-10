@@ -137,6 +137,7 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
               </div>
             </div>
           )}
+          <div className={styles.romajiBottom}>{data.wordRomaji}</div>
           <div className={`${styles.kanjiMainSmall} ${commonStyles.jaFont}`}>
             {data.word}
           </div>
@@ -149,7 +150,6 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
 
     return (
       <div className={styles.container}>
-        <div className={styles.romajiBottom}>{data.wordRomaji}</div>
         {renderMainContent()}
         <div className={styles.meaningText}>{meaningText}</div>
         {data.wordNoteKey && (
