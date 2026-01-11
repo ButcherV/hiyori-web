@@ -5,6 +5,7 @@ import { HomePage } from '../pages/HomePage/HomePage';
 import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { KanaDictionaryPage } from '../pages/KanaDictAndQuiz/PageKanaDictionary/KanaDictionaryPage';
 import { KanaQuizSelectionPage } from '../pages/KanaDictAndQuiz/PageKanaQuiz/KanaQuizSelectionPage';
+import { PageQuizSession } from '../pages/KanaDictAndQuiz/PageKanaQuiz/PageQuizSession';
 import { PageTransition } from '../components/PageTransition';
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
@@ -54,11 +55,19 @@ export const AppRouter = () => {
         />
 
         <Route
-          path="/random-test/setup"
+          path="/quiz/selection"
           element={
             <PageTransition preset="slide">
-              {/* <KanaDictionaryPage /> */}
               <KanaQuizSelectionPage />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/quiz/session"
+          element={
+            <PageTransition preset="scale">
+              <PageQuizSession />
             </PageTransition>
           }
         />

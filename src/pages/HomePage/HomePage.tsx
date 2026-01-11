@@ -177,7 +177,7 @@ export function HomePage() {
           {/* 随机测试 */}
           <div
             className={styles.quickActionBtn}
-            onClick={() => navigate('/random-test/setup')}
+            onClick={() => navigate('/quiz/selection')}
             style={{ '--btn-color': '#FF2D55' } as React.CSSProperties}
           >
             <div className={styles.quickIconBox}>
