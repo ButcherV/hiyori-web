@@ -105,7 +105,8 @@
     "clear_progress_btn": "清除学习进度",
     "clear_success": "数据清除成功",
     "kanji_background": "汉字基础",
-    "ui_language": "界面语言"
+    "ui_language": "界面语言",
+    "contact_author": "联系作者"
   },
   "stats": {
     "title": "学习旅程",

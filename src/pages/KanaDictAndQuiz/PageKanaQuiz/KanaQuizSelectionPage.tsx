@@ -16,7 +16,7 @@ export const KanaQuizSelectionPage = () => {
   );
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-  const MIN_SELECTION = 6;
+  const MIN_SELECTION = 5;
   const MAX_SELECTION = 12;
 
   const kanaMap = useMemo(() => {
@@ -76,7 +76,7 @@ export const KanaQuizSelectionPage = () => {
 
     if (validIds.length === 0) return;
 
-    // C. 随机决定要选多少个 (6 到 12 之间)
+    // C. 随机决定要选多少个 (5 到 12 之间)
     const count =
       Math.floor(Math.random() * (MAX_SELECTION - MIN_SELECTION + 1)) +
       MIN_SELECTION;
