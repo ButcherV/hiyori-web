@@ -1,4 +1,3 @@
-// src/pages/KanaDictionary/KanaDictionaryPage.tsx (或者原来的 index.tsx)
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

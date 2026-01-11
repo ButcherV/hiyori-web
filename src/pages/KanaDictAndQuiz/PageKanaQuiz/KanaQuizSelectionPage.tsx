@@ -98,7 +98,7 @@ export const KanaQuizSelectionPage = () => {
       seionTitle={t('kana_dictionary.sections.seion')}
       dakuonTitle={t('kana_dictionary.sections.dakuon')}
       yoonTitle={t('kana_dictionary.sections.yoon')}
-      onBackClick={() => navigate(-1)}
+      onBackClick={() => navigate('/')}
       onTabChange={setActiveTab}
       onItemClick={handleItemClick}
       isSelectionMode={true}
