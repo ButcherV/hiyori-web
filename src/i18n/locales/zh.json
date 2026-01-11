@@ -83,6 +83,15 @@
       "yoon": "拗音 (Yoon)"
     }
   },
+  "kana_quiz": {
+    "selection_title": "自由测试选题",
+    "start_btn": "开始测试",
+    "limit_hint": "/ {{max}} (至少 {{min}} 个)",
+    "aria": {
+      "random": "随机选择",
+      "reset": "重置选择"
+    }
+  },
   "settings": {
     "display": "显示设置",
     "appearance": "外观模式",

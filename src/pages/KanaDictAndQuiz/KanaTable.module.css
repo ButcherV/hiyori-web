@@ -8,8 +8,15 @@
     env(safe-area-inset-top) + var(--header-height) +
       var(--section-header-height) - 2px
   ); */
+  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，
+    在浏览器端是正常的。打包进 IOS 就不正常了。 IOS 端总是计算误差 1-2px*/
   --sticky-top: calc(env(safe-area-inset-top) + var(--header-height) - 2px);
-  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，在浏览器端是正常的。打包进 IOS 就不正常了。 */
+
+  /* 第一列是 32px (给侧边行头留位置)，后面 5 列平分 */
+  --grid-5col: 32px repeat(5, 1fr);
+  --grid-3col: 32px repeat(3, 1fr);
+
+  --gap-size: 6px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -20,15 +27,14 @@
 /* --- 顶部列头 (a i u e o) --- */
 .headerRow {
   display: grid;
-  /* 第一列是 40px (给侧边行头留位置)，后面 5 列平分 */
-  grid-template-columns: 32px repeat(5, 1fr);
+  grid-template-columns: var(--grid-5col);
   gap: 4px;
 
   position: sticky;
   top: var(--sticky-top);
   z-index: 10;
 
-  background-color: #f8f9fa;
+  background-color: var(--color-bg);
   padding-bottom: 8px;
   padding-top: 4px;
   margin-bottom: 4px;
@@ -37,8 +43,8 @@
 .colHeader {
   text-align: center;
   font-size: 14px;
-  font-weight: 600;
-  color: #8e8e93;
+  font-weight: 700;
+  color: var(--color-Gray6);
   text-transform: uppercase;
 }
 
@@ -46,15 +52,14 @@
 .tableBody {
   display: flex;
   flex-direction: column;
-  gap: 6px; /* 行与行之间的间距 */
+  gap: var(--gap-size);
 }
 
 /* 每一行 */
 .row {
   display: grid;
-  /* 必须和 headerRow 保持一致 */
-  grid-template-columns: 32px repeat(5, 1fr);
-  gap: 4px;
+  grid-template-columns: var(--grid-5col);
+  gap: var(--gap-size);
   align-items: center;
 }
 
@@ -62,14 +67,14 @@
 .rowHeader {
   font-size: 14px;
   font-weight: 700;
-  color: #aeaeb2;
+  color: var(--color-Gray6);
   text-align: center;
 }
 
 /* --- 单元格 --- */
 .cell {
   aspect-ratio: 1; /* 保持正方形 */
-  background: #ffffff;
+  background: white;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -95,29 +100,26 @@
 /* 主假名 */
 .mainChar {
   font-size: 24px;
-  font-weight: 700;
-  color: #1c1c1e;
+  font-weight: 800;
+  color: var(--color-Gray9);
   line-height: 1.2;
   display: inline-block;
 }
 
 /* 罗马音 */
 .romaji {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  color: #007aff;
-  opacity: 0.8;
-  margin-top: 2px;
+  color: var(--color-Blue);
+  /* opacity: 0.8; */
+  /* margin-top: 2px; */
 }
 
 /* 对照小字 */
 .subChar {
-  /* position: absolute;
-  right: 6px;
-  bottom: 4px; */
   font-size: 14px;
   font-weight: 800;
-  color: #c7c7cc;
+  color: var(--color-Gray5);
   display: inline-block;
   margin-left: 2px;
 }
@@ -126,35 +128,35 @@
 /* 40px 是行头，后面 3 列平分 */
 .headerRow3Col {
   display: grid;
-  grid-template-columns: 32px repeat(3, 1fr);
+  grid-template-columns: var(--grid-3col);
   gap: 4px;
 
   position: sticky;
   top: var(--sticky-top);
   z-index: 10;
 
-  background-color: #f8f9fa;
+  background-color: var(--color-bg);
   padding-bottom: 8px;
   padding-top: 4px;
   margin-bottom: 4px;
   padding-right: 12px;
 }
 
-/* 🔥 新增：3 列布局的行 (用于拗音) */
+/* 3 列布局的行 (用于拗音) */
 .row3Col {
   display: grid;
-  grid-template-columns: 32px repeat(3, 1fr);
-  gap: 4px;
+  grid-template-columns: var(--grid-3col);
+  gap: var(--gap-size);
   align-items: center;
 
   .cell {
-    aspect-ratio: 2.4/1.6;
+    aspect-ratio: 2.4/1.4;
   }
 }
 
 /* 选中态 */
 .selectedCell {
-  background-color: #007aff;
+  background-color: var(--color-Blue);
   transform: scale(0.96);
 
   .mainChar,

@@ -1,9 +1,16 @@
 .container {
   min-height: 100vh;
   background-color: var(--color-bg);
-  padding-bottom: 60px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
   --header-height: 149px;
   --section-header-height: 32px;
+}
+
+.selectionModeContainer {
+  /* 让底部留出更多空间给悬浮 Footer 
+     计算公式参考：Footer高度(约80px~140px) + 安全距离 
+  */
+  padding-bottom: calc(140px + env(safe-area-inset-bottom));
 }
 
 /* --- 顶部导航栏 (Page Sticky Header) --- */
@@ -47,13 +54,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #007aff;
+  color: var(--color-Blue);
 }
 
 .pageTitle {
   font-size: 18px;
   font-weight: 700;
-  color: #1c1c1e;
+  color: var(--color-Gray9);
 }
 
 .headerRight {
@@ -64,14 +71,14 @@
 
 .romajiLabel {
   font-size: 13px;
-  color: #8e8e93;
+  color: var(--color-Gray7);
   font-weight: 500;
 }
 
 /* --- Content Area --- */
 .content {
   padding: 16px 8px;
-  padding-top: calc(env(safe-area-inset-top) + 149px);
+  padding-top: calc(env(safe-area-inset-top) + var(--header-height));
 }
 
 /* --- Sections --- */

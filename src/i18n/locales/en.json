@@ -78,6 +78,15 @@
       "yoon": "Yoon (Contracted Sounds)"
     }
   },
+  "kana_quiz": {
+    "selection_title": "Custom Quiz Selection",
+    "start_btn": "Start Quiz",
+    "limit_hint": "/ {{max}} (Min {{min}})",
+    "aria": {
+      "random": "Random Select",
+      "reset": "Reset Selection"
+    }
+  },
   "settings": {
     "display": "DISPLAY",
     "appearance": "Appearance",

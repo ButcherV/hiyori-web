@@ -1,4 +1,3 @@
-// src/pages/KanaDictAndQuiz/KanaTable.tsx
 import React, { useMemo } from 'react';
 import { KANA_DB } from '../../datas/kanaData';
 import styles from './KanaTable.module.css';
@@ -11,8 +10,6 @@ interface Props {
   rowHeaders: string[];
   colHeaders: string[];
   hideColHeaders?: boolean;
-
-  // 🔥 新增：选择模式相关的 Props
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
 }
@@ -63,10 +60,7 @@ export const KanaTable: React.FC<Props> = ({
     const isSelected = isSelectionMode && selectedIds?.has(id);
 
     // 🔥 3. 计算样式
-    // 如果开启了选择模式：
-    // - 选中的：用 selectedCell
-    // - 没选中的：用 dimmedCell (让选中的更突出)，或者保持原样
-    // 这里我们简单点：选中的高亮，没选中的保持默认
+    // 选中的高亮，没选中的保持默认
     const cellClass = `
       ${styles.cell} 
       ${isSelected ? styles.selectedCell : ''}

@@ -1,4 +1,3 @@
-// src/pages/KanaDictAndQuiz/KanaBoard.tsx
 import React from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { KanaTable } from './KanaTable';
@@ -22,7 +21,6 @@ interface KanaBoardProps {
   showRomaji: boolean; // 用于控制表格内显示
   tabOptions: { id: string; label: string }[];
 
-  // --- 文案 ---
   title: string;
   romajiLabel?: string; // 变为可选，因为可能被 headerRight 覆盖
   seionTitle: string;
@@ -35,11 +33,11 @@ interface KanaBoardProps {
   onToggleRomaji?: () => void; // 变为可选
   onItemClick: (data: any) => void;
 
-  // --- 🔥 新增：透传给 KanaTable 的选择属性 ---
+  // --- 透传给 KanaTable 的选择属性 ---
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
 
-  // --- 🔥 新增：插槽 (Slots) ---
+  // --- 插槽 (Slots) ---
   headerRight?: React.ReactNode; // 自定义右上角区域
   footer?: React.ReactNode; // 自定义底部区域
 }
@@ -63,7 +61,9 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
   footer,
 }) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${isSelectionMode ? styles.selectionModeContainer : ''}`}
+    >
       {/* 顶部固定 Header */}
       <div className={styles.stickyHeader}>
         <div className={styles.stickyHeaderCol}>
@@ -74,7 +74,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <span className={styles.pageTitle}>{title}</span>
           </div>
 
-          {/* 🔥 关键修改：如果有 headerRight 插槽，就渲染插槽；否则渲染默认的 Switch */}
+          {/* 如果有 headerRight 插槽，就渲染插槽；否则渲染默认的 Switch */}
           {headerRight ? (
             <div className={styles.headerRight}>{headerRight}</div>
           ) : (
@@ -110,8 +110,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={SEION_ROWS}
               rowHeaders={SEION_ROW_HEADERS}
               colHeaders={SEION_COL_HEADERS}
-              // 🔥 透传选择状态
-              isSelectionMode={isSelectionMode}
+              isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
             />
           </section>
@@ -126,8 +125,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={DAKUON_ROWS}
               rowHeaders={DAKUON_ROW_HEADERS}
               colHeaders={SEION_COL_HEADERS}
-              // 🔥 透传选择状态
-              isSelectionMode={isSelectionMode}
+              isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
             />
           </section>
@@ -142,15 +140,14 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={YOON_ROWS}
               rowHeaders={YOON_ROW_HEADERS}
               colHeaders={YOON_COL_HEADERS}
-              // 🔥 透传选择状态
-              isSelectionMode={isSelectionMode}
+              isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
             />
           </section>
         </div>
       </div>
 
-      {/* 🔥 渲染底部插槽 (Footer) */}
+      {/* 渲染底部插槽 (Footer) */}
       {footer}
     </div>
   );
