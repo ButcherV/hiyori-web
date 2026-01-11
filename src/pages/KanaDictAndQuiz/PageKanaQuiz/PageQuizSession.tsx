@@ -1,9 +1,15 @@
 // src/pages/KanaDictAndQuiz/PageQuizSession/index.tsx
 
-import { useState, useRef, useMemo, type CSSProperties } from 'react';
+import {
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+  type CSSProperties,
+} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { X, Check, CircleX } from 'lucide-react';
+import { X, Check, CircleX, CircleEqual } from 'lucide-react'; // 🔥 加回 CircleEqual
 import { Capacitor } from '@capacitor/core';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
@@ -13,8 +19,9 @@ import { SegmentedProgressBar } from '../../TestStudySession/SegmentedProgressBa
 import { KanaCard } from '../../TestStudySession/Cards/KanaCard';
 import { WordCard } from '../../TestStudySession/Cards/WordCard';
 import { QuizCard } from '../../TestStudySession/Cards/QuizCard';
+import BottomSheet from '../../../components/BottomSheet'; // 🔥 加回 BottomSheet
+import { StudySessionSetting } from '../../TestStudySession/StudySessionSetting'; // 🔥 加回 Setting 面板
 
-// 🔥 直接引用，类型现在是匹配的
 import {
   TinderCard,
   type TinderCardRef,
@@ -45,21 +52,34 @@ export const PageQuizSession = () => {
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 记录原始题目数量
-  const [originalTotal] = useState(() => queue.length);
+  // 🔥 修复 1: 进度条逻辑重构
+  // 统计“题目组数”而非卡片数。每组题必然有一张 Correct 卡，以此为基准计算总数。
+  const [totalGroups] = useState(() => queue.filter((c) => c.isCorrect).length);
+  // 记录已完成的 Group ID (无论对错)
+  const [completedGroups, setCompletedGroups] = useState<Set<string>>(
+    new Set()
+  );
 
   // 状态
   const [isShaking, setIsShaking] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // 🔥 设置面板状态
 
-  // 🔥 直接使用导出的 Ref 类型
   const cardRef = useRef<TinderCardRef>(null);
 
   // 设置 & 音效
-  const { soundEffect, hapticFeedback } = useSettings();
+  const {
+    soundEffect,
+    hapticFeedback,
+    autoAudio, // 🔥 获取自动播放设置
+    toggleSetting,
+  } = useSettings();
+
   const playSound = useSound();
-  const { speak } = useTTS();
+  const { speak, cancel } = useTTS(); // 获取 cancel 以便切题时停止发音
 
   const currentItem = queue[currentIndex];
+  // 结束条件：所有题目组都处理完了 (用 completedGroups 判定更准，或者简单的 index 越界)
+  // 这里保留 index 越界作为最终兜底，但进度条展示用 completedGroups
   const isFinished = currentIndex >= queue.length;
 
   // --- 辅助函数 ---
@@ -81,6 +101,28 @@ export const PageQuizSession = () => {
     console.log('Record Mistake:', card.data.id, card.quizType);
   };
 
+  // 🔥 修复 3: 自动播放逻辑 (补回 TestStudySession 的逻辑)
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (autoAudio && currentItem && !isFinished) {
+      // 只有 学习卡/更正卡 才自动播放，Quiz卡通常不读题（或者看需求）
+      if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
+        timer = setTimeout(() => {
+          const textToRead =
+            currentItem.type === 'WORD_LEARN'
+              ? currentItem.data.word || currentItem.data.kana
+              : currentItem.data.kana;
+          speak(textToRead);
+        }, 400); // 稍微延迟，等卡片动画飞到位
+      }
+    }
+    return () => {
+      clearTimeout(timer);
+      cancel(); // 切卡时停止上一张的声音
+    };
+  }, [currentIndex, autoAudio, currentItem, isFinished, speak, cancel]);
+
   // --- 核心交互逻辑 ---
   const handleSwipe = (dir: 'left' | 'right') => {
     if (!currentItem) return;
@@ -93,56 +135,56 @@ export const PageQuizSession = () => {
 
     // B. Quiz 卡
     const isRightSwipe = dir === 'right';
-
-    // 逻辑：是否“操作正确”
-    // 1. 选中了对的 (Right + Correct)
-    // 2. 排除了错的 (Left + !Correct)
     const isUserCorrect =
       (currentItem.isCorrect && isRightSwipe) ||
       (!currentItem.isCorrect && !isRightSwipe);
 
-    // 辅助函数：移除同组剩余卡片
+    // 辅助: 标记当前组已完成
+    const markGroupComplete = () => {
+      if (currentItem.quizGroupId) {
+        setCompletedGroups((prev) =>
+          new Set(prev).add(currentItem.quizGroupId!)
+        );
+      }
+    };
+
+    // 辅助: 移除同组剩余
     const removeRemainingGroupCards = (currentQueue: LessonCard[]) => {
       if (!currentItem.quizGroupId) return [...currentQueue];
       return currentQueue.filter((c, index) => {
-        if (index <= currentIndex) return true; // 保留历史
-        return c.quizGroupId !== currentItem.quizGroupId; // 移除未来同组
+        if (index <= currentIndex) return true;
+        return c.quizGroupId !== currentItem.quizGroupId;
       });
     };
 
     if (isUserCorrect) {
-      // ✅ 用户操作逻辑正确
-
       if (currentItem.isCorrect && isRightSwipe) {
-        // 🎉 场景 1：用户选中了正确答案 -> 真正得分，本题结束
+        // 🎉 选中正确 -> 得分
         triggerSound('score');
         triggerHaptic(ImpactStyle.Medium);
 
-        // 🔥 只有在这里，才移除同组剩余卡片，进入下一题
-        setQueue((prev) => removeRemainingGroupCards(prev));
+        markGroupComplete(); // 进度+1
+        setQueue((prev) => removeRemainingGroupCards(prev)); // 移除剩余干扰
       } else {
-        // 👋 场景 2：用户排除了错误答案 -> 只是排除，本题继续
+        // 👋 排出错误 -> 继续
         triggerHaptic(ImpactStyle.Light);
-
-        // 🔥 关键修正：这里绝对不能移除同组卡片！
-        // 什么都不用做，让这张卡飞走，用户自然会看到下一张选项
+        // 注意：这里不标记 group complete，因为题还没做完
       }
     } else {
-      // ❌ 用户操作逻辑错误 (把对的扔了，或者选了错的)
+      // ❌ 答错
       triggerSound('failure');
       triggerNotification(NotificationType.Error);
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
 
       recordMistake(currentItem);
+      markGroupComplete(); // 进度+1 (虽然错了，但这题算过掉了，进入解析环节)
 
       const answerCard = getAnswerCard(currentItem);
-
-      // 答错了：移除同组剩余（因为已经失败了，没必要再猜），并插入解析
       setQueue((prev) => {
-        const cleanedQueue = removeRemainingGroupCards(prev);
+        const cleanedQueue = removeRemainingGroupCards(prev); // 移除剩余干扰(没必要猜了)
         const newQueue = [...cleanedQueue];
-        newQueue.splice(currentIndex + 1, 0, answerCard);
+        newQueue.splice(currentIndex + 1, 0, answerCard); // 插入解析
         return newQueue;
       });
     }
@@ -150,16 +192,12 @@ export const PageQuizSession = () => {
     setTimeout(() => setCurrentIndex((prev) => prev + 1), 200);
   };
 
-  // --- Header 逻辑 ---
+  // --- Header 逻辑 (复用) ---
   const getHeaderInfo = () => {
     if (!currentItem) return { title: '', sub: '', isJa: false };
 
     if (!currentItem.isOriginal && currentItem.type !== 'QUIZ') {
-      return {
-        title: t(currentItem.headerTitle || ''),
-        sub: '',
-        isJa: false,
-      };
+      return { title: t(currentItem.headerTitle || ''), sub: '', isJa: false };
     }
 
     let isJa = false;
@@ -195,21 +233,10 @@ export const PageQuizSession = () => {
         : // @ts-ignore
           currentItem.headerSub?.[i18n.language === 'zh' ? 'zh' : 'en'] || '';
 
-    return {
-      title: currentItem.headerTitle || '',
-      sub: subText,
-      isJa,
-    };
+    return { title: currentItem.headerTitle || '', sub: subText, isJa };
   };
 
   const headerInfo = getHeaderInfo();
-
-  // --- 进度计算 ---
-  const quizPassed = useMemo(() => {
-    return queue
-      .slice(0, currentIndex)
-      .filter((c) => c.isOriginal && c.type === 'QUIZ').length;
-  }, [queue, currentIndex]);
 
   // --- 渲染卡片 ---
   const renderCardContent = (card: LessonCard) => {
@@ -236,7 +263,14 @@ export const PageQuizSession = () => {
   }, [queue, currentIndex]);
 
   if (isFinished) {
-    return <CompletionScreen onGoHome={() => navigate('/')} />;
+    // 🔥 修复 4: 尝试传入自定义文案 (如果组件支持)。
+    // 如果不支持，请检查 CompletionScreen 内部是否 hardcode 了文案。
+    return (
+      <CompletionScreen
+        onGoHome={() => navigate('/')}
+        // title={t('quiz.completion_title')} // 建议你去 CompletionScreen 加这个 prop
+      />
+    );
   }
 
   if (queue.length === 0) return null;
@@ -248,16 +282,25 @@ export const PageQuizSession = () => {
         <button className={styles.closeBtn} onClick={() => navigate(-1)}>
           <CircleX size={28} />
         </button>
+
         <div style={{ flex: 1, margin: '0 8px' }}>
           <SegmentedProgressBar
             learnCurrent={0}
             learnTotal={0}
-            quizCurrent={quizPassed}
-            quizTotal={originalTotal}
+            // 🔥 使用 completedGroups.size 作为分子，totalGroups 作为分母
+            quizCurrent={completedGroups.size}
+            quizTotal={totalGroups}
             phase="QUIZ"
           />
         </div>
-        <div style={{ width: 40 }} />
+
+        {/* 🔥 修复 2: 恢复设置按钮 */}
+        <button
+          className={styles.closeBtn}
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <CircleEqual size={28} />
+        </button>
       </div>
 
       {/* Header */}
@@ -303,7 +346,6 @@ export const PageQuizSession = () => {
                   ref={isTopCard ? cardRef : null}
                   touchEnabled={isTopCard}
                   preventSwipe={card.type !== 'QUIZ' ? ['left'] : []}
-                  // 🔥 直接传 handleSwipe，不再需要适配器
                   onSwipe={isTopCard ? handleSwipe : () => {}}
                 >
                   <div className={`${styles.cardContent} ${contentBlurClass}`}>
@@ -333,6 +375,22 @@ export const PageQuizSession = () => {
           </button>
         </div>
       )}
+
+      {/* 🔥 修复 2: 恢复设置面板 */}
+      <BottomSheet
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        title={i18n.language === 'zh' ? '学习设置' : 'Settings'}
+      >
+        <StudySessionSetting
+          autoAudioEnabled={autoAudio}
+          soundEnabled={soundEffect}
+          hapticEnabled={hapticFeedback}
+          onToggleAutoAudio={() => toggleSetting('autoAudio')}
+          onToggleSound={() => toggleSetting('soundEffect')}
+          onToggleHaptic={() => toggleSetting('hapticFeedback')}
+        />
+      </BottomSheet>
     </div>
   );
 };
