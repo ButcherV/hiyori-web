@@ -1,13 +1,13 @@
-// src/pages/KanaDictAndQuiz/PageQuizSession/quizLogic.ts
-
 import {
   KANA_DB,
   type AnyKanaData,
   type LocalizedText,
 } from '../../../datas/kanaData';
 
+import { uuid, shuffle } from '../../../utils/generalTools';
+
 // ==========================================
-// 1. 类型定义 (保持与 Card 组件兼容)
+// 类型定义 (保持与 Card 组件兼容)
 // ==========================================
 
 export type CardType = 'KANA_LEARN' | 'WORD_LEARN' | 'QUIZ';
@@ -18,7 +18,7 @@ export interface LessonCard {
   type: CardType;
   data: AnyKanaData;
   // Quiz 专用字段
-  quizGroupId?: string; // 同一组题目的 ID (虽然纯测模式不移除同组，但保留这个字段方便追踪)
+  quizGroupId?: string; // 同一组题目的 ID
   quizType?: QuizType;
   isCorrect?: boolean;
   displayContent?: string; // 卡片上显示的文字（选项）
@@ -30,22 +30,7 @@ export interface LessonCard {
 }
 
 // ==========================================
-// 2. 工具函数
-// ==========================================
-
-const uuid = () => Math.random().toString(36).slice(2, 9);
-
-const shuffle = <T>(array: T[]): T[] => {
-  const newArr = [...array];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
-
-// ==========================================
-// 3. 单组题目生成器
+// 单组题目生成器
 // ==========================================
 
 const createQuizGroup = (
@@ -85,7 +70,7 @@ const createQuizGroup = (
       distractors = data.wordDistractors;
     }
     // 片假名：看意思选写法
-    else if (data.kind === 'k-seion') {
+    else if (['k-seion', 'k-dakuon', 'k-yoon'].includes(data.kind)) {
       if (!data.wordDistractors) return [];
       title = ''; // 片假名单词题不显示标题(防透题)
       sub = data.wordMeaning;
@@ -129,7 +114,7 @@ const createQuizGroup = (
 };
 
 // ==========================================
-// 4. 核心：生成整个测试队列
+// 核心：生成整个测试队列
 // ==========================================
 
 export const generateQuizQueue = (targetIds: string[]): LessonCard[] => {
@@ -154,7 +139,7 @@ export const generateQuizQueue = (targetIds: string[]): LessonCard[] => {
   });
 
   // 2. 组间洗牌 + 组内洗牌 + 拍平
-  // 逻辑：题目顺序打乱，但同一题的4个选项紧挨着
+  // 逻辑：题目顺序打乱，但同一题的 4 个选项紧挨着
   const shuffledCards = shuffle(allQuizGroups)
     .map((group) => shuffle(group))
     .flat();

@@ -3,6 +3,7 @@ import {
   type AnyKanaData,
   type LocalizedText,
 } from '../../datas/kanaData';
+import { uuid, shuffle } from '../../utils/generalTools';
 
 // ==========================================
 // 1. 卡片类型定义
@@ -51,19 +52,6 @@ export interface SessionStats {
 // ==========================================
 // 2. 基础生成器
 // ==========================================
-
-const uuid = () => Math.random().toString(36).slice(2, 9);
-// Fisher-Yates 洗牌算法 (真正的完全随机)
-const shuffle = <T>(array: T[]): T[] => {
-  const newArr = [...array]; // 复制一份，不修改原数组
-  for (let i = newArr.length - 1; i > 0; i--) {
-    // 随机选一个前面的位置 j
-    const j = Math.floor(Math.random() * (i + 1));
-    // 交换位置 i 和 j 的元素
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-  }
-  return newArr;
-};
 
 // 生成一组 Quiz 卡 (1对 + 3错)
 // 返回的是 LessonCard[]，即一组卡片

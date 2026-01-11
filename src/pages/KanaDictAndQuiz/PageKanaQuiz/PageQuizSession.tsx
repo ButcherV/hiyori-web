@@ -1,4 +1,5 @@
-// src/pages/KanaDictAndQuiz/PageQuizSession/index.tsx
+// 本实现直接引入了 TestStudy 中的大量组件和样式
+// page 之间这样引来引去时很危险的。待整理。
 
 import {
   useState,
@@ -9,18 +10,20 @@ import {
 } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { X, Check, CircleX, CircleEqual } from 'lucide-react'; // 🔥 加回 CircleEqual
+import { X, Check, CircleX, CircleEqual } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
-// --- 复用现有组件 ---
-import { CompletionScreen } from '../../../components/CompletionScreen';
+import { QuizCompletionScreen } from './QuizCompletionScreen';
+// --- 复用 TestStudy 中的组件 ---
 import { SegmentedProgressBar } from '../../TestStudySession/SegmentedProgressBar';
 import { KanaCard } from '../../TestStudySession/Cards/KanaCard';
 import { WordCard } from '../../TestStudySession/Cards/WordCard';
 import { QuizCard } from '../../TestStudySession/Cards/QuizCard';
-import BottomSheet from '../../../components/BottomSheet'; // 🔥 加回 BottomSheet
-import { StudySessionSetting } from '../../TestStudySession/StudySessionSetting'; // 🔥 加回 Setting 面板
+import BottomSheet from '../../../components/BottomSheet';
+import { StudySessionSetting } from '../../TestStudySession/StudySessionSetting';
+// --- 复用 TestStudy 中的样式 ---
+import styles from '../../TestStudySession/TestStudySession.module.css';
 
 import {
   TinderCard,
@@ -34,7 +37,6 @@ import { useSettings } from '../../../context/SettingsContext';
 
 // --- 本地逻辑 ---
 import { generateQuizQueue, getAnswerCard, type LessonCard } from './quizLogic';
-import styles from '../../TestStudySession/TestStudySession.module.css';
 
 const MAX_STACK_SIZE = 3;
 
@@ -52,7 +54,7 @@ export const PageQuizSession = () => {
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 🔥 修复 1: 进度条逻辑重构
+  // 进度条逻辑重构
   // 统计“题目组数”而非卡片数。每组题必然有一张 Correct 卡，以此为基准计算总数。
   const [totalGroups] = useState(() => queue.filter((c) => c.isCorrect).length);
   // 记录已完成的 Group ID (无论对错)
@@ -60,22 +62,22 @@ export const PageQuizSession = () => {
     new Set()
   );
 
+  // 统计数据
+  const startTimeRef = useRef(Date.now()); // 记录进入页面的时间戳
+  const [mistakeCount, setMistakeCount] = useState(0); // 记录错误次数
+
   // 状态
   const [isShaking, setIsShaking] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // 🔥 设置面板状态
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const cardRef = useRef<TinderCardRef>(null);
 
   // 设置 & 音效
-  const {
-    soundEffect,
-    hapticFeedback,
-    autoAudio, // 🔥 获取自动播放设置
-    toggleSetting,
-  } = useSettings();
+  const { soundEffect, hapticFeedback, autoAudio, toggleSetting } =
+    useSettings();
 
   const playSound = useSound();
-  const { speak, cancel } = useTTS(); // 获取 cancel 以便切题时停止发音
+  const { speak, cancel } = useTTS();
 
   const currentItem = queue[currentIndex];
   // 结束条件：所有题目组都处理完了 (用 completedGroups 判定更准，或者简单的 index 越界)
@@ -99,14 +101,14 @@ export const PageQuizSession = () => {
 
   const recordMistake = (card: LessonCard) => {
     console.log('Record Mistake:', card.data.id, card.quizType);
+    setMistakeCount((prev) => prev + 1); // 计数+1
   };
 
-  // 🔥 修复 3: 自动播放逻辑 (补回 TestStudySession 的逻辑)
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
 
     if (autoAudio && currentItem && !isFinished) {
-      // 只有 学习卡/更正卡 才自动播放，Quiz卡通常不读题（或者看需求）
+      // 只有 学习卡/更正卡 才自动播放，Quiz卡通常不读题
       if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
         timer = setTimeout(() => {
           const textToRead =
@@ -119,7 +121,7 @@ export const PageQuizSession = () => {
     }
     return () => {
       clearTimeout(timer);
-      cancel(); // 切卡时停止上一张的声音
+      //   cancel();
     };
   }, [currentIndex, autoAudio, currentItem, isFinished, speak, cancel]);
 
@@ -263,12 +265,20 @@ export const PageQuizSession = () => {
   }, [queue, currentIndex]);
 
   if (isFinished) {
-    // 🔥 修复 4: 尝试传入自定义文案 (如果组件支持)。
-    // 如果不支持，请检查 CompletionScreen 内部是否 hardcode 了文案。
+    const durationSeconds = Math.max(
+      0,
+      Math.floor((Date.now() - startTimeRef.current) / 1000)
+    );
+
     return (
-      <CompletionScreen
-        onGoHome={() => navigate('/')}
-        // title={t('quiz.completion_title')} // 建议你去 CompletionScreen 加这个 prop
+      <QuizCompletionScreen
+        stats={{
+          totalKana: targetIds.length, // 选了几个假名
+          totalQuestions: totalGroups, // 一共几道题
+          mistakeCount: mistakeCount, // 错了几个
+          durationSeconds: durationSeconds, // 耗时
+        }}
+        onGoHome={() => navigate(-1)} // 返回上一页(选题页)，或者 navigate('/') 回首页
       />
     );
   }
@@ -279,7 +289,11 @@ export const PageQuizSession = () => {
     <div className={`${styles.container} ${styles.quizContainer}`}>
       {/* Top Bar */}
       <div className={styles.topNav}>
-        <button className={styles.closeBtn} onClick={() => navigate(-1)}>
+        <button
+          className={styles.closeBtn}
+          //   回选择页，而不是回 home 页
+          onClick={() => navigate('/quiz/selection')}
+        >
           <CircleX size={28} />
         </button>
 
@@ -294,7 +308,6 @@ export const PageQuizSession = () => {
           />
         </div>
 
-        {/* 🔥 修复 2: 恢复设置按钮 */}
         <button
           className={styles.closeBtn}
           onClick={() => setIsSettingsOpen(true)}
@@ -376,7 +389,6 @@ export const PageQuizSession = () => {
         </div>
       )}
 
-      {/* 🔥 修复 2: 恢复设置面板 */}
       <BottomSheet
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

@@ -22,7 +22,7 @@
 
 .learnColor {
   background-color: var(--color-Green);
-} /* 蓝 */
+}
 .quizColor {
-  background-color: var(--color-primary);
-} /* 橙 */
+  background-color: var(--color-xBlue);
+}
