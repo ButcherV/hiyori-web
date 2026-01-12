@@ -95,7 +95,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'red', zh: '红色', zhHant: '紅色' },
     wordEmoji: '🔴',
     kanaDistractors: ['や', 'が', 'わ'],
-    romajiDistractors: ['ki', 'ko', 'ta'],
+    romajiDistractors: ['ga', 'ki', 'ko', 'ta'],
     wordDistractors: ['あや', 'あが', 'ぬか'],
   }),
 

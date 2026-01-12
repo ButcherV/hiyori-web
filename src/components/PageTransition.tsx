@@ -85,7 +85,6 @@ export const PageTransition = ({
 
   return (
     <motion.div
-      // 🔥这里必须传 direction，否则 initial 动画拿不到方向，默认为 0 就不动了
       custom={direction}
       initial="initial"
       animate="in"

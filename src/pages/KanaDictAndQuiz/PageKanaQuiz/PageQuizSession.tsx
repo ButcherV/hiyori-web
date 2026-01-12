@@ -56,7 +56,14 @@ export const PageQuizSession = () => {
 
   // 进度条逻辑重构
   // 统计“题目组数”而非卡片数。每组题必然有一张 Correct 卡，以此为基准计算总数。
+  // 总题数 (用于进度条和正确率)：统计所有 isCorrect 的卡片
   const [totalGroups] = useState(() => queue.filter((c) => c.isCorrect).length);
+
+  // 单词数 (用于结果展示)：统计 quizType 为 'WORD' 的题目数量
+  //    注意：这里假设每个单词只生成了一组 'WORD' 类型的题目
+  const [wordCount] = useState(
+    () => queue.filter((c) => c.isCorrect && c.quizType === 'WORD').length
+  );
   // 记录已完成的 Group ID (无论对错)
   const [completedGroups, setCompletedGroups] = useState<Set<string>>(
     new Set()
@@ -274,11 +281,12 @@ export const PageQuizSession = () => {
       <QuizCompletionScreen
         stats={{
           totalKana: targetIds.length, // 选了几个假名
+          wordCount: wordCount, // 单词数
           totalQuestions: totalGroups, // 一共几道题
           mistakeCount: mistakeCount, // 错了几个
           durationSeconds: durationSeconds, // 耗时
         }}
-        onGoHome={() => navigate(-1)} // 返回上一页(选题页)，或者 navigate('/') 回首页
+        onGoHome={() => navigate('/')}
       />
     );
   }

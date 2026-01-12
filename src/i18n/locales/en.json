@@ -154,5 +154,36 @@
     "locked": "LOCKED",
     "in_progress": "IN PROGRESS",
     "start": "START"
+  },
+  "quiz_result": {
+    "title": {
+      "perfect": "Perfect Score!",
+      "good": "Great Job!",
+      "pass": "Completed",
+      "fail": "Keep Trying"
+    },
+    "unit": {
+      "kana": "Kana",
+      "word": "Words"
+    },
+    "sub": {
+      "perfect": "Incredible! You nailed it completely.",
+      "good": "High accuracy, keep up the momentum.",
+      "pass": "Not bad. Review the mistakes and try again.",
+      "fail": "Don't give up. Practice makes perfect."
+    },
+    "stats": {
+      "accuracy": "Accuracy",
+      "time": "Time",
+      "mistakes": "Mistakes",
+      "kana_count": "Kana Count",
+      "score_detail": "{{correct}} / {{total}}"
+    },
+    "btn_back": "Back to Selection",
+    "time_eval": {
+      "fast": "Speedy",
+      "normal": "Steady",
+      "slow": "Careful"
+    }
   }
 }

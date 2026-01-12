@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
@@ -9,40 +9,55 @@ interface Props {
   autoRedirectSeconds?: number;
 }
 
+// 定义中文状态下的随机鼓励语录
+const CHINESE_QUOTES = [
+  '力学如力耕，勤惰尔自知。',
+  '操千曲而后晓声，观千剑而后识器。',
+  '博观而约取，厚积而薄发。',
+  '流水不腐，户枢不蠹。',
+  '行远必自迩，登高必自卑。',
+  '砚田无荒岁，笔耒有丰年。',
+];
+
 export const CompletionScreen: React.FC<Props> = ({
   onGoHome,
-  autoRedirectSeconds = 3,
+  autoRedirectSeconds = 4,
 }) => {
-  const { t } = useTranslation();
+  // 获取 i18n 对象用于判断语言
+  const { t, i18n } = useTranslation();
   const [countdown, setCountdown] = useState(autoRedirectSeconds);
-
   const [isExiting, setIsExiting] = useState(false);
-
-  // 防止重复触发跳转的锁
   const hasTriggeredExit = useRef(false);
 
-  // 封装退出逻辑：先动画，后跳转
+  // 2. 使用 useMemo 计算随机文案
+  // 作用：只在组件挂载或语言改变时计算一次，防止倒计时更新导致文案闪烁
+  const randomSubMessage = useMemo(() => {
+    // 判断是否为中文环境 (匹配 zh, zh-CN, zh-TW 等)
+    if (i18n.language && i18n.language.startsWith('zh')) {
+      const randomIndex = Math.floor(Math.random() * CHINESE_QUOTES.length);
+      return CHINESE_QUOTES[randomIndex];
+    }
+    // 非中文环境，使用默认翻译 key
+    return t('completion.subMessage');
+  }, [i18n.language, t]);
+
+  // 封装退出逻辑
   const handleExit = () => {
     if (hasTriggeredExit.current) return;
     hasTriggeredExit.current = true;
-
-    setIsExiting(true); // 触发 CSS 动画
-
-    // 等待 300ms (与 CSS transition 时间匹配) 后执行真正的跳转
+    setIsExiting(true);
     setTimeout(() => {
       onGoHome();
     }, 300);
   };
 
-  // 专门处理礼花效果
+  // 礼花效果
   useEffect(() => {
-    // 定义一个发射函数，创建一个“真实感”的爆炸效果
     const fireRealisticConfetti = () => {
       const count = 200;
       const defaults = {
-        origin: { y: 0.6 }, // 从屏幕中下方开始
-        zIndex: 2000, // 确保在最上层
-        // colors: ['#ff0000', '#00ff00', '#0000ff'], // 可选：自定义颜色
+        origin: { y: 0.6 },
+        zIndex: 2000,
       };
 
       function fire(particleRatio: number, opts: confetti.Options) {
@@ -53,7 +68,6 @@ export const CompletionScreen: React.FC<Props> = ({
         });
       }
 
-      // 发射几波不同参数的礼花，组合成一个大爆炸效果
       fire(0.25, { spread: 26, startVelocity: 55 });
       fire(0.2, { spread: 60 });
       fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
@@ -61,14 +75,11 @@ export const CompletionScreen: React.FC<Props> = ({
       fire(0.1, { spread: 120, startVelocity: 45 });
     };
 
-    // 执行发射
     fireRealisticConfetti();
+  }, []);
 
-    // 不需要清理函数，因为 canvas-confetti 会自动清理 canvas
-  }, []); // 空依赖数组，确保只在组件挂载时执行一次
-
+  // 倒计时逻辑
   useEffect(() => {
-    // 启动倒计时
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -79,8 +90,6 @@ export const CompletionScreen: React.FC<Props> = ({
         return prev - 1;
       });
     }, 1000);
-
-    // 清理定时器 (防止用户手动点击按钮离开后，定时器还在跑)
     return () => clearInterval(interval);
   }, []);
 
@@ -95,9 +104,10 @@ export const CompletionScreen: React.FC<Props> = ({
         <CheckCircle size={80} strokeWidth={2.5} />
       </div>
       <h1 className={styles.completeTitle}>{t('completion.title')}</h1>
-      <p className={styles.completeSub}>{t('completion.subMessage')}</p>
 
-      {/* 🔥 优化：将 animationDuration 设为动态，与倒计时秒数同步 */}
+      {/* 3. 使用计算好的 randomSubMessage */}
+      <p className={styles.completeSub}>{randomSubMessage}</p>
+
       <button
         className={styles.fillingBtn}
         onClick={handleExit}

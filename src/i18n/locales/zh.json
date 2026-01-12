@@ -158,10 +158,41 @@
   },
   "completion": {
     "title": "学习完成！",
-    "subMessage": "今天也完成得很棒。",
+    "subMessage": "力学如力耕，勤惰尔自知。",
     "backHome": "返回主页 ({{seconds}})"
   },
   "borrowedWords": {
     "origin": "词源"
+  },
+  "quiz_result": {
+    "unit": {
+      "kana": "假名",
+      "word": "单词"
+    },
+    "stats": {
+      "accuracy": "正确率",
+      "time": "总耗时",
+      "mistakes": "错题数",
+      "kana_count": "假名数",
+      "score_detail": "{{correct}} / {{total}} 题"
+    },
+    "btn_back": "返回选题",
+    "title": {
+      "perfect": "技进乎道，游刃有余",
+      "good": "瑕不掩瑜，温故知新",
+      "pass": "功不唐捐，玉汝于成。",
+      "fail": "成败有时，不可失志。"
+    },
+    "sub": {
+      "perfect": "我是清都山水郎，天教分付与疏狂！",
+      "good": "昔日龌龊不足夸，今朝放荡思无涯。",
+      "pass": "千淘万漉虽辛苦，吹尽狂沙始到金。",
+      "fail": "江东子弟多才俊，卷土重来未可知。"
+    },
+    "time_eval": {
+      "fast": "唯快不破",
+      "normal": "璞玉待琢",
+      "slow": "顾盼犹疑"
+    }
   }
 }

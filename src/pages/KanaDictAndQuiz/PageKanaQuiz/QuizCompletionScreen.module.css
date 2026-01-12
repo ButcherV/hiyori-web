@@ -1,3 +1,5 @@
+/* src/components/QuizCompletionScreen/QuizCompletionScreen.module.css */
+
 .container {
   position: fixed;
   top: 0;
@@ -25,23 +27,25 @@
   }
 }
 
-/* 顶部：大图标和标题 */
+/* Header */
 .header {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 32px;
+  width: 100%;
 }
 
 .trophyIcon {
   font-size: 64px;
   margin-bottom: 16px;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  /* 移除了内联样式，改用 class */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .title {
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 900;
   color: #1c1c1e;
   margin: 0;
 }
@@ -50,9 +54,11 @@
   font-size: 16px;
   color: #8e8e93;
   margin-top: 8px;
+  text-align: center;
+  width: 100%;
 }
 
-/* 中部：数据网格 */
+/* Stats Grid */
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -79,12 +85,39 @@
   transform: scale(0.98);
 }
 
+/* 🔥 新增：图标包装器 (替代内联 style) */
+.iconWrapper {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iconSuccess {
+  color: #34c759;
+}
+.iconInfo {
+  color: #007aff;
+}
+.iconError {
+  color: #ff3b30;
+}
+.iconNeutral {
+  color: #8e8e93;
+}
+
 .statValue {
   font-size: 24px;
   font-weight: 800;
   color: #1c1c1e;
   font-variant-numeric: tabular-nums;
   margin-bottom: 4px;
+}
+
+.statSubValue {
+  font-size: 14px;
+  color: var(--color-Gray6);
+  font-weight: 500;
+  margin-left: 4px;
 }
 
 .statLabel {
@@ -95,16 +128,22 @@
   letter-spacing: 0.5px;
 }
 
-/* 特殊样式：错误数高亮 */
+.statDetail {
+  font-size: 12px;
+  color: #8e8e93;
+  margin-top: 4px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 .mistakeValue {
   color: #ff3b30;
 }
-/* 特殊样式：正确率高亮 */
 .accuracyValue {
   color: #34c759;
 }
 
-/* 底部：按钮 */
+/* Action Area */
 .actionArea {
   width: 100%;
   max-width: 300px;

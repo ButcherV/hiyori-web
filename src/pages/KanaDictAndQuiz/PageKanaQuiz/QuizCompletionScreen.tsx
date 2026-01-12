@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
-import { Home, Clock, XCircle, CheckCircle, Hash, Type } from 'lucide-react';
+// src/components/QuizCompletionScreen/index.tsx
+
+import React, { useEffect, useMemo } from 'react';
+import { Home, Clock, XCircle, CheckCircle, BookOpen } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
 import styles from './QuizCompletionScreen.module.css';
 
 interface QuizStats {
-  totalKana: number; // 选择了多少个假名 (e.g. 5)
-  totalQuestions: number; // 一共多少道题 (e.g. 15)
-  mistakeCount: number; // 错了多少次
-  durationSeconds: number; // 耗时(秒)
+  totalQuestions: number;
+  wordCount: number;
+  totalKana: number;
+  mistakeCount: number;
+  durationSeconds: number;
 }
 
 interface Props {
@@ -16,25 +20,69 @@ interface Props {
 }
 
 export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
-  const { totalKana, totalQuestions, mistakeCount, durationSeconds } = stats;
+  const { t } = useTranslation();
+  const {
+    totalKana,
+    wordCount,
+    totalQuestions,
+    mistakeCount,
+    durationSeconds,
+  } = stats;
 
-  // 计算正确率
-  // 逻辑：每道题只有一次机会（答错就进解析了），所以 正确数 = 总题数 - 错题数
-  // 注意防御分母为0
+  // 1. 计算核心数据
   const correctCount = Math.max(0, totalQuestions - mistakeCount);
   const accuracy =
     totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
 
-  // 格式化时间 mm:ss
+  // 计算平均每题耗时 (用于评估熟练度)
+  const avgTime = totalQuestions > 0 ? durationSeconds / totalQuestions : 0;
+
+  // 2. 格式化时间
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60);
     const s = Math.floor(secs % 60);
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  // 礼花特效 (保留你喜欢的)
+  // 定义熟练度评价 (Time Evaluation)
+  const timeEval = useMemo(() => {
+    if (avgTime < 4.0) return 'fast'; // < 4秒/题
+    if (avgTime < 6.0) return 'normal'; // 3-6秒/题
+    return 'slow'; // > 6秒/题
+  }, [avgTime]);
+
+  // 4. 定义复合评价等级 (Result Tier)
+  // 逻辑：正确率是门槛，速度决定是否完美
+  const resultTier = useMemo(() => {
+    if (accuracy === 100) {
+      // 全对，且速度快 -> Perfect
+      // 全对，但速度慢 -> Good
+      return avgTime < 4.0 ? 'perfect' : 'good';
+    }
+    if (accuracy >= 80) return 'good';
+    if (accuracy >= 60) return 'pass';
+    return 'fail';
+  }, [accuracy, avgTime]);
+
+  // 5. 根据等级决定视觉元素
+  const renderHeaderIcon = () => {
+    switch (resultTier) {
+      case 'perfect':
+        return <div>🏆</div>; // 金杯
+      case 'good':
+        return <div>🥈</div>; // 银牌
+      case 'pass':
+        return <div>🥉</div>;
+      default:
+        return <div>🔥</div>;
+    }
+  };
+
+  // 6. 礼花特效
   useEffect(() => {
-    const duration = 15 * 1000;
+    if (resultTier !== 'perfect' && resultTier !== 'good') return;
+
+    const duration = 4 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = {
       startVelocity: 30,
@@ -42,16 +90,12 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
       ticks: 60,
       zIndex: 3000,
     };
-
     const randomInRange = (min: number, max: number) =>
       Math.random() * (max - min) + min;
 
     const interval: any = setInterval(function () {
       const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
+      if (timeLeft <= 0) return clearInterval(interval);
 
       const particleCount = 50 * (timeLeft / duration);
       confetti({
@@ -67,56 +111,92 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
     }, 250);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [resultTier]);
 
   return (
     <div className={styles.container}>
+      {/* Header */}
       <div className={styles.header}>
-        <div className={styles.trophyIcon}>🏆</div>
-        <h1 className={styles.title}>Quiz Completed!</h1>
-        <p className={styles.subTitle}>Great job keeping up the practice.</p>
+        <div className={styles.trophyIcon}>{renderHeaderIcon()}</div>
+        <h1 className={styles.title}>{t(`quiz_result.title.${resultTier}`)}</h1>
+        <p className={styles.subTitle}>{t(`quiz_result.sub.${resultTier}`)}</p>
       </div>
 
       <div className={styles.statsGrid}>
-        {/* 1. 正确率 */}
+        {/* 正确率 */}
         <div className={styles.statCard}>
+          <div className={`${styles.iconWrapper} ${styles.iconSuccess}`}>
+            <CheckCircle size={28} />
+          </div>
+          <div className={styles.statLabel}>
+            {t('quiz_result.stats.accuracy')}
+          </div>
           <div className={`${styles.statValue} ${styles.accuracyValue}`}>
             {accuracy}%
           </div>
-          <div className={styles.statLabel}>Accuracy</div>
+          <div className={styles.statDetail}>
+            {t('quiz_result.stats.score_detail', {
+              correct: correctCount,
+              total: totalQuestions,
+            })}
+          </div>
         </div>
 
-        {/* 2. 耗时 */}
+        {/* 总假名、总单词数 */}
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{formatTime(durationSeconds)}</div>
-          <div className={styles.statLabel}>Time</div>
+          <div className={`${styles.iconWrapper} ${styles.iconNeutral}`}>
+            <BookOpen size={28} />
+          </div>
+          {/* <div className={styles.statLabel}>
+            {t('quiz_result.stats.volume')}
+          </div> */}
+          {/* 假名数 */}
+          <div className={styles.statValue}>
+            {totalKana}
+            <span className={styles.statSubValue}>
+              {t('quiz_result.unit.kana')}
+            </span>
+          </div>
+          {/* 单词数 */}
+          <div className={styles.statValue}>
+            {wordCount}
+            <span className={styles.statSubValue}>
+              {t('quiz_result.unit.word')}
+            </span>
+          </div>
         </div>
 
-        {/* 3. 错误数 */}
+        {/* 错误数 */}
         <div className={styles.statCard}>
+          <div className={`${styles.iconWrapper} ${styles.iconError}`}>
+            <XCircle size={28} />
+          </div>
+          <div className={styles.statLabel}>
+            {t('quiz_result.stats.mistakes')}
+          </div>
           <div className={`${styles.statValue} ${styles.mistakeValue}`}>
             {mistakeCount}
           </div>
-          <div className={styles.statLabel}>Mistakes</div>
         </div>
 
-        {/* 4. 总假名数 */}
+        {/* 耗时 & 熟练度评价 */}
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{totalKana}</div>
-          <div className={styles.statLabel}>Kana Count</div>
+          <div className={`${styles.iconWrapper} ${styles.iconInfo}`}>
+            <Clock size={28} />
+          </div>
+          <div className={styles.statLabel}>{t('quiz_result.stats.time')}</div>
+          <div className={styles.statValue}>{formatTime(durationSeconds)}</div>
+          {/* 显示速度评价 */}
+          <div className={styles.statDetail}>
+            {t(`quiz_result.time_eval.${timeEval}`)}
+          </div>
         </div>
-
-        {/* 可选：显示总题数/正确数 */}
-        {/* <div className={styles.statCard}>
-          <div className={styles.statValue}>{correctCount}/{totalQuestions}</div>
-          <div className={styles.statLabel}>Score</div>
-        </div> */}
       </div>
 
       <div className={styles.actionArea}>
         <button className={styles.homeBtn} onClick={onGoHome}>
           <Home size={20} />
-          <span>Back to Selection</span>
+          <span>{t('quiz_result.btn_back')}</span>
         </button>
       </div>
     </div>
