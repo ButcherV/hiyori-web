@@ -44,24 +44,38 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  // 定义熟练度评价 (Time Evaluation)
+  // -------------------------------------------------------------
+  // 熟练度评价 (Time Evaluation)
+  // 逻辑：如果准确率太低 (<60%)，速度再快也是“无效答题”或“太急躁”
+  // -------------------------------------------------------------
   const timeEval = useMemo(() => {
+    // 门槛：如果正确率不及格，强制不评价速度，或者给一个特殊评价
+    if (accuracy < 60) return 'rushed'; // 比如定义一个 "太急了/无效"
+
     if (avgTime < 4.0) return 'fast'; // < 4秒/题
     if (avgTime < 6.0) return 'normal'; // 3-6秒/题
     return 'slow'; // > 6秒/题
-  }, [avgTime]);
+  }, [avgTime, accuracy]);
 
-  // 4. 定义复合评价等级 (Result Tier)
-  // 逻辑：正确率是门槛，速度决定是否完美
+  // -------------------------------------------------------------
+  // 复合评价等级 (Result Tier)
+  // 逻辑：准确率是第一优先级 (Gatekeeper)，速度是加分项 (Bonus)
+  // -------------------------------------------------------------
   const resultTier = useMemo(() => {
-    if (accuracy === 100) {
-      // 全对，且速度快 -> Perfect
-      // 全对，但速度慢 -> Good
-      return avgTime < 4.0 ? 'perfect' : 'good';
+    // 1. 先看准确率：不及格直接 Fail，不管多快
+    if (accuracy < 60) return 'fail';
+
+    // 2. 及格了 (60-79)：也就是 Pass，不管多快都只是 Pass
+    if (accuracy < 80) return 'pass';
+
+    // 3. 优秀 (>80)：这时候速度才有意义
+    // 只有 全对(100%) 且 速度快(fast) 才是 Perfect
+    if (accuracy === 100 && avgTime < 4.0) {
+      return 'perfect';
     }
-    if (accuracy >= 80) return 'good';
-    if (accuracy >= 60) return 'pass';
-    return 'fail';
+
+    // 其他情况（比如100%但慢，或者85%）都是 Good
+    return 'good';
   }, [accuracy, avgTime]);
 
   // 5. 根据等级决定视觉元素
@@ -74,7 +88,7 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
       case 'pass':
         return <div>🥉</div>;
       default:
-        return <div>🔥</div>;
+        return <div>🤦‍♂️</div>;
     }
   };
 
@@ -151,15 +165,15 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
             {t('quiz_result.stats.volume')}
           </div> */}
           {/* 假名数 */}
-          <div className={styles.statValue}>
-            {totalKana}
+          <div className={styles.statValueContainer}>
+            <span className={styles.statValue}>{totalKana}</span>
             <span className={styles.statSubValue}>
               {t('quiz_result.unit.kana')}
             </span>
           </div>
           {/* 单词数 */}
-          <div className={styles.statValue}>
-            {wordCount}
+          <div className={styles.statValueContainer}>
+            <span className={styles.statValue}>{wordCount}</span>
             <span className={styles.statSubValue}>
               {t('quiz_result.unit.word')}
             </span>
@@ -186,9 +200,10 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
           </div>
           <div className={styles.statLabel}>{t('quiz_result.stats.time')}</div>
           <div className={styles.statValue}>{formatTime(durationSeconds)}</div>
-          {/* 显示速度评价 */}
           <div className={styles.statDetail}>
-            {t(`quiz_result.time_eval.${timeEval}`)}
+            {timeEval === 'rushed'
+              ? ''
+              : t(`quiz_result.time_eval.${timeEval}`)}
           </div>
         </div>
       </div>

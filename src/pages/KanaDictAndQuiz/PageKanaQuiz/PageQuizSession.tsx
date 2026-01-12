@@ -271,7 +271,7 @@ export const PageQuizSession = () => {
     return queue.slice(currentIndex, currentIndex + MAX_STACK_SIZE);
   }, [queue, currentIndex]);
 
-  if (isFinished) {
+  if (!isFinished) {
     const durationSeconds = Math.max(
       0,
       Math.floor((Date.now() - startTimeRef.current) / 1000)
@@ -286,7 +286,7 @@ export const PageQuizSession = () => {
           mistakeCount: mistakeCount, // 错了几个
           durationSeconds: durationSeconds, // 耗时
         }}
-        onGoHome={() => navigate('/')}
+        onGoHome={() => navigate('/quiz/selection')}
       />
     );
   }

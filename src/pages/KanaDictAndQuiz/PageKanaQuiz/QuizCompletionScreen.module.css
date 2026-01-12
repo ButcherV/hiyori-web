@@ -113,6 +113,20 @@
   margin-bottom: 4px;
 }
 
+.statValueContainer {
+  .statValue {
+    width: 50px;
+    display: inline-block;
+    text-align: right;
+  }
+
+  .statSubValue {
+    width: 50px;
+    display: inline-block;
+    text-align: left;
+  }
+}
+
 .statSubValue {
   font-size: 14px;
   color: var(--color-Gray6);
