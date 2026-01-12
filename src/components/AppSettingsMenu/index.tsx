@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Info,
   Globe,
   Volume2,
   Speaker,
