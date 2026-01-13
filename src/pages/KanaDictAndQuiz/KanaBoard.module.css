@@ -10,7 +10,7 @@
   /* 让底部留出更多空间给悬浮 Footer 
      计算公式参考：Footer高度(约80px~140px) + 安全距离 
   */
-  padding-bottom: calc(140px + env(safe-area-inset-bottom));
+  padding-bottom: calc(160px + env(safe-area-inset-bottom));
 }
 
 /* --- 顶部导航栏 (Page Sticky Header) --- */

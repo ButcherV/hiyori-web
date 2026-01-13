@@ -78,9 +78,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'a·o',
     wordMeaning: { en: 'blue', zh: '蓝色', zhHant: '藍色' },
     wordEmoji: '🔵',
-    kanaDistractors: ['あ', 'む', 'す'],
+    kanaDistractors: ['あ', 'む', 'め', 'ぬ'],
     romajiDistractors: ['u', 'wo', 'ou'],
-    wordDistractors: ['あぬ', 'あめ', 'あむ'],
+    wordDistractors: ['あぬ', 'あめ', 'おあ', 'おぬ'],
   }),
 
   // か行 (K-Column)
@@ -94,11 +94,12 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'a·ka',
     wordMeaning: { en: 'red', zh: '红色', zhHant: '紅色' },
     wordEmoji: '🔴',
-    kanaDistractors: ['や', 'が', 'わ'],
+    kanaDistractors: ['ケ', 'タ', 'わ'],
     romajiDistractors: ['ga', 'ki', 'ko', 'ta'],
-    wordDistractors: ['あや', 'あが', 'ぬか'],
+    wordDistractors: ['あタ', 'あケ', 'おか'],
   }),
 
+  // --- 检查到这了 ---
   き: defineHSeion({
     id: 'h-ki',
     kana: 'き',

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FlipText } from './FlipText'; // 引入上面的组件
 import styles from './GreetingHeader.module.css';
+import { App } from '@capacitor/app';
 
 import {
   getJapaneseGreeting,
@@ -19,12 +20,37 @@ export function GreetingHeader() {
   const [mode, setMode] = useState<'jp' | 'local'>('jp');
 
   // 定时器：每 x 秒切换一次
+  // 新增两个状态：控制重置动画(resetKey) 和 记录App前后台状态(isActive)
+  const [resetKey, setResetKey] = useState(0);
+  const [isActive, setIsActive] = useState(true);
+
+  // 2. 新增监听：专门处理 IOS 切后台的逻辑
   useEffect(() => {
+    const handle = App.addListener('appStateChange', ({ isActive }) => {
+      setIsActive(isActive); // 更新状态
+
+      // 如果回到了前台，让 resetKey + 1
+      // 这会强制 React 销毁并重建整个组件，彻底消除卡顿
+      if (isActive) {
+        setResetKey((prev) => prev + 1);
+      }
+    });
+
+    return () => {
+      handle.then((h) => h.remove());
+    };
+  }, []);
+
+  // 3. 修改定时器：增加 (!isActive) 判断
+  useEffect(() => {
+    // ⚠️ 如果 App 在后台，直接 return，不执行任何切换逻辑
+    if (!isActive) return;
+
     const timer = setInterval(() => {
       setMode((prev) => (prev === 'jp' ? 'local' : 'jp'));
     }, 10000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isActive]);
 
   // 数据计算核心逻辑
   // 数据计算核心逻辑
@@ -117,7 +143,7 @@ export function GreetingHeader() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} key={resetKey}>
       {/* 1. 问候语区域 (3D 翻转) */}
       <div className={styles.greetingBox}>
         <FlipText text={content.greeting} className={getFontClass()} />

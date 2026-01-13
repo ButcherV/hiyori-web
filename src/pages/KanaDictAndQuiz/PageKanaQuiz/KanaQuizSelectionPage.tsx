@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Play, X, Dices, RotateCcw, Crown } from 'lucide-react';
+import { Play, X, Dices, RotateCcw } from 'lucide-react';
 
 import { KanaBoard } from '../KanaBoard';
 import { KANA_DB } from '../../../datas/kanaData';
@@ -131,7 +131,7 @@ export const KanaQuizSelectionPage = () => {
     setSelectedIds(new Set(randomSelection));
   };
 
-  // 图例
+  // 图例数据
   const legendConfig = useMemo(
     () => [
       {
@@ -161,6 +161,16 @@ export const KanaQuizSelectionPage = () => {
     ],
     [t, currentTabStats]
   ); // 依赖翻译和统计数据
+
+  // 是否显示图例？
+  // 逻辑：只要有 "非 New" 的数据 (即 Weak, Mastered, Perfect 任意一个大于 0)，就代表用户开始学了，显示图例。
+  const showLegend = useMemo(() => {
+    return (
+      currentTabStats.weak > 0 ||
+      currentTabStats.mastered > 0 ||
+      currentTabStats.perfect > 0
+    );
+  }, [currentTabStats]);
 
   return (
     <KanaBoard
@@ -221,19 +231,21 @@ export const KanaQuizSelectionPage = () => {
           )}
 
           {/*  图例横条 (Legend Bar) */}
-          <div className={styles.legendBar}>
-            {legendConfig.map((item) => (
-              <div
-                key={item.key}
-                className={styles.legendItem}
-                title={item.label}
-              >
-                <div className={`${styles.legendDot} ${item.dotClass}`} />
-                <span className={styles.legendCount}>{item.count}</span>
-                <span className={styles.legendLabel}>{item.label}</span>
-              </div>
-            ))}
-          </div>
+          {showLegend && (
+            <div className={styles.legendBar}>
+              {legendConfig.map((item) => (
+                <div
+                  key={item.key}
+                  className={styles.legendItem}
+                  title={item.label}
+                >
+                  <div className={`${styles.legendDot} ${item.dotClass}`} />
+                  <span className={styles.legendCount}>{item.count}</span>
+                  <span className={styles.legendLabel}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* 底部操作内容 (Start 按钮等) */}
           <div className={styles.footerContent}>
