@@ -7,12 +7,14 @@ import {
   Trash2,
   BookOpen,
   MessageCircle,
+  Eraser,
 } from 'lucide-react';
 import styles from './AppSettingsMenu.module.css';
 
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
 import { useProgress } from '../../context/ProgressContext';
+import { useMistakes } from '../../context/MistakeContext';
 import { Switch } from '../../components/Switch';
 
 interface AppSettingsMenuProps {
@@ -79,6 +81,7 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
   } = useSettings();
 
   const { clearHistory } = useProgress();
+  const { clearAllMistakes } = useMistakes();
 
   const handleLanguageChange = (code: 'en' | 'zh' | 'zh-Hant') => {
     updateSettings({ uiLanguage: code });
@@ -88,6 +91,11 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
   const handleClearData = async () => {
     await clearHistory();
     if (onClose) onClose();
+  };
+
+  const handleClearMistakes = async () => {
+    await clearAllMistakes();
+    // onClose?.();
   };
 
   return (
@@ -231,6 +239,20 @@ export const AppSettingsMenu: React.FC<AppSettingsMenuProps> = ({
         </div>
         <span className={styles.value}>1.0.0 (Beta)</span>
       </div> */}
+
+      {/* 清除共用数据 (熟练度/错题) - 影响错题本和选做页 */}
+      <div
+        className={styles.controlRow}
+        onClick={handleClearMistakes}
+        style={{ cursor: 'pointer' }}
+      >
+        <div className={styles.labelGroup}>
+          <Eraser size={20} className={styles.icon} color="#ff3b30" />
+          <span className={styles.label} style={{ color: '#ff3b30' }}>
+            {t('settings.reset_proficiency_btn') || 'Reset Quiz Data'}
+          </span>
+        </div>
+      </div>
 
       {/* 清除数据 */}
       <div

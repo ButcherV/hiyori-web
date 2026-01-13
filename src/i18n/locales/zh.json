@@ -110,6 +110,9 @@
     "data_management": "数据管理",
     "clear_progress_btn": "清除学习数据",
     "clear_success": "数据清除成功",
+    "reset_proficiency_btn": "清空测试记录",
+    "clear_mistakes_title": "清空测试记录",
+    "clear_mistakes_message": "确定要清除所有测试记录吗？包括错题历史在内的所有记录也将被删除，此操作无法撤销。",
     "kanji_background": "汉字基础",
     "ui_language": "界面语言",
     "contact_author": "联系作者"

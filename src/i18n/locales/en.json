@@ -108,7 +108,10 @@
     "clear_success": "Data cleared successfully",
     "kanji_background": "Learn with Kanji",
     "ui_language": "Language",
-    "contact_author": "Contact Author"
+    "contact_author": "Contact Author",
+    "reset_proficiency_btn": "Reset Proficiency",
+    "clear_mistakes_title": "Reset Proficiency?",
+    "clear_mistakes_message": "All mastery progress (colors, crowns, and weak stats) will be permanently reset to 'New'. This cannot be undone."
   },
   "stats": {
     "title": "My Journey",

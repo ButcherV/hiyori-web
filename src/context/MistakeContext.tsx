@@ -9,6 +9,9 @@ import {
   type MistakeStore,
   type ProficiencyStatus,
 } from '../pages/KanaDictAndQuiz/PageKanaQuiz/quizLogic';
+import { Dialog } from '@capacitor/dialog';
+import { Toast } from '@capacitor/toast';
+import { useTranslation } from 'react-i18next';
 
 // Context 定义
 interface MistakeContextType {
@@ -23,11 +26,12 @@ const MistakeContext = createContext<MistakeContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'hiyori_mistakes_v1';
 const MASTERY_THRESHOLD = 2; // 🔥 必须连对 2 次才能变绿
-const PERFECT_THRESHOLD = 3; // 👑 皇冠：连续对 10 次
+const PERFECT_THRESHOLD = 8; // 👑 皇冠：连续对 8 次
 
 export const MistakeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { t } = useTranslation();
   const [mistakes, setMistakes] = useState<MistakeStore>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -141,8 +145,23 @@ export const MistakeProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  const clearAllMistakes = () => {
-    setMistakes({});
+  const clearAllMistakes = async () => {
+    const { value } = await Dialog.confirm({
+      title: t('settings.clear_mistakes_title'),
+      message: t('settings.clear_mistakes_message'),
+      okButtonTitle: t('common.delete'), // "删除"
+      cancelButtonTitle: t('common.cancel'), // "取消"
+    });
+
+    if (value) {
+      setMistakes({}); // 清空 State
+
+      await Toast.show({
+        text: t('settings.clear_success'),
+        duration: 'short',
+        position: 'bottom',
+      });
+    }
   };
 
   return (
