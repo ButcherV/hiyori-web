@@ -79,12 +79,18 @@
     }
   },
   "kana_quiz": {
-    "selection_title": "Custom Quiz Selection",
+    "selection_title": "Selection",
     "start_btn": "Start Quiz",
     "limit_hint": "/ {{max}} (Min {{min}})",
     "aria": {
       "random": "Random Select",
       "reset": "Reset Selection"
+    },
+    "legend": {
+      "new": "New",
+      "weak": "Weak",
+      "mastered": "Mastered",
+      "perfect": "Perfect!"
     }
   },
   "settings": {
@@ -132,7 +138,8 @@
       "strokePractice": "Stroke Practice",
       "finalReview": "Final Review",
       "reviewWord": "Review Word",
-      "reviewKana": "Review Kana"
+      "reviewKana": "Review Kana",
+      "correctAnswer": "Correct Answer"
     }
   },
   "trace": {

@@ -70,6 +70,28 @@
   --font-family-ja:
     'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', 'Yu Gothic',
     'Noto Sans JP', sans-serif;
+
+  /* ==========================================
+     🔥 熟练度状态色 (Proficiency Colors)
+     ========================================== */
+
+  /* 1. 生疏/错题 (Weak - Red) */
+  --color-weak-bg: #fff1f0;
+  --color-weak-border: #ffccc7;
+  --color-weak-text: #ff4d4f;
+
+  /* 2. 已掌握 (Mastered - Green) */
+  --color-mastered-bg: #f6ffed;
+  --color-mastered-border: #d9f7be;
+  --color-mastered-text: #389e0d;
+
+  /* 3. 完美/皇冠 (Perfect - Gold) */
+  --color-perfect-bg-start: #fffbf0; /* 渐变起始 */
+  --color-perfect-bg-end: #fff3cd; /* 渐变结束 */
+  --color-perfect-border: #ffe58f;
+  --color-perfect-text: #d48806; /* 主文字 */
+  --color-perfect-text-sub: #d46b08; /* 副文字(Romaji) */
+  --color-perfect-shadow: rgba(250, 173, 20, 0.3);
 }
 
 .jaFont {

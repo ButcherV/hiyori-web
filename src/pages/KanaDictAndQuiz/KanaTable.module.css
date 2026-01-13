@@ -83,7 +83,7 @@
   position: relative;
 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid white;
   cursor: pointer;
   transition: all 0.1s ease-out;
 }
@@ -154,14 +154,124 @@
   }
 }
 
-/* 选中态 */
+/* 选中态 (Selected) - 必须放在最后以覆盖上面的颜色 */
 .selectedCell {
   background-color: var(--color-Blue);
+  border-color: var(--color-Blue);
   transform: scale(0.96);
+}
+
+.selectedCell .mainChar,
+.selectedCell .romaji,
+.selectedCell .subChar {
+  color: white !important;
+}
+
+/* 生疏/错题 (Weak) - 红色背景 */
+.cellWeak {
+  background-color: var(--color-weak-bg);
+  border-color: var(--color-weak-border);
 
   .mainChar,
+  .romaji {
+    color: var(--color-weak-text);
+  }
+}
+
+/*  已掌握 (Mastered) - 绿色背景 */
+.cellMastered {
+  background-color: var(--color-mastered-bg);
+  border-color: var(--color-mastered-border);
+
+  .mainChar,
+  .romaji {
+    color: var(--color-mastered-text);
+  }
+}
+
+/* =================================================================
+   皇冠样式 (Perfect)
+   特征：金色渐变背景 + 金色边框 + 外部光晕 + 内部扫光动画
+================================================================= */
+
+/* 扫光动画关键帧 */
+@keyframes shineEffect {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.6; /* 最亮的时候 */
+  }
+  100% {
+    left: 200%; /* 扫出屏幕外 */
+    opacity: 0;
+  }
+}
+
+/* --- 定义【常态】下的流光金样式 --- */
+/* 注意：这里只写 .cellPerfect，不要加 .selectedCell */
+.cellPerfect {
+  background: linear-gradient(
+    135deg,
+    var(--color-perfect-bg-start) 0%,
+    var(--color-perfect-bg-end) 100%
+  );
+
+  border: 1px solid var(--color-perfect-border);
+  color: var(--color-perfect-text);
+  box-shadow: 0 4px 12px var(--color-perfect-shadow);
+
+  position: relative;
+  overflow: hidden; /* 防止扫光出界 */
+
+  .romaji,
+  .mainChar {
+    color: var(--color-perfect-text-sub);
+    /* opacity: 0.8; */
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    animation: shineEffect 2.4s infinite ease-in-out;
+    pointer-events: none;
+  }
+}
+
+/* --- 定义【选中态】的特殊逻辑（同步补丁） --- */
+/* 当格子既是 Perfect 又是 Selected 时 */
+.selectedCell.cellPerfect {
+  /* 强制变回蓝色背景，覆盖掉上面的金色渐变 */
+  background: var(--color-Blue);
+  border-color: var(--color-Blue);
+  box-shadow: none;
+  color: white;
+
   .romaji,
   .subChar {
-    color: white;
+    color: white !important;
+    opacity: 1;
+  }
+
+  /* 关键：把流光“隐身”，而不是移除。
+     这样动画时间轴还在后台跑，取消选中时才能无缝衔接。 */
+  &::before {
+    visibility: hidden;
   }
 }

@@ -8,7 +8,7 @@ import {
   useEffect,
   type CSSProperties,
 } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { X, Check, CircleX, CircleEqual } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
@@ -34,6 +34,7 @@ import {
 import { useSound } from '../../../hooks/useSound';
 import { useTTS } from '../../../hooks/useTTS';
 import { useSettings } from '../../../context/SettingsContext';
+import { useMistakes } from '../../../context/MistakeContext';
 
 // --- 本地逻辑 ---
 import { generateQuizQueue, getAnswerCard, type LessonCard } from './quizLogic';
@@ -44,9 +45,22 @@ export const PageQuizSession = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const { recordQuizResult } = useMistakes();
 
-  // 1. 获取选题参数
-  const targetIds = location.state?.targetIds || [];
+  // ============================================================
+  // 🔥 防呆守卫 (Safety Guard)
+  // ============================================================
+  // 获取原始参数
+  const rawTargetIds = location.state?.targetIds;
+
+  // 如果参数不存在或为空（说明是刷新页面或非法访问），直接踢回选择页
+  // replace={true} 防止用户点后退按钮死循环
+  if (!rawTargetIds || rawTargetIds.length === 0) {
+    return <Navigate to="/quiz/selection" replace />;
+  }
+
+  // 1. 此时 TypeScript 知道 targetIds 肯定存在了，放心使用
+  const targetIds = rawTargetIds as string[];
 
   // 2. 初始化队列
   const [queue, setQueue] = useState<LessonCard[]>(() =>
@@ -72,6 +86,11 @@ export const PageQuizSession = () => {
   // 统计数据
   const startTimeRef = useRef(Date.now()); // 记录进入页面的时间戳
   const [mistakeCount, setMistakeCount] = useState(0); // 记录错误次数
+
+  // 🔥 记录本场 Session 中每个 ID 的判定状态
+  // 'success' = 已经给过奖励了，后面再对也不加分
+  // 'fail' = 已经错了，后面再对也不算数
+  const sessionResults = useRef<Record<string, 'success' | 'fail'>>({});
 
   // 状态
   const [isShaking, setIsShaking] = useState(false);
@@ -142,6 +161,8 @@ export const PageQuizSession = () => {
       return;
     }
 
+    const currentId = currentItem.data.id;
+
     // B. Quiz 卡
     const isRightSwipe = dir === 'right';
     const isUserCorrect =
@@ -172,6 +193,13 @@ export const PageQuizSession = () => {
         triggerSound('score');
         triggerHaptic(ImpactStyle.Medium);
 
+        // 🔥 核心逻辑：会话级防抖
+        // 只有当这个 ID 在本场还没“定性”时，才给予奖励
+        if (!sessionResults.current[currentId]) {
+          recordQuizResult(currentId, true);
+          sessionResults.current[currentId] = 'success';
+        }
+
         markGroupComplete(); // 进度+1
         setQueue((prev) => removeRemainingGroupCards(prev)); // 移除剩余干扰
       } else {
@@ -186,7 +214,14 @@ export const PageQuizSession = () => {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
 
+      // 用于统计本次 Session 错误数
       recordMistake(currentItem);
+
+      // 🔥 核心逻辑：惩罚逻辑
+      // 只要错一次，直接重罚（清零 Streak）
+      recordQuizResult(currentId, false);
+      // 并标记为 'fail'，防止后续同ID题目做对时误加分
+      sessionResults.current[currentId] = 'fail';
       markGroupComplete(); // 进度+1 (虽然错了，但这题算过掉了，进入解析环节)
 
       const answerCard = getAnswerCard(currentItem);
@@ -271,7 +306,7 @@ export const PageQuizSession = () => {
     return queue.slice(currentIndex, currentIndex + MAX_STACK_SIZE);
   }, [queue, currentIndex]);
 
-  if (!isFinished) {
+  if (isFinished) {
     const durationSeconds = Math.max(
       0,
       Math.floor((Date.now() - startTimeRef.current) / 1000)
@@ -299,7 +334,6 @@ export const PageQuizSession = () => {
       <div className={styles.topNav}>
         <button
           className={styles.closeBtn}
-          //   回选择页，而不是回 home 页
           onClick={() => navigate('/quiz/selection')}
         >
           <CircleX size={28} />
@@ -309,7 +343,7 @@ export const PageQuizSession = () => {
           <SegmentedProgressBar
             learnCurrent={0}
             learnTotal={0}
-            // 🔥 使用 completedGroups.size 作为分子，totalGroups 作为分母
+            // 使用 completedGroups.size 作为分子，totalGroups 作为分母
             quizCurrent={completedGroups.size}
             quizTotal={totalGroups}
             phase="QUIZ"

@@ -5,7 +5,12 @@ import {
   useMemo,
   type CSSProperties,
 } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useLocation,
+  useParams,
+  Navigate,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
@@ -76,13 +81,13 @@ export const TestStudySession = () => {
   const [isShaking, setIsShaking] = useState(false);
 
   const location = useLocation();
-  const targetChars = location.state?.targetChars || [
-    'あ',
-    'い',
-    'う',
-    'え',
-    'お',
-  ];
+
+  // 路由守卫
+  if (!location.state?.targetChars) {
+    return <Navigate to="/" replace />;
+  }
+
+  const targetChars = location.state.targetChars;
 
   const playSound = useSound();
   const { speak, cancel } = useTTS();

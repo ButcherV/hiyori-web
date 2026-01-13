@@ -14,6 +14,7 @@ import {
   YOON_COL_HEADERS,
 } from './constants';
 import styles from './KanaBoard.module.css';
+import { type ProficiencyStatus } from './PageKanaQuiz/quizLogic';
 
 interface KanaBoardProps {
   // --- 状态 ---
@@ -40,6 +41,7 @@ interface KanaBoardProps {
   // --- 插槽 (Slots) ---
   headerRight?: React.ReactNode; // 自定义右上角区域
   footer?: React.ReactNode; // 自定义底部区域
+  proficiencyMap?: Record<string, ProficiencyStatus>;
 }
 
 export const KanaBoard: React.FC<KanaBoardProps> = ({
@@ -59,6 +61,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
   selectedIds,
   headerRight,
   footer,
+  proficiencyMap,
 }) => {
   return (
     <div
@@ -112,6 +115,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               colHeaders={SEION_COL_HEADERS}
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
+              proficiencyMap={proficiencyMap}
             />
           </section>
 
@@ -127,6 +131,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               colHeaders={SEION_COL_HEADERS}
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
+              proficiencyMap={proficiencyMap}
             />
           </section>
 
@@ -142,6 +147,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               colHeaders={YOON_COL_HEADERS}
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
+              proficiencyMap={proficiencyMap}
             />
           </section>
         </div>

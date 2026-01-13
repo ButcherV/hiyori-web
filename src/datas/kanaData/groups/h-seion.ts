@@ -63,9 +63,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'e',
     wordMeaning: { en: 'picture; drawing', zh: '画；图画', zhHant: '畫；圖畫' },
     wordEmoji: '🖼️',
-    kanaDistractors: ['ん', 'あ', 'そ'],
+    kanaDistractors: ['ん', 'さ', 'そ'],
     romajiDistractors: ['i', 'ei', 'ye'],
-    wordDistractors: ['い', 'ん', 'あ'],
+    wordDistractors: ['そ', 'ん', 'さ'],
   }),
 
   お: defineHSeion({

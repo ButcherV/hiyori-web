@@ -7,6 +7,25 @@ import {
 import { uuid, shuffle } from '../../../utils/generalTools';
 
 // ==========================================
+// 错题本核心数据结构定义
+// ==========================================
+
+export interface MistakeRecord {
+  id: string; // 假名 ID (如 'h-a')
+  mistakeCount: number; // 累计错误次数
+  streak: number; // 连续答对次数 (决定是否掌握)
+  lastMistakeTime: number; // 上次错误时间
+  // 总测试数
+  // testCount: number;
+}
+
+// 存储结构：Key 是假名ID，Value 是记录
+export type MistakeStore = Record<string, MistakeRecord>;
+
+// 熟练度状态：UI 渲染四种状态
+export type ProficiencyStatus = 'new' | 'weak' | 'mastered' | 'perfect';
+
+// ==========================================
 // 类型定义 (保持与 Card 组件兼容)
 // ==========================================
 
@@ -160,7 +179,7 @@ export const getAnswerCard = (failedQuizCard: LessonCard): LessonCard => {
       uniqueId: `answer-word-${uuid()}`,
       type: 'WORD_LEARN',
       data: data,
-      headerTitle: 'Correct Answer',
+      headerTitle: 'studyKana.session.correctAnswer',
       isOriginal: false, // 标记为补救卡
     };
   }
@@ -170,7 +189,7 @@ export const getAnswerCard = (failedQuizCard: LessonCard): LessonCard => {
     uniqueId: `answer-kana-${uuid()}`,
     type: 'KANA_LEARN',
     data: data,
-    headerTitle: 'Correct Answer',
+    headerTitle: 'studyKana.session.correctAnswer',
     isOriginal: false,
   };
 };

@@ -88,7 +88,6 @@ export const AppRouter = () => {
         <Route
           path="/quiz/selection"
           element={
-            // 🔥 Slide 需要 direction 来判断是从右边滑入(1)还是原地不动(-1)
             <PageTransition preset="slide" depth={2} direction={direction}>
               <KanaQuizSelectionPage />
             </PageTransition>

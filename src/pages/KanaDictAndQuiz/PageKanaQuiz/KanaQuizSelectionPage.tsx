@@ -1,15 +1,18 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Play, X, Dices, RotateCcw } from 'lucide-react';
+import { Play, X, Dices, RotateCcw, Crown } from 'lucide-react';
 
 import { KanaBoard } from '../KanaBoard';
 import { KANA_DB } from '../../../datas/kanaData';
 import styles from './KanaQuizSelectionPage.module.css';
+import { useMistakes } from '../../../context/MistakeContext';
 
 export const KanaQuizSelectionPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // 🔥 2. 从 Context 获取实时熟练度地图
+  const { proficiencyMap } = useMistakes();
 
   const [activeTab, setActiveTab] = useState<'hiragana' | 'katakana'>(
     'hiragana'
@@ -33,6 +36,44 @@ export const KanaQuizSelectionPage = () => {
       .map((id) => kanaMap[id])
       .filter(Boolean);
   }, [selectedIds, kanaMap]);
+
+  // =========================================================
+  // 🔥 核心修正：基于 Context 状态统计当前 Tab 数量
+  // =========================================================
+  const currentTabStats = useMemo(() => {
+    // 初始化计数器
+    const stats = { new: 0, weak: 0, mastered: 0, perfect: 0 };
+    const prefix = activeTab === 'hiragana' ? 'h-' : 'k-';
+
+    // 遍历数据库中的所有假名
+    // @ts-ignore
+    Object.values(KANA_DB).forEach((item: any) => {
+      // 1. 过滤：只统计当前 Tab 的假名
+      if (!item?.id || !item.id.startsWith(prefix)) return;
+
+      // 2. 直接读取 Context 里的状态 ('perfect', 'mastered', 'weak' 或 undefined)
+      const status = proficiencyMap[item.id];
+
+      // 3. 根据状态归类
+      switch (status) {
+        case 'perfect':
+          stats.perfect++;
+          break;
+        case 'mastered':
+          stats.mastered++;
+          break;
+        case 'weak':
+          stats.weak++;
+          break;
+        default:
+          // Context 中没有记录 (undefined)，或者逻辑上不算上述三种的，都算 New
+          stats.new++;
+          break;
+      }
+    });
+
+    return stats;
+  }, [activeTab, proficiencyMap]); // 依赖项：切换 Tab 或 Context 变动时重算
 
   const tabOptions = useMemo(
     () => [
@@ -90,6 +131,37 @@ export const KanaQuizSelectionPage = () => {
     setSelectedIds(new Set(randomSelection));
   };
 
+  // 图例
+  const legendConfig = useMemo(
+    () => [
+      {
+        key: 'new',
+        label: t('kana_quiz.legend.new') || 'New',
+        count: currentTabStats.new,
+        dotClass: styles.dotNew,
+      },
+      {
+        key: 'weak',
+        label: t('kana_quiz.legend.weak') || 'Weak',
+        count: currentTabStats.weak,
+        dotClass: styles.dotWeak,
+      },
+      {
+        key: 'mastered',
+        label: t('kana_quiz.legend.mastered') || 'Mastered',
+        count: currentTabStats.mastered,
+        dotClass: styles.dotMastered,
+      },
+      {
+        key: 'perfect',
+        label: t('kana_quiz.legend.perfect') || 'Perfect',
+        count: currentTabStats.perfect,
+        dotClass: styles.dotPerfect,
+      },
+    ],
+    [t, currentTabStats]
+  ); // 依赖翻译和统计数据
+
   return (
     <KanaBoard
       activeTab={activeTab}
@@ -104,7 +176,7 @@ export const KanaQuizSelectionPage = () => {
       isSelectionMode={true}
       selectedIds={selectedIds}
       showRomaji={true}
-      // 🔥 修改右上角：图标按钮组
+      proficiencyMap={proficiencyMap}
       headerRight={
         <div className={styles.iconGroup}>
           {/* 骰子按钮：随时可用 */}
@@ -130,6 +202,7 @@ export const KanaQuizSelectionPage = () => {
       }
       footer={
         <div className={styles.footer}>
+          {/* 选中项预览条 (存在时显示) */}
           {selectedItems.length > 0 && (
             <div className={styles.previewBar}>
               <div className={styles.previewScroll}>
@@ -147,6 +220,22 @@ export const KanaQuizSelectionPage = () => {
             </div>
           )}
 
+          {/*  图例横条 (Legend Bar) */}
+          <div className={styles.legendBar}>
+            {legendConfig.map((item) => (
+              <div
+                key={item.key}
+                className={styles.legendItem}
+                title={item.label}
+              >
+                <div className={`${styles.legendDot} ${item.dotClass}`} />
+                <span className={styles.legendCount}>{item.count}</span>
+                <span className={styles.legendLabel}>{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 底部操作内容 (Start 按钮等) */}
           <div className={styles.footerContent}>
             <div className={styles.counterInfo}>
               <span className={styles.countNumber}>{selectedIds.size}</span>

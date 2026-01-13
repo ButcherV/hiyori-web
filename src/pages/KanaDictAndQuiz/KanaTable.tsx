@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { KANA_DB } from '../../datas/kanaData';
 import styles from './KanaTable.module.css';
+import { type ProficiencyStatus } from './PageKanaQuiz/quizLogic';
 
 interface Props {
   activeScript: 'hiragana' | 'katakana';
@@ -12,6 +13,7 @@ interface Props {
   hideColHeaders?: boolean;
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
+  proficiencyMap?: Record<string, ProficiencyStatus>;
 }
 
 export const KanaTable: React.FC<Props> = ({
@@ -24,6 +26,7 @@ export const KanaTable: React.FC<Props> = ({
   hideColHeaders = false,
   isSelectionMode = false,
   selectedIds,
+  proficiencyMap,
 }) => {
   const idMap = useMemo(() => {
     const map: Record<string, any> = {};
@@ -56,13 +59,29 @@ export const KanaTable: React.FC<Props> = ({
     if (!idMap[crossId]) crossId = `${crossPrefix}yoon-${romajiKey}`;
     const crossData = idMap[crossId];
 
-    // 🔥 2. 判断选中状态
+    // 🔥 3. 获取状态并计算样式
+    const status: ProficiencyStatus = proficiencyMap?.[id] || 'new';
     const isSelected = isSelectionMode && selectedIds?.has(id);
 
-    // 🔥 3. 计算样式
-    // 选中的高亮，没选中的保持默认
+    let statusClass = '';
+    // 逻辑优化：
+    // A. 如果是 Perfect (皇冠/流光)：
+    //    必须要常驻。无论是否选中，都加上类名。
+    //    原因：防止移除类名导致动画时间轴重置 (Desync)。
+    if (status === 'perfect') {
+      statusClass = styles.cellPerfect;
+    }
+    // B. 如果是 Weak / Mastered (普通颜色)：
+    //    互斥逻辑。只有在【未选中】时才加类名。
+    //    原因：选中就是蓝色，不需要底下的红/绿色干扰。
+    else if (!isSelected) {
+      if (status === 'weak') statusClass = styles.cellWeak;
+      if (status === 'mastered') statusClass = styles.cellMastered;
+    }
+
     const cellClass = `
       ${styles.cell} 
+      ${statusClass}
       ${isSelected ? styles.selectedCell : ''}
     `;
 
@@ -70,7 +89,8 @@ export const KanaTable: React.FC<Props> = ({
       <div key={id} className={cellClass} onClick={() => onItemClick?.(data)}>
         <div>
           <span className={`${styles.mainChar} jaFont`}>{data.kana}</span>
-          {crossData && (
+          {/* 只有在【非选择模式】(即字典模式) 下，才显示对照用的副标题字符 */}
+          {crossData && !isSelectionMode && (
             <span className={`${styles.subChar} jaFont`}>{crossData.kana}</span>
           )}
         </div>
