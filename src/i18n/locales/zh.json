@@ -22,8 +22,8 @@
     "kanaTest": {
       "dictionary": "五十音图",
       "dictionary_sub": "五十音图检索",
-      "random_test": "随机自测",
-      "random_test_sub": "自定义选题",
+      "random_test": "自选测试",
+      "random_test_sub": "自选假名",
       "mistake_book": "错题记录",
       "mistake_book_sub": "查漏补缺"
     },
@@ -97,6 +97,9 @@
       "mastered": "掌握",
       "perfect": "精通"
     }
+  },
+  "mistake_notebook": {
+    "title": "错题记录"
   },
   "settings": {
     "display": "显示设置",

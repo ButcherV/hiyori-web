@@ -1,0 +1,81 @@
+/* src/pages/KanaDictAndQuiz/PageMistakeNotebook/QuizConfirmSheet.module.css */
+
+.container {
+  padding: 0 20px 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 顶部的圆形图标背景 */
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(0, 122, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1c1c1e;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  color: #8e8e93;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 280px;
+}
+
+.highlight {
+  color: #007aff;
+  font-weight: 600;
+}
+
+.buttonGroup {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+/* 按钮基础样式 */
+.baseBtn {
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.baseBtn:active {
+  opacity: 0.8;
+}
+
+/* "再看看" 按钮 */
+.cancelBtn {
+  flex: 1;
+  background-color: #f2f2f7;
+  color: #1c1c1e;
+}
+
+/* "开始挑战" 按钮 */
+.startBtn {
+  flex: 2;
+  background-color: #007aff;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}

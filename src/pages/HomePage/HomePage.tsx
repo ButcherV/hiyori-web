@@ -178,7 +178,7 @@ export function HomePage() {
           <div
             className={styles.quickActionBtn}
             onClick={() => navigate('/quiz/selection')}
-            style={{ '--btn-color': '#FF2D55' } as React.CSSProperties}
+            style={{ '--btn-color': '#FF9500' } as React.CSSProperties}
           >
             <div className={styles.quickIconBox}>
               <Shuffle size={18} strokeWidth={2} />
@@ -197,7 +197,7 @@ export function HomePage() {
           <div
             className={styles.quickActionBtn}
             onClick={() => navigate('/mistake-book')}
-            style={{ '--btn-color': '#FF9500' } as React.CSSProperties}
+            style={{ '--btn-color': '#FF2D55' } as React.CSSProperties}
           >
             <div className={styles.quickIconBox}>
               <BookX size={18} strokeWidth={2} />

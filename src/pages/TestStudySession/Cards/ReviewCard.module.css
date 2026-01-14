@@ -34,7 +34,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-Blue-Light, #eff6ff); /* 浅蓝色背景 */
+  background-color: var(--color-xxxBlue);
   border-radius: 12px;
   padding: 8px 0;
   height: 100%;

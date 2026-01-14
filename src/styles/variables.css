@@ -78,12 +78,12 @@
   /* 1. 生疏/错题 (Weak - Red) */
   --color-weak-bg: #fff1f0;
   --color-weak-border: #ffccc7;
-  --color-weak-text: #ff4d4f;
+  --color-weak-text: #ff3b30;
 
   /* 2. 已掌握 (Mastered - Green) */
   --color-mastered-bg: #f6ffed;
   --color-mastered-border: #d9f7be;
-  --color-mastered-text: #389e0d;
+  --color-mastered-text: #25c764;
 
   /* 3. 完美/皇冠 (Perfect - Gold) */
   --color-perfect-bg-start: #fffbf0; /* 渐变起始 */

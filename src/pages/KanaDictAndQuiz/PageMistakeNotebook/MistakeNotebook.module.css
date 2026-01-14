@@ -1,0 +1,129 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.headerWrapper {
+  background-color: white;
+  /* backdrop-filter: blur(10px); */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  padding-top: calc(env(safe-area-inset-top) + 24px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-Gray9);
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  z-index: 2; /* 保证按钮在标题上面 */
+}
+
+.testBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-Blue);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+  z-index: 2;
+}
+.testBtn:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+.tabBar {
+  padding: 16px;
+}
+
+.listArea {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 160px;
+  color: var(--color-Gray5);
+  gap: 18px;
+  font-weight: 900;
+  font-size: 24px;
+}
+
+/* 🔥 Banner 样式 */
+.banner {
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bannerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.bannerRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.fixedRow {
+  color: #34c759; /* Green */
+}
+
+.failedRow {
+  color: #ff3b30; /* Red */
+}
+
+.closeBannerBtn {
+  background: none;
+  border: none;
+  color: var(--color-Gray5);
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}

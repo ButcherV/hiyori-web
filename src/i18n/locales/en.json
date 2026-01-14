@@ -93,6 +93,9 @@
       "perfect": "Perfect!"
     }
   },
+  "mistake_notebook": {
+    "title": "Mistake Notebook"
+  },
   "settings": {
     "display": "DISPLAY",
     "appearance": "Appearance",

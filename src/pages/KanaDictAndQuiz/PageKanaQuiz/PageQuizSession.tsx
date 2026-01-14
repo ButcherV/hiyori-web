@@ -47,6 +47,9 @@ export const PageQuizSession = () => {
   const { t, i18n } = useTranslation();
   const { recordQuizResult } = useMistakes();
 
+  // 🔥 获取来源模式
+  const mode = location.state?.mode; // 'mistake_review' | 'manual' | undefined
+
   // ============================================================
   // 🔥 防呆守卫 (Safety Guard)
   // ============================================================
@@ -306,6 +309,19 @@ export const PageQuizSession = () => {
     return queue.slice(currentIndex, currentIndex + MAX_STACK_SIZE);
   }, [queue, currentIndex]);
 
+  const handleFinish = () => {
+    if (mode === 'mistake_review') {
+      // 如果是从错题本进来的，带上战果返回错题本
+      navigate('/mistake-book', {
+        state: { sessionResults: sessionResults.current },
+        replace: true, // 替换历史，防止点返回键又回到 quiz
+      });
+    } else {
+      // 否则回选择页
+      navigate('/quiz/selection', { replace: true });
+    }
+  };
+
   if (isFinished) {
     const durationSeconds = Math.max(
       0,
@@ -321,7 +337,7 @@ export const PageQuizSession = () => {
           mistakeCount: mistakeCount, // 错了几个
           durationSeconds: durationSeconds, // 耗时
         }}
-        onGoHome={() => navigate('/quiz/selection')}
+        onGoHome={handleFinish}
       />
     );
   }
@@ -332,10 +348,7 @@ export const PageQuizSession = () => {
     <div className={`${styles.container} ${styles.quizContainer}`}>
       {/* Top Bar */}
       <div className={styles.topNav}>
-        <button
-          className={styles.closeBtn}
-          onClick={() => navigate('/quiz/selection')}
-        >
+        <button className={styles.closeBtn} onClick={() => navigate(-1)}>
           <CircleX size={28} />
         </button>
 

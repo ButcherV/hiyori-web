@@ -8,6 +8,7 @@ import { TestStudySession } from '../pages/TestStudySession/TestStudySession';
 import { KanaDictionaryPage } from '../pages/KanaDictAndQuiz/PageKanaDictionary/KanaDictionaryPage';
 import { KanaQuizSelectionPage } from '../pages/KanaDictAndQuiz/PageKanaQuiz/KanaQuizSelectionPage';
 import { PageQuizSession } from '../pages/KanaDictAndQuiz/PageKanaQuiz/PageQuizSession';
+import { MistakeNotebook } from '../pages/KanaDictAndQuiz/PageMistakeNotebook/MistakeNotebook';
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
 
@@ -25,7 +26,7 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname === '/study/dates') return 2;
   if (pathname === '/kana-dictionary') return 2;
   if (pathname === '/dice') return 2;
-
+  if (pathname === '/mistake-book') return 2;
   if (pathname === '/quiz/session') return 3;
 
   return 100;
@@ -63,6 +64,15 @@ export const AppRouter = () => {
           element={
             <PageTransition preset="scale" depth={2} direction={direction}>
               <TestStudySession />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/mistake-book"
+          element={
+            <PageTransition preset="slide" depth={2} direction={direction}>
+              <MistakeNotebook />
             </PageTransition>
           }
         />
