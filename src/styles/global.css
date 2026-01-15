@@ -23,3 +23,61 @@ body {
   font-style: normal;
   font-display: swap; /* 确保字体未加载完时先显示默认字体，避免白屏 */
 }
+
+/* --- 全局按钮通用样式 --- */
+
+/* 基础结构与交互 */
+.btn-base {
+  padding: 14px;
+  border-radius: 999px; /* 只要这个数值大于高度的一半，浏览器就会自动把它限制为高度的一半 */
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+  user-select: none;
+  /* 移除移动端点击高亮 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 点击反馈 */
+.btn-base:active {
+  opacity: 0.8;
+  transform: scale(0.98); /* 增加一点点微缩手感 */
+}
+
+/* 禁用状态 */
+.btn-base:disabled {
+  background-color: #e5e5ea !important;
+  color: #aeaeb2 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  opacity: 1;
+  transform: none;
+}
+
+/* --- 变体：主按钮 (蓝色) --- */
+.btn-primary {
+  background-color: #007aff;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+/* --- 变体：次要按钮 (灰色) --- */
+.btn-secondary {
+  background-color: #f2f2f7;
+  color: #1c1c1e;
+}
+
+/* --- 变体：危险按钮 (红色 - 备用) --- */
+.btn-danger {
+  background-color: #ff3b30;
+  color: white;
+}

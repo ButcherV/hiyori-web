@@ -115,6 +115,21 @@
       "desc_3": "即可彻底移出列表。",
       "btn_cancel": "再看看",
       "btn_start": "开始挑战"
+    },
+    "help_sheet": {
+      "title": "使用说明",
+      "mechanism_title": "如何移出错题？",
+      "mechanism_text": "所有错题需要 <strong>连续答对 2 轮次</strong> 才能移出列表。<br/>这是为了防止靠猜测过关，确保真正掌握。",
+      "legend_title": "状态图解",
+      "legend_review_title": "复习中",
+      "legend_review_desc": "红圈内的数字代表累计错误次数。",
+      "legend_remove_title": "即将移出",
+      "legend_remove_desc": "出现绿色半环，表示已答对 1 轮次。",
+      "func_title": "功能按钮",
+      "func_blitz_title": "错题突击",
+      "func_blitz_desc": "对当前列表的所有错题进行集中测试。",
+      "func_sound_title": "听发音",
+      "func_sound_desc": "点击列表中的任意一行即可播放。"
     }
   },
   "settings": {

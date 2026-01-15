@@ -1,19 +1,16 @@
-// src/pages/KanaDictAndQuiz/PageMistakeNotebook/QuizConfirmSheet.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sword } from 'lucide-react';
+import { Sword, CheckCircle2, Circle, Play } from 'lucide-react';
 import BottomSheet from '../../../components/BottomSheet';
 import styles from './QuizConfirmSheet.module.css';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  // 🔥 改动 1：不再只传 count，而是传具体的 ID 数组和当前 Tab
   hMistakeIds: string[];
   kMistakeIds: string[];
   defaultTab: 'hiragana' | 'katakana';
-  // 🔥 改动 2：确认回调需要把最终计算好的 IDs 传回去
+  // 🔥 确认回调需要把最终计算好的 IDs 传回去
   onConfirm: (finalIds: string[]) => void;
 }
 
@@ -85,7 +82,6 @@ export const QuizConfirmSheet: React.FC<Props> = ({
           {t('mistake_notebook.confirm_sheet.desc_3')}
         </p>
 
-        {/* 🔥 新增：复选框区域 */}
         <div className={styles.optionsContainer}>
           {/* 平假名选项 */}
           <label
@@ -99,7 +95,19 @@ export const QuizConfirmSheet: React.FC<Props> = ({
               checked={isHSelected}
               disabled={hMistakeIds.length === 0}
               onChange={(e) => setHSelected(e.target.checked)}
+              style={{ display: 'none' }}
             />
+            {isHSelected ? (
+              <CheckCircle2
+                size={20}
+                className={styles.checkIcon}
+                fill="#007AFF"
+                color="white"
+              />
+            ) : (
+              <Circle size={20} color="#C7C7CC" />
+            )}
+
             <span>
               {t('mistake_notebook.hiragana')} ({hMistakeIds.length})
             </span>
@@ -117,7 +125,20 @@ export const QuizConfirmSheet: React.FC<Props> = ({
               checked={isKSelected}
               disabled={kMistakeIds.length === 0}
               onChange={(e) => setKSelected(e.target.checked)}
+              style={{ display: 'none' }}
             />
+
+            {isKSelected ? (
+              <CheckCircle2
+                size={20}
+                className={styles.checkIcon}
+                fill="#007AFF"
+                color="white"
+              />
+            ) : (
+              <Circle size={20} color="#C7C7CC" />
+            )}
+
             <span>
               {t('mistake_notebook.katakana')} ({kMistakeIds.length})
             </span>
@@ -125,20 +146,29 @@ export const QuizConfirmSheet: React.FC<Props> = ({
         </div>
 
         <div className={styles.buttonGroup}>
-          <button
+          {/* <button
             onClick={onClose}
-            className={`${styles.baseBtn} ${styles.cancelBtn}`}
+            className={`${styles.cancelBtn} btn-base btn-secondary`}
           >
             {t('mistake_notebook.confirm_sheet.btn_cancel')}
           </button>
 
           <button
             onClick={handleConfirm}
-            // 如果一个都没选，禁止开始
             disabled={totalCount === 0}
-            className={`${styles.baseBtn} ${styles.startBtn}`}
+            className={`${styles.startBtn} btn-base btn-primary`}
           >
             {t('mistake_notebook.confirm_sheet.btn_start')}
+          </button> */}
+          <button
+            onClick={handleConfirm}
+            className={`${styles.startBtn} btn-base btn-primary`}
+            disabled={totalCount === 0}
+          >
+            <Play size={18} fill="currentColor" />
+            <span style={{ marginLeft: 4 }}>
+              {t('mistake_notebook.confirm_sheet.btn_start')}
+            </span>
           </button>
         </div>
       </div>

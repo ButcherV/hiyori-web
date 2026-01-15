@@ -105,11 +105,26 @@
       "prefix": "Ready to eliminate",
       "suffix": "mistakes?",
       "desc_1": "This is an efficient way to review.",
-      "desc_2": "Correct answers earn progress tags,",
-      "desc_highlight": "2 consecutive correct answers",
+      "desc_2": "Passing items earn progress tags,",
+      "desc_highlight": "2 consecutive passes",
       "desc_3": "will remove them from the list.",
       "btn_cancel": "Not Now",
       "btn_start": "Start Challenge"
+    },
+    "help_sheet": {
+      "title": "Instructions",
+      "mechanism_title": "How to remove mistakes?",
+      "mechanism_text": "Mistakes are removed after <strong>2 consecutive sessions</strong>.<br/>This prevents guessing and ensures true mastery.",
+      "legend_title": "Status Legend",
+      "legend_review_title": "Reviewing",
+      "legend_review_desc": "The number in the red circle shows total mistakes.",
+      "legend_remove_title": "Almost Removed",
+      "legend_remove_desc": "A green ring indicates 1 successful review.",
+      "func_title": "Feature Buttons",
+      "func_blitz_title": "Mistake Blitz",
+      "func_blitz_desc": "Start a focused test on all mistakes in the list.",
+      "func_sound_title": "Pronunciation",
+      "func_sound_desc": "Tap any row in the list to play audio."
     }
   },
   "settings": {

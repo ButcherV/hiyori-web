@@ -260,7 +260,7 @@ export const KanaQuizSelectionPage = () => {
             </div>
 
             <button
-              className={styles.startBtn}
+              className={`${styles.startBtn} btn-base btn-primary`}
               disabled={selectedIds.size < MIN_SELECTION}
               onClick={handleStartQuiz}
             >

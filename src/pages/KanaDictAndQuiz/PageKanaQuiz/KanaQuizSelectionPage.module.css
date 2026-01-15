@@ -102,33 +102,10 @@
 }
 
 .startBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-Blue);
-  color: white;
-  border: none;
-  border-radius: 20px;
   height: 40px;
   padding: 0 16px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
 }
 
-.startBtn:disabled {
-  background-color: #e5e5ea;
-  color: #aeaeb2;
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-.startBtn:active:not(:disabled) {
-  transform: scale(0.96);
-  opacity: 0.9;
-}
 .iconGroup {
   display: flex;
   align-items: center;
