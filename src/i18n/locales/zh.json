@@ -99,7 +99,23 @@
     }
   },
   "mistake_notebook": {
-    "title": "错题记录"
+    "title": "错题记录",
+    "banner_fixed": "移出",
+    "banner_failed": "加重",
+    "empty": "暂无错题！",
+    "hiragana": "平假名",
+    "katakana": "片假名",
+    "confirm_sheet": {
+      "title": "错题突击",
+      "prefix": "准备好消灭",
+      "suffix": "个错题了吗？",
+      "desc_1": "这是集中复习的高效方式。",
+      "desc_2": "答对的假名将获得进度标记，",
+      "desc_highlight": "连续两轮次答对",
+      "desc_3": "即可彻底移出列表。",
+      "btn_cancel": "再看看",
+      "btn_start": "开始挑战"
+    }
   },
   "settings": {
     "display": "显示设置",

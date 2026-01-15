@@ -7,7 +7,6 @@
   align-items: center;
 }
 
-/* 顶部的圆形图标背景 */
 .iconWrapper {
   width: 64px;
   height: 64px;
@@ -32,7 +31,7 @@
   color: #8e8e93;
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 32px;
+  margin-bottom: 24px; /* 稍微调小，给选项留空间 */
   max-width: 280px;
 }
 
@@ -41,13 +40,53 @@
   font-weight: 600;
 }
 
+/* 🔥 新增：选项区域 */
+.optionsContainer {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #f2f2f7;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+/* 选中状态高亮 */
+.checkboxLabel.checked {
+  background-color: rgba(0, 122, 255, 0.1);
+  border-color: #007aff;
+  color: #007aff;
+  font-weight: 600;
+}
+
+.checkboxLabel.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkboxInput {
+  accent-color: #007aff;
+  width: 18px;
+  height: 18px;
+}
+
 .buttonGroup {
   display: flex;
   width: 100%;
   gap: 12px;
 }
 
-/* 按钮基础样式 */
 .baseBtn {
   padding: 14px;
   border-radius: 16px;
@@ -65,14 +104,19 @@
   opacity: 0.8;
 }
 
-/* "再看看" 按钮 */
+.baseBtn:disabled {
+  background-color: #e5e5ea;
+  color: #aeaeb2;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
 .cancelBtn {
   flex: 1;
   background-color: #f2f2f7;
   color: #1c1c1e;
 }
 
-/* "开始挑战" 按钮 */
 .startBtn {
   flex: 2;
   background-color: #007aff;

@@ -37,6 +37,32 @@ export const MistakeNotebook = () => {
   const [bannerData, setBannerData] = useState<BannerData | null>(null);
   const [isQuizConfirmOpen, setIsQuizConfirmOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [hasInitializedTab, setHasInitializedTab] = useState(false);
+
+  useEffect(() => {
+    // 如果已经初始化过，或者数据还没加载出来，就跳过
+    if (hasInitializedTab || !mistakeRecords) return;
+
+    // 临时计算一下数量 (为了不依赖下方的 useMemo，保证逻辑独立且迅速)
+    let hCount = 0;
+    let kCount = 0;
+    Object.values(mistakeRecords).forEach((record) => {
+      if (record.mistakeCount > 0 && record.streak < 2) {
+        if (record.id.startsWith('h-')) hCount++;
+        else if (record.id.startsWith('k-')) kCount++;
+      }
+    });
+
+    // 🧠 核心判断逻辑：
+    // 只有当 "平假名没有错题" 且 "片假名有错题" 时，才切到片假名。
+    // 其他情况（都有、都没有、只有平假名有）默认就是 'hiragana'，不用动。
+    if (hCount === 0 && kCount > 0) {
+      setActiveTab('katakana');
+    }
+
+    // 标记为已初始化，以后不再自动乱跳
+    setHasInitializedTab(true);
+  }, [mistakeRecords, hasInitializedTab]);
 
   useEffect(() => {
     // 读取路由参数中的 sessionResults
@@ -73,30 +99,36 @@ export const MistakeNotebook = () => {
         // 🧹 清理：清除 location state，防止刷新页面或切后台回来重复显示
         window.history.replaceState({}, document.title);
 
-        // ⏲️ 倒计时：6 秒后自动关闭
-        const timer = setTimeout(() => setBannerData(null), 6000);
+        // ⏲️ 倒计时：10 秒后自动关闭
+        const timer = setTimeout(() => setBannerData(null), 10000);
         return () => clearTimeout(timer);
       }
     }
   }, [location.state, mistakeRecords]); // 依赖 location.state
 
-  const counts = useMemo(() => {
-    let hCount = 0;
-    let kCount = 0;
+  // 🔥 改动: 分别准备 Hiragana 和 Katakana 的错题 ID 列表
+  // 这里既用于计算 Counts，也用于传给 QuizConfirmSheet
+  const mistakeIds = useMemo(() => {
+    const hIds: string[] = [];
+    const kIds: string[] = [];
 
     if (mistakeRecords) {
       Object.values(mistakeRecords).forEach((record) => {
-        // ✅ 修正：只有“犯过错” 且 “连对次数不足 2 次”的才算有效错题
         if (record.mistakeCount > 0 && record.streak < 2) {
-          if (record.id.startsWith('h-')) hCount++;
-          else if (record.id.startsWith('k-')) kCount++;
+          if (record.id.startsWith('h-')) hIds.push(record.id);
+          else if (record.id.startsWith('k-')) kIds.push(record.id);
         }
       });
     }
-    return { h: hCount, k: kCount };
+    return { hIds, kIds };
   }, [mistakeRecords]);
 
-  const allItems = useMemo(() => {
+  // Counts 直接从上面的 IDs 取长度即可
+  const counts = { h: mistakeIds.hIds.length, k: mistakeIds.kIds.length };
+  const totalMistakes = counts.h + counts.k;
+
+  // 列表显示用的 Items (受 Tab 限制)
+  const displayItems = useMemo(() => {
     if (!mistakeRecords) return [];
     const prefix = activeTab === 'hiragana' ? 'h-' : 'k-';
 
@@ -129,18 +161,16 @@ export const MistakeNotebook = () => {
       })
       .filter(Boolean) as MistakeItem[];
 
-    // 排序：错误次数高 -> 低
     list.sort((a, b) => b.mistakeCount - a.mistakeCount);
-
     return list;
   }, [mistakeRecords, activeTab]);
 
-  const handleTestAll = () => {
-    if (allItems.length === 0) return;
-    navigate('/quiz/session', {
-      state: { mode: 'mistake_review', targetIds: allItems.map((i) => i.id) },
-    });
-  };
+  // const handleTestAll = () => {
+  //   if (allItems.length === 0) return;
+  //   navigate('/quiz/session', {
+  //     state: { mode: 'mistake_review', targetIds: allItems.map((i) => i.id) },
+  //   });
+  // };
 
   // const debugTriggerBanner = () => {
   //   setBannerData({
@@ -148,17 +178,18 @@ export const MistakeNotebook = () => {
   //     failed: ['か', 'き'], // 假装这几个又错了
   //   });
   // };
-  // 🟢 点击闪电：不再直接跳转，而是打开确认面板
+  // 🟢 点击闪电：打开确认面板
   const handleTestClick = () => {
-    if (allItems.length === 0) return;
+    if (totalMistakes === 0) return;
     setIsQuizConfirmOpen(true);
   };
-
-  // 🟢 确认面板中的“开始”：这才是真正的跳转
-  const handleRealStart = () => {
+  const handleRealStart = (targetIds: string[]) => {
     setIsQuizConfirmOpen(false);
     navigate('/quiz/session', {
-      state: { mode: 'mistake_review', targetIds: allItems.map((i) => i.id) },
+      state: {
+        mode: 'mistake_review',
+        targetIds: targetIds, // 使用用户勾选的 IDs
+      },
     });
   };
 
@@ -187,7 +218,7 @@ export const MistakeNotebook = () => {
                 <Zap size={20} fill="currentColor" />
               </button>
             )} */}
-            {allItems.length > 0 && (
+            {totalMistakes > 0 && (
               <button onClick={handleTestClick} className={styles.testBtn}>
                 <Zap size={20} fill="currentColor" />
               </button>
@@ -235,14 +266,42 @@ export const MistakeNotebook = () => {
         {bannerData && (
           <motion.div
             className={styles.banner}
-            // 进场动画
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            // 离场动画
-            exit={{ height: 0, opacity: 0 }}
+            // 🔥 1. 进场状态：所有占空间的属性都必须是 0
+            initial={{
+              height: 0,
+              opacity: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+            // 目标状态：恢复到 CSS 定义的默认值
+            // Framer Motion 很聪明，写 'var(--p-top)' 或直接不写具体数值，
+            // 它会自动读取你 CSS (.banner) 里的原始 padding 值作为终点。
+            // 这里我们用 CSS 变量或者直接写具体数值，最简单的是让它自动检测，
+            // 但为了保险，建议显式恢复到你 CSS 里的值（比如 12px），或者使用 "auto" (如果支持)。
+            // 最稳妥的做法是：在这里不写具体 padding 值，Framer 会自动读取 DOM 里的 computed style。
+            // 但为了配合 initial，我们需要告诉它“变回原来的样子”。
+            animate={{
+              height: 'auto',
+              opacity: 1,
+              paddingTop: 12, // 恢复 CSS 里的 12px
+              paddingBottom: 12, // 恢复 CSS 里的 12px
+              marginTop: 0, // 如果 CSS 里有 margin，这里也要恢复
+              marginBottom: 0,
+            }}
+            // 离场状态：再次全部变回 0
+            exit={{
+              height: 0,
+              opacity: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              marginTop: 0,
+              marginBottom: 0,
+            }}
             // 过渡效果
-            transition={{ duration: 0.3 }}
-            // 防止布局溢出，内容裁剪
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            // 防止布局溢出
             style={{ overflow: 'hidden' }}
           >
             <div className={styles.bannerContent}>
@@ -251,7 +310,7 @@ export const MistakeNotebook = () => {
                 <div className={`${styles.bannerRow} ${styles.fixedRow}`}>
                   <PartyPopper size={16} />
                   <span>
-                    {t('mistake_notebook.banner_fixed', '移出')}:{' '}
+                    {t('mistake_notebook.banner_fixed')}:{' '}
                     <span className={`jaFont`}>
                       {bannerData.fixed.join(', ')}
                     </span>
@@ -263,7 +322,7 @@ export const MistakeNotebook = () => {
                 <div className={`${styles.bannerRow} ${styles.failedRow}`}>
                   <AlertTriangle size={16} />
                   <span>
-                    {t('mistake_notebook.banner_failed', '加重')}:{' '}
+                    {t('mistake_notebook.banner_failed')}:{' '}
                     <span className={`jaFont`}>
                       {bannerData.failed.join(', ')}
                     </span>
@@ -284,14 +343,14 @@ export const MistakeNotebook = () => {
       {/* ========================================================= */}
 
       <div className={styles.listArea}>
-        {allItems.length === 0 ? (
+        {displayItems.length === 0 ? (
           <div className={styles.emptyState}>
             <span style={{ fontSize: 48 }}>🎉</span>
-            <p>{t('mistake_notebook.empty', '暂无错题！')}</p>
+            <p>{t('mistake_notebook.empty')}</p>
           </div>
         ) : (
           <MistakeRowCard
-            items={allItems}
+            items={displayItems}
             onPlaySound={speak}
             onBadgeClick={() => setIsHelpOpen(true)}
           />
@@ -302,7 +361,9 @@ export const MistakeNotebook = () => {
         isOpen={isQuizConfirmOpen}
         onClose={() => setIsQuizConfirmOpen(false)}
         onConfirm={handleRealStart}
-        count={allItems.length}
+        hMistakeIds={mistakeIds.hIds}
+        kMistakeIds={mistakeIds.kIds}
+        defaultTab={activeTab}
       />
 
       <RulesHelpSheet

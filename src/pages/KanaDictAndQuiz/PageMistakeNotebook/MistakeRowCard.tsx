@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Volume2, Footprints } from 'lucide-react'; // 引入一个脚印或火焰图标表示进度
+import { Volume2 } from 'lucide-react';
 import { useSettings } from '../../../context/SettingsContext';
 import styles from './MistakeRowCard.module.css';
 import commonStyles from '../../TestStudySession/TestStudySession.module.css';
@@ -64,12 +64,12 @@ export const MistakeRowCard: React.FC<Props> = ({
     ) {
       return (
         <div className={styles.wordContent}>
+          <span className={`${styles.wordReading} ${commonStyles.jaFont}`}>
+            {item.wordKana}
+          </span>
           <div className={styles.wordRow}>
             <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
               {item.word}
-            </span>
-            <span className={`${styles.wordReading} ${commonStyles.jaFont}`}>
-              {item.wordKana}
             </span>
           </div>
           <span className={styles.reviewMeaning}>
@@ -80,6 +80,9 @@ export const MistakeRowCard: React.FC<Props> = ({
     }
     return (
       <div className={styles.wordContent}>
+        {item.wordRomaji && (
+          <span className={styles.wordReading}>{item.wordRomaji}</span>
+        )}
         <div className={styles.wordRow}>
           {item.wordKana ? (
             <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
@@ -89,9 +92,6 @@ export const MistakeRowCard: React.FC<Props> = ({
             <span className={`${styles.reviewWord} ${commonStyles.jaFont}`}>
               {item.word}
             </span>
-          )}
-          {item.wordRomaji && (
-            <span className={styles.wordReading}>{item.wordRomaji}</span>
           )}
         </div>
         <span className={styles.reviewMeaning}>{getMeaning(item.meaning)}</span>

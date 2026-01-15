@@ -7,7 +7,6 @@
 
 .headerWrapper {
   background-color: white;
-  /* backdrop-filter: blur(10px); */
   position: sticky;
   top: 0;
   z-index: 10;
@@ -67,6 +66,7 @@
 
 .listArea {
   padding: 16px;
+  /* padding-top: 8px; */
   display: flex;
   flex-direction: column;
 }
@@ -107,15 +107,15 @@
   gap: 6px;
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
+  /* line-height: 1.4; */
 }
 
 .fixedRow {
-  color: #34c759; /* Green */
+  color: var(--color-success);
 }
 
 .failedRow {
-  color: #ff3b30; /* Red */
+  color: var(--color-error); /* Red */
 }
 
 .closeBannerBtn {

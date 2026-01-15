@@ -94,7 +94,23 @@
     }
   },
   "mistake_notebook": {
-    "title": "Mistake Notebook"
+    "title": "Mistake Notebook",
+    "banner_fixed": "Fixed",
+    "banner_failed": "Failed",
+    "empty": "No mistakes yet!",
+    "hiragana": "Hiragana",
+    "katakana": "Katakana",
+    "confirm_sheet": {
+      "title": "Mistake Blitz",
+      "prefix": "Ready to eliminate",
+      "suffix": "mistakes?",
+      "desc_1": "This is an efficient way to review.",
+      "desc_2": "Correct answers earn progress tags,",
+      "desc_highlight": "2 consecutive correct answers",
+      "desc_3": "will remove them from the list.",
+      "btn_cancel": "Not Now",
+      "btn_start": "Start Challenge"
+    }
   },
   "settings": {
     "display": "DISPLAY",
