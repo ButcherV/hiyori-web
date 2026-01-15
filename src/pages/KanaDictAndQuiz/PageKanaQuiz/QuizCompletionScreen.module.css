@@ -81,9 +81,9 @@
   transition: transform 0.2s;
 }
 
-.statCard:active {
+/* .statCard:active {
   transform: scale(0.98);
-}
+} */
 
 /* 🔥 新增：图标包装器 (替代内联 style) */
 .iconWrapper {
@@ -165,23 +165,4 @@
 
 .homeBtn {
   width: 100%;
-  height: 56px;
-  border-radius: 28px;
-  background-color: #007aff;
-  color: white;
-  border: none;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.homeBtn:active {
-  transform: scale(0.96);
-  background-color: #0062cc;
 }

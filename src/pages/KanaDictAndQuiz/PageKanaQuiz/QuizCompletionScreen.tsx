@@ -209,7 +209,10 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
       </div>
 
       <div className={styles.actionArea}>
-        <button className={styles.homeBtn} onClick={onGoHome}>
+        <button
+          className={`${styles.homeBtn} btn-base btn-primary`}
+          onClick={onGoHome}
+        >
           <Home size={20} />
           <span>{t('quiz_result.btn_back')}</span>
         </button>

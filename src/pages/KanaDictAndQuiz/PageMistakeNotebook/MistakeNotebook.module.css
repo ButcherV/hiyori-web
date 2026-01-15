@@ -7,7 +7,9 @@
 
 .headerWrapper {
   background-color: white;
-  position: sticky;
+  position: fixed;
+  left: 0;
+  right: 0;
   top: 0;
   z-index: 10;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -69,6 +71,7 @@
   /* padding-top: 8px; */
   display: flex;
   flex-direction: column;
+  padding-top: calc(env(safe-area-inset-top) + 166px);
 }
 
 .emptyState {

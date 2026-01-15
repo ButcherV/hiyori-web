@@ -71,6 +71,7 @@
   color: white;
   font-size: 10px;
   font-weight: 800;
+  flex-shrink: 0;
 }
 
 /* 模拟 2: 绿色进度环 (容器) */
