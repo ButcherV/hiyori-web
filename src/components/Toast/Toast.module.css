@@ -1,0 +1,52 @@
+.toastWrapper {
+  position: fixed; /* 改为 fixed，相对于视口定位 */
+  top: calc(env(safe-area-inset-top) + 32px);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 9999; /* 确保极高层级 */
+  pointer-events: none; /* 让点击穿透 */
+}
+
+.toast {
+  background-color: rgba(32, 32, 35, 0.95);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  /* 增加一点最大宽度，防止手机上太宽 */
+  max-width: 90vw;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff9500;
+  flex-shrink: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.desc {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 500;
+}

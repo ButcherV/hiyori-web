@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Play, X, Dices, RotateCcw, Lock } from 'lucide-react';
@@ -7,6 +7,7 @@ import { KanaBoard } from '../KanaBoard';
 import { KANA_DB } from '../../../datas/kanaData';
 import styles from './KanaQuizSelectionPage.module.css';
 import { useMistakes } from '../../../context/MistakeContext';
+import { Toast } from '../../../components/Toast/Toast';
 
 export const KanaQuizSelectionPage = () => {
   const navigate = useNavigate();
@@ -20,7 +21,11 @@ export const KanaQuizSelectionPage = () => {
 
   const MIN_SELECTION = 5;
   const MAX_SELECTION = 12;
-  const MISTAKE_LIMIT = 5;
+  const MISTAKE_LIMIT = 20;
+
+  // Toast 状态管理
+  const [showLimitToast, setShowLimitToast] = useState(false);
+  const toastTimerRef = useRef<number | null>(null);
 
   const kanaMap = useMemo(() => {
     const map: Record<string, any> = {};
@@ -87,6 +92,37 @@ export const KanaQuizSelectionPage = () => {
 
     return ids;
   }, [mistakeCounts, mistakes]);
+
+  // =========================================================
+  // Toast 触发逻辑
+  // =========================================================
+  const triggerToast = useCallback(() => {
+    setShowLimitToast(true);
+
+    // 使用 ref.current 读取和清除定时器
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+
+    // 设置新定时器
+    toastTimerRef.current = setTimeout(() => {
+      setShowLimitToast(false);
+    }, 4000);
+  }, []);
+
+  const isLocked = useMemo(() => {
+    return activeTab === 'hiragana'
+      ? mistakeCounts.h >= MISTAKE_LIMIT
+      : mistakeCounts.k >= MISTAKE_LIMIT;
+  }, [activeTab, mistakeCounts]);
+
+  useEffect(() => {
+    if (isLocked) {
+      triggerToast();
+    } else {
+      setShowLimitToast(false);
+    }
+  }, [isLocked, triggerToast, activeTab]);
 
   // =========================================================
   // 🔥 核心修正：基于 Context 状态统计当前 Tab 数量
@@ -176,12 +212,10 @@ export const KanaQuizSelectionPage = () => {
 
   // 随机选择逻辑
   const handleRandomSelection = () => {
-    const isLocked =
-      activeTab === 'hiragana'
-        ? mistakeCounts.h >= MISTAKE_LIMIT
-        : mistakeCounts.k >= MISTAKE_LIMIT;
-
-    if (isLocked) return; // 锁定状态下禁止随机选择
+    if (isLocked) {
+      triggerToast();
+      return;
+    }
     // A. 确定当前的 ID 前缀 (h- 或 k-)，只在当前 Tab 内随机
     const prefix = activeTab === 'hiragana' ? 'h-' : 'k-';
 
@@ -208,7 +242,9 @@ export const KanaQuizSelectionPage = () => {
   };
 
   // 暂时留空，不做 Toast
-  const handleDisabledClick = () => {};
+  const handleDisabledClick = () => {
+    triggerToast();
+  };
 
   // 图例数据
   const legendConfig = useMemo(
@@ -251,106 +287,147 @@ export const KanaQuizSelectionPage = () => {
     );
   }, [currentTabStats]);
 
-  return (
-    <KanaBoard
-      activeTab={activeTab}
-      tabOptions={tabOptions}
-      title={t('kana_quiz.selection_title')}
-      seionTitle={t('kana_dictionary.sections.seion')}
-      dakuonTitle={t('kana_dictionary.sections.dakuon')}
-      yoonTitle={t('kana_dictionary.sections.yoon')}
-      onBackClick={() => navigate('/')}
-      onTabChange={setActiveTab}
-      onItemClick={handleItemClick}
-      isSelectionMode={true}
-      selectedIds={selectedIds}
-      showRomaji={true}
-      proficiencyMap={proficiencyMap}
-      disabledIds={disabledIds}
-      onDisabledItemClick={handleDisabledClick}
-      headerRight={
-        <div className={styles.iconGroup}>
-          {/* 骰子按钮：随时可用 */}
-          <button
-            className={styles.iconBtn}
-            onClick={handleRandomSelection}
-            aria-label={t('kana_quiz.aria.random')}
-          >
-            <Dices size={22} />
-          </button>
+  const toastMessage = t('kana_quiz.limit_toast.title', {
+    tab:
+      activeTab === 'hiragana'
+        ? t('kana_dictionary.tabs.hiragana')
+        : t('kana_dictionary.tabs.katakana'),
+  });
 
-          {/* 重置按钮：仅当有选中项时显示 (或者也可以设为 disabled) */}
-          {selectedIds.size > 0 && (
-            <button
-              className={styles.iconBtn}
-              onClick={() => setSelectedIds(new Set())}
-              aria-label={t('kana_quiz.aria.reset')}
-            >
-              <RotateCcw size={22} />
-            </button>
-          )}
-        </div>
-      }
-      footer={
-        <div className={styles.footer}>
-          {/* 选中项预览条 (存在时显示) */}
-          {selectedItems.length > 0 && (
-            <div className={styles.previewBar}>
-              <div className={styles.previewScroll}>
-                {selectedItems.map((item) => (
-                  <button
-                    key={item.id}
-                    className={styles.previewTag}
-                    onClick={() => handleItemClick(item)}
+  // 描述里还需要 limit
+  const toastDesc = t('kana_quiz.limit_toast.desc', { limit: MISTAKE_LIMIT });
+
+  return (
+    <div style={{ height: '100%' }}>
+      <Toast
+        isVisible={showLimitToast}
+        message={toastMessage}
+        description={toastDesc}
+      />
+      <KanaBoard
+        activeTab={activeTab}
+        tabOptions={tabOptions}
+        title={t('kana_quiz.selection_title')}
+        seionTitle={t('kana_dictionary.sections.seion')}
+        dakuonTitle={t('kana_dictionary.sections.dakuon')}
+        yoonTitle={t('kana_dictionary.sections.yoon')}
+        onBackClick={() => navigate('/')}
+        onTabChange={setActiveTab}
+        onItemClick={handleItemClick}
+        isSelectionMode={true}
+        selectedIds={selectedIds}
+        showRomaji={true}
+        proficiencyMap={proficiencyMap}
+        disabledIds={disabledIds}
+        onDisabledItemClick={handleDisabledClick}
+        headerRight={
+          <div className={styles.iconGroup}>
+            {!isLocked && (
+              <button
+                className={styles.iconBtn}
+                onClick={handleRandomSelection}
+                aria-label={t('kana_quiz.aria.random')}
+              >
+                <Dices size={22} />
+              </button>
+            )}
+
+            {/* 重置按钮：仅当有选中项时显示 (或者也可以设为 disabled) */}
+            {selectedIds.size > 0 && (
+              <button
+                className={styles.iconBtn}
+                onClick={() => setSelectedIds(new Set())}
+                aria-label={t('kana_quiz.aria.reset')}
+              >
+                <RotateCcw size={22} />
+              </button>
+            )}
+          </div>
+        }
+        footer={
+          <div className={styles.footer}>
+            {/* 选中项预览条 (存在时显示) */}
+            {selectedItems.length > 0 && (
+              <div className={styles.previewBar}>
+                <div className={styles.previewScroll}>
+                  {selectedItems.map((item) => {
+                    const status = proficiencyMap?.[item.id];
+                    return (
+                      <div
+                        key={item.id}
+                        className={styles.previewTag}
+                        onClick={() => handleItemClick(item)}
+                      >
+                        {/* 🔥 3. 将样式应用在 span 上 */}
+                        {status === 'weak' && (
+                          <div
+                            className={`${styles.statusDot} ${styles.dotWeak}`}
+                          />
+                        )}
+                        {status === 'mastered' && (
+                          <div
+                            className={`${styles.statusDot} ${styles.dotMastered}`}
+                          />
+                        )}
+                        {status === 'perfect' && (
+                          <div
+                            className={`${styles.statusDot} ${styles.dotPerfect}`}
+                          />
+                        )}
+                        <span className={`${styles.previewChar} jaFont`}>
+                          {item.kana}
+                        </span>
+                        <X size={12} className={styles.removeIcon} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/*  图例横条 (Legend Bar) */}
+            {showLegend && (
+              <div className={styles.legendBar}>
+                {legendConfig.map((item) => (
+                  <div
+                    key={item.key}
+                    className={styles.legendItem}
+                    title={item.label}
                   >
-                    <span className="jaFont">{item.kana}</span>
-                    <X size={12} className={styles.removeIcon} />
-                  </button>
+                    <div className={`${styles.legendDot} ${item.dotClass}`} />
+                    <span className={styles.legendCount}>{item.count}</span>
+                    <span className={styles.legendLabel}>{item.label}</span>
+                  </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
 
-          {/*  图例横条 (Legend Bar) */}
-          {showLegend && (
-            <div className={styles.legendBar}>
-              {legendConfig.map((item) => (
-                <div
-                  key={item.key}
-                  className={styles.legendItem}
-                  title={item.label}
-                >
-                  <div className={`${styles.legendDot} ${item.dotClass}`} />
-                  <span className={styles.legendCount}>{item.count}</span>
-                  <span className={styles.legendLabel}>{item.label}</span>
-                </div>
-              ))}
-            </div>
-          )}
+            {/* 底部操作内容 (Start 按钮等) */}
+            <div className={styles.footerContent}>
+              <div className={styles.counterInfo}>
+                <span className={styles.countNumber}>{selectedIds.size}</span>
+                <span className={styles.countLabel}>
+                  {t('kana_quiz.limit_hint', {
+                    max: MAX_SELECTION,
+                    min: MIN_SELECTION,
+                  })}
+                </span>
+              </div>
 
-          {/* 底部操作内容 (Start 按钮等) */}
-          <div className={styles.footerContent}>
-            <div className={styles.counterInfo}>
-              <span className={styles.countNumber}>{selectedIds.size}</span>
-              <span className={styles.countLabel}>
-                {t('kana_quiz.limit_hint', {
-                  max: MAX_SELECTION,
-                  min: MIN_SELECTION,
-                })}
-              </span>
+              <button
+                className={`${styles.startBtn} btn-base btn-primary`}
+                disabled={selectedIds.size < MIN_SELECTION}
+                onClick={handleStartQuiz}
+              >
+                <Play size={18} fill="currentColor" />
+                <span style={{ marginLeft: 4 }}>
+                  {t('kana_quiz.start_btn')}
+                </span>
+              </button>
             </div>
-
-            <button
-              className={`${styles.startBtn} btn-base btn-primary`}
-              disabled={selectedIds.size < MIN_SELECTION}
-              onClick={handleStartQuiz}
-            >
-              <Play size={18} fill="currentColor" />
-              <span style={{ marginLeft: 4 }}>{t('kana_quiz.start_btn')}</span>
-            </button>
           </div>
-        </div>
-      }
-    />
+        }
+      />
+    </div>
   );
 };

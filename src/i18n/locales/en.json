@@ -91,6 +91,10 @@
       "weak": "Weak",
       "mastered": "Mastered",
       "perfect": "Perfect!"
+    },
+    "limit_toast": {
+      "title": "{{tab}} Limit Reached",
+      "desc": "Reduce below {{limit}} to unlock new Kana"
     }
   },
   "mistake_notebook": {

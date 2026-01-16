@@ -74,8 +74,8 @@
     "title": "五十音图",
     "romaji_label": "罗马音",
     "tabs": {
-      "hiragana": "平假名 (Hiragana)",
-      "katakana": "片假名 (Katakana)"
+      "hiragana": "平假名",
+      "katakana": "片假名"
     },
     "sections": {
       "seion": "清音 (Seion)",
@@ -96,6 +96,10 @@
       "weak": "生疏",
       "mastered": "掌握",
       "perfect": "精通"
+    },
+    "limit_toast": {
+      "title": "{{tab}}错题收录已达上限",
+      "desc": "需将错题数减少至 {{limit}} 道以内，才能解锁其他假名"
     }
   },
   "mistake_notebook": {
