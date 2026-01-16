@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Play, X, Dices, RotateCcw } from 'lucide-react';
+import { Play, X, Dices, RotateCcw, Lock } from 'lucide-react';
 
 import { KanaBoard } from '../KanaBoard';
 import { KANA_DB } from '../../../datas/kanaData';
@@ -11,8 +11,7 @@ import { useMistakes } from '../../../context/MistakeContext';
 export const KanaQuizSelectionPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  // 🔥 2. 从 Context 获取实时熟练度地图
-  const { proficiencyMap } = useMistakes();
+  const { proficiencyMap, mistakes } = useMistakes();
 
   const [activeTab, setActiveTab] = useState<'hiragana' | 'katakana'>(
     'hiragana'
@@ -21,6 +20,7 @@ export const KanaQuizSelectionPage = () => {
 
   const MIN_SELECTION = 5;
   const MAX_SELECTION = 12;
+  const MISTAKE_LIMIT = 5;
 
   const kanaMap = useMemo(() => {
     const map: Record<string, any> = {};
@@ -36,6 +36,57 @@ export const KanaQuizSelectionPage = () => {
       .map((id) => kanaMap[id])
       .filter(Boolean);
   }, [selectedIds, kanaMap]);
+
+  // =========================================================
+  // 实时计算两边的错题数
+  // =========================================================
+  const mistakeCounts = useMemo(() => {
+    let h = 0,
+      k = 0;
+    if (mistakes) {
+      Object.values(mistakes).forEach((r) => {
+        // 有效错题：错误次数 > 0 且 未被移出 (streak < 2)
+        if (r.mistakeCount > 0 && r.streak < 2) {
+          if (r.id.startsWith('h-')) h++;
+          else if (r.id.startsWith('k-')) k++;
+        }
+      });
+    }
+    return { h, k };
+  }, [mistakes]);
+
+  // =========================================================
+  // 生成黑名单 (disabledIds)
+  // =========================================================
+  const disabledIds = useMemo(() => {
+    const ids = new Set<string>();
+
+    const hLocked = mistakeCounts.h >= MISTAKE_LIMIT;
+    const kLocked = mistakeCounts.k >= MISTAKE_LIMIT;
+
+    // 如果都没锁，直接返回空，性能最优
+    if (!hLocked && !kLocked) return ids;
+
+    // 遍历数据库，找出需要封杀的 ID
+    // @ts-ignore
+    Object.values(KANA_DB).forEach((item: any) => {
+      const id = item.id;
+      // 检查是否是“有效错题”(红点)
+      const record = mistakes?.[id];
+      const isMistake = record && record.mistakeCount > 0 && record.streak < 2;
+
+      // 逻辑A: 平假名爆仓 且 该ID是平假名 且 不是错题 -> 封杀
+      if (hLocked && id.startsWith('h-') && !isMistake) {
+        ids.add(id);
+      }
+      // 逻辑B: 片假名爆仓 且 该ID是片假名 且 不是错题 -> 封杀
+      else if (kLocked && id.startsWith('k-') && !isMistake) {
+        ids.add(id);
+      }
+    });
+
+    return ids;
+  }, [mistakeCounts, mistakes]);
 
   // =========================================================
   // 🔥 核心修正：基于 Context 状态统计当前 Tab 数量
@@ -75,16 +126,35 @@ export const KanaQuizSelectionPage = () => {
     return stats;
   }, [activeTab, proficiencyMap]); // 依赖项：切换 Tab 或 Context 变动时重算
 
-  const tabOptions = useMemo(
-    () => [
-      { id: 'hiragana', label: t('kana_dictionary.tabs.hiragana') },
-      { id: 'katakana', label: t('kana_dictionary.tabs.katakana') },
-    ],
-    [t]
-  );
+  const tabOptions = useMemo(() => {
+    const hLocked = mistakeCounts.h >= MISTAKE_LIMIT;
+    const kLocked = mistakeCounts.k >= MISTAKE_LIMIT;
+
+    return [
+      {
+        id: 'hiragana',
+        label: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {t('kana_dictionary.tabs.hiragana')}
+            {hLocked && <Lock size={14} color="#FF9500" strokeWidth={2.5} />}
+          </div>
+        ),
+      },
+      {
+        id: 'katakana',
+        label: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {t('kana_dictionary.tabs.katakana')}
+            {kLocked && <Lock size={14} color="#FF9500" strokeWidth={2.5} />}
+          </div>
+        ),
+      },
+    ];
+  }, [t, mistakeCounts]);
 
   const handleItemClick = (data: any) => {
     const id = data.id;
+    if (disabledIds.has(id)) return;
     const newSet = new Set(selectedIds);
     if (newSet.has(id)) {
       newSet.delete(id);
@@ -106,6 +176,12 @@ export const KanaQuizSelectionPage = () => {
 
   // 随机选择逻辑
   const handleRandomSelection = () => {
+    const isLocked =
+      activeTab === 'hiragana'
+        ? mistakeCounts.h >= MISTAKE_LIMIT
+        : mistakeCounts.k >= MISTAKE_LIMIT;
+
+    if (isLocked) return; // 锁定状态下禁止随机选择
     // A. 确定当前的 ID 前缀 (h- 或 k-)，只在当前 Tab 内随机
     const prefix = activeTab === 'hiragana' ? 'h-' : 'k-';
 
@@ -130,6 +206,9 @@ export const KanaQuizSelectionPage = () => {
     // E. 覆盖选中状态
     setSelectedIds(new Set(randomSelection));
   };
+
+  // 暂时留空，不做 Toast
+  const handleDisabledClick = () => {};
 
   // 图例数据
   const legendConfig = useMemo(
@@ -187,6 +266,8 @@ export const KanaQuizSelectionPage = () => {
       selectedIds={selectedIds}
       showRomaji={true}
       proficiencyMap={proficiencyMap}
+      disabledIds={disabledIds}
+      onDisabledItemClick={handleDisabledClick}
       headerRight={
         <div className={styles.iconGroup}>
           {/* 骰子按钮：随时可用 */}

@@ -20,7 +20,7 @@ interface KanaBoardProps {
   // --- 状态 ---
   activeTab: 'hiragana' | 'katakana';
   showRomaji: boolean; // 用于控制表格内显示
-  tabOptions: { id: string; label: string }[];
+  tabOptions: { id: string; label: string | React.ReactNode }[];
 
   title: string;
   romajiLabel?: string; // 变为可选，因为可能被 headerRight 覆盖
@@ -42,6 +42,9 @@ interface KanaBoardProps {
   headerRight?: React.ReactNode; // 自定义右上角区域
   footer?: React.ReactNode; // 自定义底部区域
   proficiencyMap?: Record<string, ProficiencyStatus>;
+
+  disabledIds?: Set<string>;
+  onDisabledItemClick?: () => void;
 }
 
 export const KanaBoard: React.FC<KanaBoardProps> = ({
@@ -62,6 +65,8 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
   headerRight,
   footer,
   proficiencyMap,
+  disabledIds,
+  onDisabledItemClick,
 }) => {
   return (
     <div
@@ -92,7 +97,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
         <div className={styles.stickyHeaderCol2}>
           <div className={styles.tabWrapper}>
             <CategoryTabs
-              options={tabOptions}
+              options={tabOptions as any}
               activeId={activeTab}
               onChange={(id) => onTabChange(id as 'hiragana' | 'katakana')}
             />
@@ -116,6 +121,8 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
+              disabledIds={disabledIds}
+              onDisabledItemClick={onDisabledItemClick}
             />
           </section>
 
@@ -132,6 +139,8 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
+              disabledIds={disabledIds}
+              onDisabledItemClick={onDisabledItemClick}
             />
           </section>
 
@@ -148,6 +157,8 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               isSelectionMode={isSelectionMode} // 透传选择状态
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
+              disabledIds={disabledIds}
+              onDisabledItemClick={onDisabledItemClick}
             />
           </section>
         </div>

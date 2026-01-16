@@ -14,6 +14,8 @@ interface Props {
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
   proficiencyMap?: Record<string, ProficiencyStatus>;
+  disabledIds?: Set<string>;
+  onDisabledItemClick?: () => void;
 }
 
 export const KanaTable: React.FC<Props> = ({
@@ -27,6 +29,8 @@ export const KanaTable: React.FC<Props> = ({
   isSelectionMode = false,
   selectedIds,
   proficiencyMap,
+  disabledIds,
+  onDisabledItemClick,
 }) => {
   const idMap = useMemo(() => {
     const map: Record<string, any> = {};
@@ -59,9 +63,12 @@ export const KanaTable: React.FC<Props> = ({
     if (!idMap[crossId]) crossId = `${crossPrefix}yoon-${romajiKey}`;
     const crossData = idMap[crossId];
 
-    // 🔥 3. 获取状态并计算样式
+    // 获取状态并计算样式
     const status: ProficiencyStatus = proficiencyMap?.[id] || 'new';
     const isSelected = isSelectionMode && selectedIds?.has(id);
+
+    // 判断当前 ID 是否在禁用名单里
+    const isDisabled = disabledIds?.has(id);
 
     let statusClass = '';
     // 逻辑优化：
@@ -83,10 +90,22 @@ export const KanaTable: React.FC<Props> = ({
       ${styles.cell} 
       ${statusClass}
       ${isSelected ? styles.selectedCell : ''}
+      ${isDisabled ? styles.disabledCell : ''}
     `;
 
     return (
-      <div key={id} className={cellClass} onClick={() => onItemClick?.(data)}>
+      <div
+        key={id}
+        className={cellClass}
+        onClick={() => {
+          // 拦截点击逻辑
+          if (isDisabled) {
+            onDisabledItemClick?.(); // 如果被禁用了，触发回调（目前为空，先占位）
+            return;
+          }
+          onItemClick?.(data);
+        }}
+      >
         <div>
           <span className={`${styles.mainChar} jaFont`}>{data.kana}</span>
           {/* 只有在【非选择模式】(即字典模式) 下，才显示对照用的副标题字符 */}
