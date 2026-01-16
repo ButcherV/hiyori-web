@@ -1,5 +1,5 @@
 .container {
-  padding: 0 20px 32px 20px;
+  padding: 0 8px 24px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +22,25 @@
   color: var(--color-Gray9);
   margin-bottom: 8px;
   text-align: center;
+  /* 增加高度限制，防止行高变化导致的微小抖动 */
+  min-height: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+/* 定宽数字容器 */
+.countNumber {
+  display: inline-block;
+  min-width: 28px; /* 根据字体大小调整，确保能放下 2 位数 */
+  text-align: center;
+
+  /* 关键属性：等宽数字，防止 "1" 比 "9" 窄导致跳动 */
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+
+  color: var(--color-Blue);
 }
 
 .description {

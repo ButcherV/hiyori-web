@@ -109,7 +109,8 @@
       "desc_highlight": "2 consecutive passes",
       "desc_3": "will remove them from the list.",
       "btn_cancel": "Not Now",
-      "btn_start": "Start Challenge"
+      "btn_start": "Start Challenge",
+      "title_zero": "Please Select Mistakes"
     },
     "help_sheet": {
       "title": "Instructions",

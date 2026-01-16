@@ -65,12 +65,19 @@ export const QuizConfirmSheet: React.FC<Props> = ({
     >
       <div className={styles.container}>
         <div className={styles.iconWrapper}>
-          <Sword size={32} color="#007AFF" />
+          <Sword size={32} color="var(--color-Blue)" />
         </div>
 
         <h3 className={styles.title}>
-          {t('mistake_notebook.confirm_sheet.prefix')} {totalCount}{' '}
-          {t('mistake_notebook.confirm_sheet.suffix')}
+          {totalCount === 0 ? (
+            <span>{t('mistake_notebook.confirm_sheet.title_zero')}</span>
+          ) : (
+            <>
+              {t('mistake_notebook.confirm_sheet.prefix')}
+              <span className={styles.countNumber}>{totalCount}</span>
+              {t('mistake_notebook.confirm_sheet.suffix')}
+            </>
+          )}
         </h3>
 
         <p className={styles.description}>
@@ -101,11 +108,11 @@ export const QuizConfirmSheet: React.FC<Props> = ({
               <CheckCircle2
                 size={20}
                 className={styles.checkIcon}
-                fill="#007AFF"
+                fill="var(--color-Blue)"
                 color="white"
               />
             ) : (
-              <Circle size={20} color="#C7C7CC" />
+              <Circle size={20} color="var(--color-Gray4)" />
             )}
 
             <span>
@@ -132,11 +139,11 @@ export const QuizConfirmSheet: React.FC<Props> = ({
               <CheckCircle2
                 size={20}
                 className={styles.checkIcon}
-                fill="#007AFF"
+                fill="var(--color-Blue)"
                 color="white"
               />
             ) : (
-              <Circle size={20} color="#C7C7CC" />
+              <Circle size={20} color="var(--color-Gray4)" />
             )}
 
             <span>

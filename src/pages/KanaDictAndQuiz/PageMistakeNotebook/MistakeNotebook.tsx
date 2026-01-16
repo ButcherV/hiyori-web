@@ -201,14 +201,16 @@ export const MistakeNotebook = () => {
             <button onClick={() => navigate(-1)} className={styles.iconBtn}>
               <ChevronLeft size={24} color="var(--color-Blue)" />
             </button>
-            <div className={styles.title}>{t('mistake_notebook.title')}</div>
-            <button
-              onClick={() => setIsHelpOpen(true)}
-              className={styles.iconBtn}
-              style={{ marginRight: 8, color: '#8E8E93' }}
-            >
-              <HelpCircle size={20} />
-            </button>
+            <div className={styles.title}>
+              <span>{t('mistake_notebook.title')}</span>
+              <button
+                onClick={() => setIsHelpOpen(true)}
+                className={styles.iconBtn}
+                style={{ color: 'var(--color-Gray6)' }}
+              >
+                <HelpCircle size={20} />
+              </button>
+            </div>
           </div>
           {/* 标题 */}
 

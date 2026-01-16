@@ -114,7 +114,8 @@
       "desc_highlight": "连续两轮次答对",
       "desc_3": "即可彻底移出列表。",
       "btn_cancel": "再看看",
-      "btn_start": "开始挑战"
+      "btn_start": "开始挑战",
+      "title_zero": "请勾选要复习的错题"
     },
     "help_sheet": {
       "title": "使用说明",

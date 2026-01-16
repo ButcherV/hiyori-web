@@ -34,6 +34,9 @@
   font-size: 18px;
   font-weight: 700;
   color: var(--color-Gray9);
+  display: flex;
+  align-items: center;
+  /* gap: 2px; */
 }
 
 .iconBtn {
@@ -71,7 +74,7 @@
   /* padding-top: 8px; */
   display: flex;
   flex-direction: column;
-  padding-top: calc(env(safe-area-inset-top) + 166px);
+  padding-top: calc(env(safe-area-inset-top) + 158px);
 }
 
 .emptyState {
