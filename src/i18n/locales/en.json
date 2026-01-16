@@ -215,6 +215,8 @@
       "kana": "Kana",
       "word": "Words"
     },
+    "btn_back_selection": "Back to Selection",
+    "btn_back_mistake": "Back to Mistake Notebook",
     "sub": {
       "perfect": "Incredible! You nailed it completely.",
       "good": "High accuracy, keep up the momentum.",

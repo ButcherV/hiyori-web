@@ -1,7 +1,14 @@
 // src/components/QuizCompletionScreen/index.tsx
 
 import React, { useEffect, useMemo } from 'react';
-import { Home, Clock, XCircle, CheckCircle, BookOpen } from 'lucide-react';
+import {
+  Clock,
+  XCircle,
+  CheckCircle,
+  BookOpen,
+  Shuffle,
+  BookX,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
 import styles from './QuizCompletionScreen.module.css';
@@ -16,10 +23,15 @@ interface QuizStats {
 
 interface Props {
   stats: QuizStats;
-  onGoHome: () => void;
+  onGoBack: () => void;
+  quizMode?: 'manual' | 'mistake' | 'random';
 }
 
-export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
+export const QuizCompletionScreen: React.FC<Props> = ({
+  stats,
+  onGoBack,
+  quizMode = 'manual',
+}) => {
   const { t } = useTranslation();
   const {
     totalKana,
@@ -127,6 +139,22 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
     return () => clearInterval(interval);
   }, [resultTier]);
 
+  const actionConfig = useMemo(() => {
+    switch (quizMode) {
+      case 'mistake':
+        return {
+          icon: <BookX size={20} />,
+          label: t('quiz_result.btn_back_mistake'), // "返回错题本"
+        };
+      case 'manual':
+      default:
+        return {
+          icon: <Shuffle size={20} />,
+          label: t('quiz_result.btn_back_selection'), // "返回选题"
+        };
+    }
+  }, [quizMode, t]);
+
   return (
     <div className={styles.container}>
       {/* Header */}
@@ -211,10 +239,10 @@ export const QuizCompletionScreen: React.FC<Props> = ({ stats, onGoHome }) => {
       <div className={styles.actionArea}>
         <button
           className={`${styles.homeBtn} btn-base btn-primary`}
-          onClick={onGoHome}
+          onClick={onGoBack}
         >
-          <Home size={20} />
-          <span>{t('quiz_result.btn_back')}</span>
+          {actionConfig.icon}
+          <span style={{ marginLeft: 4 }}>{actionConfig.label}</span>
         </button>
       </div>
     </div>

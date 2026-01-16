@@ -328,6 +328,7 @@ export const PageQuizSession = () => {
       Math.floor((Date.now() - startTimeRef.current) / 1000)
     );
 
+    const completionMode = mode === 'mistake_review' ? 'mistake' : 'manual';
     return (
       <QuizCompletionScreen
         stats={{
@@ -337,7 +338,8 @@ export const PageQuizSession = () => {
           mistakeCount: mistakeCount, // 错了几个
           durationSeconds: durationSeconds, // 耗时
         }}
-        onGoHome={handleFinish}
+        onGoBack={handleFinish}
+        quizMode={completionMode}
       />
     );
   }

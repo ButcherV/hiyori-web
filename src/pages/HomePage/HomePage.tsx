@@ -159,9 +159,9 @@ export function HomePage() {
               <Trophy size={22} color="#ffbb00ff" />
             </button>
           )}
-          <button className={styles.iconBtn}>
+          {/* <button className={styles.iconBtn}>
             <BookOpenText size={24} />
-          </button>
+          </button> */}
           <button
             className={styles.iconBtn}
             onClick={() => setSettingsOpen(true)}
