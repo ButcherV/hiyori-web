@@ -172,13 +172,14 @@ export const MistakeNotebook = () => {
   //   });
   // };
 
+  // banner 调试用
   // const debugTriggerBanner = () => {
   //   setBannerData({
   //     fixed: ['あ', 'い', 'う'], // 假装修好了这几个
   //     failed: ['か', 'き'], // 假装这几个又错了
   //   });
   // };
-  // 🟢 点击闪电：打开确认面板
+
   const handleTestClick = () => {
     if (totalMistakes === 0) return;
     setIsQuizConfirmOpen(true);
@@ -225,7 +226,7 @@ export const MistakeNotebook = () => {
                 <Zap size={20} fill="currentColor" />
               </button>
             )}
-            {/* 🛠️ 调试按钮 (调试完记得删掉) */}
+            {/* 🛠️ Banner 调试按钮 (调试完记得注销) */}
             {/* <button
               onClick={debugTriggerBanner}
               style={{
@@ -241,7 +242,7 @@ export const MistakeNotebook = () => {
           </div>
         </div>
 
-        {/* 🔥 3. Tab 栏：把 counts 显示在 label 里 */}
+        {/* 🔥 Tab 栏：把 counts 显示在 label 里 */}
         <div className={styles.tabBar}>
           <CategoryTabs
             activeId={activeTab}
@@ -259,89 +260,94 @@ export const MistakeNotebook = () => {
             ]}
           />
         </div>
+
+        {/* ========================================================= */}
+        {/* 结算反馈横幅 (Banner) */}
+        {/* ========================================================= */}
+        <AnimatePresence>
+          {bannerData && (
+            <motion.div
+              className={styles.banner}
+              // 进场状态：所有占空间的属性都必须是 0
+              initial={{
+                opacity: 0,
+                height: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginTop: 0,
+                marginBottom: 0,
+              }}
+              // 目标状态：恢复到 CSS 定义的默认值
+              // Framer Motion 很聪明，写 'var(--p-top)' 或直接不写具体数值，
+              // 它会自动读取你 CSS (.banner) 里的原始 padding 值作为终点。
+              // 这里我们用 CSS 变量或者直接写具体数值，最简单的是让它自动检测，
+              // 但为了保险，建议显式恢复到你 CSS 里的值（比如 12px），或者使用 "auto" (如果支持)。
+              // 最稳妥的做法是：在这里不写具体 padding 值，Framer 会自动读取 DOM 里的 computed style。
+              // 但为了配合 initial，我们需要告诉它“变回原来的样子”。
+              animate={{
+                opacity: 1,
+                height: 'auto',
+                paddingTop: 12, // 恢复 CSS 里的 12px
+                paddingBottom: 12, // 恢复 CSS 里的 12px
+                marginTop: 0, // 如果 CSS 里有 margin，这里也要恢复
+                marginBottom: 0,
+              }}
+              // 离场状态：再次全部变回 0
+              exit={{
+                opacity: 0,
+                height: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                marginTop: 0,
+                marginBottom: 0,
+              }}
+              // 过渡效果
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              // 防止布局溢出
+              style={{ overflow: 'hidden' }}
+            >
+              <div className={styles.bannerContent}>
+                {/* 移出提示 */}
+                {bannerData.fixed.length > 0 && (
+                  <div className={`${styles.bannerRow} ${styles.fixedRow}`}>
+                    <div className={`${styles.bannerRowIcon}`}>
+                      <PartyPopper size={16} />
+                    </div>
+                    <span>
+                      {t('mistake_notebook.banner_fixed')}:{' '}
+                      <span className={`jaFont`}>
+                        {bannerData.fixed.join(', ')}
+                      </span>
+                    </span>
+                  </div>
+                )}
+                {/* 加重提示 */}
+                {bannerData.failed.length > 0 && (
+                  <div className={`${styles.bannerRow} ${styles.failedRow}`}>
+                    <div className={`${styles.bannerRowIcon}`}>
+                      <AlertTriangle size={16} />
+                    </div>
+                    <span>
+                      {t('mistake_notebook.banner_failed')}:{' '}
+                      <span className={`jaFont`}>
+                        {bannerData.failed.join(', ')}
+                      </span>
+                    </span>
+                  </div>
+                )}
+              </div>
+              {/* 关闭按钮 */}
+              <button
+                className={styles.closeBannerBtn}
+                onClick={() => setBannerData(null)}
+              >
+                <X size={18} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* ========================================================= */}
-      {/* 结算反馈横幅 (Banner) */}
-      {/* ========================================================= */}
-      <AnimatePresence>
-        {bannerData && (
-          <motion.div
-            className={styles.banner}
-            // 🔥 1. 进场状态：所有占空间的属性都必须是 0
-            initial={{
-              height: 0,
-              opacity: 0,
-              paddingTop: 0,
-              paddingBottom: 0,
-              marginTop: 0,
-              marginBottom: 0,
-            }}
-            // 目标状态：恢复到 CSS 定义的默认值
-            // Framer Motion 很聪明，写 'var(--p-top)' 或直接不写具体数值，
-            // 它会自动读取你 CSS (.banner) 里的原始 padding 值作为终点。
-            // 这里我们用 CSS 变量或者直接写具体数值，最简单的是让它自动检测，
-            // 但为了保险，建议显式恢复到你 CSS 里的值（比如 12px），或者使用 "auto" (如果支持)。
-            // 最稳妥的做法是：在这里不写具体 padding 值，Framer 会自动读取 DOM 里的 computed style。
-            // 但为了配合 initial，我们需要告诉它“变回原来的样子”。
-            animate={{
-              height: 'auto',
-              opacity: 1,
-              paddingTop: 12, // 恢复 CSS 里的 12px
-              paddingBottom: 12, // 恢复 CSS 里的 12px
-              marginTop: 0, // 如果 CSS 里有 margin，这里也要恢复
-              marginBottom: 0,
-            }}
-            // 离场状态：再次全部变回 0
-            exit={{
-              height: 0,
-              opacity: 0,
-              paddingTop: 0,
-              paddingBottom: 0,
-              marginTop: 0,
-              marginBottom: 0,
-            }}
-            // 过渡效果
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            // 防止布局溢出
-            style={{ overflow: 'hidden' }}
-          >
-            <div className={styles.bannerContent}>
-              {/* 移出提示 */}
-              {bannerData.fixed.length > 0 && (
-                <div className={`${styles.bannerRow} ${styles.fixedRow}`}>
-                  <PartyPopper size={16} />
-                  <span>
-                    {t('mistake_notebook.banner_fixed')}:{' '}
-                    <span className={`jaFont`}>
-                      {bannerData.fixed.join(', ')}
-                    </span>
-                  </span>
-                </div>
-              )}
-              {/* 加重提示 */}
-              {bannerData.failed.length > 0 && (
-                <div className={`${styles.bannerRow} ${styles.failedRow}`}>
-                  <AlertTriangle size={16} />
-                  <span>
-                    {t('mistake_notebook.banner_failed')}:{' '}
-                    <span className={`jaFont`}>
-                      {bannerData.failed.join(', ')}
-                    </span>
-                  </span>
-                </div>
-              )}
-            </div>
-            {/* 关闭按钮 */}
-            <button
-              className={styles.closeBannerBtn}
-              onClick={() => setBannerData(null)}
-            >
-              <X size={16} />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
       {/* ========================================================= */}
 
       <div className={styles.listArea}>
