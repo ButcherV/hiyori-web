@@ -37,16 +37,16 @@
   justify-content: center;
   background-color: #f7f9fc;
   border-radius: 12px;
-  height: 56px;
-  width: 56px;
+  height: 64px;
+  width: 64px;
   position: relative;
 }
 
 .reviewChar {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--color-Blue);
-  line-height: 1;
+  line-height: 1.2;
   margin-bottom: 2px;
 }
 
@@ -63,10 +63,10 @@
 /* 1. Badge 容器：固定在右上角 */
 .badgeContainer {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 20px;
-  height: 20px;
+  top: -12px;
+  right: -12px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,8 +75,8 @@
 
 /* 2. 红色错误数 (圆心) */
 .mistakeBadge {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
 
   background-color: var(--color-error);
@@ -97,8 +97,8 @@
 /* 3. 绿色半圆环 (Progress Ring) */
 .progressRing {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 
   border: 3px solid transparent;
@@ -109,11 +109,26 @@
   transform: rotate(45deg);
 
   /* 修正定位居中 */
-  top: -2px;
-  left: -2px;
+  top: 0;
+  left: 0;
 
   z-index: 1;
   pointer-events: none;
+}
+
+.badgeSingle {
+  font-size: 14px;
+  letter-spacing: -0.5px;
+}
+
+.badgeDouble {
+  font-size: 12px;
+  letter-spacing: -0.5px;
+}
+
+.badgeMax {
+  font-size: 10px;
+  letter-spacing: -1px;
 }
 
 /* --- 单词与图标区域 (保持不变) --- */

@@ -173,7 +173,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '☂️',
     kanaDistractors: ['き', 'ち', 'ざ'],
     romajiDistractors: ['shi', 'su', 'za'],
-    wordDistractors: ['かき', 'かち', 'かざ'],
+    wordDistractors: ['かき', 'かち', 'ちか'],
   }),
 
   し: defineHSeion({
@@ -265,7 +265,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🌱',
     kanaDistractors: ['ら', 'さ', 'ぢ'],
     romajiDistractors: ['ti', 'shi', 'ji'],
-    wordDistractors: ['つら', 'つさ', 'つぢ'],
+    wordDistractors: ['しち', 'つら', 'つさ', 'ちつ'],
     noteKey: 'studyKana.notes.hchi',
   }),
 

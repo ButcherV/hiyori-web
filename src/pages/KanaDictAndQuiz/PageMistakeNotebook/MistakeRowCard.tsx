@@ -52,6 +52,20 @@ export const MistakeRowCard: React.FC<Props> = ({
     }
   };
 
+  // 计算 Badge 显示逻辑的辅助函数
+  const getBadgeConfig = (count: number) => {
+    if (count >= 100) {
+      // 爆表：显示 99+，用最小字体
+      return { text: '99+', className: styles.badgeMax };
+    }
+    if (count >= 10) {
+      // 两位数：显示原数字，用中等字体
+      return { text: count, className: styles.badgeDouble };
+    }
+    // 个位数：显示原数字，用最大字体
+    return { text: count, className: styles.badgeSingle };
+  };
+
   const renderWordInfo = (item: MistakeItem) => {
     // ... (保持原有的 renderWordInfo 逻辑不变) ...
     // 为了节省篇幅，这里省略，直接复制原来的即可
@@ -101,36 +115,41 @@ export const MistakeRowCard: React.FC<Props> = ({
 
   return (
     <div className={styles.container}>
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className={styles.reviewRow}
-          onClick={() => handlePlay(item)}
-        >
-          {/* 左侧：假名主体 */}
-          <div className={styles.kanaBox}>
-            <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
-              {item.char}
-            </span>
-            <span className={styles.reviewRomaji}>{item.romaji}</span>
+      {items.map((item) => {
+        const { text, className } = getBadgeConfig(item.mistakeCount);
 
-            {/* 🔥 状态展示区 (进度环方案) */}
-            <div className={styles.badgeContainer} onClick={handleBadgeClick}>
-              {/* 如果 streak > 0，显示绿色的半圆环 */}
-              {item.streak > 0 && <div className={styles.progressRing} />}
+        return (
+          <div
+            key={item.id}
+            className={styles.reviewRow}
+            onClick={() => handlePlay(item)}
+          >
+            {/* 左侧：假名主体 */}
+            <div className={styles.kanaBox}>
+              <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
+                {item.char}
+              </span>
+              <span className={styles.reviewRomaji}>{item.romaji}</span>
 
-              {/* 核心 Badge：显示错误次数 */}
-              <div className={styles.mistakeBadge}>{item.mistakeCount}</div>
+              {/* 🔥 状态展示区 */}
+              <div className={styles.badgeContainer} onClick={handleBadgeClick}>
+                {item.streak > 0 && <div className={styles.progressRing} />}
+
+                {/* 🔥 3. 修改：应用动态 Class 和动态文本 */}
+                <div className={`${styles.mistakeBadge} ${className}`}>
+                  {text}
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.wordInfo}>{renderWordInfo(item)}</div>
+
+            <div className={styles.soundIcon}>
+              <Volume2 size={20} />
             </div>
           </div>
-
-          <div className={styles.wordInfo}>{renderWordInfo(item)}</div>
-
-          <div className={styles.soundIcon}>
-            <Volume2 size={20} />
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

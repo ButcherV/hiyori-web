@@ -40,7 +40,7 @@ export const KanaDictionaryPage = () => {
       dakuonTitle={t('kana_dictionary.sections.dakuon')}
       yoonTitle={t('kana_dictionary.sections.yoon')}
       // Handlers
-      onBackClick={() => navigate(-1)}
+      onBackClick={() => navigate('/')}
       onTabChange={setActiveTab}
       onToggleRomaji={() => setShowRomaji(!showRomaji)}
       onItemClick={handleItemClick}
