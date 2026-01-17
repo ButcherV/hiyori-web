@@ -150,7 +150,7 @@
     "contact_author": "Contact Author",
     "reset_proficiency_btn": "Reset Proficiency",
     "clear_mistakes_title": "Reset Proficiency?",
-    "clear_mistakes_message": "All mastery progress (colors, crowns, and weak stats) will be permanently reset to 'New'. This cannot be undone."
+    "clear_mistakes_message": "All mastery progress (mistake history, like weak status) will be permanently reset to 'New'. This cannot be undone."
   },
   "stats": {
     "title": "My Journey",

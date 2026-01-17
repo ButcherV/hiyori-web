@@ -1,13 +1,13 @@
-// src/components/QuizCompletionScreen/index.tsx
-
 import React, { useEffect, useMemo } from 'react';
 import {
   Clock,
   XCircle,
   CheckCircle,
   BookOpen,
-  Shuffle,
-  BookX,
+  ChevronLeft,
+  // ArrowLeft
+  // Shuffle,
+  // BookX,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
@@ -143,13 +143,15 @@ export const QuizCompletionScreen: React.FC<Props> = ({
     switch (quizMode) {
       case 'mistake':
         return {
-          icon: <BookX size={20} />,
+          // icon: <BookX size={20} />,
+          icon: <ChevronLeft size={20} />,
           label: t('quiz_result.btn_back_mistake'), // "返回错题本"
         };
       case 'manual':
       default:
         return {
-          icon: <Shuffle size={20} />,
+          // icon: <Shuffle size={20} />,
+          icon: <ChevronLeft size={20} />,
           label: t('quiz_result.btn_back_selection'), // "返回选题"
         };
     }
