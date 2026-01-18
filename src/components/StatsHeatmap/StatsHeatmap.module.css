@@ -1,40 +1,161 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 16px 0;
+  gap: 16px;
+  padding: 12px;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.statsRow {
+/* --- 模块 A: 核心指标卡片 --- */
+.summarySection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.statCard {
+  background-color: white;
+  border-radius: 12px;
+  padding: 8px;
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.statItem {
-  text-align: center;
+.iconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconFire {
+  background-color: rgba(255, 149, 0, 0.1);
+  color: var(--color-primary);
+}
+
+.iconStar {
+  background-color: rgba(52, 199, 89, 0.1);
+  color: var(--color-success);
+}
+
+.statText {
+  display: flex;
+  flex-direction: column;
 }
 
 .statValue {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
-  color: #333;
+  color: var(--color-Gray10);
+  line-height: 1.1;
 }
 
 .statLabel {
   font-size: 12px;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 4px;
+  color: var(--color-Gray6);
+  font-weight: 500;
+  margin-top: 2px;
 }
 
+/* --- 通用卡片容器 (用于热力图和勋章) --- */
+.sectionCard {
+  background-color: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-Gray10);
+  margin: 0;
+}
+
+.moreLink {
+  font-size: 13px;
+  color: var(--color-Blue);
+  cursor: pointer;
+}
+
+/* --- 热力图调整 --- */
 .calendarWrapper {
-  /* 让日历在手机上居中 */
   display: flex;
   justify-content: center;
-  /* 允许横向滚动，防止小屏溢出 */
   overflow-x: auto;
-  padding-bottom: 10px;
+  /* 隐藏滚动条但保留功能 */
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.calendarWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- 模块 C: 勋章墙 --- */
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.badgeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.badgeIcon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-Gray4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+/* 解锁状态 */
+.badgeItem:not(.locked) .badgeIcon {
+  background-color: rgba(255, 204, 0, 0.15);
+  border-color: var(--color-perfect-text);
+}
+
+/* 锁定状态 */
+.locked .badgeIcon {
+  background-color: var(--color-Gray4);
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+.locked .badgeName {
+  color: var(--color-Gray5);
+}
+
+.badgeName {
+  font-size: 12px;
+  color: var(--color-Gray10);
+  font-weight: 500;
+  text-align: center;
 }

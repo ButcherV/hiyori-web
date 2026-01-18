@@ -14,9 +14,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'love', zh: '爱', zhHant: '愛' },
 
     wordEmoji: '❤️', // 该单词尽可能是简单名词，有对应的 emoji
-    kanaDistractors: ['お', 'め', 'ぬ'], // 该假名的形近
-    romajiDistractors: ['o', 'ou', 'au'], // 该假名的音近
-    wordDistractors: ['あえ', 'めい', 'おい'], // 与 wordKana 的形似
+    kanaDistractors: ['お', 'め', 'ぬ'], // 该假名的形近，三个以上
+    romajiDistractors: ['o', 'ou', 'au', 'u'], // 该假名的音近，三个以上
+    wordDistractors: ['いあ', 'あえ', 'めい', 'おい'], // 与 wordKana 的形似，三个以上
   }),
 
   い: defineHSeion({
@@ -33,7 +33,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🏠',
     kanaDistractors: ['り', 'こ', 'に'],
     romajiDistractors: ['e', 'ei', 'ie'],
-    wordDistractors: ['にえ', 'えい', 'りえ'],
+    wordDistractors: ['にえ', 'えい', 'りえ', 'いそ'],
   }),
 
   う: defineHSeion({
@@ -110,9 +110,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'e·ki',
     wordMeaning: { en: 'station', zh: '车站', zhHant: '車站' },
     wordEmoji: '🚉',
-    kanaDistractors: ['さ', 'ち', 'ぎ'],
+    kanaDistractors: ['さ', 'ち', 'を'],
     romajiDistractors: ['ka', 'shi', 'ke'],
-    wordDistractors: ['えさ', 'えち', 'えぎ'],
+    wordDistractors: ['えさ', 'えち', 'きえ', 'えを'],
   }),
 
   く: defineHSeion({
@@ -125,9 +125,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'ku·u·ki',
     wordMeaning: { en: 'air', zh: '空气', zhHant: '空氣' },
     wordEmoji: '💨',
-    kanaDistractors: ['へ', 'て', 'ぐ'],
+    kanaDistractors: ['へ', 'て', 'レ'],
     romajiDistractors: ['ke', 'ko', 'fu'],
-    wordDistractors: ['へうき', 'ぐうき', 'てうき'],
+    wordDistractors: ['うくき', 'へうき', 'レうき', 'てうき'],
   }),
 
   け: defineHSeion({

@@ -1,0 +1,259 @@
+/* MagicClock.css */
+
+:root {
+  /* --- 默认 (Fun/冷色调) --- */
+  --mc-bg-gradient-from: #f0f9ff; /* sky-50 */
+  --mc-bg-gradient-to: #eef2ff; /* indigo-50 */
+  --mc-accent-color: #3b82f6; /* blue-500 */
+  --mc-text-main: #334155; /* slate-700 */
+  --mc-text-sub: #94a3b8; /* slate-400 */
+  --mc-clock-face: #ffffff;
+  --mc-clock-border: #3b82f6;
+  --mc-status-bg: #dbeafe; /* blue-100 */
+  --mc-status-text: #2563eb; /* blue-600 */
+}
+
+/* --- 变调模式 (Ppun/暖色调) --- */
+.magic-clock-container.mode-ppun {
+  --mc-bg-gradient-from: #fff7ed; /* orange-50 */
+  --mc-bg-gradient-to: #fef2f2; /* red-50 */
+  --mc-accent-color: #f97316; /* orange-500 */
+  --mc-text-main: #c2410c; /* orange-700 */
+  --mc-text-sub: #fdba74; /* orange-300 */
+  --mc-clock-face: #ffedd5; /* orange-100 */
+  --mc-clock-border: #f97316;
+  --mc-status-bg: #f97316;
+  --mc-status-text: #ffffff;
+}
+
+/* --- 容器布局 --- */
+.magic-clock-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 24px;
+
+  /* 使用变量定义渐变背景 */
+  background: linear-gradient(
+    135deg,
+    var(--mc-bg-gradient-from),
+    var(--mc-bg-gradient-to)
+  );
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.5s ease-out; /* 背景色平滑过渡 */
+  user-select: none;
+}
+
+/* --- 标题 --- */
+.mc-header {
+  text-align: center;
+}
+.mc-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--mc-text-main);
+  margin: 0 0 8px 0;
+  transition: color 0.3s;
+}
+.mc-subtitle {
+  font-size: 0.875rem;
+  color: var(--mc-text-sub);
+  margin: 0;
+}
+
+/* --- 钟表主体 --- */
+.mc-clock-face {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background-color: var(--mc-clock-face);
+  border: 8px solid var(--mc-clock-border);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* 刻度线 */
+.mc-tick {
+  position: absolute;
+  width: 2px;
+  height: 12px;
+  background-color: #cbd5e1; /* slate-300 */
+  left: 50%;
+  top: 0;
+  transform-origin: 50% 130px; /* 半径 */
+}
+
+/* 3, 6, 9, 12 数字 */
+.mc-number {
+  position: absolute;
+  font-weight: 700;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+.mc-num-12 {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mc-num-6 {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mc-num-3 {
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.mc-num-9 {
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 中心点 */
+.mc-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: #334155;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+/* 分针 */
+.mc-hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 110px; /* 指针长度 */
+  background-color: #334155;
+  border-radius: 999px;
+  transform-origin: bottom center; /* 底部旋转 */
+  z-index: 10;
+  /* 这里的 transform 由内联样式控制旋转 */
+  margin-left: -3px; /* 修正居中: width的一半 */
+  margin-top: -110px; /* 修正定位: 向上提自身高度 */
+}
+
+/* 分针头部的交互圆圈 */
+.mc-hand-knob {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--mc-accent-color);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+/* --- 反馈显示区 --- */
+.mc-feedback-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  width: 100%;
+}
+
+.mc-status-badge {
+  position: absolute;
+  top: -10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--mc-status-bg);
+  color: var(--mc-status-text);
+  transition: all 0.3s;
+}
+
+.mc-digital-time {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #1e293b;
+  font-family: monospace;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.mc-digital-unit {
+  font-size: 1.5rem;
+  color: #94a3b8;
+  margin-left: 8px;
+}
+
+/* 核心动画文字 */
+.mc-kana-box {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.mc-kana-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #475569; /* slate-600 */
+  transition: color 0.3s;
+}
+
+.mc-romaji-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--mc-text-sub);
+  transition: color 0.3s;
+}
+
+/* --- 变调时的动画 --- */
+.mode-ppun .mc-kana-text {
+  color: #ea580c; /* orange-600 */
+  animation: mc-pop-jump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes mc-pop-jump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3) translateY(-5px);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.mode-ppun .mc-romaji-text {
+  color: #fb923c; /* orange-400 */
+}
+
+/* --- 底部提示 --- */
+.mc-footer {
+  display: flex;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  align-items: center;
+}
