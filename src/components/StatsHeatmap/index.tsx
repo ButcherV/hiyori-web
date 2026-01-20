@@ -13,7 +13,11 @@ import {
 import styles from './StatsHeatmap.module.css';
 import { useTranslation } from 'react-i18next';
 import { Toast } from '@capacitor/toast';
-import { Flame, CalendarCheck, Medal } from 'lucide-react';
+import {
+  Flame,
+  CalendarCheck,
+  // Medal
+} from 'lucide-react';
 
 interface ActivityType {
   date: string;
@@ -32,7 +36,7 @@ export const StatsHeatmap = () => {
     const today = new Date();
 
     // 周数
-    const weeksToShow = 13;
+    const weeksToShow = 15;
 
     // A. 锁定起点：18周前的【周日】 (左侧对齐)
     const startDate = subWeeks(startOfWeek(today), weeksToShow);
@@ -101,7 +105,7 @@ export const StatsHeatmap = () => {
   // --- 交互逻辑 ---
   const handleBlockClick = async (activity: ActivityType) => {
     const now = Date.now();
-    const COOLDOWN = 1000; // 缩短冷却时间，提升手感
+    const COOLDOWN = 1000;
     if (now - lastClickTimeRef.current < COOLDOWN) return;
     lastClickTimeRef.current = now;
 
@@ -118,32 +122,32 @@ export const StatsHeatmap = () => {
   };
 
   // --- 勋章 Mock 数据 (应用 i18n) ---
-  const badges = [
-    {
-      id: 1,
-      icon: '🌱',
-      name: t('stats.badges.beginner'), // 初学者
-      unlocked: true,
-    },
-    {
-      id: 2,
-      icon: '🔥',
-      name: t('stats.badges.streak_3'), // 坚持3天
-      unlocked: currentStreak >= 3,
-    },
-    {
-      id: 3,
-      icon: '🎓',
-      name: t('stats.badges.scholar'), // 学霸
-      unlocked: totalActivities > 100,
-    },
-    {
-      id: 4,
-      icon: '👑',
-      name: t('stats.badges.master'), // 大师
-      unlocked: false,
-    },
-  ];
+  // const badges = [
+  //   {
+  //     id: 1,
+  //     icon: '🌱',
+  //     name: t('stats.badges.beginner'), // 初学者
+  //     unlocked: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     icon: '🔥',
+  //     name: t('stats.badges.streak_3'), // 坚持3天
+  //     unlocked: currentStreak >= 3,
+  //   },
+  //   {
+  //     id: 3,
+  //     icon: '🎓',
+  //     name: t('stats.badges.scholar'), // 学霸
+  //     unlocked: totalActivities > 100,
+  //   },
+  //   {
+  //     id: 4,
+  //     icon: '👑',
+  //     name: t('stats.badges.master'), // 大师
+  //     unlocked: false,
+  //   },
+  // ];
 
   return (
     <div className={styles.container}>
@@ -154,22 +158,49 @@ export const StatsHeatmap = () => {
             <Flame size={20} fill="currentColor" />
           </div>
           <div className={styles.statText}>
-            <span className={styles.statValue}>{currentStreak}</span>
+            <span className={styles.statValue}>
+              {currentStreak.toLocaleString()}
+              <span
+                style={{
+                  fontSize: '0.5em',
+                  marginLeft: '4px',
+                  fontWeight: '600',
+                  opacity: 0.7,
+                }}
+              >
+                {/* 🔥 改动：传入 { count: currentStreak } */}
+                {/* i18next 会看：如果是 1 -> "day"，如果是 0, 2, 3... -> "days" */}
+                {t('stats.day_unit', { count: currentStreak })}
+              </span>
+            </span>
             <span className={styles.statLabel}>{t('stats.streak_label')}</span>
           </div>
         </div>
 
+        {/* 🔥 卡片 2: 累计学习 */}
         <div className={styles.statCard}>
           <div className={`${styles.iconBox} ${styles.iconStar}`}>
             <CalendarCheck size={20} />
           </div>
           <div className={styles.statText}>
-            <span className={styles.statValue}>{totalActivities}</span>
+            <span className={styles.statValue}>
+              {totalActivities.toLocaleString()}
+              <span
+                style={{
+                  fontSize: '0.5em',
+                  marginLeft: '4px',
+                  fontWeight: '600',
+                  opacity: 0.7,
+                }}
+              >
+                {/* 🔥 改动：传入 { count: totalActivities } */}
+                {t('stats.count_unit', { count: totalActivities })}
+              </span>
+            </span>
             <span className={styles.statLabel}>{t('stats.total_lessons')}</span>
           </div>
         </div>
       </div>
-
       {/* 模块 B: 热力图卡片 */}
       <div className={styles.sectionCard}>
         {/* <div className={styles.cardHeader}>
@@ -206,16 +237,7 @@ export const StatsHeatmap = () => {
       </div>
 
       {/* 模块 C: 勋章墙 */}
-      <div className={styles.sectionCard}>
-        {/* <div className={styles.cardHeader}>
-          <h3 className={styles.cardTitle}>
-            {t('stats.badges_title')}
-          </h3>
-          <span className={styles.moreLink}>
-            {t('common.view_all')} &gt;
-          </span>
-        </div> */}
-
+      {/* <div className={styles.sectionCard}>
         <div className={styles.badgesGrid}>
           {badges.map((badge) => (
             <div
@@ -229,7 +251,7 @@ export const StatsHeatmap = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

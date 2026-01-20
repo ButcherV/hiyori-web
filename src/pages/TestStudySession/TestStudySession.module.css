@@ -207,49 +207,6 @@
   animation: shakeAnimation 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
-/* --- Quiz 底部操作按钮 --- */
-.quizActions {
-  position: absolute;
-  bottom: 70px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  z-index: 50;
-  pointer-events: none;
-}
-
-.actionBtn {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.actionBtn:active {
-  transform: scale(0.92);
-  background: #f2f2f7;
-}
-
-.reject {
-  color: #ff3b30;
-  border: 0px solid #ff3b3020;
-}
-
-.accept {
-  color: #34c759;
-  border: 0px solid #34c75920;
-}
-
 /* 胶囊型备注标签 */
 .cardNoteLabel {
   display: inline-flex;

@@ -1,0 +1,51 @@
+/* src/components/QuizActionButtons/QuizActionButtons.module.css */
+
+.quizActions {
+  position: absolute;
+  bottom: 70px;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  z-index: 50;
+  pointer-events: none; /* 按鈕本身是 auto，容易穿透 */
+}
+
+.actionBtn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto; /* 恢復點擊 */
+  transition:
+    transform 0.1s,
+    opacity 0.2s,
+    background-color 0.1s;
+}
+
+.actionBtn:active {
+  transform: scale(0.92);
+  background: #f2f2f7;
+}
+
+/* 額外：定義禁用狀態的基礎樣式，雖然 JS 會控制 opacity */
+.actionBtn:disabled {
+  cursor: not-allowed;
+}
+
+.reject {
+  color: var(--color-error);
+}
+
+.accept {
+  color: var(--color-success);
+}

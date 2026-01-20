@@ -29,6 +29,7 @@ import {
   TinderCard,
   type TinderCardRef,
 } from '../../../components/TinderCard/index';
+import { QuizActionButtons } from '../../../components/QuizActionButtons';
 
 // --- Hooks & Context ---
 import { useSound } from '../../../hooks/useSound';
@@ -322,6 +323,9 @@ export const PageQuizSession = () => {
     }
   };
 
+  const handleReject = () => cardRef.current?.swipe('left');
+  const handleAccept = () => cardRef.current?.swipe('right');
+
   if (isFinished) {
     const durationSeconds = Math.max(
       0,
@@ -430,20 +434,7 @@ export const PageQuizSession = () => {
 
       {/* Bottom Actions */}
       {currentItem.type === 'QUIZ' && (
-        <div className={styles.quizActions}>
-          <button
-            className={`${styles.actionBtn} ${styles.reject}`}
-            onClick={() => cardRef.current?.swipe('left')}
-          >
-            <X size={32} strokeWidth={3} />
-          </button>
-          <button
-            className={`${styles.actionBtn} ${styles.accept}`}
-            onClick={() => cardRef.current?.swipe('right')}
-          >
-            <Check size={32} strokeWidth={3} />
-          </button>
-        </div>
+        <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
       )}
 
       <BottomSheet

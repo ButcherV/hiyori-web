@@ -167,7 +167,13 @@
       "streak_3": "3 Day Streak",
       "scholar": "Scholar",
       "master": "Master"
-    }
+    },
+    "day_unit_one": "day",
+    "day_unit_other": "days",
+
+    "count_unit_one": "session",
+    "count_unit_other": "sessions",
+    "title": "Study Records​"
   },
   "onboarding": {
     "step2_title": "Your Background",

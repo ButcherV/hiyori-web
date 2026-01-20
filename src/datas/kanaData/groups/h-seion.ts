@@ -96,10 +96,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🔴',
     kanaDistractors: ['ケ', 'タ', 'わ'],
     romajiDistractors: ['ga', 'ki', 'ko', 'ta'],
-    wordDistractors: ['あタ', 'あケ', 'おか'],
+    wordDistractors: ['あタ', 'あケ', 'おか', 'かあ'],
   }),
 
-  // --- 检查到这了 ---
   き: defineHSeion({
     id: 'h-ki',
     kana: 'き',
@@ -126,8 +125,8 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'air', zh: '空气', zhHant: '空氣' },
     wordEmoji: '💨',
     kanaDistractors: ['へ', 'て', 'レ'],
-    romajiDistractors: ['ke', 'ko', 'fu'],
-    wordDistractors: ['うくき', 'へうき', 'レうき', 'てうき'],
+    romajiDistractors: ['ke', 'ko', 'kou', 'fu'],
+    wordDistractors: ['うくき', 'へうき', 'レうき', 'てうき', 'くきう'],
   }),
 
   け: defineHSeion({
@@ -141,8 +140,8 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'pond', zh: '池塘', zhHant: '池塘' },
     wordEmoji: '⛲',
     kanaDistractors: ['は', 'に', 'ほ'],
-    romajiDistractors: ['ki', 'ku', 'he'],
-    wordDistractors: ['いは', 'いに', 'いほ'],
+    romajiDistractors: ['ki', 'ku', 'he', 'kei'],
+    wordDistractors: ['いは', 'いに', 'いほ', 'けい'],
   }),
 
   こ: defineHSeion({
@@ -155,9 +154,9 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'ko·e',
     wordMeaning: { en: 'voice', zh: '声音', zhHant: '聲音' },
     wordEmoji: '🗣️',
-    kanaDistractors: ['い', 'に', 'た'],
-    romajiDistractors: ['ka', 'ke', 'to'],
-    wordDistractors: ['にえ', 'いえ', 'たえ'],
+    kanaDistractors: ['い', 'に', 'ろ'],
+    romajiDistractors: ['ka', 'ke', 'to', 'kou'],
+    wordDistractors: ['えこ', 'にえ', 'いえ', 'ろえ'],
   }),
 
   // さ行 (S-Column)
@@ -171,10 +170,16 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'ka·sa',
     wordMeaning: { en: 'umbrella', zh: '伞', zhHant: '傘' },
     wordEmoji: '☂️',
-    kanaDistractors: ['き', 'ち', 'ざ'],
-    romajiDistractors: ['shi', 'su', 'za'],
-    wordDistractors: ['かき', 'かち', 'ちか'],
+    kanaDistractors: ['き', 'ち', 'そ'],
+    romajiDistractors: ['sai', 'su', 'za'],
+    wordDistractors: ['かき', 'かそ', 'かち', 'ちか'],
   }),
+
+  // 整理到这了 -----------------------------------
+  // 整理到这了 -----------------------------------
+  // 整理到这了 -----------------------------------
+  // 整理到这了 -----------------------------------
+  // 整理到这了 -----------------------------------
 
   し: defineHSeion({
     id: 'h-shi',

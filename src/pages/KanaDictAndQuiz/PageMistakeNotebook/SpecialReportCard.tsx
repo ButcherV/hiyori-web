@@ -65,10 +65,10 @@ export const SpecialReportCard: React.FC<Props> = ({ data, onDismiss }) => {
 
   // 自动倒计时
   useEffect(() => {
-    // 6 秒后自动触发关闭
+    // x 秒后自动触发关闭
     const timer = setTimeout(() => {
       onDismiss();
-    }, 60000);
+    }, 8000);
 
     // 组件卸载时清除定时器，防止内存泄漏
     return () => clearTimeout(timer);
@@ -90,11 +90,7 @@ export const SpecialReportCard: React.FC<Props> = ({ data, onDismiss }) => {
       {/* 内层 Card：负责展示内容 (去掉了所有 drag 和 mouse 事件) */}
       <motion.div className={styles.card} variants={innerCardVariants}>
         <div className={styles.bgIcon}>
-          {isPerfect ? (
-            <PartyPopper size={112} />
-          ) : (
-            <AlertTriangle size={112} />
-          )}
+          {isPerfect ? <PartyPopper size={112} /> : <AlertTriangle size={80} />}
         </div>
 
         <div className={styles.content}>

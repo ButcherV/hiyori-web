@@ -1,34 +1,46 @@
+/* src/pages/Stats/StatsHeatmap.module.css */
+
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 12px;
   width: 100%;
   box-sizing: border-box;
+  padding: 0;
+
+  /* 🔥 利用背景色做分割线 (gap = 线条粗细) */
+  gap: 1px;
+  background-color: var(--color-Gray4);
 }
 
 /* --- 模块 A: 核心指标卡片 --- */
 .summarySection {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  /* 两个指标中间的垂直分割线 */
+  gap: 1px;
+  background-color: var(--color-Gray4);
 }
 
 .statCard {
   background-color: white;
-  border-radius: 12px;
-  padding: 8px;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  padding: 16px 0px;
+
   display: flex;
   align-items: center;
-  gap: 12px;
-  border: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  gap: 8px;
+
+  + .statCard {
+    padding-left: 16px;
+  }
 }
 
 .iconBox {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 10px; /* 图标保持圆角，形成方圆对比 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,30 +67,39 @@
   font-weight: 800;
   color: var(--color-Gray10);
   line-height: 1.1;
+  display: flex;
+  align-items: baseline; /* 确保数字和单位底部对齐 */
 }
 
 .statLabel {
   font-size: 12px;
   color: var(--color-Gray6);
   font-weight: 500;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* --- 通用卡片容器 (用于热力图和勋章) --- */
 .sectionCard {
   background-color: white;
-  border-radius: 12px;
-  padding: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  /* 🔥 去除圆角和阴影 */
+  border-radius: 0;
+  box-shadow: none;
+
+  /* 上下留白，左右不留白以最大化利用空间 */
+  padding: 16px 0;
+
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* 标题需要左侧间距 */
+  padding: 0 16px;
 }
 
 .cardTitle {
@@ -88,31 +109,30 @@
   margin: 0;
 }
 
-.moreLink {
-  font-size: 13px;
-  color: var(--color-Blue);
-  cursor: pointer;
-}
-
 /* --- 热力图调整 --- */
 .calendarWrapper {
   display: flex;
   justify-content: center;
+  width: 100%;
   overflow-x: auto;
-  /* 隐藏滚动条但保留功能 */
   scrollbar-width: none;
-  padding-bottom: 4px;
+  padding-bottom: 0;
+
+  /* 如果希望热力图两边有点边距，可以在这里加 padding */
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .calendarWrapper::-webkit-scrollbar {
   display: none;
 }
 
-/* --- 模块 C: 勋章墙 --- */
+/* --- 模块 C: 勋章墙 (如果启用) --- */
 .badgesGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+  padding: 0 16px; /* 勋章内容需要左右间距 */
 }
 
 .badgeItem {
@@ -136,13 +156,11 @@
   transition: all 0.2s;
 }
 
-/* 解锁状态 */
 .badgeItem:not(.locked) .badgeIcon {
   background-color: rgba(255, 204, 0, 0.15);
   border-color: var(--color-perfect-text);
 }
 
-/* 锁定状态 */
 .locked .badgeIcon {
   background-color: var(--color-Gray4);
   filter: grayscale(100%);

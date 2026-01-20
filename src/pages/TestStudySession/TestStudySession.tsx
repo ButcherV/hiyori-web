@@ -24,6 +24,7 @@ import {
 } from '../../components/TinderCard/index';
 import { TraceCard } from '../../components/TraceCard/index';
 import BottomSheet from '../../components/BottomSheet';
+import { QuizActionButtons } from '../../components/QuizActionButtons';
 import { SegmentedProgressBar } from './SegmentedProgressBar';
 import { StudySessionSetting } from './StudySessionSetting';
 
@@ -296,6 +297,9 @@ export const TestStudySession = () => {
     setTimeout(() => setCurrentIndex((prev) => prev + 1), 200);
   };
 
+  const handleReject = () => cardRef.current?.swipe('left');
+  const handleAccept = () => cardRef.current?.swipe('right');
+
   // --- 渲染器 (Switch Dispatcher) ---
   const renderCardContent = (card: LessonCard) => {
     switch (card.type) {
@@ -441,21 +445,9 @@ export const TestStudySession = () => {
       </div>
 
       {/* Quiz Actions (Only for Quiz) */}
+
       {currentItem?.type === 'QUIZ' && (
-        <div className={styles.quizActions}>
-          <button
-            className={`${styles.actionBtn} ${styles.reject}`}
-            onClick={() => cardRef.current?.swipe('left')}
-          >
-            <X size={32} strokeWidth={3} />
-          </button>
-          <button
-            className={`${styles.actionBtn} ${styles.accept}`}
-            onClick={() => cardRef.current?.swipe('right')}
-          >
-            <Check size={32} strokeWidth={3} />
-          </button>
-        </div>
+        <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
       )}
 
       {/* Settings Sheet */}
