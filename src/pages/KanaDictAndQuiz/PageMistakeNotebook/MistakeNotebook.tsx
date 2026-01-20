@@ -2,14 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ChevronLeft,
-  Zap,
-  PartyPopper,
-  AlertTriangle,
-  X,
-  HelpCircle,
-} from 'lucide-react';
+import { ChevronLeft, Zap, HelpCircle } from 'lucide-react';
 import { useMistakes } from '../../../context/MistakeContext';
 import { KANA_DB } from '../../../datas/kanaData';
 import { CategoryTabs } from '../../../components/CategoryTabs';
@@ -18,6 +11,7 @@ import { MistakeRowCard, type MistakeItem } from './MistakeRowCard';
 import styles from './MistakeNotebook.module.css';
 import { QuizConfirmSheet } from './QuizConfirmSheet';
 import { RulesHelpSheet } from './RulesHelpSheet';
+import { SpecialReportCard } from './SpecialReportCard';
 
 interface BannerData {
   fixed: string[]; // 移出/掌握的假名
@@ -98,10 +92,6 @@ export const MistakeNotebook = () => {
 
         // 🧹 清理：清除 location state，防止刷新页面或切后台回来重复显示
         window.history.replaceState({}, document.title);
-
-        // ⏲️ 倒计时：10 秒后自动关闭
-        const timer = setTimeout(() => setBannerData(null), 10000);
-        return () => clearTimeout(timer);
       }
     }
   }, [location.state, mistakeRecords]); // 依赖 location.state
@@ -260,109 +250,34 @@ export const MistakeNotebook = () => {
             ]}
           />
         </div>
-
-        {/* ========================================================= */}
-        {/* 结算反馈横幅 (Banner) */}
-        {/* ========================================================= */}
-        <AnimatePresence>
-          {bannerData && (
-            <motion.div
-              className={styles.banner}
-              // 进场状态：所有占空间的属性都必须是 0
-              initial={{
-                opacity: 0,
-                height: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginTop: 0,
-                marginBottom: 0,
-              }}
-              // 目标状态：恢复到 CSS 定义的默认值
-              // Framer Motion 很聪明，写 'var(--p-top)' 或直接不写具体数值，
-              // 它会自动读取你 CSS (.banner) 里的原始 padding 值作为终点。
-              // 这里我们用 CSS 变量或者直接写具体数值，最简单的是让它自动检测，
-              // 但为了保险，建议显式恢复到你 CSS 里的值（比如 12px），或者使用 "auto" (如果支持)。
-              // 最稳妥的做法是：在这里不写具体 padding 值，Framer 会自动读取 DOM 里的 computed style。
-              // 但为了配合 initial，我们需要告诉它“变回原来的样子”。
-              animate={{
-                opacity: 1,
-                height: 'auto',
-                paddingTop: 12, // 恢复 CSS 里的 12px
-                paddingBottom: 12, // 恢复 CSS 里的 12px
-                marginTop: 0, // 如果 CSS 里有 margin，这里也要恢复
-                marginBottom: 0,
-              }}
-              // 离场状态：再次全部变回 0
-              exit={{
-                opacity: 0,
-                height: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                marginTop: 0,
-                marginBottom: 0,
-              }}
-              // 过渡效果
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              // 防止布局溢出
-              style={{ overflow: 'hidden' }}
-            >
-              <div className={styles.bannerContent}>
-                {/* 移出提示 */}
-                {bannerData.fixed.length > 0 && (
-                  <div className={`${styles.bannerRow} ${styles.fixedRow}`}>
-                    <div className={`${styles.bannerRowIcon}`}>
-                      <PartyPopper size={16} />
-                    </div>
-                    <span>
-                      {t('mistake_notebook.banner_fixed')}:{' '}
-                      <span className={`jaFont`}>
-                        {bannerData.fixed.join(', ')}
-                      </span>
-                    </span>
-                  </div>
-                )}
-                {/* 加重提示 */}
-                {bannerData.failed.length > 0 && (
-                  <div className={`${styles.bannerRow} ${styles.failedRow}`}>
-                    <div className={`${styles.bannerRowIcon}`}>
-                      <AlertTriangle size={16} />
-                    </div>
-                    <span>
-                      {t('mistake_notebook.banner_failed')}:{' '}
-                      <span className={`jaFont`}>
-                        {bannerData.failed.join(', ')}
-                      </span>
-                    </span>
-                  </div>
-                )}
-              </div>
-              {/* 关闭按钮 */}
-              <button
-                className={styles.closeBannerBtn}
-                onClick={() => setBannerData(null)}
-              >
-                <X size={18} />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* ========================================================= */}
 
       <div className={styles.listArea}>
-        {displayItems.length === 0 ? (
-          <div className={styles.emptyState}>
-            <span style={{ fontSize: 48 }}>🎉</span>
-            <p>{t('mistake_notebook.empty')}</p>
-          </div>
-        ) : (
-          <MistakeRowCard
-            items={displayItems}
-            onPlaySound={speak}
-            onBadgeClick={() => setIsHelpOpen(true)}
-          />
-        )}
+        <AnimatePresence>
+          {bannerData && (
+            <SpecialReportCard
+              key="report-card" // 必须有 key
+              data={bannerData}
+              onDismiss={() => setBannerData(null)}
+            />
+          )}
+        </AnimatePresence>
+        <motion.div layout="position" className={styles.listWrapper}>
+          {displayItems.length === 0 ? (
+            <div className={styles.emptyState}>
+              <span style={{ fontSize: 48 }}>🎉</span>
+              <p>{t('mistake_notebook.empty')}</p>
+            </div>
+          ) : (
+            <MistakeRowCard
+              items={displayItems}
+              onPlaySound={speak}
+              onBadgeClick={() => setIsHelpOpen(true)}
+            />
+          )}
+        </motion.div>
       </div>
 
       <QuizConfirmSheet

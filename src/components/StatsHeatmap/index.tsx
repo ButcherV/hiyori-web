@@ -31,14 +31,13 @@ export const StatsHeatmap = () => {
   const { data, totalActivities } = useMemo(() => {
     const today = new Date();
 
-    // 展示最近 18 周 (约 4 个月)
-    const weeksToShow = 18;
+    // 周数
+    const weeksToShow = 13;
 
     // A. 锁定起点：18周前的【周日】 (左侧对齐)
     const startDate = subWeeks(startOfWeek(today), weeksToShow);
 
     // B. 锁定终点：本周的【周六】 (右侧对齐)
-    // 这样无论今天是周几，图表都会把这一整周的格子画满，形成完美的矩形
     const endDate = endOfWeek(today);
 
     // 计算总格子数
@@ -52,8 +51,7 @@ export const StatsHeatmap = () => {
       const dateStr = format(date, 'yyyy-MM-dd');
       const count = activityLog[dateStr] || 0;
 
-      // 只有截至到今天的数据才算进总数 (未来的日子虽然显示格子，但不计入总数)
-      // 如果不加这个判断，total 也不会错(因为count是0)，但逻辑上严谨一点
+      // 只有截至到今天的数据才算进总数
       if (date <= today) {
         total += count;
       }
@@ -79,22 +77,15 @@ export const StatsHeatmap = () => {
     const today = new Date();
     let checkDate = today;
 
-    // 逻辑：
-    // 1. 如果今天打卡了，Streak 从今天开始算。
-    // 2. 如果今天没打卡，但昨天打卡了，Streak 从昨天开始算（连续未断）。
-    // 3. 如果昨天也没打卡，Streak 断了，归零。
     const todayStr = format(today, 'yyyy-MM-dd');
     if (!activityLog[todayStr]) {
-      // 今天没打卡，检查昨天
       checkDate = subDays(today, 1);
       const yesterdayStr = format(checkDate, 'yyyy-MM-dd');
-      // 如果昨天也没数据，直接返回 0
       if (!activityLog[yesterdayStr]) {
         return 0;
       }
     }
 
-    // 开始回溯计数
     while (true) {
       const dateStr = format(checkDate, 'yyyy-MM-dd');
       if (activityLog[dateStr] && activityLog[dateStr] > 0) {
@@ -110,9 +101,14 @@ export const StatsHeatmap = () => {
   // --- 交互逻辑 ---
   const handleBlockClick = async (activity: ActivityType) => {
     const now = Date.now();
-    const COOLDOWN = 2000;
+    const COOLDOWN = 1000; // 缩短冷却时间，提升手感
     if (now - lastClickTimeRef.current < COOLDOWN) return;
     lastClickTimeRef.current = now;
+
+    // 如果点击的是未来的日子（空数据），不弹出提示
+    if (activity.count === 0 && new Date(activity.date) > new Date()) {
+      return;
+    }
 
     await Toast.show({
       text: t('stats.tooltip', { count: activity.count, date: activity.date }),
@@ -121,12 +117,32 @@ export const StatsHeatmap = () => {
     });
   };
 
-  // --- 勋章 Mock 数据 ---
+  // --- 勋章 Mock 数据 (应用 i18n) ---
   const badges = [
-    { id: 1, icon: '🌱', name: '初学者', unlocked: true },
-    { id: 2, icon: '🔥', name: '坚持3天', unlocked: currentStreak >= 3 },
-    { id: 3, icon: '🎓', name: '学霸', unlocked: totalActivities > 100 },
-    { id: 4, icon: '👑', name: '大师', unlocked: false },
+    {
+      id: 1,
+      icon: '🌱',
+      name: t('stats.badges.beginner'), // 初学者
+      unlocked: true,
+    },
+    {
+      id: 2,
+      icon: '🔥',
+      name: t('stats.badges.streak_3'), // 坚持3天
+      unlocked: currentStreak >= 3,
+    },
+    {
+      id: 3,
+      icon: '🎓',
+      name: t('stats.badges.scholar'), // 学霸
+      unlocked: totalActivities > 100,
+    },
+    {
+      id: 4,
+      icon: '👑',
+      name: t('stats.badges.master'), // 大师
+      unlocked: false,
+    },
   ];
 
   return (
@@ -139,9 +155,7 @@ export const StatsHeatmap = () => {
           </div>
           <div className={styles.statText}>
             <span className={styles.statValue}>{currentStreak}</span>
-            <span className={styles.statLabel}>
-              {t('stats.streak_label') || 'Streak'}
-            </span>
+            <span className={styles.statLabel}>{t('stats.streak_label')}</span>
           </div>
         </div>
 
@@ -151,9 +165,7 @@ export const StatsHeatmap = () => {
           </div>
           <div className={styles.statText}>
             <span className={styles.statValue}>{totalActivities}</span>
-            <span className={styles.statLabel}>
-              {t('stats.total_lessons') || 'Total'}
-            </span>
+            <span className={styles.statLabel}>{t('stats.total_lessons')}</span>
           </div>
         </div>
       </div>
@@ -162,14 +174,15 @@ export const StatsHeatmap = () => {
       <div className={styles.sectionCard}>
         {/* <div className={styles.cardHeader}>
           <h3 className={styles.cardTitle}>
-            {t('stats.activity_title') || 'Learning Activity'}
+            {t('stats.activity_title')}
           </h3>
         </div> */}
+
         <div className={styles.calendarWrapper}>
           <ActivityCalendar
             data={data}
-            blockSize={14}
-            blockMargin={4}
+            blockSize={18} // 增大触摸区域
+            blockMargin={3} // 调小间距
             fontSize={12}
             showTotalCount={false}
             showColorLegend={false}
@@ -182,15 +195,27 @@ export const StatsHeatmap = () => {
               const act = activity as ActivityType;
               return React.cloneElement(block, {
                 onClick: () => handleBlockClick(act),
-                style: { cursor: 'pointer', borderRadius: '3px' },
+                style: {
+                  cursor: 'pointer',
+                  borderRadius: '4px', // 圆角优化
+                },
               });
             }}
           />
         </div>
       </div>
 
-      {/* 模块 C: 勋章墙 (预留) */}
+      {/* 模块 C: 勋章墙 */}
       <div className={styles.sectionCard}>
+        {/* <div className={styles.cardHeader}>
+          <h3 className={styles.cardTitle}>
+            {t('stats.badges_title')}
+          </h3>
+          <span className={styles.moreLink}>
+            {t('common.view_all')} &gt;
+          </span>
+        </div> */}
+
         <div className={styles.badgesGrid}>
           {badges.map((badge) => (
             <div

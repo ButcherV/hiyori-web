@@ -28,6 +28,9 @@ import {
   ChevronRight,
   Shuffle,
   BookX,
+  // MountainSnow,
+  // Activity,
+  Flame,
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
 
@@ -156,7 +159,9 @@ export function HomePage() {
               className={styles.iconBtn}
               onClick={() => setStatsOpen(true)}
             >
-              <Trophy size={22} color="#ffbb00ff" />
+              {/* <Trophy size={22} color="#ffbb00ff" /> */}
+              {/* <Activity size={22} color="#30B0C7" /> */}
+              <Flame size={22} />
             </button>
           )}
           {/* <button className={styles.iconBtn}>

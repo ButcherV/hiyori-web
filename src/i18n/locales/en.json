@@ -104,6 +104,10 @@
     "empty": "No mistakes yet!",
     "hiragana": "Hiragana",
     "katakana": "Katakana",
+    "report_title": "Review Report",
+    "report_perfect": "Perfect Review!",
+    "report_fixed": "Fixed {{count}}",
+    "report_failed": "Failed {{count}}",
     "confirm_sheet": {
       "title": "Mistake Blitz",
       "prefix": "Ready to eliminate",
@@ -153,10 +157,17 @@
     "clear_mistakes_message": "All mastery progress (mistake history, like weak status) will be permanently reset to 'New'. This cannot be undone."
   },
   "stats": {
-    "title": "My Journey",
+    "streak_label": "Day Streak",
     "total_lessons": "Total Lessons",
-    "streak_label": "Keep Going!",
-    "tooltip": "{{count}} sessions on {{date}}"
+    "activity_title": "Activity",
+    "badges_title": "Achievements",
+    "tooltip": "{{count}} lessons on {{date}}",
+    "badges": {
+      "beginner": "Beginner",
+      "streak_3": "3 Day Streak",
+      "scholar": "Scholar",
+      "master": "Master"
+    }
   },
   "onboarding": {
     "step2_title": "Your Background",

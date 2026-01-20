@@ -37,6 +37,7 @@
   justify-content: center;
   background-color: #f7f9fc;
   border-radius: 12px;
+  border: 2px solid #f7f9fc;
   height: 64px;
   width: 64px;
   position: relative;
@@ -56,6 +57,30 @@
   color: var(--color-Blue);
   text-transform: uppercase;
   opacity: 0.9;
+}
+
+.kanaBox.katakana {
+  /* 1. 背景变白 */
+  background-color: #ffffff;
+
+  /* 2. 加上淡蓝色边框 (代替色块区分) */
+  /* 使用品牌色的透明度版本，既有颜色呼应，又不刺眼 */
+  border: 2px solid rgba(0, 122, 255, 0.15);
+
+  /* 3. 圆角变小 (12px -> 6px) */
+  /* 方正的形状符合片假名“楷书”般的硬朗字形特征 */
+  border-radius: 6px;
+}
+
+/* 文字保持蓝色，维持整洁 */
+.reviewChar.katakana {
+  color: var(--color-Blue);
+}
+
+/* 罗马音保持蓝色 */
+.reviewRomaji.katakana {
+  color: var(--color-Blue);
+  opacity: 0.7;
 }
 
 /* --- Badge 体系 --- */

@@ -67,8 +67,6 @@ export const MistakeRowCard: React.FC<Props> = ({
   };
 
   const renderWordInfo = (item: MistakeItem) => {
-    // ... (保持原有的 renderWordInfo 逻辑不变) ...
-    // 为了节省篇幅，这里省略，直接复制原来的即可
     if (!item.word) {
       return <span className={styles.emptyWord}>-</span>;
     }
@@ -118,6 +116,9 @@ export const MistakeRowCard: React.FC<Props> = ({
       {items.map((item) => {
         const { text, className } = getBadgeConfig(item.mistakeCount);
 
+        const isKatakana = item.id.startsWith('k-');
+        const typeClass = isKatakana ? styles.katakana : '';
+
         return (
           <div
             key={item.id}
@@ -125,17 +126,20 @@ export const MistakeRowCard: React.FC<Props> = ({
             onClick={() => handlePlay(item)}
           >
             {/* 左侧：假名主体 */}
-            <div className={styles.kanaBox}>
-              <span className={`${styles.reviewChar} ${commonStyles.jaFont}`}>
+            <div className={`${styles.kanaBox} ${typeClass}`}>
+              <span
+                className={`${styles.reviewChar} ${commonStyles.jaFont} ${typeClass}`}
+              >
                 {item.char}
               </span>
-              <span className={styles.reviewRomaji}>{item.romaji}</span>
 
-              {/* 🔥 状态展示区 */}
+              <span className={`${styles.reviewRomaji} ${typeClass}`}>
+                {item.romaji}
+              </span>
+
               <div className={styles.badgeContainer} onClick={handleBadgeClick}>
                 {item.streak > 0 && <div className={styles.progressRing} />}
 
-                {/* 🔥 3. 修改：应用动态 Class 和动态文本 */}
                 <div className={`${styles.mistakeBadge} ${className}`}>
                   {text}
                 </div>

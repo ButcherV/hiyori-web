@@ -1,0 +1,96 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  border: 1px solid rgba(0, 122, 255, 0.15);
+  border-radius: 12px;
+
+  /* 悬浮感 */
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.12);
+
+  border-left: 5px solid var(--color-Blue);
+
+  margin-bottom: 12px; /* 和下方列表的间距 */
+  position: relative;
+  overflow: hidden;
+
+  /* 关键：禁用浏览器默认的触摸操作，交给 Framer Motion */
+  touch-action: pan-y;
+}
+
+/* 内容区 */
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-Gray9);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail {
+  font-size: 13px;
+  color: var(--color-Gray6);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.detailRow {
+  display: block;
+  word-break: break-all;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.kanaList {
+  color: var(--color-Gray8);
+  margin-left: 2px;
+  font-weight: 900;
+}
+
+.successText {
+  color: var(--color-success);
+}
+
+.errorText {
+  color: var(--color-error);
+}
+
+.bgIcon {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  opacity: 0.05;
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-Blue);
+  padding: 8px;
+  cursor: pointer;
+  margin-right: -8px;
+}
+
+.closeBtn:active {
+  opacity: 0.6;
+}

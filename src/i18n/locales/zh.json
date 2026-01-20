@@ -109,6 +109,10 @@
     "empty": "暂无错题！",
     "hiragana": "平假名",
     "katakana": "片假名",
+    "report_title": "本次复习报告",
+    "report_perfect": "本次复习完美通过！",
+    "report_fixed": "成功移出 {{count}} 个",
+    "report_failed": "屡教不改 {{count}} 个",
     "confirm_sheet": {
       "title": "错题突击",
       "prefix": "准备好消灭",
@@ -157,10 +161,17 @@
     "contact_author": "联系作者"
   },
   "stats": {
-    "title": "学习旅程",
+    "streak_label": "连续打卡",
     "total_lessons": "累计学习",
-    "streak_label": "坚持下去!",
-    "tooltip": "{{date}} 完成了 {{count}} 次"
+    "activity_title": "学习热力图",
+    "badges_title": "成就勋章",
+    "tooltip": "{{date}} 完成了 {{count}} 次练习",
+    "badges": {
+      "beginner": "初学者",
+      "streak_3": "坚持 3 天",
+      "scholar": "学霸",
+      "master": "大师"
+    }
   },
   "onboarding": {
     "step2_title": "Kanji：日文中的汉字",
