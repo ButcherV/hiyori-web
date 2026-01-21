@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
-import { X, Check, CircleX, CircleEqual } from 'lucide-react';
+import { CircleX, CircleEqual } from 'lucide-react';
 import { CompletionScreen } from '../../components/CompletionScreen';
 import { useTTS } from '../../hooks/useTTS';
 

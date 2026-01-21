@@ -45,9 +45,13 @@
     "drills": {
       "title": "快速练习",
       "numbers": "数字",
-      "numbers_sub": "0 - 999999...",
+      "numbers_sub": "基数・序数・量词",
       "dates": "日期",
-      "dates_sub": "星期与月份",
+      "dates_sub": "读音特例与日历",
+      "money": "货币",
+      "money_sub": "日元面额与找零",
+      "times": "时间",
+      "times_sub": "时刻・时段・时长",
       "vocab": "词汇",
       "vocab_sub": "生存必备词汇",
       "kanji": "汉字",
@@ -59,11 +63,7 @@
       "speaking": "口语",
       "speaking_sub": "发音纠正",
       "challenge": "挑战",
-      "challenge_sub": "每周测验",
-      "money": "货币",
-      "money_sub": "认识货币",
-      "times": "时间",
-      "times_sub": "认识时间"
+      "challenge_sub": "每周测验"
     },
     "modal": {
       "select_hiragana": "选择平假名课程",

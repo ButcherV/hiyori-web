@@ -14,7 +14,7 @@ import { HeroScroll } from './HeroScroll';
 import type { ScriptType } from '../../components/LessonMenu';
 
 import {
-  Hash,
+  // Hash,
   Calendar,
   Zap,
   Type,
@@ -28,6 +28,7 @@ import {
   ChevronRight,
   Shuffle,
   BookX,
+  Dices,
   // MountainSnow,
   // Activity,
   Flame,
@@ -58,7 +59,7 @@ export function HomePage() {
       id: 'numbers',
       title: t('home.drills.numbers'),
       sub: t('home.drills.numbers_sub'),
-      icon: Hash,
+      icon: Dices,
       color: '#FF9500',
     },
     {
@@ -73,14 +74,36 @@ export function HomePage() {
       title: t('home.drills.times'),
       sub: t('home.drills.times_sub'),
       icon: Clock,
-      color: '#30B0C7',
+      color: '#AF52DE',
     },
     {
       id: 'money',
       title: t('home.drills.money'),
-      sub: t('home.drills.moeny_sub'),
+      sub: t('home.drills.money_sub'),
       icon: CircleDollarSign,
-      color: '#30B0C7',
+      color: '#FF3B30',
+    },
+
+    {
+      id: 'listening',
+      title: t('home.drills.listening'),
+      sub: t('home.drills.listening_sub'),
+      icon: Headphones,
+      color: '#00C7BE',
+    },
+    {
+      id: 'speaking',
+      title: t('home.drills.speaking'),
+      sub: t('home.drills.speaking_sub'),
+      icon: Mic,
+      color: '#34C759',
+    },
+    {
+      id: 'challenge',
+      title: t('home.drills.challenge'),
+      sub: t('home.drills.challenge_sub'),
+      icon: Trophy,
+      color: '#FFcc00',
     },
     {
       id: 'vocab',
@@ -102,27 +125,6 @@ export function HomePage() {
       sub: t('home.drills.grammar_sub'),
       icon: BookOpenText,
       color: '#5856D6',
-    },
-    {
-      id: 'listening',
-      title: t('home.drills.listening'),
-      sub: t('home.drills.listening_sub'),
-      icon: Headphones,
-      color: '#00C7BE',
-    },
-    {
-      id: 'speaking',
-      title: t('home.drills.speaking'),
-      sub: t('home.drills.speaking_sub'),
-      icon: Mic,
-      color: '#34C759',
-    },
-    {
-      id: 'challenge',
-      title: t('home.drills.challenge'),
-      sub: t('home.drills.challenge_sub'),
-      icon: Trophy,
-      color: '#FFcc00',
     },
   ];
 
@@ -256,13 +258,21 @@ export function HomePage() {
             onClick={() => handleDrillClick(item.id)}
             style={
               {
-                // ✅ 动态传递 CSS 变量，实现高级透明色
                 '--drill-color': item.color,
-                '--drill-tint-bg': `linear-gradient(135deg, #ffffff 40%, ${item.color}15 100%)`,
-                '--drill-bg': `${item.color}15`, // 约 8% 透明度的背景色
+                // 🔥 1. 背景不再是纯白，而是极淡的渐变
+                '--drill-bg-gradient': `linear-gradient(145deg, #ffffff 0%, ${item.color}18 100%)`,
+                // 🔥 2. 图标背景色稍微深一点点
+                '--drill-icon-bg': `${item.color}25`,
+                // 🔥 3. 关键：有色阴影 (Glowing Shadow)
+                '--drill-shadow': `0 8px 20px -6px ${item.color}50`,
               } as React.CSSProperties
             }
           >
+            {/* 🔥🔥🔥 新增：背景大图标 (复用 item.icon) */}
+            <div className={styles.cardBgIcon}>
+              {/* strokeWidth 设细一点(1.5)，大图标显得更精致 */}
+              <item.icon size={80} strokeWidth={1.5} />
+            </div>
             {/* 上半部分：图标 + 箭头 */}
             <div className={styles.cardTop}>
               <div className={styles.drillIconBox}>

@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { X, Check, CircleX, CircleEqual } from 'lucide-react';
+import { CircleX, CircleEqual } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 

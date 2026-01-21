@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Check } from 'lucide-react';
 import styles from './QuizActionButtons.module.css';
 
@@ -6,7 +6,7 @@ interface Props {
   onReject: () => void;
   onAccept: () => void;
   disabled?: boolean;
-  className?: string; // 允許父組件傳入額外樣式類名（比如微調位置）
+  className?: string;
 }
 
 export const QuizActionButtons: React.FC<Props> = ({
@@ -15,48 +15,67 @@ export const QuizActionButtons: React.FC<Props> = ({
   disabled = false,
   className = '',
 }) => {
-  const [isLocked, setIsLocked] = useState(false);
+  // 逻辑锁 (用 useRef 避免不必要的渲染，但这里配合 state 用也行)
+  const isLocked = useRef(false);
 
-  // 當組件卸載時，確保清理定時器（防止內存洩漏或狀態更新報錯）
+  // 视觉状态：控制哪个按钮处于“按下去”的样子
+  const [activeBtn, setActiveBtn] = useState<'reject' | 'accept' | null>(null);
+
   useEffect(() => {
     return () => {
-      setIsLocked(false);
+      isLocked.current = false; // 清理
     };
   }, []);
 
   const handleClick = (action: 'reject' | 'accept') => {
-    if (isLocked || disabled) return;
+    // 1. 门卫拦截：如果锁住了，或者外部禁用了，直接无视
+    //    此时 activeBtn 不会被设置，所以按钮纹丝不动（不会缩放）
+    if (isLocked.current || disabled) return;
 
-    setIsLocked(true);
+    // 2. 立即上逻辑锁
+    isLocked.current = true;
 
+    // 3. 触发“按下去”的视觉动画
+    setActiveBtn(action);
+
+    // 4. 执行业务逻辑
     if (action === 'reject') onReject();
     else onAccept();
 
-    // 400ms 冷卻時間
+    // 5. 【视觉回弹】150ms 后松手：保证第一下的动画完美播放
     setTimeout(() => {
-      setIsLocked(false);
+      setActiveBtn(null);
+    }, 150);
+
+    // 6. 【逻辑解锁】600ms 后允许下一次点击
+    setTimeout(() => {
+      isLocked.current = false;
     }, 600);
   };
-
-  const isBtnDisabled = isLocked || disabled;
 
   return (
     <div className={`${styles.quizActions} ${className}`}>
       <button
-        className={`${styles.actionBtn} ${styles.reject}`}
+        className={`
+          ${styles.actionBtn} 
+          ${styles.reject} 
+          ${activeBtn === 'reject' ? styles.active : ''} 
+        `}
+        // 🔥 核心：去掉了 disabled={...} DOM 属性
+        // 这样按钮永远不会变灰，也不会强行打断动画
         onClick={() => handleClick('reject')}
-        disabled={isBtnDisabled}
-        style={{ opacity: isBtnDisabled ? 0.6 : 1 }}
         aria-label="Reject"
       >
         <X size={32} strokeWidth={3} />
       </button>
 
       <button
-        className={`${styles.actionBtn} ${styles.accept}`}
+        className={`
+          ${styles.actionBtn} 
+          ${styles.accept} 
+          ${activeBtn === 'accept' ? styles.active : ''} 
+        `}
         onClick={() => handleClick('accept')}
-        disabled={isBtnDisabled}
-        style={{ opacity: isBtnDisabled ? 0.6 : 1 }}
         aria-label="Accept"
       >
         <Check size={32} strokeWidth={3} />

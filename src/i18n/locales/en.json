@@ -40,9 +40,13 @@
     "drills": {
       "title": "Quick Drills",
       "numbers": "Numbers",
-      "numbers_sub": "0 - 999999...",
+      "numbers_sub": "Count & Counters",
       "dates": "Dates",
-      "dates_sub": "Week & Month",
+      "dates_sub": "Calendar & Days",
+      "money": "Money",
+      "money_sub": "Yen & Cash",
+      "times": "Time",
+      "times_sub": "Clock & Duration",
       "vocab": "Vocab",
       "vocab_sub": "Survival Words",
       "kanji": "Kanji",
@@ -54,11 +58,7 @@
       "speaking": "Speaking",
       "speaking_sub": "Pronunciation",
       "challenge": "Challenge",
-      "challenge_sub": "Weekly Quiz",
-      "money": "货币",
-      "money_sub": "认识货币",
-      "times": "时间",
-      "times_sub": "认识时间"
+      "challenge_sub": "Weekly Quiz"
     },
     "modal": {
       "select_hiragana": "Select Hiragana Row",
