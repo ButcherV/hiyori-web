@@ -12,6 +12,7 @@ import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CircleX, CircleEqual } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 import { QuizCompletionScreen } from './QuizCompletionScreen';
@@ -101,6 +102,44 @@ export const PageQuizSession = () => {
   const resultsBuffer = useRef<{ id: string; isCorrect: boolean }[]>([]);
   // 防止 React StrictMode 或重渲染导致重复提交
   const hasCommitted = useRef(false);
+
+  // 用于记录切后台的时间点
+  const backgroundTimeRef = useRef<number | null>(null);
+
+  // 监听 App 后台状态 (安全期逻辑)
+  useEffect(() => {
+    // 建立监听器
+    const listenerPromise = App.addListener(
+      'appStateChange',
+      ({ isActive }) => {
+        if (!isActive) {
+          // 🌑 切到后台：记录当前时间戳
+          backgroundTimeRef.current = Date.now();
+        } else {
+          // ☀️ 切回前台：检查离开了多久
+          if (backgroundTimeRef.current) {
+            const timeGone = Date.now() - backgroundTimeRef.current;
+
+            // 🔥 阈值设定：10秒 (10000ms)
+            // 如果离开超过 10 秒，视为放弃，强制踢回首页
+            if (timeGone > 10 * 1000) {
+              console.log('User was away too long (>10s). Session terminated.');
+              // 使用 replace: true 防止用户点返回键又回到这就尴尬了
+              navigate('/', { replace: true });
+            }
+
+            // 重置计时器 (如果小于10秒，就当无事发生)
+            backgroundTimeRef.current = null;
+          }
+        }
+      }
+    );
+
+    // 清理监听器
+    return () => {
+      listenerPromise.then((pluginListener) => pluginListener.remove());
+    };
+  }, [navigate]);
 
   // 状态
   const [isShaking, setIsShaking] = useState(false);
