@@ -97,12 +97,20 @@ export const SpecialReportCard: React.FC<Props> = ({ data, onDismiss }) => {
           <div className={styles.title}>
             {isPerfect ? (
               <>
-                <CheckCircle2 size={18} fill="#34C759" color="white" />
+                <CheckCircle2
+                  size={18}
+                  fill="var(--color-success)"
+                  color="white"
+                />
                 <span>{t('mistake_notebook.report_perfect')}</span>
               </>
             ) : (
               <>
-                <AlertTriangle size={18} fill="#FF9500" color="white" />
+                <AlertTriangle
+                  size={18}
+                  fill="var(--color-error)"
+                  color="white"
+                />
                 <span>{t('mistake_notebook.report_title')}</span>
               </>
             )}

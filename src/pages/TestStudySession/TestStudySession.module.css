@@ -125,34 +125,6 @@
   font-feature-settings: 'palt';
 }
 
-/* 喇叭按钮 */
-.speakerBtn {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
-  background: #ffffff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #007aff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.1s;
-  z-index: 10;
-}
-.speakerBtn:active {
-  transform: scale(0.92);
-  background: #e5e5ea;
-}
-.speakerBtn svg {
-  width: 22px;
-  height: 22px;
-  stroke-width: 1.6px;
-}
-
 /* --- 动画与状态 --- */
 /* 卡片模糊/清晰动画 */
 @keyframes unblur {
@@ -205,45 +177,4 @@
 
 .shake {
   animation: shakeAnimation 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-/* 胶囊型备注标签 */
-.cardNoteLabel {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  margin-top: 16px;
-  margin-bottom: 32px;
-  margin-left: 16px;
-  margin-right: 16px;
-  padding: 8px 16px;
-  text-align: left;
-
-  background: rgba(255, 69, 0, 0.03);
-  border: 1px solid var(--color-error);
-  color: var(--color-error);
-
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1.4;
-  align-self: center;
-
-  animation: fadeIn 0.3s ease-out;
-}
-
-.noteIcon {
-  flex-shrink: 0;
-  opacity: 0.8;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

@@ -96,6 +96,12 @@ export const PageQuizSession = () => {
   // 'fail' = 已经错了，后面再对也不算数
   const sessionResults = useRef<Record<string, 'success' | 'fail'>>({});
 
+  // 结果暂存区 (用于实现“中途退出不保存”)
+  // 只有当 isFinished 为 true 时，才把这里面的数据提交给数据库
+  const resultsBuffer = useRef<{ id: string; isCorrect: boolean }[]>([]);
+  // 防止 React StrictMode 或重渲染导致重复提交
+  const hasCommitted = useRef(false);
+
   // 状态
   const [isShaking, setIsShaking] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -155,6 +161,20 @@ export const PageQuizSession = () => {
     };
   }, [currentIndex, autoAudio, currentItem, isFinished, speak, cancel]);
 
+  // 监听结束状态，统一提交数据
+  useEffect(() => {
+    if (isFinished && !hasCommitted.current) {
+      console.log('Session Finished. Committing results to DB...');
+
+      // 遍历暂存区，批量写入数据库
+      resultsBuffer.current.forEach((item) => {
+        recordQuizResult(item.id, item.isCorrect);
+      });
+
+      hasCommitted.current = true;
+    }
+  }, [isFinished, recordQuizResult]);
+
   // --- 核心交互逻辑 ---
   const handleSwipe = (dir: 'left' | 'right') => {
     if (!currentItem) return;
@@ -200,8 +220,9 @@ export const PageQuizSession = () => {
         // 🔥 核心逻辑：会话级防抖
         // 只有当这个 ID 在本场还没“定性”时，才给予奖励
         if (!sessionResults.current[currentId]) {
-          recordQuizResult(currentId, true);
-          sessionResults.current[currentId] = 'success';
+          // 🔥 不直接调用 recordQuizResult，而是推入暂存区
+          // recordQuizResult(currentId, true);
+          resultsBuffer.current.push({ id: currentId, isCorrect: true });
         }
 
         markGroupComplete(); // 进度+1
@@ -221,9 +242,9 @@ export const PageQuizSession = () => {
       // 用于统计本次 Session 错误数
       recordMistake(currentItem);
 
-      // 🔥 核心逻辑：惩罚逻辑
-      // 只要错一次，直接重罚（清零 Streak）
-      recordQuizResult(currentId, false);
+      // 🔥 不直接调用 recordQuizResult，而是推入暂存区
+      // recordQuizResult(currentId, false);
+      resultsBuffer.current.push({ id: currentId, isCorrect: false });
       // 并标记为 'fail'，防止后续同ID题目做对时误加分
       sessionResults.current[currentId] = 'fail';
       markGroupComplete(); // 进度+1 (虽然错了，但这题算过掉了，进入解析环节)

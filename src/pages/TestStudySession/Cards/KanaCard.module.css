@@ -1,31 +1,72 @@
+/* src/pages/TestStudySession/Cards/KanaCard.module.css */
+
 .container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative; /* 为喇叭提供定位基准 */
+
+  /* Padding 策略：
+     Top: 60px (给右上角的喇叭留出防撞空间，防止假名太高撞到)
+     Bottom: 32px (底部留白)
+     X: 24px
+  */
+  padding: 60px 24px 32px 24px;
+  box-sizing: border-box;
+}
+
+/* --- 2. 核心区：罗马音 + 假名 (自动占据剩余空间并居中) --- */
+.mainZone {
+  flex-grow: 1;
   width: 100%;
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 垂直居中 */
+  align-items: center;
 
-.bigChar {
-  font-size: 160px;
-  line-height: 1.1;
-  font-weight: 800;
-  color: var(--color-Gray9);
-  margin-bottom: 8px;
-}
+  /* 罗马音和假名紧紧贴在一起 */
+  gap: 0px;
 
-.midChar {
-  font-size: 100px;
-  line-height: 1.1;
-  font-weight: 800;
-  /* 开启比例宽度替代，自动消除拗音间距 */
-  font-feature-settings: 'palt';
-  color: var(--color-Gray9);
-  margin-bottom: 8px;
+  /* 稍微往上提一点，视觉重心偏上会更舒服 */
+  padding-bottom: 20px;
 }
 
 .romajiSub {
-  font-size: 28px;
-  color: var(--color-Gray6);
+  font-size: 24px;
   font-weight: 600;
-  margin-top: -10px;
+  color: var(--color-Gray6);
+  line-height: 1;
+  /* 微调：让它视觉上更贴近下方的字 */
+  margin-bottom: -4px;
+}
+
+.kanaText {
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-Gray9);
+  text-align: center;
+  font-feature-settings: 'palt';
+  margin: 0;
+}
+
+/* 字号控制 */
+.big {
+  font-size: 140px;
+}
+.mid {
+  font-size: 100px;
+}
+
+/* --- 3. 底部信息区：字源 + 提示 (自然堆叠) --- */
+.footerInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  /* 确保不会太贴底 */
+  margin-top: auto;
 }

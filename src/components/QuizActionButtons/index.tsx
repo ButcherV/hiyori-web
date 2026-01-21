@@ -15,10 +15,7 @@ export const QuizActionButtons: React.FC<Props> = ({
   disabled = false,
   className = '',
 }) => {
-  // 逻辑锁 (用 useRef 避免不必要的渲染，但这里配合 state 用也行)
   const isLocked = useRef(false);
-
-  // 视觉状态：控制哪个按钮处于“按下去”的样子
   const [activeBtn, setActiveBtn] = useState<'reject' | 'accept' | null>(null);
 
   useEffect(() => {
@@ -61,8 +58,6 @@ export const QuizActionButtons: React.FC<Props> = ({
           ${styles.reject} 
           ${activeBtn === 'reject' ? styles.active : ''} 
         `}
-        // 🔥 核心：去掉了 disabled={...} DOM 属性
-        // 这样按钮永远不会变灰，也不会强行打断动画
         onClick={() => handleClick('reject')}
         aria-label="Reject"
       >

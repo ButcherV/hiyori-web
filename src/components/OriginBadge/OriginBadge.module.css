@@ -7,8 +7,8 @@
 
 .originCharBox {
   position: relative;
-  width: 66px;
-  height: 66px;
+  width: 56px;
+  height: 56px;
   background-color: rgba(0, 122, 255, 0.02);
   border: 1px solid rgba(0, 122, 255, 0.45);
   border-radius: 8px;
@@ -38,7 +38,7 @@
 
   /* 使用标准、好认的日文字体 */
   font-family: 'Noto Serif JP', sans-serif;
-  font-size: 64px;
+  font-size: 56px;
   font-weight: 900;
   /* 颜色要极其淡，作为草书的“影子” */
   color: rgba(0, 122, 255, 0.1);

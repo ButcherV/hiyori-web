@@ -14,7 +14,6 @@ interface Props {
 
 export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
   if (!data.word) return null;
-  console.log('data', data);
   const { i18n, t } = useTranslation();
   const { kanjiBackground } = useSettings();
 
@@ -41,14 +40,12 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         return { icon: '🇸🇪', label: 'Sweden' };
       case 'ja':
         return { icon: '🇯🇵', label: 'Japan Origin' };
-
       default:
         return null;
     }
   };
 
   let targetKey: 'zh' | 'zhHant' | 'en' = 'en';
-
   if (i18n.language === 'zh-Hant') {
     targetKey = 'zhHant';
   } else if (i18n.language.startsWith('zh')) {
@@ -59,13 +56,13 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
     ? data.wordMeaning[targetKey] || data.wordMeaning.en
     : '';
 
+  // 1. 平假名情况
   if (
     data.kind === 'h-seion' ||
     data.kind === 'h-dakuon' ||
     data.kind === 'h-yoon'
   ) {
     const renderMainContent = () => {
-      // 场景 A: 汉字背景开启
       if (kanjiBackground) {
         return (
           <>
@@ -78,9 +75,6 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
           </>
         );
       }
-
-      // 场景 B: 汉字背景关闭
-      // B1. Emoji
       if (data.wordEmoji) {
         return (
           <>
@@ -91,38 +85,49 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
           </>
         );
       }
-
-      // // B2. 纯假名
-      // return (
-      //   <div className={`${styles.kanjiMain} ${commonStyles.jaFont}`}>
-      //     {data.wordKana}
-      //   </div>
-      // );
+      return null;
     };
 
     return (
       <div className={styles.container}>
-        <div className={styles.romajiBottom}>{data.wordRomaji}</div>
-        {renderMainContent()}
-        <div className={styles.meaningText}>{meaningText}</div>
-        {data.wordNoteKey && (
-          <div className={commonStyles.cardNoteLabel}>
-            <Lightbulb size={14} className={commonStyles.noteIcon} />
-            <span>{t(data.wordNoteKey)}</span>
-          </div>
-        )}
-        <div className={commonStyles.speakerBtn} onClick={handlePlay}>
+        {/* 1. 喇叭：直接使用全局定位类 */}
+        <div className="speakerBtn" onClick={handlePlay}>
           <Volume2 />
+        </div>
+
+        {/* 2. 核心区 (居中) */}
+        <div className={styles.mainZone}>
+          <div className={styles.romajiBottom}>{data.wordRomaji}</div>
+          {renderMainContent()}
+          <div className={styles.meaningText}>{meaningText}</div>
+        </div>
+
+        {/* 3. 底部 Note (绝对定位沉底) */}
+        <div className={styles.footerNote}>
+          {data.wordNoteKey && (
+            <div className="notePill">
+              <Lightbulb size={14} className="noteIcon" />
+              <span>{t(data.wordNoteKey)}</span>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
+  // 2. 片假名情况
   if (data.kind === 'k-seion') {
     const badge = data.wordOrigin ? getOriginBadge(data.wordOrigin) : null;
-    const renderMainContent = () => {
-      return (
-        <>
+
+    return (
+      <div className={styles.container}>
+        {/* 1. 喇叭 */}
+        <div className="speakerBtn" onClick={handlePlay}>
+          <Volume2 />
+        </div>
+
+        {/* 2. 核心区 */}
+        <div className={styles.mainZone}>
           {data.wordOrigin && (
             <div className={styles.originTag}>
               <span className={styles.originLabel}>
@@ -144,22 +149,17 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
           {data.wordEmoji && (
             <div className={styles.emoji}>{data.wordEmoji}</div>
           )}
-        </>
-      );
-    };
+          <div className={styles.meaningText}>{meaningText}</div>
+        </div>
 
-    return (
-      <div className={styles.container}>
-        {renderMainContent()}
-        <div className={styles.meaningText}>{meaningText}</div>
-        {data.wordNoteKey && (
-          <div className={commonStyles.cardNoteLabel}>
-            <Lightbulb size={14} className={commonStyles.noteIcon} />
-            <span>{t(data.wordNoteKey)}</span>
-          </div>
-        )}
-        <div className={commonStyles.speakerBtn} onClick={handlePlay}>
-          <Volume2 />
+        {/* 3. 底部 Note */}
+        <div className={styles.footerNote}>
+          {data.wordNoteKey && (
+            <div className="notePill">
+              <Lightbulb size={14} className="noteIcon" />
+              <span>{t(data.wordNoteKey)}</span>
+            </div>
+          )}
         </div>
       </div>
     );

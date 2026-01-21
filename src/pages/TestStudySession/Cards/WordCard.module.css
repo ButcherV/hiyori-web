@@ -1,10 +1,50 @@
+/* src/pages/TestStudySession/Cards/WordCard.module.css */
+
 .container {
+  width: 100%;
+  height: 100%;
+  /* 必须保留 relative，否则全局的 absolute speakerBtn 会定位到屏幕外面去 */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* Padding 策略：
+     Top: 60px (为右上角的全局喇叭留出防撞空间)
+     Bottom: 80px (为底部的 Note 留出空间)
+  */
+  padding: 60px 24px 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* --- 核心内容区 (居中) --- */
+.mainZone {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
+  /* 视觉重心微调 */
+  padding-bottom: 20px;
 }
+
+/* --- 底部 Note (绝对定位沉底，不影响中间布局) --- */
+.footerNote {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  box-sizing: border-box;
+  z-index: 10;
+  pointer-events: none; /* 防止遮挡 */
+}
+
+/* --- 以下保持原有样式不变 --- */
 
 .furigana {
   font-size: 32px;
@@ -12,7 +52,6 @@
   font-weight: 800;
   letter-spacing: 2px;
   margin-bottom: -5px;
-  /* 开启比例宽度替代，自动消除拗音间距 */
   font-feature-settings: 'palt';
 }
 
@@ -23,7 +62,6 @@
   line-height: 1.1;
   margin: 5px 0;
   text-align: center;
-  /* 开启比例宽度替代，自动消除拗音间距 */
   font-feature-settings: 'palt';
 }
 
@@ -34,7 +72,6 @@
   line-height: 1.1;
   margin: 5px 0;
   text-align: center;
-  /* 开启比例宽度替代，自动消除拗音间距 */
   font-feature-settings: 'palt';
 }
 
@@ -42,34 +79,33 @@
   font-size: 24px;
   color: var(--color-Gray6);
   font-weight: 600;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 
 .meaningText {
   font-size: 24px;
   color: var(--color-Gray6);
-  margin-top: 8px;
+  margin-top: 16px;
   font-weight: 600;
   text-align: center;
+  line-height: 1.3;
 }
 
 .emoji {
   font-size: 100px;
   line-height: 1.2;
   font-family: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+  margin-top: 8px;
 }
 
 .originTag {
   display: inline-flex;
   flex-direction: column;
-
-  background-color: var(--color-xxxBlue); /* 比如 #eff6ff */
-  /* border: 1px solid rgba(0, 0, 0, 0.04); 极淡的边框增加精致感 */
+  background-color: var(--color-xxxBlue);
   border-radius: 4px;
   padding: 8px;
   padding-bottom: 5px;
-
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   min-width: 100px;
 }

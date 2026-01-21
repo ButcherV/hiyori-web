@@ -81,3 +81,57 @@ body {
   background-color: #ff3b30;
   color: white;
 }
+
+.speakerBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-Blue);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.1s;
+  z-index: 10;
+}
+.speakerBtn:active {
+  transform: scale(0.92);
+  background: #e5e5ea;
+}
+.speakerBtn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.6px;
+}
+
+/* 胶囊型备注标签 */
+.notePill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+
+  background-color: rgba(255, 59, 48, 0.08);
+  border-radius: 20px;
+
+  font-size: 13px;
+  color: var(--color-error);
+  font-weight: 600;
+  text-align: left;
+  line-height: 1.4;
+
+  /* 允许换行，防止内容过长撑爆 */
+  white-space: pre-wrap;
+  max-width: 100%;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
