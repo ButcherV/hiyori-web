@@ -1,0 +1,237 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 16px 16px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #f9f9fb 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 舞台区 */
+.stageContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  /* padding-top: 40px; */
+}
+
+.bgNumber {
+  position: absolute;
+  font-size: 240px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.04);
+  z-index: 0;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+}
+
+/* 汉字：绝对主角，始终居中 */
+.heroKanji {
+  font-size: 104px;
+  font-weight: 800;
+  color: var(--color-Gray10);
+  line-height: 1;
+  margin-bottom: 32px;
+  /* 增加白色描边/投影，防止和背景数字重叠时看不清 */
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8);
+  z-index: 2;
+}
+
+/* =========================================
+   场景 A: 单读音 (Single Layout)
+   设计理念：极简，无框，只有文字和声音
+   ========================================= */
+.singleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 16px;
+  transition: background-color 0.2s;
+  min-height: 136px;
+}
+
+/* .singleContainer:active {
+  background-color: rgba(0, 0, 0, 0.05);
+} */
+
+.romajiLabel {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-Gray6);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.kanaRow {
+  position: relative;
+}
+
+.kanaLabel {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-Blue);
+  line-height: 1;
+}
+
+.speakerIcon {
+  color: var(--color-Gray6);
+  opacity: 0.8;
+  flex-shrink: 0;
+  position: absolute;
+  right: -32px;
+  top: 4px;
+}
+
+/* =========================================
+   场景 B: 多读音 (Split Layout)
+   设计理念：强制等高，底部对齐，左上角标签
+   ========================================= */
+.splitContainer {
+  display: flex;
+  flex-direction: row;
+  /* 关键：拉伸子元素，保证卡片高度一致 */
+  align-items: stretch;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px; /* 限制最大宽度 */
+  z-index: 2;
+}
+
+/* 卡片基础样式 */
+.splitCard {
+  position: relative; /* 为了给 absolute 的 badge 定位 */
+
+  /* 弹性布局：让内部元素可以垂直分布 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* 宽度分配 */
+  flex: 1;
+
+  /* 视觉样式：磨砂透视感 */
+  /* background: rgba(255, 255, 255, 0.1); */
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+
+  /* 内边距：顶部稍微多留一点给 badge 呼吸空间，虽然它是悬浮的 */
+  padding: 12px 8px 8px 8px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* 最小高度，保证视觉体量 */
+  min-height: 136px;
+  overflow: hidden; /* 防止 badge 溢出圆角 */
+}
+
+/* 选中状态 */
+.cardActive {
+  border-color: var(--color-study-number);
+  background: rgba(255, 248, 240, 0.6);
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 主读音卡片微调 */
+/* .cardMain {
+  background: rgba(255, 255, 255, 0.3);
+} */
+
+/* 🌟 角落标签 (Corner Badge) */
+.mainBadge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background: var(--color-study-number);
+
+  padding: 4px 10px;
+
+  /* 左上跟随卡片圆角，右下给个小圆角 */
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 4px;
+
+  box-shadow: 2px 2px 6px rgba(255, 149, 0, 0.15);
+  pointer-events: none;
+}
+
+/* 顶部内容区 (Romaji + Kana) */
+.cardTopContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.romajiText {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-Gray6);
+  margin-bottom: 2px;
+}
+
+.kanaText {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-Blue);
+  margin-bottom: 8px;
+  line-height: 1.2;
+  position: relative;
+}
+
+.speakerIconInCard {
+  position: absolute;
+  right: -24px;
+  top: 10px;
+  color: var(--color-Gray6);
+  opacity: 0.8;
+}
+
+/* 底部说明区 */
+.usageWrapper {
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.usageText {
+  font-size: 12px;
+  color: var(--color-Gray7);
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* 激活时文字变深 */
+.cardActive .usageText {
+  color: #482000;
+}
+
+.cardActive .usageWrapper {
+  border-top-color: rgba(255, 149, 0, 0.15);
+}

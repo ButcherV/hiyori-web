@@ -92,6 +92,8 @@
   --color-perfect-text: #d48806; /* 主文字 */
   --color-perfect-text-sub: #d46b08; /* 副文字(Romaji) */
   --color-perfect-shadow: rgba(250, 173, 20, 0.3);
+
+  --color-study-number: #ff9500;
 }
 
 .jaFont {

@@ -258,5 +258,43 @@
       "normal": "璞玉待琢",
       "slow": "顾盼犹疑"
     }
+  },
+  "number_study": {
+    "common": {
+      "level_locked_title": "关卡未解锁",
+      "level_locked_desc": "请先完成上一阶段的挑战",
+      "mode_learn": "学习",
+      "mode_test": "挑战",
+      "understand": "明白",
+      "goal": "学习目标",
+      "keypoint": "重点难点",
+      "speed_challenge": "速度挑战",
+      "coming_soon": "开发中..."
+    },
+    "numbers": {
+      "title_base": "数字学习",
+      "test_only_hint": "纯测试模式",
+      "levels": {
+        "lvl1": {
+          "label": "0-10",
+          "title": "基础数字",
+          "goal_desc": "掌握 0-10 的日语读音与汉字写法。",
+          "keypoint_desc": "数字 <strong>4, 7, 9</strong> 拥有双重读音（音便），请仔细听辨。"
+        },
+        "lvl2": {
+          "label": "11-99",
+          "title": "十位组合",
+          "desc": "这一关没有新单词，考验的是你对数字组合的反应速度。"
+        },
+        "lvl3": {
+          "label": "100-999",
+          "title": "百位音便"
+        },
+        "lvl4": {
+          "label": ">=1000",
+          "title": "大数单位"
+        }
+      }
+    }
   }
 }

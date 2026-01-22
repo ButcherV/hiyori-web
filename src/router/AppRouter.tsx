@@ -12,6 +12,7 @@ import { MistakeNotebook } from '../pages/KanaDictAndQuiz/PageMistakeNotebook/Mi
 import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
 import { MagicClock } from '../pages/Clock/Clock';
+import { PageNumbers } from '../pages/Numbers/PageNumbers';
 
 // 动画组件
 import { PageTransition } from '../components/PageTransition';
@@ -30,6 +31,7 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname === '/mistake-book') return 2;
   if (pathname === '/quiz/session') return 3;
   if (pathname === '/study/clock') return 2;
+  if (pathname === '/study/number') return 2;
 
   return 100;
 };
@@ -84,6 +86,15 @@ export const AppRouter = () => {
           element={
             <PageTransition preset="scale" depth={2} direction={direction}>
               <DatesPage />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/study/numbers"
+          element={
+            <PageTransition preset="slide" depth={2} direction={direction}>
+              <PageNumbers />
             </PageTransition>
           }
         />

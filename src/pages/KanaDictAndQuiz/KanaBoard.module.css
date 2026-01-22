@@ -27,8 +27,8 @@
 }
 
 .stickyHeaderCol {
-  padding: 0 16px 16px 16px;
-  /* padding-bottom: 16px; */
+  padding: 0 16px 16px 12px;
+  /* 视觉上左右对齐 */
   display: flex;
   justify-content: space-between;
   align-items: center;

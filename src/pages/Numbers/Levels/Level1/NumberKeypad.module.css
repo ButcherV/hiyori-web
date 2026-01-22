@@ -1,0 +1,40 @@
+.keyboardArea {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.keyRow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.keyBtn {
+  width: calc((100% - 40px) / 6); /* 自适应宽度 */
+  height: 48px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--color-Gray3);
+  color: var(--color-Gray10);
+  font-size: 22px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+
+.keyBtn:active {
+  background-color: var(--color-Gray6);
+  transform: scale(0.95);
+}
+
+.keyBtnActive {
+  /* 使用你之前定义的橙色高亮 */
+  background-color: var(--color-study-number);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.2);
+}

@@ -48,9 +48,6 @@ export function HomePage() {
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [isStatsOpen, setStatsOpen] = useState(false);
 
-  // 占位 - 专项练习弹窗
-  const [isNumbersOpen, setNumbersOpen] = useState(false);
-
   const { activityLog } = useProgress();
   const hasActivity = Object.values(activityLog).some((count) => count > 0);
 
@@ -139,13 +136,12 @@ export function HomePage() {
     if (id === 'dates') {
       navigate('/study/dates');
     } else if (id === 'numbers') {
-      setNumbersOpen(true);
+      navigate('/study/numbers');
     }
   };
 
   const handleLessonSelect = (courseId: string, targetChars: string[]) => {
     setSelectionOpen(false);
-    setNumbersOpen(false);
     setTimeout(() => {
       navigate(`/study/kana/${courseId}`, { state: { targetChars } });
     }, 0);
@@ -301,14 +297,6 @@ export function HomePage() {
         }
       >
         <LessonMenu script={currentScript} onSelect={handleLessonSelect} />
-      </BottomSheet>
-
-      <BottomSheet
-        isOpen={isNumbersOpen}
-        onClose={() => setNumbersOpen(false)}
-        title={t('home.drills.numbers')}
-      >
-        <LessonMenu script={'numbers' as any} onSelect={handleLessonSelect} />
       </BottomSheet>
 
       <BottomSheet
