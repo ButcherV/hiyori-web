@@ -69,8 +69,18 @@
 .levelNav {
   display: flex;
   gap: 12px;
+  /* 显式开启水平滚动，显式禁止垂直滚动 */
   overflow-x: auto;
-  padding: 0 16px;
+  overflow-y: hidden;
+
+  /* 开启 iOS 惯性滚动，手感顺滑 */
+  -webkit-overflow-scrolling: touch;
+
+  /* 告诉浏览器“这里只认水平划动”，防止垂直手势干扰 */
+  touch-action: pan-x;
+
+  padding: 1px 16px;
+
   scrollbar-width: none;
   align-items: center;
 }
@@ -112,8 +122,7 @@
   background-color: var(--color-study-number);
   color: white;
   border-color: var(--color-study-number);
-  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.35); /* 橙色光晕 */
-  transform: scale(1.05); /* 稍微放大突出 */
+  /* box-shadow: 0 4px 12px rgba(255, 149, 0, 0.35); */
   z-index: 1;
 }
 

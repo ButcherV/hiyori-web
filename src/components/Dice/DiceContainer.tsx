@@ -6,10 +6,14 @@ import { OrbitControls } from '@react-three/drei';
 
 interface DiceRollerProps {
   onRoll?: (total: number, values: number[]) => void;
+  disabled?: boolean;
 }
 
-export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
-  const [status, setStatus] = useState('Drag & Release!');
+export const DiceRoller: React.FC<DiceRollerProps> = ({
+  onRoll,
+  disabled = false,
+}) => {
+  // const [status, setStatus] = useState('Drag & Release!');
 
   useEffect(() => {
     console.log('DiceRoller mounted! 🚀');
@@ -17,7 +21,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
 
   const handleResult = (vals: number[]) => {
     const total = vals[0] + vals[1];
-    setStatus(`Rolled: ${vals[0]} + ${vals[1]} = ${total}`);
+    // setStatus(`Rolled: ${vals[0]} + ${vals[1]} = ${total}`);
     if (onRoll) onRoll(total, vals);
   };
 
@@ -25,13 +29,20 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
     <div
       style={{
         width: '100%',
-        height: '40vh',
+        height: '100%',
         position: 'relative',
         background: '#F6F3EB',
-        borderRadius: '24px',
+        borderRadius: '12px',
         overflow: 'hidden',
         boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
         touchAction: 'none',
+        // 🟢 核心修改：如果禁用，屏蔽所有鼠标/触摸事件
+        // 这会让骰子变得“不可抓取”，直到 disabled 解除
+        pointerEvents: disabled ? 'none' : 'auto',
+
+        // 可选：稍微降低一点透明度，给用户“不可操作”的视觉暗示
+        opacity: disabled ? 0.8 : 1,
+        // cursor: disabled ? 'default' : 'grab',
       }}
     >
       <Canvas
@@ -67,17 +78,22 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
         {/* <Environment preset="city" /> */}
 
         {/* 调试地板：如果能看到红色网格，说明渲染成功了 */}
-        <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        {/* <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[100, 100]} />
           <meshBasicMaterial color="red" wireframe opacity={0.1} transparent />
-        </mesh>
+        </mesh> */}
 
-        <DoubleDice onResult={handleResult} />
+        <DoubleDice onResult={handleResult} disabled={disabled} />
 
-        <OrbitControls target={[0, 0, 0]} enableZoom={true} />
+        <OrbitControls
+          target={[0, 0, 0]}
+          enableZoom={false} /* 禁止缩放 */
+          enableRotate={false} /* 禁止旋转 */
+          enablePan={false} /* 禁止平移 */
+        />
       </Canvas>
 
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           bottom: '15px',
@@ -100,7 +116,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ onRoll }) => {
         >
           {status}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

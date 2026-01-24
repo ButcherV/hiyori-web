@@ -23,7 +23,7 @@ export const Level1Learn = () => {
       if (data && data.readings.length > 0) {
         speak(data.readings[0].kana);
       }
-    }, 300); // 300ms 延迟，体验更自然
+    }, 400); // 延迟
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps

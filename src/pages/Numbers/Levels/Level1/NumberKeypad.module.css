@@ -16,7 +16,7 @@
 .keyBtn {
   width: calc((100% - 40px) / 6); /* 自适应宽度 */
   height: 48px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   background-color: var(--color-Gray3);
   color: var(--color-Gray10);
@@ -25,6 +25,9 @@
   cursor: pointer;
   transition: all 0.1s;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .keyBtn:active {

@@ -1,27 +1,75 @@
-/* src/pages/Numbers/Levels/Level1Test.module.css */
+/* src/pages/Numbers/Levels/Level1/Level1Test.module.css */
 
 .container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 16px 16px 16px;
-  box-sizing: border-box;
-  background: linear-gradient(180deg, #f9f9fb 0%, #ffffff 100%);
+  /* background-color: #f5f6f8; */
+  position: relative;
 }
 
-.stageContainer {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* --- A区: 骰子 (固定高度) --- */
+.diceSection {
   width: 100%;
-  /* 预留样式：这里以后放你的测试交互界面 */
+  /* 这里的 280px 是你想要的高度，可以随意调小 */
+  height: 280px;
+  flex-shrink: 0;
+  /* background: #f6f3eb; */
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
+  padding: 16px;
 }
 
-/* 占位文字样式 */
+/* --- B区: 式子板 (占据剩余所有空间，垂直居中) --- */
+.boardSection {
+  flex: 1; /* 关键：自动撑开，把上下隔开 */
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  padding: 0 20px;
+}
+
+/* 式子卡片：完全独立的卡片样式 */
+.equationCard {
+  background: white;
+  padding: 8px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  min-width: 200px;
+
+  /* 稍微往上提一点视觉重心，不要死板居中 */
+  transform: translateY(-10px);
+}
+
+.equationText {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1c1c1e;
+  font-family: 'SF Pro Rounded', system-ui, sans-serif;
+  letter-spacing: 2px;
+}
+
+.questionMark {
+  color: #ff9500;
+  display: inline-block;
+}
+
 .placeholderText {
   color: #8e8e93;
-  font-size: 16px;
-  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* --- C区: 键盘 (沉底) --- */
+.keypadSection {
+  flex-shrink: 0;
+  padding: 0 16px 32px 16px; /* 底部留足安全距离 */
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
+  pointer-events: none;
 }

@@ -15,7 +15,7 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
       {/* 第一排: 0 - 4 */}
       <div className={styles.keyRow}>
         {[0, 1, 2, 3, 4].map((num) => (
-          <button
+          <div
             key={num}
             className={`
               ${styles.keyBtn} 
@@ -24,14 +24,14 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
             onClick={() => onKeyClick(num)}
           >
             {num}
-          </button>
+          </div>
         ))}
       </div>
 
       {/* 第二排: 5 - 10 */}
       <div className={styles.keyRow}>
         {[5, 6, 7, 8, 9, 10].map((num) => (
-          <button
+          <div
             key={num}
             className={`
               ${styles.keyBtn} 
@@ -40,7 +40,7 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
             onClick={() => onKeyClick(num)}
           >
             {num}
-          </button>
+          </div>
         ))}
       </div>
     </div>

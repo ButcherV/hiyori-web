@@ -18,9 +18,13 @@ const COMMON_COLORS = {
 
 interface DoubleDiceProps {
   onResult: (result: number[]) => void;
+  disabled?: boolean;
 }
 
-export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
+export const DoubleDice: React.FC<DoubleDiceProps> = ({
+  onResult,
+  disabled,
+}) => {
   const { scene, gl, camera } = useThree();
 
   const worldRef = useRef<CANNON.World>(null!);
@@ -170,6 +174,8 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
     };
 
     const onDown = (e: MouseEvent | TouchEvent) => {
+      // 如果 disabled 为 true，直接禁止交互
+      if (disabled) return;
       e.preventDefault();
       isHoldingRef.current = true;
       needsCheckRef.current = false;
@@ -224,7 +230,7 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onUp);
     };
-  }, [gl]);
+  }, [gl, disabled]);
 
   // --- 辅助逻辑 ---
   const createDice = (
@@ -429,6 +435,9 @@ export const DoubleDice: React.FC<DoubleDiceProps> = ({ onResult }) => {
 };
 
 // --- 工具函数：生成贴图 (逻辑保持不变 0-5) ---
+
+// 在 Three.js 中，要给骰子的每一面贴上不同的点数，
+// 这里没有使用现成的图片文件，而是使用 HTML5 Canvas 动态画出来的。
 function createDiceTexture(logicalNumber: number, colorHex: string) {
   const size = 256;
   const canvas = document.createElement('canvas');
