@@ -1,24 +1,29 @@
-/* src/pages/Numbers/Levels/Level1/Level1Test.module.css */
-
-/* 容器保持不变 */
 .container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 16px 16px 32px 16px;
+  padding-top: 0px;
   position: relative;
 }
 
-.diceSection {
+/* --- Stage 保持不变，去掉了 idleHint 相关的样式 --- */
+.stageSection {
+  padding-top: 16px;
   width: 100%;
   flex: 1;
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
+  min-height: 290px;
+  position: relative;
   border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
 
-  /* 这一段背景现在终于能露出来了！ */
+.diceLayer {
+  width: 100%;
+  height: 100%;
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   background-color: #fcfcfc;
   background-image:
     radial-gradient(
@@ -31,108 +36,185 @@
   background-size:
     100% 100%,
     24px 24px;
-
-  box-shadow: inset 0 -30px 40px -20px rgba(100, 116, 139, 0.1);
-  border-bottom: none;
 }
 
-.boardSection {
-  flex: 1;
-  flex-shrink: 0;
-  flex-grow: 0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* 增加透视感，让 3D 翻转效果更明显 */
-  perspective: 1000px;
+.blurMode {
+  filter: blur(8px) grayscale(0.2) brightness(0.95);
+  transform: scale(1.02);
 }
 
-/* --- 核心修改：算式卡片容器 --- */
-.equationCard {
-  background: white;
-  padding: 0px;
-  border-radius: 24px;
-  /* 更柔和、更有层次的阴影 */
+.hudOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(248, 250, 252, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow:
-    0 10px 30px -5px rgba(0, 0, 0, 0.08),
-    0 4px 10px -2px rgba(0, 0, 0, 0.04);
-
+    0 20px 50px -12px rgba(0, 0, 0, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.5);
+  padding: 24px 32px;
+  border-radius: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px; /* 元素之间的间距 */
+  gap: 12px;
+  z-index: 10;
+}
 
-  min-width: 260px;
-  min-height: 72px;
-  transform: translateY(-12px);
+/* --- 🟢 键盘区域重构 (Keypad Section) --- */
+.keypadSection {
+  flex-shrink: 0;
+  margin-top: 16px;
+  width: 100%;
+  position: relative; /* 为 Overlay 提供锚点 */
+}
+
+/* 键盘被禁用时的样式：模糊 + 压暗 */
+.disabledKeypad {
+  opacity: 0.4; /* 降低不透明度 */
+  filter: blur(2px) grayscale(0.8); /* 稍微模糊，让提示条更突出 */
+  pointer-events: none; /* 禁止点击 */
   transition: all 0.3s ease;
 }
 
-/* 空闲状态文字 */
-.placeholderText {
-  color: #a1a1aa;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  animation: float 3s ease-in-out infinite;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+/* --- 🟢 键盘封印遮罩 (Hint Overlay) --- */
+.idleHintOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-/* --- 积木数字块 (Number Block) --- */
-.numBlock {
-  width: 48px;
-  height: 48px;
-  background: #f3f4f6; /* 浅灰底色 */
-  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 24px;
+  z-index: 20; /* 确保盖在键盘上面 */
+  pointer-events: none; /* 允许穿透？不，这里其实无所谓，因为键盘也是 disabled */
+}
+
+/* 提示胶囊本体 */
+.hintText {
+  background: rgba(30, 41, 59, 0.9); /* 深色背景 */
+  color: #f8fafc;
+  padding: 12px 24px;
+  border-radius: 99px;
+
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  /* 强烈的悬浮质感 */
+  backdrop-filter: blur(4px);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+
+  /* 整体呼吸动画 */
+  animation: floatAndPulse 3s ease-in-out infinite;
+}
+
+/* 箭头动画：向上指引 */
+.hintText svg {
+  color: #60a5fa; /* 亮蓝箭头 */
+  animation: slideUp 1.5s ease-in-out infinite;
+}
+
+/* --- 动画关键帧 --- */
+
+@keyframes floatAndPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* 箭头向上滑动 */
+@keyframes slideUp {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  } /* 向上动 */
+}
+
+/* --- 积木块通用样式 --- */
+.numBlock {
+  width: 52px;
+  height: 52px;
+
+  /* 1. 背景改回纯白实体，不再透明 */
+  background: #ffffff;
+
+  /* 2. 边框稍微明显一点 */
+  border: 1px solid #e2e8f0; /* Slate-200 */
+  border-radius: 14px;
+
+  /* 3. 字体 */
+  font-size: 26px;
   font-weight: 800;
-  color: #374151;
+  color: #334155; /* Slate-700 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Nunito', 'SF Pro Rounded', sans-serif;
 
-  /* 底部增加一点“厚度”感 */
-  border-bottom: 4px solid #e5e7eb;
+  /* 4. 关键：增加悬浮投影，让它与 HUD 拉开层次 */
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.05); /* 底部微弱内阴影模拟厚度 */
 
-  /* 默认隐藏，等待动画 */
   opacity: 0;
   transform: scale(0.5);
 }
 
-/* 符号 (+, =) */
+/* 🟢 问号块 (Target Block) - 保持醒目的蓝色 */
+.targetBlock {
+  background: #3b82f6; /* 纯蓝 */
+  color: #ffffff;
+  border: none; /* 问号块不需要边框 */
+
+  /* 蓝色块的投影要带色相，才显高级 */
+  box-shadow:
+    0 8px 16px -4px rgba(59, 130, 246, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3); /* 顶部高光 */
+}
 .operator {
   font-size: 24px;
   font-weight: 900;
-  color: #9ca3af;
-  margin: 0 4px;
+  color: #64748b;
+  margin: 0 2px;
   opacity: 0;
 }
 
-/* 问号块 (Target Block) */
-.targetBlock {
-  background: #eff6ff; /* 浅蓝底色 */
-  border-bottom: 4px solid #dbeafe;
-  color: #3b82f6;
-}
-
-/* 动画类：依次弹出 (Pop In) */
 .animPop {
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-/* 动画类：问号呼吸 (Pulse) */
 .animPulse {
   animation: pulse 2s infinite ease-in-out;
 }
 
-/* --- Keyframes 动画定义 --- */
-
-/* 1. 弹性弹出 */
 @keyframes popIn {
   0% {
     opacity: 0;
@@ -144,28 +226,14 @@
   }
 }
 
-/* 2. 悬浮/呼吸 */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* 3. 问号强调跳动 */
 @keyframes pulse {
   0% {
     transform: scale(1);
-    /* 初始状态，稍微有一点点光晕，颜色稍微深一点点以便在浅色背景上看清 */
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
   }
   70% {
-    transform: scale(1.05); /* 放大到 1.05 倍 */
-    /* 光晕扩散开，并变得透明 */
-    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+    transform: scale(1.08);
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
   }
   100% {
     transform: scale(1);
@@ -173,13 +241,70 @@
   }
 }
 
-/* 键盘部分保持不变 */
-.keypadSection {
-  flex-shrink: 0;
-  width: 100%;
+/* 成功态：翠绿色 + 稍微放大弹跳 */
+.successState {
+  background-color: var(--color-success) !important; /* Emerald-500 */
+  color: white !important;
+  border: none !important;
+  /* 绿色光晕 */
+  box-shadow:
+    0 8px 20px -4px rgba(16, 185, 129, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4) !important;
+  /* 成功弹跳动画 */
+  animation: successBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
-.disabled {
-  opacity: 0.5;
-  filter: grayscale(1);
-  pointer-events: none;
+
+/* 失败态：红色 */
+.errorState {
+  background-color: var(--color-error) !important; /* Red-500 */
+  color: white !important;
+  border: none !important;
+  /* 红色光晕 */
+  box-shadow:
+    0 8px 20px -4px rgba(239, 68, 68, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* --- 🟢 新增：关键帧动画 --- */
+
+/* 1. 成功时的弹跳 (Scale Up -> Bounce) */
+@keyframes successBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+/* 2. 失败时的 HUD 颤动 (Shake) */
+/* 注意：必须保留 translate(-50%, -50%) 否则颤动时会跑偏 */
+@keyframes shakeHUD {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translate(-52%, -50%);
+  } /* 向左晃 */
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translate(-48%, -50%);
+  } /* 向右晃 */
+}
+
+/* 应用于 HUD 容器 */
+.shakeAnim {
+  animation: shakeHUD 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  /* 颤动时边框也红一下 */
+  border-color: rgba(239, 68, 68, 0.5);
 }

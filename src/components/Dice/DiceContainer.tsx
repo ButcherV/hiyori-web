@@ -6,7 +6,7 @@ import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface DiceRollerProps {
-  onRoll?: (total: number, values: number[]) => void;
+  onRoll?: (values: number[]) => void;
   disabled?: boolean;
 }
 
@@ -21,9 +21,9 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
   }, []);
 
   const handleResult = (vals: number[]) => {
-    const total = vals[0] + vals[1];
+    // const total = vals[0] + vals[1];
     // setStatus(`Rolled: ${vals[0]} + ${vals[1]} = ${total}`);
-    if (onRoll) onRoll(total, vals);
+    if (onRoll) onRoll(vals);
   };
 
   return (

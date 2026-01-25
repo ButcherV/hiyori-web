@@ -274,6 +274,12 @@
     "numbers": {
       "title_base": "数字学习",
       "test_only_hint": "纯测试模式",
+      "interaction": {
+        "roll_hint": "请掷骰子",
+        "common_badge": "常用",
+        "toast_wrong_title": "回答错误",
+        "toast_wrong_desc": "正确答案是 {{val}}。我们复习一下！"
+      },
       "levels": {
         "lvl1": {
           "label": "0-10",

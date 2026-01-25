@@ -253,5 +253,49 @@
       "normal": "Steady",
       "slow": "Careful"
     }
+  },
+  "number_study": {
+    "common": {
+      "level_locked_title": "Level Locked",
+      "level_locked_desc": "Complete previous level first",
+      "mode_learn": "Learn",
+      "mode_test": "Challenge",
+      "understand": "Got it",
+      "goal": "Goal",
+      "keypoint": "Key Points",
+      "speed_challenge": "Speed Challenge",
+      "coming_soon": "Coming Soon..."
+    },
+    "numbers": {
+      "title_base": "Number Study",
+      "test_only_hint": "Test Mode Only",
+      "interaction": {
+        "roll_hint": "Roll Dice to Start",
+        "common_badge": "Main",
+        "toast_wrong_title": "Incorrect",
+        "toast_wrong_desc": "Answer is {{val}}. Let's review!"
+      },
+      "levels": {
+        "lvl1": {
+          "label": "0-10",
+          "title": "Basic Numbers",
+          "goal_desc": "Master readings and Kanji for 0-10.",
+          "keypoint_desc": "Numbers <strong>4, 7, 9</strong> have dual readings. Listen closely."
+        },
+        "lvl2": {
+          "label": "11-99",
+          "title": "Tens Structure",
+          "desc": "No new words. Test your reaction speed on number combinations."
+        },
+        "lvl3": {
+          "label": "100-999",
+          "title": "Hundreds Variations"
+        },
+        "lvl4": {
+          "label": ">=1000",
+          "title": "Large Units"
+        }
+      }
+    }
   }
 }

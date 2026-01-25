@@ -35,7 +35,8 @@ export const DicePage = () => {
   const [animateCard, setAnimateCard] = useState(false);
 
   // 处理骰子结果
-  const handleRollComplete = (total: number) => {
+  const handleRollComplete = (values: number[]) => {
+    const total = values[0] + values[1];
     setCurrentNumber(total);
 
     // 触发卡片弹入动画

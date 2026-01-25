@@ -42,8 +42,10 @@ export const Level1 = () => {
     // 2. 显示你的 Toast
     setToastConfig({
       isVisible: true,
-      message: 'Wrong Answer', // 或者用 t('wrong_answer')
-      description: `The correct answer was ${targetNum}. Let's review!`,
+      message: t('number_study.numbers.interaction.toast_wrong_title'),
+      description: t('number_study.numbers.interaction.toast_wrong_desc', {
+        val: targetNum,
+      }),
     });
 
     // 3. 延迟 2秒 后，关闭 Toast 并跳转

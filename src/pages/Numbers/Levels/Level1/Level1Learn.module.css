@@ -166,7 +166,7 @@
   color: white;
   background: var(--color-study-number);
 
-  padding: 4px 10px;
+  padding: 4px 8px;
 
   /* 左上跟随卡片圆角，右下给个小圆角 */
   border-top-left-radius: 0px;

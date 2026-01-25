@@ -14,48 +14,78 @@
 }
 
 .keyBtn {
-  width: calc((100% - 40px) / 6); /* 自适应宽度 */
-  height: 48px;
-  border-radius: 8px;
-  border: none;
-  background-color: var(--color-Gray3);
-  color: var(--color-Gray10);
-  font-size: 22px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.1s;
-  flex-shrink: 0;
+  /* 1. 布局与尺寸 */
+  /* 计算宽度：(100% - 5个间隙*8px - 左右padding) / 6 */
+  width: calc((100% - 40px) / 6);
+  height: 56px; /* 加高一点，更有手感 */
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+
+  /* 2. 3D 实体质感核心 */
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0; /* 极细的轮廓 */
+  /* 关键：用底部边框模拟厚度 */
+  border-bottom: 4px solid #cbd5e1;
+  border-radius: 12px; /* 圆润的边角 */
+
+  /* 3. 字体 */
+  color: #475569;
+  font-size: 24px;
+  font-weight: 700;
+  /* font-family: 'Nunito', 'SF Pro Rounded', sans-serif; */
+
+  /* 4. 交互属性 */
+  cursor: pointer;
+  /* 极快的过渡，保证按键跟手 */
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 禁用手机上的点击高亮背景 */
+  -webkit-tap-highlight-color: transparent;
+
+  /* 稍微加一点投影让它浮起来 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* 按下状态：模拟物理下沉 */
 .keyBtn:active {
-  background-color: var(--color-Gray6);
-  transform: scale(0.95);
+  transform: translateY(2px); /* 整体下移 */
+  border-bottom-width: 2px; /* 底部变薄，模拟陷入 */
+  background-color: #f1f5f9; /* 稍微变暗 */
+  box-shadow: none; /* 投影消失 */
 }
 
+/* 激活/选中状态 (如果有 activeNum) */
 .keyBtnActive {
-  /* 使用你之前定义的橙色高亮 */
-  background-color: var(--color-study-number);
+  background-color: #3b82f6; /* 亮蓝色 */
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.2);
+  border-color: #2563eb;
+  border-bottom-color: #1d4ed8; /* 深蓝色底边 */
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
+.keyBtnActive:active {
+  background-color: #2563eb;
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* 日文模式字体调整 */
 .fontJa {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
 }
 
-/* 🟢 新增：洗牌入场动画 */
+/* 进场动画 */
 @keyframes popIn {
   0% {
     opacity: 0;
-    transform: scale(0.6) translateY(10px);
+    transform: scale(0.6) translateY(20px);
   }
   60% {
     opacity: 1;
-    transform: scale(1.1); /* 稍微放大一点，制造回弹感 */
+    transform: scale(1.05);
   }
   100% {
     opacity: 1;
@@ -64,6 +94,5 @@
 }
 
 .shuffleAnim {
-  /* backwards 确保在动画开始前，元素保持 0% 的状态（不可见） */
   animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
 }

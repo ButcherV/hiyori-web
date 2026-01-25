@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../../../hooks/useTTS';
-import { LEVEL_1_DATA } from './Level1Data';
+import { LEVEL_1_DATA, type LocalizedText } from './Level1Data';
 import styles from './Level1Learn.module.css';
 import { NumberKeypad } from './NumberKeypad';
+import { useTranslation } from 'react-i18next';
 
 interface Level1LearnProps {
   initialNum?: number | null;
@@ -11,6 +12,7 @@ interface Level1LearnProps {
 
 export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
   const { speak } = useTTS();
+  const { t, i18n } = useTranslation();
 
   // 如果有 initialNum，就用它初始化；否则归零
   const [currentNum, setCurrentNum] = useState(initialNum ?? 0);
@@ -24,6 +26,12 @@ export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
 
   // 记录选中的多音字索引 (0 或 1)
   const [activeSplitIdx, setActiveSplitIdx] = useState<number>(0);
+
+  const getUsageText = (usage?: LocalizedText) => {
+    if (!usage) return null;
+    const isChinese = i18n.language.startsWith('zh');
+    return isChinese ? usage.zh : usage.en;
+  };
 
   const data = LEVEL_1_DATA[currentNum];
   const isMultiReading = data.readings.length > 1;
@@ -91,6 +99,7 @@ export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
             {data.readings.map((r, idx) => {
               const isActive = activeSplitIdx === idx;
               const isMain = r.isMain;
+              const usageText = getUsageText(r.usage);
 
               return (
                 <div
@@ -103,7 +112,11 @@ export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
                   onClick={() => handleMultiClick(idx, r.kana)}
                 >
                   {/* 角落标签 */}
-                  {isMain && <div className={styles.mainBadge}>常用</div>}
+                  {isMain && (
+                    <div className={styles.mainBadge}>
+                      {t('number_study.numbers.interaction.common_badge')}
+                    </div>
+                  )}
 
                   {/* 上半部分：Romaji + Kana */}
                   <div className={styles.cardTopContent}>
@@ -115,9 +128,11 @@ export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
                   </div>
 
                   {/* 下半部分：说明文字 (自动沉底对齐) */}
-                  <div className={styles.usageWrapper}>
-                    <span className={styles.usageText}>{r.usage}</span>
-                  </div>
+                  {usageText && (
+                    <div className={styles.usageWrapper}>
+                      <span className={styles.usageText}>{usageText}</span>
+                    </div>
+                  )}
                 </div>
               );
             })}
