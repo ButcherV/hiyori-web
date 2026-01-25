@@ -65,7 +65,7 @@ export const PageNumbers = () => {
       {/* Layer 1: Header */}
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
-          <button className={styles.iconBtn} onClick={() => navigate(-1)}>
+          <button className={styles.iconBtn} onClick={() => navigate('/')}>
             <ChevronLeft size={24} color="var(--color-Blue)" />
           </button>
           <div className={styles.titleWrapper}>

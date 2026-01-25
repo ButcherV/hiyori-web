@@ -5,9 +5,22 @@ import { LEVEL_1_DATA } from './Level1Data';
 import styles from './Level1Learn.module.css';
 import { NumberKeypad } from './NumberKeypad';
 
-export const Level1Learn = () => {
+interface Level1LearnProps {
+  initialNum?: number | null;
+}
+
+export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
   const { speak } = useTTS();
-  const [currentNum, setCurrentNum] = useState(0);
+
+  // 如果有 initialNum，就用它初始化；否则归零
+  const [currentNum, setCurrentNum] = useState(initialNum ?? 0);
+
+  // 监听 props 变化，确保从 Test 跳回来时能立即更新
+  useEffect(() => {
+    if (typeof initialNum === 'number') {
+      setCurrentNum(initialNum);
+    }
+  }, [initialNum]);
 
   // 记录选中的多音字索引 (0 或 1)
   const [activeSplitIdx, setActiveSplitIdx] = useState<number>(0);
@@ -112,8 +125,13 @@ export const Level1Learn = () => {
         )}
       </div>
 
-      {/* 4. 底部键盘 */}
-      <NumberKeypad onKeyClick={handleKeyClick} activeNum={currentNum} />
+      {/* 4. 底部键盘 - 顺序阿拉伯 */}
+      <NumberKeypad
+        onKeyClick={handleKeyClick}
+        activeNum={currentNum}
+        shuffle={false}
+        displayMode="arabic"
+      />
     </div>
   );
 };
