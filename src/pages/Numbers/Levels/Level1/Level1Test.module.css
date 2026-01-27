@@ -8,12 +8,11 @@
   position: relative;
 }
 
-/* --- Stage 保持不变，去掉了 idleHint 相关的样式 --- */
 .stageSection {
-  padding-top: 16px;
+  margin-top: 16px;
   width: 100%;
   flex: 1;
-  min-height: 290px;
+  min-height: 280px;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -64,15 +63,13 @@
   z-index: 10;
 }
 
-/* --- 🟢 键盘区域重构 (Keypad Section) --- */
 .keypadSection {
   flex-shrink: 0;
   margin-top: 16px;
   width: 100%;
-  position: relative; /* 为 Overlay 提供锚点 */
+  position: relative;
 }
 
-/* 键盘被禁用时的样式：模糊 + 压暗 */
 .disabledKeypad {
   opacity: 0.4; /* 降低不透明度 */
   filter: blur(2px) grayscale(0.8); /* 稍微模糊，让提示条更突出 */
@@ -80,7 +77,6 @@
   transition: all 0.3s ease;
 }
 
-/* --- 🟢 键盘封印遮罩 (Hint Overlay) --- */
 .idleHintOverlay {
   position: absolute;
   top: 0;
@@ -123,7 +119,7 @@
 
 /* 箭头动画：向上指引 */
 .hintText svg {
-  color: #60a5fa; /* 亮蓝箭头 */
+  color: var(--color-Blue); /* 亮蓝箭头 */
   animation: slideUp 1.5s ease-in-out infinite;
 }
 
@@ -163,7 +159,7 @@
   height: 52px;
 
   /* 1. 背景改回纯白实体，不再透明 */
-  background: #ffffff;
+  background: white;
 
   /* 2. 边框稍微明显一点 */
   border: 1px solid #e2e8f0; /* Slate-200 */
@@ -190,8 +186,8 @@
 
 /* 🟢 问号块 (Target Block) - 保持醒目的蓝色 */
 .targetBlock {
-  background: #3b82f6; /* 纯蓝 */
-  color: #ffffff;
+  background: var(--color-xBlue); /* 纯蓝 */
+  color: white;
   border: none; /* 问号块不需要边框 */
 
   /* 蓝色块的投影要带色相，才显高级 */

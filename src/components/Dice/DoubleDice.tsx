@@ -34,7 +34,7 @@ const BOX_SIZE = 2.5;
 //   shadow: '#F3BD2E', // 假阴影颜色
 // };
 
-// 🟢 新配色（启用）：Vivid / Sharp 工业色系
+// Vivid / Sharp 工业色系
 // 这些颜色在柔光背景下会非常跳脱，对比度极高
 const PALETTE = [
   '#FF3B30', // Apple Red (极高红) - 视觉冲击力强
@@ -45,11 +45,11 @@ const PALETTE = [
   '#FFCC00', // Traffic Yellow (交通黄) - 极高亮
 ];
 
-// 🟢 通用颜色优化
+// 通用颜色优化
 const COMMON_COLORS = {
   dots: '#FFFFFF', // 点数保持纯白，对比最强
 
-  // 🔴 关键修改：描边颜色
+  // 描边颜色
   // 原来的 '#725349' (暖褐) -> 改为 '#1F2937' (深蓝灰/近黑)
   // 这会让骰子的边缘像漫画或 CAD 图纸一样清晰锐利
   outline: '#1F2937',

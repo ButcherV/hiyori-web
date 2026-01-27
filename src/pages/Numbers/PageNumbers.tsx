@@ -1,68 +1,82 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, HelpCircle, Lock } from 'lucide-react';
+import { ChevronLeft, HelpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import styles from './PageNumbers.module.css';
 import { Level1 } from './Levels/Level1/Level1';
 import { ALL_LEVELS_CONFIG } from './Levels';
 import BottomSheet from '../../components/BottomSheet';
-import { Toast } from '../../components/Toast/Toast';
+import { useSettings } from '../../context/SettingsContext';
 
 export const PageNumbers = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // 全局状态：在哪个关卡
-  const [activeLevelId, setActiveLevelId] = useState('lvl1');
-  const [isInfoOpen, setInfoOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-  const [toastState, setToastState] = useState({
-    isVisible: false,
-    message: '',
-    description: '',
+  const {
+    lastNumberLevel,
+    setLastNumberLevel,
+    viewedNumberIntros,
+    markNumberIntroAsViewed,
+  } = useSettings();
+
+  const [activeLevelId, setActiveLevelId] = useState(lastNumberLevel);
+
+  const [isInfoOpen, setInfoOpen] = useState(() => {
+    return !viewedNumberIntros.includes(activeLevelId);
   });
 
-  const showToast = (message: string, description: string = '') => {
-    setToastState({ isVisible: true, message, description });
-    setTimeout(() => {
-      setToastState((prev) => ({ ...prev, isVisible: false }));
-    }, 2000);
+  useEffect(() => {
+    if (!isInfoOpen) {
+      markNumberIntroAsViewed(activeLevelId);
+    }
+  }, [isInfoOpen, activeLevelId, markNumberIntroAsViewed]);
+
+  // 计算并执行“尽力居中”滚动
+  const scrollToCenter = (levelId: string) => {
+    const container = navRef.current;
+    const item = itemsRef.current.get(levelId);
+
+    if (container && item) {
+      // 计算公式：(元素左偏移 + 元素一半宽) - (容器一半宽)
+      // 浏览器会自动处理边界：如果是首尾项，计算结果超出范围，会自动停在尽头
+      const targetLeft =
+        item.offsetLeft + item.offsetWidth / 2 - container.offsetWidth / 2;
+
+      container.scrollTo({
+        left: targetLeft,
+        behavior: 'smooth', // 平滑滚动
+      });
+    }
   };
 
-  // 获取当前关卡配置
+  // 监听 activeLevelId：只要切换关卡（包括初始化），就自动居中
+  useEffect(() => {
+    // 稍微延迟确保 DOM 已经渲染完毕
+    const timer = setTimeout(() => {
+      scrollToCenter(activeLevelId);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [activeLevelId]);
+
   const currentLevelConfig =
     ALL_LEVELS_CONFIG.find((l) => l.id === activeLevelId) ||
     ALL_LEVELS_CONFIG[0];
 
-  // 动态 Title
   const pageTitle = t(currentLevelConfig.titleKey);
 
   const handleLevelClick = (levelId: string) => {
-    const isLocked = levelId !== 'lvl1';
-
-    if (isLocked) {
-      showToast(
-        t('number_study.common.level_locked_title'),
-        t('number_study.common.level_locked_desc')
-      );
-      return;
-    }
-
     setActiveLevelId(levelId);
-    // 切换关卡时，是否自动弹出说明书？
-    // setInfoOpen(true);
+    setLastNumberLevel(levelId);
+    const hasViewedNewLevel = viewedNumberIntros.includes(levelId);
+    setInfoOpen(!hasViewedNewLevel);
   };
 
   return (
     <div className={styles.container}>
-      <Toast
-        isVisible={toastState.isVisible}
-        message={toastState.message}
-        description={toastState.description}
-      />
-
-      {/* Layer 1: Header */}
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
           <button className={styles.iconBtn} onClick={() => navigate('/')}>
@@ -81,29 +95,27 @@ export const PageNumbers = () => {
         </div>
       </div>
 
-      {/* Layer 2: Nav Pills */}
       <div className={styles.levelNavWrapper}>
-        <div className={styles.levelNav}>
+        {/* 绑定 navRef 容器 */}
+        <div className={styles.levelNav} ref={navRef}>
           {ALL_LEVELS_CONFIG.map((level) => {
             const isActive = activeLevelId === level.id;
-            const isLocked = level.id !== 'lvl1';
 
-            let pillClass = styles.levelPill;
-            if (isLocked) {
-              pillClass += ` ${styles.levelPillLocked}`;
-            } else if (isActive) {
-              pillClass += ` ${styles.levelPillActive}`;
-            } else {
-              pillClass += ` ${styles.levelPillUnlocked}`;
-            }
+            const pillClass = `${styles.levelPill} ${
+              isActive ? styles.levelPillActive : styles.levelPillDefault
+            }`;
 
             return (
               <button
                 key={level.id}
+                // 将每个 Pill 的 DOM 存入 Map
+                ref={(el) => {
+                  if (el) itemsRef.current.set(level.id, el);
+                  else itemsRef.current.delete(level.id);
+                }}
                 className={pillClass}
                 onClick={() => handleLevelClick(level.id)}
               >
-                {isLocked && <Lock className={styles.lockIcon} />}
                 {t(level.labelKey)}
               </button>
             );
@@ -111,16 +123,18 @@ export const PageNumbers = () => {
         </div>
       </div>
 
-      {/* Layer 4: Workspace */}
       <div className={styles.workspace}>
         {activeLevelId === 'lvl1' && <Level1 />}
 
-        {/* {activeLevelId === 'lvl2' && (
-          <div className={styles.placeholder}>
-            <h2>{t('number_study.numbers.levels.lvl2.title')}</h2>
-            <p>{t('number_study.numbers.test_only_hint')}</p>
+        {activeLevelId !== 'lvl1' && (
+          <div
+            className={styles.placeholder}
+            style={{ padding: 20, textAlign: 'center', color: '#999' }}
+          >
+            <h2>{t('number_study.common.coming_soon')}</h2>
+            <p>{pageTitle}</p>
           </div>
-        )} */}
+        )}
       </div>
 
       <BottomSheet
@@ -129,15 +143,7 @@ export const PageNumbers = () => {
         title={pageTitle}
       >
         <div className={styles.infoSheetContent}>
-          {/* 渲染当前关卡的说明书组件 */}
           <currentLevelConfig.DescriptionContent />
-
-          {/* <button
-            className={styles.sheetActionBtn}
-            onClick={() => setInfoOpen(false)}
-          >
-            {t('number_study.common.understand')}
-          </button> */}
         </div>
       </BottomSheet>
     </div>

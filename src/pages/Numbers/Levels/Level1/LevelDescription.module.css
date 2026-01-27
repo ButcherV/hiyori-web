@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--color-Gray9);
+}
+
+/* --- 板块通用结构 --- */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-Gray9);
+}
+
+.sectionContent {
+  /* 关键：左侧缩进，形成层级感，与图标对齐 */
+  padding-left: 26px;
+}
+
+/* --- 文本样式 --- */
+.text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-Gray7);
+  margin: 0;
+}
+
+/* 高亮样式 (用于替代内联 style) */
+.highlight {
+  color: var(--color-study-number);
+  font-weight: 800;
+  margin: 0 4px;
+}
+
+/* 强调文字 */
+.strong {
+  font-weight: 700;
+  color: var(--color-Gray9);
+}

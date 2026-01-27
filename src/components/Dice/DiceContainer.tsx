@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { DoubleDice } from './DoubleDice';
-// ❌ 删除 Environment 的引用，防止去国外 CDN 下载
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -36,8 +35,6 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
         overflow: 'hidden',
         boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
         touchAction: 'none',
-        // 🟢 核心修改：如果禁用，屏蔽所有鼠标/触摸事件
-        // 这会让骰子变得“不可抓取”，直到 disabled 解除
         pointerEvents: disabled ? 'none' : 'auto',
 
         // 可选：稍微降低一点透明度，给用户“不可操作”的视觉暗示
@@ -75,7 +72,6 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
         {/* 3. 侧逆光/轮廓光：稍微亮一点，勾勒边缘 */}
         <pointLight position={[-10, -10, -10]} intensity={1.5} color="white" />
 
-        {/* ❌ 彻底删除这行，它就是罪魁祸首 */}
         {/* <Environment preset="city" /> */}
 
         {/* 调试地板：如果能看到红色网格，说明渲染成功了 */}

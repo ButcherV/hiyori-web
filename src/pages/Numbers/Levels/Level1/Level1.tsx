@@ -6,7 +6,7 @@ import styles from './Level1.module.css';
 import { Level1Learn } from './Level1Learn';
 import { Level1Test } from './Level1Test';
 import { CategoryTabs } from '../../../../components/CategoryTabs';
-import { Toast } from '../../../../components/Toast/Toast'; // 🟢 引入你自己的组件
+import { Toast } from '../../../../components/Toast/Toast';
 
 type Mode = 'learn' | 'test';
 
@@ -15,10 +15,10 @@ export const Level1 = () => {
 
   const [mode, setMode] = useState<Mode>('learn');
 
-  // 🟢 新增：记录需要复习的数字
+  // 记录需要复习的数字
   const [reviewNum, setReviewNum] = useState<number | null>(null);
 
-  // 🟢 新增：Toast 状态管理
+  // Toast 状态管理
   const [toastConfig, setToastConfig] = useState({
     isVisible: false,
     message: '',
@@ -63,7 +63,7 @@ export const Level1 = () => {
   const handleModeChange = (newMode: Mode) => {
     setMode(newMode);
     if (newMode === 'test') {
-      setReviewNum(null); // 进测试模式时，清理掉复习状态
+      setReviewNum(null);
     }
   };
 
@@ -82,7 +82,6 @@ export const Level1 = () => {
 
   return (
     <div className={styles.container}>
-      {/* 🟢 挂载你的 Toast 组件 */}
       <Toast
         isVisible={toastConfig.isVisible}
         message={toastConfig.message}

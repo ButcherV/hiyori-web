@@ -65,9 +65,9 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
           label = NUM_DATA[num].romaji;
           break;
         case 'mixed':
-          // 混合模式：50% 概率显示汉字，50% 概率显示假名
+          // 混合模式：35% 概率显示汉字，65% 概率显示假名
           label =
-            Math.random() > 0.5 ? NUM_DATA[num].kanji : NUM_DATA[num].kana;
+            Math.random() > 0.35 ? NUM_DATA[num].kanji : NUM_DATA[num].kana;
           break;
         case 'arabic':
         default:

@@ -79,6 +79,8 @@
   /* 告诉浏览器“这里只认水平划动”，防止垂直手势干扰 */
   touch-action: pan-x;
 
+  scroll-snap-type: x mandatory;
+
   padding: 1px 16px;
 
   scrollbar-width: none;
@@ -103,16 +105,16 @@
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   white-space: nowrap;
   position: relative;
+  scroll-snap-align: center;
 }
 
-/* 状态 1: 默认未选中 (Unlocked, Inactive) */
-.levelPillUnlocked {
+.levelPillDefault {
   background-color: white;
   color: var(--color-Gray10);
   border-color: var(--color-Gray4);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
-.levelPillUnlocked:active {
+.levelPillDefault:active {
   background-color: #f2f2f7;
   transform: scale(0.98);
 }
@@ -122,26 +124,7 @@
   background-color: var(--color-study-number);
   color: white;
   border-color: var(--color-study-number);
-  /* box-shadow: 0 4px 12px rgba(255, 149, 0, 0.35); */
   z-index: 1;
-}
-
-/* 状态 3: 锁定 (Locked) */
-.levelPillLocked {
-  background-color: rgba(242, 242, 247, 0.6); /* 极淡的灰背景 */
-  color: var(--color-Gray5); /* 浅灰色文字 */
-  border-color: transparent;
-  box-shadow: none;
-}
-.levelPillLocked:active {
-  background-color: rgba(242, 242, 247, 0.8);
-}
-
-/* 锁图标样式 */
-.lockIcon {
-  color: var(--color-Gray5);
-  width: 14px;
-  height: 14px;
 }
 
 /* === Layer 4: 工作区 === */
@@ -156,33 +139,5 @@
 
 /* Sheet Styles */
 .infoSheetContent {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.infoSheetContent h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1c1c1e;
-  margin-top: 8px;
-}
-
-.infoSheetContent p {
-  font-size: 14px;
-  color: #3a3a3c;
-  line-height: 1.6;
-}
-
-.sheetActionBtn {
-  margin-top: 16px;
-  height: 50px;
-  border-radius: 25px;
-  background: #007aff;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  width: 100%;
+  padding: 0 8px 32px 8px;
 }

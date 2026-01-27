@@ -279,8 +279,8 @@
         "lvl1": {
           "label": "0-10",
           "title": "Basic Numbers",
-          "goal_desc": "Master readings and Kanji for 0-10.",
-          "keypoint_desc": "Numbers <strong>4, 7, 9</strong> have dual readings. Listen closely."
+          "goal_desc": "Build an intuitive ear for numbers 0-10. This foundation is essential for mastering dates, time, and currency.",
+          "keypoint_desc": "<strong>Focus on 'Main' readings:</strong><br>Numbers 0, 4, 7, and 9 have multiple readings. Prioritize those marked with the <span>Main</span> badge for everyday use.<br><br><strong>Recommended Path:</strong><br>Start in \"Learn Mode\" to familiarize yourself with the sounds, then test your reflexes in \"Challenge Mode\"."
         },
         "lvl2": {
           "label": "11-99",

@@ -24,7 +24,7 @@
   flex-shrink: 0;
 
   /* 2. 3D 实体质感核心 */
-  background-color: #ffffff;
+  background-color: white;
   border: 1px solid #e2e8f0; /* 极细的轮廓 */
   /* 关键：用底部边框模拟厚度 */
   border-bottom: 4px solid #cbd5e1;

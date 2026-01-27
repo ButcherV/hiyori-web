@@ -26,4 +26,10 @@ export const ALL_LEVELS_CONFIG: LevelConfig[] = [
     titleKey: 'number_study.numbers.levels.lvl4.title',
     DescriptionContent: () => <p>...</p>,
   },
+  {
+    id: 'lvl5',
+    labelKey: 'number_study.numbers.levels.lvl5.label',
+    titleKey: 'number_study.numbers.levels.lvl5.title',
+    DescriptionContent: () => <p>...</p>,
+  },
 ];

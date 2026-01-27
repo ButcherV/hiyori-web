@@ -7,6 +7,7 @@ import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
 import { useSound } from '../../../../hooks/useSound';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Level1TestProps {
   onMistake: (targetNum: number) => void;
@@ -48,8 +49,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
   }, []);
 
   const handleKeyClick = (inputNum: number) => {
-    // 🔒 锁定逻辑：只有 answering 状态才允许点击
-    // (这解决了你说的 2s 惩罚期键盘还能点的 Bug)
+    // 锁定逻辑：只有 answering 状态才允许点击
     if (status !== 'answering' || !problem) return;
 
     const correctAnswer = problem.a + problem.b;
@@ -62,13 +62,12 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
     }
   };
 
-  // 🟢 新增：成功处理 (闭环逻辑)
   const handleSuccess = () => {
-    setStatus('success'); // 1. 状态变更为成功 (HUD变绿, ?变数字)
-    playSound('success'); // 2. 播放成功音效
-    triggerHaptic('success'); // 3. 轻微震动
+    setStatus('success');
+    playSound('score');
+    triggerHaptic('success');
 
-    // 4. 800ms 欣赏期 (延迟重置)
+    // 800ms 欣赏期 (延迟重置)
     setTimeout(() => {
       setProblem(null);
       setStatus('idle');
@@ -76,7 +75,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
     }, 800);
   };
 
-  // 🟢 新增：失败处理 (拒绝逻辑)
+  // 失败处理 (拒绝逻辑)
   const handleFailure = (wrongInput: number, correctVal: number) => {
     setStatus('error'); // 1. 状态变更为失败 (HUD变红, 颤动, 键盘锁死)
     playSound('failure'); // 2. 播放失败音效
@@ -84,7 +83,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
 
     console.log(`Wrong! User: ${wrongInput}, Correct: ${correctVal}`);
 
-    // 4. 通知父组件 (父组件会弹 Toast 并倒计时 2秒跳转)
+    // 通知父组件 (父组件会弹 Toast 并倒计时 2秒跳转)
     // 注意：此时 status 停留在 'error'，键盘保持不可点状态，直到父组件卸载此组件
     onMistake(correctVal);
   };
@@ -93,7 +92,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
     <div className={styles.container}>
       <div className={styles.stageSection}>
         {/* Layer 1: 3D 骰子层 */}
-        {/* 🟡 修改：只要不是 idle (包括 answering/success/error)，骰子都保持模糊 */}
+        {/* 只要不是 idle (包括 answering/success/error)，骰子都保持模糊 */}
         <div
           className={`${styles.diceLayer} ${status !== 'idle' ? styles.blurMode : ''}`}
         >
@@ -105,10 +104,11 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
 
         {/* Layer 2: 答题 HUD */}
         {problem && (
+          /* 错误时颤动整个 HUD */
           <div
             className={`
             ${styles.hudOverlay}
-            ${status === 'error' ? styles.shakeAnim : ''} /* 🟢 新增：错误时颤动整个 HUD */
+            ${status === 'error' ? styles.shakeAnim : ''} 
           `}
           >
             <React.Fragment key={roundId}>
@@ -140,14 +140,14 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
                 className={styles.animPop}
                 style={{ animationDelay: '0.4s' }}
               >
-                {/* 🟡 修改：问号块现在是动态的 */}
+                {/* 问号块-动态 */}
                 <div
                   className={`
                     ${styles.numBlock} 
                     ${styles.targetBlock} 
                     ${status === 'answering' ? styles.animPulse : ''}
-                    ${status === 'success' ? styles.successState : ''} /* 🟢 变绿 */
-                    ${status === 'error' ? styles.errorState : ''}   /* 🟢 变红 */
+                    ${status === 'success' ? styles.successState : ''}
+                    ${status === 'error' ? styles.errorState : ''}
                   `}
                   style={{
                     opacity: 1,
@@ -155,7 +155,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
                     animationDelay: '0.9s',
                   }}
                 >
-                  {/* 🟡 修改：答题中显示?，否则显示用户填的数字 */}
+                  {/* 答题中显示?，否则显示用户填的数字 */}
                   {status === 'answering' ? '?' : userAnswer}
                 </div>
               </div>
@@ -165,7 +165,7 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
       </div>
 
       <div className={styles.keypadSection}>
-        {/* 🟡 修改：键盘锁定逻辑 - 只有 answering 时键盘才是亮的 */}
+        {/* 键盘锁定逻辑 - 只有 answering 时键盘才是亮的 */}
         <div className={status !== 'answering' ? styles.disabledKeypad : ''}>
           <NumberKeypad
             key={roundId}
@@ -176,14 +176,36 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
         </div>
 
         {/* 2. 封印提示条 (只在 idle 时显示) */}
-        {status === 'idle' && (
+        {/* {status === 'idle' && (
           <div className={styles.idleHintOverlay}>
             <span className={styles.hintText}>
               <ArrowUp size={16} strokeWidth={3} />
               {t('number_study.numbers.interaction.roll_hint')}
             </span>
           </div>
-        )}
+        )} */}
+        <AnimatePresence>
+          {status === 'idle' && (
+            <motion.div
+              className={styles.idleHintOverlay}
+              // 定义进场初始状态
+              initial={{ opacity: 0, y: 10 }}
+              // 定义显示状态
+              animate={{ opacity: 1, y: 0 }}
+              // 定义离场状态 (这是 React 原生做不到的！)
+              exit={{ opacity: 0, y: -10 }}
+              // 定义动画参数
+              transition={{ duration: 0.3 }}
+            >
+              {/* 这里的箭头动画可以保留 CSS 里的，也可以用 motion 进一步重写，
+                  但为了省事，保留内部 CSS 动画即可 */}
+              <span className={styles.hintText}>
+                <ArrowUp size={16} strokeWidth={3} />
+                {t('number_study.numbers.interaction.roll_hint')}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

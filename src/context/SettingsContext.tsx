@@ -18,12 +18,20 @@ interface AppSettings {
   // --- 记录假名页面的 Tab ---
   lastHiraganaTab: string; // 'seion' | 'dakuon' | 'yoon'
   lastKatakanaTab: string;
+
+  // 数字模块专用字段
+  // 1. 记录上次学到了第几关 (如 'lvl1')
+  lastNumberLevel: string;
+  // 2. 记录哪些关卡的说明书已经看过了 (存 ['lvl1', 'lvl2'])
+  viewedNumberIntros: string[];
 }
 
 interface SettingsContextType extends AppSettings {
   toggleSetting: (key: keyof AppSettings) => void;
   updateSettings: (newSettings: Partial<AppSettings>) => void;
   setTheme: (mode: 'light' | 'dark') => void;
+  setLastNumberLevel: (levelId: string) => void;
+  markNumberIntroAsViewed: (levelId: string) => void;
 }
 
 // 默认设置
@@ -40,6 +48,8 @@ const defaultSettings: AppSettings = {
   lastActiveCourseId: 'hiragana',
   lastHiraganaTab: 'seion',
   lastKatakanaTab: 'seion',
+  lastNumberLevel: 'lvl1',
+  viewedNumberIntros: [],
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
@@ -52,9 +62,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [settings, setSettings] = useState<AppSettings>(() => {
     try {
       const saved = localStorage.getItem('app_settings');
-      return saved
-        ? { ...defaultSettings, ...JSON.parse(saved) }
-        : defaultSettings;
+      const parsed = saved ? JSON.parse(saved) : {};
+      return {
+        ...defaultSettings,
+        ...parsed,
+        // 确保数组字段绝对不为 undefined
+        viewedNumberIntros: parsed.viewedNumberIntros || [],
+      };
     } catch (e) {
       console.warn('Failed to load settings', e);
       return defaultSettings;
@@ -87,9 +101,31 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     setSettings((prev) => ({ ...prev, theme: mode }));
   };
 
+  const setLastNumberLevel = (levelId: string) => {
+    setSettings((prev) => ({ ...prev, lastNumberLevel: levelId }));
+  };
+
+  const markNumberIntroAsViewed = (levelId: string) => {
+    setSettings((prev) => {
+      // 如果已经包含，直接返回，避免不必要的重渲染
+      if (prev.viewedNumberIntros.includes(levelId)) return prev;
+      return {
+        ...prev,
+        viewedNumberIntros: [...prev.viewedNumberIntros, levelId],
+      };
+    });
+  };
+
   return (
     <SettingsContext.Provider
-      value={{ ...settings, toggleSetting, updateSettings, setTheme }}
+      value={{
+        ...settings,
+        toggleSetting,
+        updateSettings,
+        setTheme,
+        setLastNumberLevel,
+        markNumberIntroAsViewed,
+      }}
     >
       {children}
     </SettingsContext.Provider>

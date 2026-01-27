@@ -1,4 +1,4 @@
-// 1. 定义一个通用的多语言类型
+// 通用的多语言类型
 export interface LocalizedText {
   zh: string;
   en: string;
@@ -10,7 +10,6 @@ export interface NumberLevel1Item {
   readings: {
     romaji: string;
     kana: string;
-    // 2. 将 usage 从 string 改为 LocalizedText
     usage?: LocalizedText;
     isMain?: boolean;
   }[];
