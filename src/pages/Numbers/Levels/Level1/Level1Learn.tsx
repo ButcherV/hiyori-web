@@ -3,7 +3,7 @@ import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../../../hooks/useTTS';
 import { LEVEL_1_DATA, type LocalizedText } from './Level1Data';
 import styles from './Level1Learn.module.css';
-import { NumberKeypad } from './NumberKeypad';
+import { NumberKeypad } from '../NumberKeypad';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 

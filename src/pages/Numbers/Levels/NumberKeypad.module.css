@@ -1,4 +1,5 @@
 .keyboardArea {
+  --gap: 8px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -14,9 +15,9 @@
 }
 
 .keyBtn {
-  /* 1. 布局与尺寸 */
-  /* 计算宽度：(100% - 5个间隙*8px - 左右padding) / 6 */
-  width: calc((100% - 40px) / 6);
+  /* 🟢 核心公式：宽度 = (容器总宽 - 间隙总和) / 最大列数 */
+  /* 这确保了所有关卡、所有排的按键宽度都遵循同一个比例尺 */
+  width: calc((100% - (var(--gap) * (var(--max-cols) - 1))) / var(--max-cols));
   height: 56px; /* 加高一点，更有手感 */
   display: flex;
   justify-content: center;

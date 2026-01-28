@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { DiceRoller } from '../../../../components/Dice/DiceContainer';
-import { NumberKeypad, type KeypadDisplayMode } from './NumberKeypad';
+import { NumberKeypad, type KeypadDisplayMode } from '../NumberKeypad';
 import styles from './Level1Test.module.css';
 import { ArrowUp } from 'lucide-react';
 import { Haptics, NotificationType, ImpactStyle } from '@capacitor/haptics';

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './PageNumbers.module.css';
 import { Level1 } from './Levels/Level1/Level1';
+import { Level3 } from './Levels/Level3/Level3';
 import { ALL_LEVELS_CONFIG } from './Levels';
 import BottomSheet from '../../components/BottomSheet';
 import { useSettings } from '../../context/SettingsContext';
@@ -126,7 +127,9 @@ export const PageNumbers = () => {
       <div className={styles.workspace}>
         {activeLevelId === 'lvl1' && <Level1 />}
 
-        {activeLevelId !== 'lvl1' && (
+        {activeLevelId === 'lvl3' && <Level3 />}
+
+        {/* {(activeLevelId !== 'lvl1' || 'lvl3') && (
           <div
             className={styles.placeholder}
             style={{ padding: 20, textAlign: 'center', color: '#999' }}
@@ -134,7 +137,7 @@ export const PageNumbers = () => {
             <h2>{t('number_study.common.coming_soon')}</h2>
             <p>{pageTitle}</p>
           </div>
-        )}
+        )} */}
       </div>
 
       <BottomSheet
