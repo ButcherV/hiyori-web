@@ -13,18 +13,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
-/* --- 100 专用：居中单体模式 --- */
+/* --- 100 单体 --- */
 .singleModeContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px; /* 元素间距 */
+  gap: 16px;
   width: 100%;
 }
 
-/* 居中的大汉字 (100) */
 .singleKanji {
   font-size: 88px;
   font-weight: 900;
@@ -36,11 +36,9 @@
   justify-content: center;
 }
 
-/* 居中的单体滚轮视窗 (100) */
 .singleDrumWindow {
-  /* 复用 drumWindow 的核心质感 */
   height: 64px;
-  min-width: 140px; /* 稍微宽一点，显得稳重 */
+  min-width: 140px;
   background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
@@ -49,29 +47,27 @@
     inset 0 2px 4px rgba(0, 0, 0, 0.02),
     0 4px 6px -1px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* --- 200+ 专用：左右分体模式 --- */
+.staticCell {
+  font-size: 40px;
+  font-weight: 800;
+  color: #64748b;
+}
+
+/* --- 200+ 双体 --- */
 .splitModeContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  width: 100%;
 }
 
-.wordDisplay {
-  /* 兼容旧代码，防止报错，但在新逻辑中主要使用 splitModeContainer */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-/* --- 汉字滚动层 (200+) --- */
+/* 汉字部分 */
 .kanjiRow {
   display: flex;
   align-items: center;
@@ -107,29 +103,36 @@
   padding-left: 4px;
 }
 
-/* --- 罗马音 --- */
+.ghostText {
+  color: #e2e8f0;
+  opacity: 0.5;
+}
+
+/* 罗马音 */
+.romajiWrapper {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
 .romaji {
   font-size: 24px;
   color: #1e293b;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: lowercase;
-  margin-bottom: 4px;
 }
 
-/* --- 假名滚轮层 (200+) --- */
+/* --- 滚动部分 --- */
 .drumsContainer {
   display: flex;
   gap: 4px;
 }
 
-.drumColumn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.drumWindow {
+/* 滚动窗口 */
+.scrollWindow {
   height: 64px;
   min-width: 130px;
   background: #ffffff;
@@ -142,75 +145,39 @@
   border: 1px solid #f1f5f9;
 }
 
-.warningBorder {
-  border-color: #fecaca;
-  background-color: #fffafb;
-}
-
-.drumReel {
-  display: flex;
-  flex-direction: column;
-}
-
-.cell {
-  height: 64px;
+/* 滚动单元格 */
+.cellAbsolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-  padding: 0 8px;
-  font-size: 40px;
+
+  font-size: 38px;
   font-weight: 800;
   color: #64748b;
+
+  padding: 0 12px;
 }
 
-.alignRight {
-  justify-content: flex-end;
-}
 .alignLeft {
   justify-content: flex-start;
 }
-.activeText {
-  color: #ef4444;
+.alignRight {
+  justify-content: flex-end;
 }
 
-/* --- 局部演化标注 --- */
-.hintSpace {
-  height: 24px;
+.cellReelItem {
+  height: 64px; /* 必须与 scrollWindow 高度一致 */
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
 
-.localHint {
-  font-size: 14px;
-  color: #94a3b8;
-  font-weight: 700;
-  padding: 0 8px;
-  letter-spacing: -0.02em;
-}
-
-.arrow {
-  margin: 0 4px;
-  opacity: 0.5;
-}
-
-/* --- 解释文案容器 --- */
-.reasonContainer {
-  height: 40px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 0 16px;
-  margin-top: 4px;
-}
-
-.reasonBadge {
-  font-size: 13px;
+  font-size: 40px;
+  font-weight: 800;
   color: #64748b;
-  background: #f1f5f9;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px dashed #cbd5e1;
-  text-align: center;
-  font-weight: 500;
-  line-height: 1.4;
+
+  padding: 0 12px;
 }

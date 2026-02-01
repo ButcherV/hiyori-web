@@ -1,19 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// 🔴 引入 useTranslation 用于获取当前语言状态
-import { useTranslation } from 'react-i18next';
-import { LEVEL_3_DATA } from './Level3Data';
+import { LEVEL_3_DATA, KANA_MULTIPLIERS } from './Level3Data';
 import { NumberKeypad } from '../NumberKeypad';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
 import styles from './Level3Learn.module.css';
 
-const snapSpring = {
-  type: 'spring' as const,
-  stiffness: 200,
-  damping: 25,
-  mass: 1,
-};
+// 滚动动画时长
+const SCROLL_DURATION = 0.3;
 
 const KANJI_MULTIPLIERS = [
   '',
@@ -28,18 +22,22 @@ const KANJI_MULTIPLIERS = [
   '九',
 ];
 const KANJI_HEIGHT = 88;
+// 假名的高度通常较小，这里对应 CSS 中的 scrollWindow 高度 (64px)
+const KANA_HEIGHT = 64;
 
+// --- 组件：左侧汉字大滚轮 (Reel) ---
 const KanjiReel = ({ targetIndex }: { targetIndex: number }) => {
   return (
     <div className={styles.kanjiWindow}>
       <motion.div
+        // 根据索引计算 Y 轴偏移量，实现物理滚动
         animate={{ y: -targetIndex * KANJI_HEIGHT }}
-        transition={snapSpring}
+        transition={{ type: 'spring', stiffness: 200, damping: 25 }}
         className={styles.kanjiReel}
       >
         {KANJI_MULTIPLIERS.map((char, i) => (
           <div key={i} className={`${styles.kanjiCell} jaFont`}>
-            {char}
+            {char === '' ? <span className={styles.ghostText}>一</span> : char}
           </div>
         ))}
       </motion.div>
@@ -47,188 +45,142 @@ const KanjiReel = ({ targetIndex }: { targetIndex: number }) => {
   );
 };
 
-const Drum = ({
-  from,
-  to,
-  delay = 0,
-  isLeft = true,
+// --- 🔴 新组件：假名滚轮 (Reel) ---
+// 逻辑与 KanjiReel 一致，确保经过中间态
+const KanaReel = ({
+  targetIndex,
+  isLeft,
 }: {
-  from: string;
-  to: string;
-  delay?: number;
-  isLeft?: boolean;
+  targetIndex: number;
+  isLeft: boolean;
 }) => {
-  const isChanging = from !== to;
-
   return (
-    <div className={styles.drumColumn}>
-      <div
-        className={`${styles.drumWindow} ${isChanging ? styles.warningBorder : ''}`}
+    <div className={styles.scrollWindow}>
+      <motion.div
+        // 假名也根据索引滚动：Index * 64px
+        animate={{ y: -targetIndex * KANA_HEIGHT }}
+        transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+        className={styles.kanjiReel} // 复用列布局样式
       >
-        <motion.div
-          key={from + to}
-          initial={{ y: 0 }}
-          animate={{ y: isChanging ? -64 : 0 }}
-          transition={{ ...snapSpring, delay: delay + 0.4 }}
-          className={styles.drumReel}
-        >
+        {/* 这里渲染所有的假名乘数 (1-9) */}
+        {KANA_MULTIPLIERS.map((text, i) => (
           <div
-            className={`${styles.cell} jaFont ${isLeft ? styles.alignRight : styles.alignLeft}`}
+            key={i}
+            className={`${styles.cellReelItem} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
           >
-            {from}
+            {/* 100 (Index 1) 没有假名，显示空占位或者短横线 */}
+            {i === 1 && text === '' ? '' : text}
           </div>
-          <div
-            className={`${styles.cell} jaFont ${isLeft ? styles.alignRight : styles.alignLeft} ${isChanging ? styles.activeText : ''}`}
-          >
-            {to}
-          </div>
-        </motion.div>
-      </div>
-      {/* 局部演化标注 (小箭头) */}
-      <div className={styles.hintSpace}>
-        {isChanging && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: delay + 0.8 }}
-            className={`${styles.localHint} jaFont`}
-          >
-            {from}
-            <span className={styles.arrow}>→</span>
-            {to}
-          </motion.div>
-        )}
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+// --- 组件：右侧单位滚轮 (静态/单独处理) ---
+// 因为单位全是 "hyaku" (在我们目前的理想模型里)，所以它其实不需要长滚轮
+// 如果以后有单位变化 (如 sen -> man)，也可以改成 Reel 模式
+const UnitCell = ({ text, isLeft }: { text: string; isLeft: boolean }) => {
+  return (
+    <div className={styles.scrollWindow}>
+      <div
+        className={`${styles.cellAbsolute} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
+      >
+        {text}
       </div>
     </div>
   );
 };
 
 export const Level3Learn = () => {
-  // 🔴 获取 i18n 实例
-  const { i18n } = useTranslation();
-  // 🔴 简单判断语言：如果是 zh 开头(如 zh-CN, zh-TW)则用 zh，否则用 en
-  const lang = i18n.language.startsWith('zh') ? 'zh' : 'en';
-
   const [currentNum, setCurrentNum] = useState(200);
+  const prevNumRef = useRef(200);
+
   const data = LEVEL_3_DATA[currentNum];
-  const isHundred = currentNum === 100; // 核心判断标志
+  const isHundred = currentNum === 100;
 
-  const kanjiIndex = Math.floor(currentNum / 100);
-
-  const evo = useMemo(
-    () =>
-      data.evolution || {
-        multiplier: { from: data.parts.kana[0], to: data.parts.kana[0] },
-        unit: { from: 'ひゃく', to: 'ひゃく' },
-      },
-    [data]
-  );
+  // 计算当前数字的索引 (例如 200 -> 2, 900 -> 9)
+  const currentIndex = Math.floor(currentNum / 100);
 
   const handleKeyClick = (num: number) => {
-    setCurrentNum(num);
+    if (num === currentNum) return;
+
     if (Capacitor.isNativePlatform()) {
-      Haptics.impact({ style: ImpactStyle.Medium });
-      if (LEVEL_3_DATA[num].evolution) {
-        setTimeout(() => Haptics.impact({ style: ImpactStyle.Heavy }), 600);
-      }
+      Haptics.impact({ style: ImpactStyle.Light });
     }
+
+    prevNumRef.current = currentNum;
+    setCurrentNum(num);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.stage}>
         <AnimatePresence mode="wait">
-          {/* ================= 分支 A: 100 (单体布局) ================= */}
+          {/* === 100: 单体静止布局 === */}
           {isHundred ? (
             <motion.div
               key="single-100"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.15 } }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.1 } }}
               className={styles.singleModeContainer}
             >
-              {/* 1. 汉字：居中大写的“百” */}
               <div className={`${styles.singleKanji} jaFont`}>
                 {data.parts.kanji[1]}
               </div>
-
-              {/* 2. 罗马音 */}
               <div className={`${styles.romaji} jaFont`}>{data.romaji}</div>
-
-              {/* 3. 假名：居中单体视窗 (无滚动) */}
               <div className={styles.singleDrumWindow}>
-                <div className={`${styles.cell} jaFont`}>
+                <div className={`${styles.staticCell} jaFont`}>
                   {data.parts.kana[1]}
                 </div>
               </div>
-
-              {/* 4. 解释文案 */}
-              <div className={styles.reasonContainer}>
-                {data.reason && (
-                  <div className={styles.reasonBadge}>{data.reason[lang]}</div>
-                )}
-              </div>
             </motion.div>
           ) : (
-            /* ================= 分支 B: 200-900 (双体滚动布局) ================= */
+            /* === 200-900: 双体统一滚动布局 === */
             <motion.div
               key="split-multi"
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{
-                opacity: 0,
-                scale: 1.05,
-                transition: { duration: 0.15 },
-              }}
+              exit={{ opacity: 0, scale: 1.05, transition: { duration: 0.1 } }}
               className={styles.splitModeContainer}
             >
-              {/* 1. 汉字层 (左滚右静) */}
+              {/* 1. 汉字层 (物理滚轮) */}
               <div className={`${styles.kanjiRow} jaFont`}>
                 <div className={styles.kanjiLeft}>
-                  <KanjiReel targetIndex={kanjiIndex} />
+                  <KanjiReel targetIndex={currentIndex} />
                 </div>
                 <span className={styles.kanjiRight}>{data.parts.kanji[1]}</span>
               </div>
 
-              {/* 2. 罗马音 */}
-              <motion.div
-                key={currentNum} // 每次数字变化重新触发升起
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 0.6, y: 0 }}
-                transition={{ delay: 0.4, type: 'spring', stiffness: 100 }}
-                className={`${styles.romaji} jaFont`}
-              >
-                {data.romaji}
-              </motion.div>
-
-              {/* 3. 假名滚轮层 (双 Drum) */}
-              <div className={styles.drumsContainer}>
-                <Drum
-                  from={evo.multiplier.from}
-                  to={evo.multiplier.to}
-                  isLeft={true}
-                />
-                <Drum
-                  from={evo.unit.from}
-                  to={evo.unit.to}
-                  delay={0.15}
-                  isLeft={false}
-                />
+              {/* 2. 罗马音 (带延迟动效) */}
+              <div className={styles.romajiWrapper}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={data.romaji}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5, transition: { duration: 0.1 } }}
+                    transition={{
+                      delay: SCROLL_DURATION + 0.05,
+                      type: 'spring',
+                      stiffness: 100,
+                      damping: 15,
+                    }}
+                    className={`${styles.romaji} jaFont`}
+                  >
+                    {data.romaji}
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              {/* 4. 解释文案 */}
-              <div className={styles.reasonContainer}>
-                {data.reason && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.0 }}
-                    className={styles.reasonBadge}
-                  >
-                    {data.reason[lang]}
-                  </motion.div>
-                )}
+              {/* 3. 假名滚轮层 (完全物理同步) */}
+              <div className={styles.drumsContainer}>
+                {/* 左侧：乘数 (使用 KanaReel 实现长列表滚动) */}
+                <KanaReel targetIndex={currentIndex} isLeft={true} />
+
+                {/* 右侧：单位 (Hyaku 保持不动) */}
+                <UnitCell text={data.parts.kana[1]} isLeft={false} />
               </div>
             </motion.div>
           )}
