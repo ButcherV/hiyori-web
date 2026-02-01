@@ -14,6 +14,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative; /* 为底部 note 的定位做准备 */
+  padding-bottom: 32px;
 }
 
 /* --- 100 单体 --- */
@@ -53,7 +55,7 @@
 }
 
 .staticCell {
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 800;
   color: #64748b;
 }
@@ -108,41 +110,103 @@
   opacity: 0.5;
 }
 
-/* 罗马音 */
+/* --- 🔴 罗马音 + 喇叭布局 --- */
+
 .romajiWrapper {
   height: 32px;
+  width: 100%;
+  position: relative;
+  /* 这里不需要 flex，因为 flex 交给内部的 motion div 了 */
+  margin-bottom: 8px;
+}
+
+.romajiMotionContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
+  gap: 8px; /* 文字和喇叭的间距 */
+
+  /* 确保它在最上层，防止被遮挡 */
+  z-index: 5;
 }
 
-.romaji {
+/* 🟢 修正：罗马音文字 */
+/* 删掉 absolute！回归标准流，这样喇叭才知道你在哪 */
+.romajiText {
   font-size: 24px;
-  color: #1e293b;
+  color: var(--color-Blue);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: lowercase;
+  /* 防止文字换行破坏布局 */
+  white-space: nowrap;
 }
+
+/* 🟢 修正：喇叭图标 */
+.speakerIcon {
+  color: var(--color-Gray6);
+  cursor: pointer;
+  /* 删掉 absolute！让它自然跟随文字 */
+  display: flex;
+  align-items: center;
+  transition: transform 0.1s;
+}
+
+.speakerIcon:active {
+  transform: scale(0.9);
+}
+
+/* 优化方案：如果文字长度不固定，还是用 Flex 比较好。
+   我们在 TSX 里把 romaji 和 speaker 包在一个 div 里，
+   或者让 romajiWrapper 就是 flex center。
+   下面是配合 TSX 修改后的 Flex 方案：
+*/
+.romajiContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* 这个容器用来包裹 文字+喇叭，作为整体进出场 */
+}
+
+/* ----------------------------- */
 
 /* --- 滚动部分 --- */
 .drumsContainer {
   display: flex;
-  gap: 4px;
+  gap: 12px; /* 加大间距 */
+  align-items: flex-start;
 }
 
-/* 滚动窗口 */
+/* 🟢 新增：列容器 (包裹 ScrollWindow 和下方的提示词) */
+.columnWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 130px; /* 和 scrollWindow 同宽 */
+}
+
+/* 滚动窗口：3D 舞台 */
 .scrollWindow {
   height: 64px;
-  min-width: 130px;
+  width: 100%; /* 撑满 columnWrapper */
   background: #ffffff;
   border-radius: 12px;
-  overflow: hidden;
   position: relative;
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.02),
     0 4px 6px -1px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
+
+  perspective: 800px;
+  overflow: hidden;
 }
 
 /* 滚动单元格 */
@@ -154,11 +218,20 @@
   height: 100%;
   display: flex;
   align-items: center;
-
   font-size: 38px;
   font-weight: 800;
   color: #64748b;
+  padding: 0 12px;
+}
 
+.cellReelItem {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #64748b;
   padding: 0 12px;
 }
 
@@ -169,15 +242,87 @@
   justify-content: flex-end;
 }
 
-.cellReelItem {
-  height: 64px; /* 必须与 scrollWindow 高度一致 */
+/* 翻转动效样式 */
+.flipperContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.flipFace {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-
-  font-size: 40px;
+  background-color: #ffffff;
+  font-size: 38px;
   font-weight: 800;
-  color: #64748b;
-
   padding: 0 12px;
+  backface-visibility: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.flipFaceOld {
+  color: #64748b;
+  z-index: 1;
+}
+
+.flipFaceNew {
+  color: var(--color-error);
+  z-index: 2;
+  background-color: var(--color-weak-bg);
+}
+
+/* 演化提示词 (放在 ScrollWindow 下面) */
+.evolutionHint {
+  height: 20px;
+  font-size: 14px;
+  color: var(--color-Gray7);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.evolutionArrow {
+  margin: 0 4px;
+  color: var(--color-Gray7);
+}
+
+.evolutionHigh {
+  color: var(--color-error);
+  font-weight: 900;
+}
+
+/* 底部解释 Note */
+.noteContainer {
+  position: absolute;
+  bottom: 0; /* 贴在 Stage 底部 */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.noteBadge {
+  background-color: var(--color-Gray2);
+  color: var(--color-Gray8);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  border: 1px dashed var(--color-Gray4);
+  max-width: 90%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
