@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   padding: 0px 16px 32px 16px;
-  background-color: #f8fafc;
+  background-color: var(--bg-app);
   overflow: hidden;
 }
 
@@ -15,49 +15,17 @@
   justify-content: center;
   width: 100%;
   position: relative; /* 为底部 note 的定位做准备 */
-  padding-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 /* --- 100 单体 --- */
-.singleModeContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-}
 
-.singleKanji {
-  font-size: 88px;
-  font-weight: 900;
-  color: #1e293b;
-  line-height: 1;
-  height: 88px;
+.kanjiLeft {
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
-.singleDrumWindow {
-  height: 64px;
-  min-width: 140px;
-  background: #ffffff;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.02),
-    0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.staticCell {
-  font-size: 38px;
-  font-weight: 800;
-  color: #64748b;
+.hiddenLeft {
+  opacity: 0;
+  pointer-events: none; /* 防止消失后还能交互 */
 }
 
 /* --- 200+ 双体 --- */
@@ -73,10 +41,13 @@
 .kanjiRow {
   display: flex;
   align-items: center;
+  justify-content: center; /* 关键：居中对齐，确保左边没了右边会自动居中 */
   font-size: 88px;
   font-weight: 900;
-  color: #1e293b;
+  color: var(--color-Gray10);
   line-height: 1;
+  /* 加上相对定位，保证 layout 动画平滑 */
+  position: relative;
 }
 
 .kanjiWindow {
@@ -100,9 +71,10 @@
 }
 
 .kanjiRight {
-  text-align: left;
   min-width: 100px;
-  padding-left: 4px;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
 }
 
 .ghostText {
@@ -110,7 +82,7 @@
   opacity: 0.5;
 }
 
-/* --- 🔴 罗马音 + 喇叭布局 --- */
+/* --- 罗马音 + 喇叭布局 --- */
 
 .romajiWrapper {
   height: 32px;
@@ -136,8 +108,6 @@
   z-index: 5;
 }
 
-/* 🟢 修正：罗马音文字 */
-/* 删掉 absolute！回归标准流，这样喇叭才知道你在哪 */
 .romajiText {
   font-size: 24px;
   color: var(--color-Blue);
@@ -148,11 +118,9 @@
   white-space: nowrap;
 }
 
-/* 🟢 修正：喇叭图标 */
 .speakerIcon {
   color: var(--color-Gray6);
   cursor: pointer;
-  /* 删掉 absolute！让它自然跟随文字 */
   display: flex;
   align-items: center;
   transition: transform 0.1s;
@@ -180,11 +148,18 @@
 /* --- 滚动部分 --- */
 .drumsContainer {
   display: flex;
-  gap: 12px; /* 加大间距 */
+  gap: 0px;
   align-items: flex-start;
+  justify-content: center; /* 关键：居中对齐 */
 }
 
-/* 🟢 新增：列容器 (包裹 ScrollWindow 和下方的提示词) */
+.drumsLeftWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 这是一个容器，用于控制宽度和透明度 */
+}
+
 .columnWrapper {
   display: flex;
   flex-direction: column;
@@ -197,13 +172,13 @@
 .scrollWindow {
   height: 64px;
   width: 100%; /* 撑满 columnWrapper */
-  background: #ffffff;
+  background: white;
   border-radius: 12px;
   position: relative;
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.02),
     0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
+  /* border: 1px solid var(--color-Gray3); */
 
   perspective: 800px;
   overflow: hidden;
@@ -218,10 +193,14 @@
   height: 100%;
   display: flex;
   align-items: center;
+  /* padding 由 12px 改为 0，因为我们要用 flex justify 控制间距，或者保留 padding 但需注意 center 时是否影响 */
+  /* 这里保留 padding，因为 flex-start 时需要边距，center 时视觉上加上 padding 也问题不大，或者动态控制 */
+  padding: 0 12px;
+
   font-size: 38px;
   font-weight: 800;
   color: #64748b;
-  padding: 0 12px;
+  /* justify-content 由 Motion Variants 控制 */
 }
 
 .cellReelItem {
@@ -240,6 +219,9 @@
 }
 .alignRight {
   justify-content: flex-end;
+}
+.alignCenter {
+  justify-content: center;
 }
 
 /* 翻转动效样式 */
@@ -311,7 +293,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-bottom: 24px;
+  /* padding-bottom: 24px; */
 }
 
 .noteBadge {

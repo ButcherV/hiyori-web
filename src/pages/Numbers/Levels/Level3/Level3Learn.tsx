@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LEVEL_3_DATA, KANA_MULTIPLIERS } from './Level3Data';
 import { NumberKeypad } from '../NumberKeypad';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Capacitor } from '@capacitor/core';
-import { useTTS } from '../../../../hooks/useTTS'; // 确保路径正确
+import { useTTS } from '../../../../hooks/useTTS';
 import styles from './Level3Learn.module.css';
 
 // --- 配置 ---
@@ -15,10 +15,78 @@ const DURATION_SCROLL = 0.4;
 const DURATION_MUTATE = 0.6;
 const DELAY_GAP = 0.05;
 
-// 罗马音动画
+// 🟢 关键时间点定义
+const DURATION_FADE = 0.3; // 第一阶段：左侧淡出
+const DURATION_MOVE = 0.4; // 第二阶段：位移
+
 const TRANSITION_ROMAJI = {
   enter: { type: 'spring', stiffness: 200, damping: 20, delay: 0.05 },
-  exit: { duration: 0.15, ease: 'easeOut' }, // 快速离场
+  exit: { duration: 0.15, ease: 'easeOut' },
+};
+
+// 左侧部件：淡出 + 塌陷
+const LEFT_PART_VARIANTS: Variants = {
+  visible: {
+    opacity: 1,
+    width: 'auto',
+    marginRight: 12,
+    transition: {
+      duration: 0.3,
+      width: { duration: 0.3 },
+      opacity: { duration: 0.3, delay: 0.2 },
+      marginRight: { duration: 0.3 },
+    },
+  },
+  hidden: {
+    opacity: 0,
+    width: 0,
+    marginRight: 0,
+    transition: {
+      opacity: { duration: DURATION_FADE, ease: 'easeOut' }, // 0-0.3s
+      width: {
+        delay: DURATION_FADE,
+        duration: DURATION_MOVE,
+        ease: 'easeInOut',
+      }, // 0.3-0.7s
+      marginRight: {
+        delay: DURATION_FADE,
+        duration: DURATION_MOVE,
+        ease: 'easeInOut',
+      }, // 0.3-0.7s
+    },
+  },
+};
+
+const KANJI_LEFT_VARIANTS: Variants = {
+  visible: {
+    opacity: 1,
+    width: 'auto',
+    marginRight: 4,
+    transition: {
+      duration: 0.3,
+      width: { duration: 0.3 },
+      opacity: { duration: 0.3, delay: 0.2 },
+      marginRight: { duration: 0.3 },
+    },
+  },
+  hidden: {
+    opacity: 0,
+    width: 0,
+    marginRight: 0,
+    transition: {
+      opacity: { duration: DURATION_FADE, ease: 'easeOut' },
+      width: {
+        delay: DURATION_FADE,
+        duration: DURATION_MOVE,
+        ease: 'easeInOut',
+      },
+      marginRight: {
+        delay: DURATION_FADE,
+        duration: DURATION_MOVE,
+        ease: 'easeInOut',
+      },
+    },
+  },
 };
 
 const KANJI_MULTIPLIERS = [
@@ -38,7 +106,7 @@ const KANA_HEIGHT = 64;
 
 const wait = (s: number) => new Promise((r) => setTimeout(r, s * 1000));
 
-// --- 组件：演化提示词 (放在 ScrollWindow 下面) ---
+// ... EvolutionHint ...
 const EvolutionHint = ({
   from,
   to,
@@ -47,38 +115,28 @@ const EvolutionHint = ({
   from: string;
   to?: string;
   visible: boolean;
-}) => {
-  return (
-    <div className={styles.evolutionHint}>
-      <AnimatePresence>
-        {visible && to && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="jaFont"
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <span>{from}</span>
-            <span className={styles.evolutionArrow}>→</span>
-            <span className={styles.evolutionHigh}>{to}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-// --- 组件：翻转器 ---
-const MutationFlipper = ({
-  oldText,
-  newText,
-  isLeft,
-}: {
-  oldText: string;
-  newText: string;
-  isLeft: boolean;
 }) => (
+  <div className={styles.evolutionHint}>
+    <AnimatePresence>
+      {visible && to && (
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="jaFont"
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <span>{from}</span>
+          <span className={styles.evolutionArrow}>→</span>
+          <span className={styles.evolutionHigh}>{to}</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
+// ... MutationFlipper ...
+const MutationFlipper = ({ oldText, newText, isLeft }: any) => (
   <div className={styles.flipperContainer}>
     <motion.div
       className={`${styles.flipFace} ${styles.flipFaceOld} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
@@ -103,101 +161,49 @@ const MutationFlipper = ({
   </div>
 );
 
-// --- 组件：假名滚轮 (包含下方提示) ---
+// ... KanaReel ...
 const KanaReel = ({
   targetIndex,
   regularText,
   mutationText,
   showMutation,
   isLeft,
-}: {
-  targetIndex: number;
-  regularText: string;
-  mutationText?: string;
-  showMutation: boolean;
-  isLeft: boolean;
-}) => {
-  return (
-    <div className={styles.columnWrapper}>
-      {/* 3D 视窗 */}
-      <div className={styles.scrollWindow}>
-        <motion.div
-          animate={{ y: -targetIndex * KANA_HEIGHT }}
-          transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-          className={styles.kanjiReel}
-        >
-          {KANA_MULTIPLIERS.map((text, i) => (
-            <div
-              key={i}
-              className={`${styles.cellReelItem} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
-            >
-              {i === 1 && text === '' ? '' : text}
-            </div>
-          ))}
-        </motion.div>
-        <AnimatePresence>
-          {showMutation && mutationText && (
-            <MutationFlipper
-              oldText={regularText}
-              newText={mutationText}
-              isLeft={isLeft}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* 🔴 下方演化提示 (scrollWindow 的外部) */}
-      <EvolutionHint
-        from={regularText}
-        to={mutationText}
-        visible={showMutation}
-      />
+}: any) => (
+  <div className={styles.columnWrapper}>
+    <div className={styles.scrollWindow}>
+      <motion.div
+        animate={{ y: -targetIndex * KANA_HEIGHT }}
+        transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+        className={styles.kanjiReel}
+      >
+        {KANA_MULTIPLIERS.map((text, i) => (
+          <div
+            key={i}
+            className={`${styles.cellReelItem} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
+          >
+            {i === 1 && text === '' ? '' : text}
+          </div>
+        ))}
+      </motion.div>
+      <AnimatePresence>
+        {showMutation && mutationText && (
+          <MutationFlipper
+            oldText={regularText}
+            newText={mutationText}
+            isLeft={isLeft}
+          />
+        )}
+      </AnimatePresence>
     </div>
-  );
-};
+    <EvolutionHint
+      from={regularText}
+      to={mutationText}
+      visible={showMutation}
+    />
+  </div>
+);
 
-// --- 组件：静态单元格 (包含下方提示) ---
-const UnitCell = ({
-  regularText,
-  mutationText,
-  showMutation,
-  isLeft,
-}: {
-  regularText: string;
-  mutationText?: string;
-  showMutation: boolean;
-  isLeft: boolean;
-}) => {
-  return (
-    <div className={styles.columnWrapper}>
-      <div className={styles.scrollWindow}>
-        <div
-          className={`${styles.cellAbsolute} ${isLeft ? styles.alignRight : styles.alignLeft} jaFont`}
-        >
-          {regularText}
-        </div>
-        <AnimatePresence>
-          {showMutation && mutationText && (
-            <MutationFlipper
-              oldText={regularText}
-              newText={mutationText}
-              isLeft={isLeft}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* 🔴 下方演化提示 */}
-      <EvolutionHint
-        from={regularText}
-        to={mutationText}
-        visible={showMutation}
-      />
-    </div>
-  );
-};
-
-// --- 组件：汉字滚轮 (不变) ---
+// ... KanjiReel ...
 const KanjiReel = ({ targetIndex }: { targetIndex: number }) => (
   <div className={styles.kanjiWindow}>
     <motion.div
@@ -214,52 +220,88 @@ const KanjiReel = ({ targetIndex }: { targetIndex: number }) => (
   </div>
 );
 
+// 🟢 UnitCell 更新：接收外部传入的 layoutTransition
+const UnitCell = ({
+  regularText,
+  mutationText,
+  showMutation,
+  isLeft,
+  isLeftVisible,
+  layoutTransition, // <--- 必须接收这个 prop
+}: any) => {
+  return (
+    <div className={styles.columnWrapper}>
+      <div className={styles.scrollWindow}>
+        <motion.div
+          className={`${styles.cellAbsolute} jaFont`}
+          layout
+          style={{
+            justifyContent: isLeftVisible ? 'flex-start' : 'center',
+          }}
+          transition={layoutTransition} // <--- 使用动态参数
+        >
+          {/* Wrapper 解决文字抖动 */}
+          <motion.div layout transition={layoutTransition}>
+            {regularText}
+          </motion.div>
+        </motion.div>
+
+        <AnimatePresence>
+          {showMutation && mutationText && (
+            <MutationFlipper
+              oldText={regularText}
+              newText={mutationText}
+              isLeft={isLeft}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+      <EvolutionHint
+        from={regularText}
+        to={mutationText}
+        visible={showMutation}
+      />
+    </div>
+  );
+};
+
 export const Level3Learn = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language.startsWith('zh') ? 'zh' : 'en';
-  const { speak } = useTTS(); // 🔴 使用 useTTS
+  const { speak } = useTTS();
 
   const [currentNum, setCurrentNum] = useState(200);
   const [showMutation, setShowMutation] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRomaji, setShowRomaji] = useState(true);
+  const [isLeftVisible, setIsLeftVisible] = useState(true);
 
   const data = LEVEL_3_DATA[currentNum];
-  const isHundred = currentNum === 100;
   const currentIndex = Math.floor(currentNum / 100);
   const finalRomaji = data.mutation?.romaji || data.romaji;
 
-  // 🔴 构造完整读音并播放
   const playCurrentAudio = () => {
-    // 如果有变异，用变异后的组合；否则用规律组合
     const leftPart = data.mutation?.multiplier || data.parts.kana[0];
     const rightPart = data.mutation?.unit || data.parts.kana[1];
-    const fullText = leftPart + rightPart;
-    speak(fullText);
+    speak(leftPart + rightPart);
   };
 
-  // 🔴 监听 showRomaji 变为 true 时 (即动画结束时)，自动播放
   useEffect(() => {
     if (showRomaji) {
       playCurrentAudio();
     }
-  }, [showRomaji, currentNum]); // 依赖 currentNum 确保切数字后能触发
+  }, [showRomaji, currentNum]);
 
   const handleKeyClick = async (targetNum: number) => {
     if (targetNum === currentNum || isAnimating) return;
-
-    if (targetNum === 100) {
-      setCurrentNum(targetNum);
-      setShowMutation(false);
-      setShowRomaji(true);
-      return;
-    }
 
     setIsAnimating(true);
     setShowRomaji(false);
 
     if (Capacitor.isNativePlatform())
       Haptics.impact({ style: ImpactStyle.Light });
+
+    setIsLeftVisible(true);
 
     if (showMutation) {
       setShowMutation(false);
@@ -269,138 +311,130 @@ export const Level3Learn = () => {
     setCurrentNum(targetNum);
     await wait(DURATION_SCROLL + DELAY_GAP);
 
-    const targetData = LEVEL_3_DATA[targetNum];
-    if (targetData.mutation) {
-      if (Capacitor.isNativePlatform())
-        Haptics.impact({ style: ImpactStyle.Heavy });
-      setShowMutation(true);
-      await wait(DURATION_MUTATE);
+    if (targetNum === 100) {
+      setIsLeftVisible(false); // 触发变身
+      await wait(DURATION_FADE + DURATION_MOVE); // 等待完整的 0.7s
+    } else {
+      const targetData = LEVEL_3_DATA[targetNum];
+      if (targetData.mutation) {
+        if (Capacitor.isNativePlatform())
+          Haptics.impact({ style: ImpactStyle.Heavy });
+        setShowMutation(true);
+        await wait(DURATION_MUTATE);
+      }
     }
 
     setShowRomaji(true);
     setIsAnimating(false);
   };
 
+  // 🟢 核心修正：动态计算 Transition
+  // 如果 isLeftVisible = true (展开过程)：delay 为 0，立即移动，duration 设为 0.3 与左侧淡入同步
+  // 如果 isLeftVisible = false (收缩过程)：delay 为 0.3，等左侧淡出后再移动
+  const dynamicLayoutTransition = isLeftVisible
+    ? {
+        duration: DURATION_FADE, // 0.3s (如果觉得太快，可以稍微加一点到 0.35)
+        ease: 'easeInOut',
+        delay: 0, // ⚡️ 关键：消除展开时的延迟
+      }
+    : {
+        duration: DURATION_MOVE, // 0.4s
+        ease: 'easeInOut',
+        delay: DURATION_FADE, // 0.3s (收缩时必须等待)
+      };
+
   return (
     <div className={styles.container}>
       <div className={styles.stage}>
-        <AnimatePresence mode="wait">
-          {isHundred ? (
+        <motion.div
+          key="split-multi"
+          className={styles.splitModeContainer}
+          layout
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+        >
+          {/* 1. 汉字层 */}
+          <div className={`${styles.kanjiRow} jaFont`}>
             <motion.div
-              key="single-100"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.1 } }}
-              className={styles.singleModeContainer}
+              className={styles.kanjiLeft}
+              variants={KANJI_LEFT_VARIANTS}
+              initial="visible"
+              animate={isLeftVisible ? 'visible' : 'hidden'}
             >
-              <div className={`${styles.singleKanji} jaFont`}>
-                {data.parts.kanji[1]}
-              </div>
+              <KanjiReel targetIndex={currentIndex} />
+            </motion.div>
 
-              {/* 100 的罗马音 + 喇叭 */}
-              <div className={styles.romajiWrapper}>
-                {/* 复用 romajiMotionContainer 的 Flex 样式，但不加 absolute，因为 100 不需要重叠动画 */}
-                <div
+            {/* 🟢 右侧汉字：应用动态 Transition */}
+            <motion.span
+              className={styles.kanjiRight}
+              layout
+              style={{
+                justifyContent: isLeftVisible ? 'flex-start' : 'center',
+              }}
+              transition={dynamicLayoutTransition} // <--- 使用动态参数
+            >
+              {/* Wrapper */}
+              <motion.span layout transition={dynamicLayoutTransition}>
+                {data.parts.kanji[1]}
+              </motion.span>
+            </motion.span>
+          </div>
+
+          {/* 2. 罗马音 + 喇叭 */}
+          <div className={styles.romajiWrapper}>
+            <AnimatePresence>
+              {showRomaji && (
+                <motion.div
+                  key={`romaji-${currentNum}`}
                   className={styles.romajiMotionContainer}
-                  style={{ position: 'relative' }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 5 }}
+                  transition={TRANSITION_ROMAJI}
                 >
-                  <span className={`${styles.romajiText}`}>{finalRomaji}</span>
+                  <span className={`${styles.romajiText} jaFont`}>
+                    {finalRomaji}
+                  </span>
                   <Volume2
                     size={20}
                     className={styles.speakerIcon}
                     onClick={playCurrentAudio}
                   />
-                </div>
-              </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-              <div className={styles.singleDrumWindow}>
-                <div className={`${styles.staticCell} jaFont`}>
-                  {data.parts.kana[1]}
-                </div>
-              </div>
-            </motion.div>
-          ) : (
+          {/* 3. 滚轮层 */}
+          <div className={styles.drumsContainer}>
             <motion.div
-              key="split-multi"
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05, transition: { duration: 0.1 } }}
-              className={styles.splitModeContainer}
+              className={styles.drumsLeftWrapper}
+              variants={LEFT_PART_VARIANTS}
+              initial="visible"
+              animate={isLeftVisible ? 'visible' : 'hidden'}
             >
-              <div className={`${styles.kanjiRow} jaFont`}>
-                <div className={styles.kanjiLeft}>
-                  <KanjiReel targetIndex={currentIndex} />
-                </div>
-                <span className={styles.kanjiRight}>{data.parts.kanji[1]}</span>
-              </div>
-
-              {/* 🔴 罗马音 + 喇叭区域 */}
-              <div className={styles.romajiWrapper}>
-                <AnimatePresence>
-                  {showRomaji && (
-                    <motion.div
-                      key={`romaji-${currentNum}`}
-                      // 这里的 className 包含了 absolute + flex center
-                      className={styles.romajiMotionContainer}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      transition={TRANSITION_ROMAJI}
-                    >
-                      {/* 文字：标准流 */}
-                      <span className={`${styles.romajiText}`}>
-                        {finalRomaji}
-                      </span>
-
-                      {/* 喇叭：标准流，自然跟在文字后面 */}
-                      <Volume2
-                        size={20}
-                        className={styles.speakerIcon}
-                        onClick={playCurrentAudio}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <div className={styles.drumsContainer}>
-                <KanaReel
-                  targetIndex={currentIndex}
-                  regularText={data.parts.kana[0]}
-                  mutationText={data.mutation?.multiplier}
-                  showMutation={showMutation}
-                  isLeft={true}
-                />
-
-                <UnitCell
-                  regularText={data.parts.kana[1]}
-                  mutationText={data.mutation?.unit}
-                  showMutation={showMutation}
-                  isLeft={false}
-                />
-              </div>
-
-              {/* 🔴 底部 Note (放在 splitModeContainer 内部最下方) */}
-              <div className={styles.noteContainer}>
-                <AnimatePresence>
-                  {showRomaji && data.note && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className={styles.noteBadge}
-                    >
-                      {data.note[lang]}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <KanaReel
+                targetIndex={currentIndex}
+                regularText={data.parts.kana[0]}
+                mutationText={data.mutation?.multiplier}
+                showMutation={showMutation}
+                isLeft={true}
+              />
             </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* 100 的 Note 放在这里 (因为 100 结构比较特殊，可以直接放在 stage 底部) */}
-        {isHundred && (
+            {/* 🟢 右侧假名 UnitCell：传入动态 Transition */}
+            <motion.div layout>
+              <UnitCell
+                regularText={data.parts.kana[1]}
+                mutationText={data.mutation?.unit}
+                showMutation={showMutation}
+                isLeft={false}
+                isLeftVisible={isLeftVisible}
+                layoutTransition={dynamicLayoutTransition} // <--- 传入
+              />
+            </motion.div>
+          </div>
+
+          {/* 4. 底部 Note */}
           <div className={styles.noteContainer}>
             <AnimatePresence>
               {showRomaji && data.note && (
@@ -415,7 +449,7 @@ export const Level3Learn = () => {
               )}
             </AnimatePresence>
           </div>
-        )}
+        </motion.div>
       </div>
 
       <NumberKeypad

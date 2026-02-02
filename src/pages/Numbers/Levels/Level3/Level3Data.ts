@@ -24,7 +24,7 @@ export interface NumberLevel3Item {
 // 辅助常量：1-9 的规律假名序列
 export const KANA_MULTIPLIERS = [
   '',
-  '',
+  'いち',
   'に',
   'さん',
   'よん',
