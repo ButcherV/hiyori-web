@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, HelpCircle } from 'lucide-react';
+import { ChevronLeft, HelpCircle, Calculator } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import styles from './PageNumbers.module.css';
 import { Level1 } from './Levels/Level1/Level1';
 import { Level3 } from './Levels/Level3/Level3';
+import { Level4 } from './Levels/Level4/Level4';
 import { ALL_LEVELS_CONFIG } from './Levels';
 import BottomSheet from '../../components/BottomSheet';
 import { useSettings } from '../../context/SettingsContext';
@@ -94,6 +95,13 @@ export const PageNumbers = () => {
             </button>
           </div>
         </div>
+        <button
+          className={styles.translatorEntryBtn}
+          onClick={() => navigate('/study/numbers/translator')}
+          aria-label="Number Translator"
+        >
+          <Calculator size={20} strokeWidth={2.5} />
+        </button>
       </div>
 
       <div className={styles.levelNavWrapper}>
@@ -128,6 +136,8 @@ export const PageNumbers = () => {
         {activeLevelId === 'lvl1' && <Level1 />}
 
         {activeLevelId === 'lvl3' && <Level3 />}
+
+        {activeLevelId === 'lvl4' && <Level4 />}
 
         {/* {(activeLevelId !== 'lvl1' || 'lvl3') && (
           <div

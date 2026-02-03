@@ -18,10 +18,11 @@
   padding-left: 12px;
   padding-top: calc(env(safe-area-inset-top) + 24px);
   z-index: 50;
+  background-color: white;
   /* 增加磨砂感 */
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px); */
+  /* -webkit-backdrop-filter: blur(12px); */
   /* border-bottom: 0.5px solid rgba(0, 0, 0, 0.05); */
 }
 
@@ -141,4 +142,30 @@
 /* Sheet Styles */
 .infoSheetContent {
   padding: 0 8px 32px 8px;
+}
+
+.translatorEntryBtn {
+  /* 继承基础交互属性 */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  /* 具体的视觉样式 */
+  color: var(--color-Blue);
+  background-color: rgba(59, 130, 246, 0.1); /* 淡淡的蓝色背景 */
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+
+  /* 微调位置，保持视觉平衡 */
+  margin-right: -4px;
+
+  /* 增加点击反馈 */
+  transition: opacity 0.2s;
+}
+
+.translatorEntryBtn:active {
+  opacity: 0.7;
 }

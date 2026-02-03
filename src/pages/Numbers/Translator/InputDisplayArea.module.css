@@ -1,0 +1,86 @@
+/* src/pages/Numbers/Translator/components/InputDisplayArea.module.css */
+
+.inputDisplayArea {
+  flex-shrink: 0;
+  background-color: white;
+  padding: 8px 16px; /* 稍微减少 padding，给两行文字留空间 */
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between;
+  height: 72px; /* 🟢 稍微增加一点高度 (原64px)，容纳两行大字更从容 */
+  overflow: hidden;
+}
+
+/* ... inputActions 和 inputActionBtn 保持不变 ... */
+.inputActions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0; /* 防止喇叭被挤扁 */
+}
+.inputActionBtn {
+  background: #f1f5f9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-Blue);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.inputActionBtn:active {
+  opacity: 0.6;
+}
+
+/* 右侧数字容器Wrapper */
+.numberWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1; /* 占满剩余空间 */
+  overflow: hidden; /* 防止溢出 */
+  padding-left: 12px; /* 跟喇叭拉开距离 */
+}
+
+/* 阿拉伯数字基础样式 */
+.arabicNum {
+  font-weight: 700;
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  color: var(--color-Gray9);
+  line-height: 1.1; /* 紧凑行高 */
+  letter-spacing: -0.5px;
+  text-align: right;
+  width: 100%;
+
+  /* 🟢 核心：多行文本截断 (最多2行) */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all; /* 允许数字在任意位置换行 */
+}
+
+/* 🟢 动态字号等级 */
+.fontLarge {
+  font-size: 32px; /* 短数字：超大 */
+}
+
+.fontMedium {
+  font-size: 24px; /* 中等长度：中号 */
+}
+
+.fontSmall {
+  font-size: 18px; /* 长数字：小号，确保两行能放下 */
+}
+
+.westernHint {
+  font-size: 11px;
+  color: var(--color-Gray5);
+  margin-top: 2px;
+  white-space: nowrap; /* 防止提示语换行 */
+}

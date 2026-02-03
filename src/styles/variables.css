@@ -30,7 +30,7 @@
   --transition-fast: 0.2s ease;
   --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  --bg-app: #f9fafb; /* 页面底色 */
+  --bg-app: ##f9f9f7; /* 页面底色 */
   --bg-surface: #ffffff; /* 列表/卡片背景色 */
   --text-primary: #111827; /* 主要文字色 */
   --text-secondary: #9ca3af; /* 次要文字色 */

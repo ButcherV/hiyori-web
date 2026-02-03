@@ -22,7 +22,7 @@
   left: 0;
   right: 0;
   z-index: 20;
-  background-color: white;
+  background-color: var(--color-bg);
   height: var(--header-height);
 }
 

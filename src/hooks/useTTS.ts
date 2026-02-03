@@ -1,74 +1,91 @@
 // src/hooks/useTTS.ts
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 
 export const useTTS = () => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  // 使用 ref 来保存 voices，以便在 speak 回调中总能拿到最新值，避免闭包陷阱（虽然 voices 已经在依赖项里了，但这样更稳）
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
-  // 初始化语音列表 (解决 Chrome 异步加载问题)
-  useEffect(() => {
-    const loadVoices = () => {
-      const allVoices = window.speechSynthesis.getVoices();
-      // 过滤出日语声音，避免列表过长
-      const jaVoices = allVoices.filter(
-        (v) => v.lang.includes('ja') || v.lang.includes('JP')
-      );
-      setVoices(jaVoices);
-    };
-
-    loadVoices();
-
-    // Chrome 必须监听这个事件才能获取到列表
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-    };
+  const updateVoices = useCallback(() => {
+    const allVoices = window.speechSynthesis.getVoices();
+    // 宽松过滤：只要包含 ja 或 JP 即可
+    const jaVoices = allVoices.filter(
+      (v) => v.lang.includes('ja') || v.lang.includes('JP')
+    );
+    setVoices(jaVoices);
+    voicesRef.current = jaVoices;
   }, []);
 
-  //  朗读
+  useEffect(() => {
+    updateVoices();
+
+    // 🟢 修复 2: 使用 addEventListener 避免覆盖全局事件
+    window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
+
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
+    };
+  }, [updateVoices]);
+
   const speak = useCallback(
-    (text: string, gender: 'male' | 'female' = 'male') => {
+    (
+      text: string,
+      options: {
+        gender?: 'male' | 'female';
+        rate?: number; // 🟢 允许外部控制语速
+        pitch?: number;
+      } = {}
+    ) => {
       if (!text) return;
 
-      // 🔥 播放前强制打断之前的声音
+      const { gender = 'male', rate = 1.0, pitch = 1.0 } = options;
+
+      // 🔥 播放前打断
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'ja-JP';
-      utterance.rate = 0.8; // 语速 (可以在这里扩展参数)
+      // 🟢 修复 1: 默认语速 1.0，避免慢速导致的破碎感
+      utterance.rate = rate;
+      utterance.pitch = pitch;
 
-      // 尝试匹配性别 (如果找不到则使用默认声音)
-      if (voices.length > 0) {
-        const maleKeywords = ['male', 'otoya', 'ichiro', 'kenji'];
-        const femaleKeywords = ['female', 'kyoko', 'haruka', 'ayumi'];
+      // 🟢 修复 3: 再次尝试获取声音 (应对初始化抢跑)
+      let currentVoices = voicesRef.current;
+      if (currentVoices.length === 0) {
+        const all = window.speechSynthesis.getVoices();
+        currentVoices = all.filter(
+          (v) => v.lang.includes('ja') || v.lang.includes('JP')
+        );
+      }
+
+      if (currentVoices.length > 0) {
+        // 尝试匹配性别 (注意：移动端很多声音名字里不带性别标识，这只是尽力而为)
+        const maleKeywords = [
+          'male',
+          'otoya',
+          'ichiro',
+          'kenji',
+          'google 日本語',
+        ]; // Android Google TTS 通常较深沉
+        const femaleKeywords = ['female', 'kyoko', 'haruka', 'ayumi', 'siri']; // Siri 通常是女声
         const targetKeywords =
           gender === 'male' ? maleKeywords : femaleKeywords;
 
-        const targetVoice = voices.find((v) =>
+        const targetVoice = currentVoices.find((v) =>
           targetKeywords.some((k) => v.name.toLowerCase().includes(k))
         );
-        console.log('voices', voices);
-        console.log('targetVoice', targetVoice);
 
-        if (targetVoice) {
-          utterance.voice = targetVoice;
-        } else {
-          // 兜底：如果没有匹配性别的，就用列表里的第一个日语声音
-          utterance.voice = voices[0];
-        }
-
-        // 暂时写死 - 'Reed (日语（日本）)'
-        // utterance.voice = voices[5];
+        // 如果匹配到了就用匹配的，没匹配到就用第一个日语声音
+        // 这样至少保证是“日语引擎”在读，而不是“英语引擎”在硬读
+        utterance.voice = targetVoice || currentVoices[0];
       }
 
+      console.log('TTS Speak:', { text, voice: utterance.voice?.name, rate });
       window.speechSynthesis.speak(utterance);
     },
-    [voices]
+    [] // 移除 voices 依赖，改用 ref，减少 speak 函数的重建
   );
 
-  // 暴露 cancel 方法，供组件销毁时调用
   const cancel = useCallback(() => {
     window.speechSynthesis.cancel();
   }, []);

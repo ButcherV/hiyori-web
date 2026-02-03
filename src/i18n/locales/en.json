@@ -266,6 +266,12 @@
       "speed_challenge": "Speed Challenge",
       "coming_soon": "Coming Soon..."
     },
+    "translator": {
+      "title": "Number Translator",
+      "empty_state": "Enter a number to translate",
+      "toast_max_limit_title": "Max Length Reached",
+      "toast_max_limit_desc": "Maximum 16 digits allowed"
+    },
     "numbers": {
       "title_base": "Number Study",
       "test_only_hint": "Test Mode Only",
@@ -295,7 +301,9 @@
         },
         "lvl4": {
           "label": "1000s",
-          "title": "Large Units"
+          "title": "The Thousands",
+          "goal_desc": "Master the sound changes in the thousands. Combine this with previous basics to unlock any four-digit number (e.g., 1980, 2024).",
+          "keypoint_desc": "<strong>Regular Rule:</strong><br>Number + <span>sen</span> (e.g., 2000 ni-sen).<br><br><strong>Two Key Exceptions:</strong><br>3000: s → z → <span>zen</span><br>8000: Add pause (small tsu) → <span>hassen</span><br><br><strong>Note:</strong><br>1000 is simply sen. Do not add ichi."
         }
       }
     }

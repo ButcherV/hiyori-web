@@ -1,5 +1,6 @@
 import { LEVEL1_CONFIG, type LevelConfig } from './Level1/Level1Config';
 import { LEVEL3_CONFIG } from './Level3/Level3Config';
+import { LEVEL4_CONFIG } from './Level4/Level4Config';
 
 // 这里汇聚所有关卡的配置
 export const ALL_LEVELS_CONFIG: LevelConfig[] = [
@@ -16,18 +17,7 @@ export const ALL_LEVELS_CONFIG: LevelConfig[] = [
     },
   },
   LEVEL3_CONFIG,
-  // {
-  //   id: 'lvl3',
-  //   labelKey: 'number_study.numbers.levels.lvl3.label',
-  //   titleKey: 'number_study.numbers.levels.lvl3.title',
-  //   DescriptionContent: () => <p>...</p>,
-  // },
-  {
-    id: 'lvl4',
-    labelKey: 'number_study.numbers.levels.lvl4.label',
-    titleKey: 'number_study.numbers.levels.lvl4.title',
-    DescriptionContent: () => <p>...</p>,
-  },
+  LEVEL4_CONFIG,
   {
     id: 'lvl5',
     labelKey: 'number_study.numbers.levels.lvl5.label',

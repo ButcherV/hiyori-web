@@ -13,6 +13,7 @@ import { DicePage } from '../pages/DicePage';
 import { DatesPage } from '../pages/DatesPage';
 import { MagicClock } from '../pages/Clock/Clock';
 import { PageNumbers } from '../pages/Numbers/PageNumbers';
+import { NumberTranslator } from '../pages/Numbers/Translator/NumberTranslator';
 
 // 动画组件
 import { PageTransition } from '../components/PageTransition';
@@ -31,7 +32,8 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname === '/mistake-book') return 2;
   if (pathname === '/quiz/session') return 3;
   if (pathname === '/study/clock') return 2;
-  if (pathname === '/study/number') return 2;
+  if (pathname === '/study/numbers') return 2;
+  if (pathname === '/study/numbers/translator') return 3;
 
   return 100;
 };
@@ -126,6 +128,15 @@ export const AppRouter = () => {
           element={
             <PageTransition preset="scale" depth={3} direction={direction}>
               <PageQuizSession />
+            </PageTransition>
+          }
+        />
+
+        <Route
+          path="/study/numbers/translator"
+          element={
+            <PageTransition preset="slide" depth={3} direction={direction}>
+              <NumberTranslator />
             </PageTransition>
           }
         />

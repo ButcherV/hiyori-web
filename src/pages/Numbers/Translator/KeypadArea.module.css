@@ -1,0 +1,56 @@
+/* src/pages/Numbers/Translator/components/KeypadArea.module.css */
+
+.keypadArea {
+  flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #f9f9fb;
+  padding-top: 8px;
+}
+
+.keypadGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 16px 16px 16px;
+}
+
+/* 键盘按钮基础样式 */
+.keyBtn {
+  height: 46px;
+  font-size: 22px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.1s,
+    opacity 0.1s;
+}
+
+.keyBtn:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+/* 普通数字键 */
+.keyBtnNum {
+  background: white;
+  color: var(--color-Gray9);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* 清除键 (AC) */
+.keyBtnClear {
+  background: #fee2e2;
+  color: #ef4444;
+  font-size: 16px;
+}
+
+/* 退格键 */
+.keyBtnDelete {
+  background: #e2e8f0;
+  color: var(--color-Gray7);
+}

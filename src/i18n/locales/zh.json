@@ -271,6 +271,12 @@
       "speed_challenge": "速度挑战",
       "coming_soon": "开发中..."
     },
+    "translator": {
+      "title": "数字翻译机",
+      "empty_state": "输入数字开始翻译",
+      "toast_max_limit_title": "已达到最大长度",
+      "toast_max_limit_desc": "最多只能输入 16 位数字哦"
+    },
     "numbers": {
       "title_base": "数字学习",
       "test_only_hint": "纯测试模式",
@@ -282,25 +288,27 @@
       },
       "levels": {
         "lvl1": {
-          "label": "0-10",
+          "label": "个",
           "title": "基础数字",
           "goal_desc": "建立 0-10 的“听音辨数”直觉。这是学习百千万亿、日期、时间、货币的基石。",
           "keypoint_desc": "<strong>优先记忆「常用」读音：</strong><br>数字 0, 4, 7, 9 有多种读法，生活中请首选带有<span>「常用」</span>标记的读音。<br><br><strong>推荐顺序：</strong><br>先在「学习模式」点读磨耳朵，再通过「挑战模式」测试反应速度。"
         },
         "lvl2": {
-          "label": "11-99",
+          "label": "十",
           "title": "十位组合",
           "desc": "这一关没有新单词，考验的是你对数字组合的反应速度。"
         },
         "lvl3": {
-          "label": "100-900",
+          "label": "百",
           "title": "百位学习",
           "goal_desc": "攻克百位数的特殊「音便」。结合前课基础，你将彻底解锁任意三位数（如 365、890）的读法。",
           "keypoint_desc": "<strong>常规读法：</strong><br>数字 + <span>hyaku</span>（如 200 ni-hyaku）。<br><br><strong>三大变音（重点）：</strong><br>300：h 变 b → <span>byaku</span><br>600, 800：h 变 p (带促音) → <span>ppyaku</span><br><br><strong>注意：</strong><br>100 读作 hyaku，不加 ichi。"
         },
         "lvl4": {
-          "label": "1000-9000",
-          "title": "千位学习"
+          "label": "千",
+          "title": "千位学习",
+          "goal_desc": "攻克千位数的特殊「音便」。结合前课基础，你将彻底解锁任意四位数（如 1980、2024）的读法。",
+          "keypoint_desc": "<strong>常规读法：</strong><br>数字 + <span>sen</span>（如 2000 ni-sen）。<br><br><strong>两大变音（重点）：</strong><br>3000：s 变 z → <span>zen</span><br>8000：促音化 → <span>hassen</span><br><br><strong>注意：</strong><br>1000 读作 sen，不加 ichi。"
         },
         "lvl5": {
           "label": ">=10000",
