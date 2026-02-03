@@ -293,12 +293,14 @@
           "desc": "这一关没有新单词，考验的是你对数字组合的反应速度。"
         },
         "lvl3": {
-          "label": "100-999",
-          "title": "百位音便"
+          "label": "100-900",
+          "title": "百位学习",
+          "goal_desc": "攻克百位数的特殊「音便」。结合前课基础，你将彻底解锁任意三位数（如 365、890）的读法。",
+          "keypoint_desc": "<strong>常规读法：</strong><br>数字 + <span>hyaku</span>（如 200 ni-hyaku）。<br><br><strong>三大变音（重点）：</strong><br>300：h 变 b → <span>byaku</span><br>600, 800：h 变 p (带促音) → <span>ppyaku</span><br><br><strong>注意：</strong><br>100 读作 hyaku，不加 ichi。"
         },
         "lvl4": {
-          "label": "1000-9999",
-          "title": "大数单位"
+          "label": "1000-9000",
+          "title": "千位学习"
         },
         "lvl5": {
           "label": ">=10000",

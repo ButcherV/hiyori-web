@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  type Variants,
+  type Transition,
+} from 'framer-motion'; // 🟢 1. 引入 Transition 类型
 import { Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LEVEL_3_DATA, KANA_MULTIPLIERS } from './Level3Data';
@@ -329,18 +334,17 @@ export const Level3Learn = () => {
   };
 
   // 🟢 核心修正：动态计算 Transition
-  // 如果 isLeftVisible = true (展开过程)：delay 为 0，立即移动，duration 设为 0.3 与左侧淡入同步
-  // 如果 isLeftVisible = false (收缩过程)：delay 为 0.3，等左侧淡出后再移动
-  const dynamicLayoutTransition = isLeftVisible
+  // 加上 : Transition 类型注解，解决 ease 属性类型推断错误
+  const dynamicLayoutTransition: Transition = isLeftVisible
     ? {
-        duration: DURATION_FADE, // 0.3s (如果觉得太快，可以稍微加一点到 0.35)
+        duration: DURATION_FADE,
         ease: 'easeInOut',
-        delay: 0, // ⚡️ 关键：消除展开时的延迟
+        delay: 0,
       }
     : {
-        duration: DURATION_MOVE, // 0.4s
+        duration: DURATION_MOVE,
         ease: 'easeInOut',
-        delay: DURATION_FADE, // 0.3s (收缩时必须等待)
+        delay: DURATION_FADE,
       };
 
   return (
@@ -391,9 +395,7 @@ export const Level3Learn = () => {
                   exit={{ opacity: 0, y: 5 }}
                   transition={TRANSITION_ROMAJI}
                 >
-                  <span className={`${styles.romajiText} jaFont`}>
-                    {finalRomaji}
-                  </span>
+                  <span className={`${styles.romajiText}`}>{finalRomaji}</span>
                   <Volume2
                     size={20}
                     className={styles.speakerIcon}

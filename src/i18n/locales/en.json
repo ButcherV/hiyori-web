@@ -288,11 +288,13 @@
           "desc": "No new words. Test your reaction speed on number combinations."
         },
         "lvl3": {
-          "label": "100-999",
-          "title": "Hundreds Variations"
+          "label": "100s",
+          "title": "The Hundreds",
+          "goal_desc": "Master the special sound changes in the hundreds. Combine this with previous basics to unlock any three-digit number (e.g., 365, 890).",
+          "keypoint_desc": "<strong>Regular Rule:</strong><br>Number + <span>hyaku</span> (e.g., 200 ni-hyaku).<br><br><strong>Three Key Exceptions:</strong><br>300: h → b → <span>byaku</span><br>600, 800: h → p (+ pause) → <span>ppyaku</span><br><br><strong>Note:</strong><br>100 is simply hyaku. Do not add ichi."
         },
         "lvl4": {
-          "label": ">=1000",
+          "label": "1000s",
           "title": "Large Units"
         }
       }
