@@ -34,9 +34,9 @@ export const InputDisplayArea: React.FC<Props> = ({
     <div className={styles.inputDisplayArea}>
       <div className={styles.inputActions}>
         {inputVal && (
-          <button className={styles.inputActionBtn} onClick={onPlayAudio}>
+          <div className={styles.inputActionBtn} onClick={onPlayAudio}>
             <Volume2 size={20} />
-          </button>
+          </div>
         )}
       </div>
       <div className={styles.numberWrapper}>

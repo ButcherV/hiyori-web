@@ -297,6 +297,7 @@ export const SplitNumberLearn = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRomaji, setShowRomaji] = useState(true);
   const [isLeftVisible, setIsLeftVisible] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false);
 
   const currentItem = levelData[currentNum];
   // 🟢 关键：根据 baseUnit 计算索引 (100 或 1000)
@@ -311,10 +312,10 @@ export const SplitNumberLearn = ({
   };
 
   useEffect(() => {
-    if (showRomaji) {
+    if (showRomaji && hasMounted) {
       playCurrentAudio();
     }
-  }, [showRomaji, currentNum]);
+  }, [showRomaji, currentNum, hasMounted]);
 
   const handleKeyClick = async (targetNum: number) => {
     if (targetNum === currentNum || isAnimating) return;

@@ -1,0 +1,42 @@
+/* src/components/ModeToggleFAB/ModeToggleFAB.module.css */
+
+.fabSwitch {
+  position: absolute;
+  /* 🟢 统一位置：所有关卡都固定在这个高度 */
+  top: 32px;
+  right: 32px;
+
+  z-index: 100;
+
+  /* 视觉设计：毛玻璃 */
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-Gray6); /* 默认灰色图标 */
+
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fabSwitch:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* 🟢 战斗模式的特殊样式 */
+.modeTest {
+  color: #ef4444; /* 红色图标 */
+  background: rgba(255, 240, 240, 0.6); /* 淡红背景 */
+  border-color: rgba(239, 68, 68, 0.2);
+}

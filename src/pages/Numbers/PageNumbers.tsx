@@ -95,13 +95,13 @@ export const PageNumbers = () => {
             </button>
           </div>
         </div>
-        <button
+        <div
           className={styles.translatorEntryBtn}
           onClick={() => navigate('/study/numbers/translator')}
           aria-label="Number Translator"
         >
           <Calculator size={20} strokeWidth={2.5} />
-        </button>
+        </div>
       </div>
 
       <div className={styles.levelNavWrapper}>

@@ -126,7 +126,6 @@ export const NumberTranslator = () => {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeft size={24} />
         </button>
-        {/* 🟢 标题 i18n */}
         <span className={styles.title}>
           {t('number_study.translator.title')}
         </span>

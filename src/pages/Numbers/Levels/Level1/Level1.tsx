@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { BookOpen, Swords } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import styles from './Level1.module.css';
 
 import { Level1Learn } from './Level1Learn';
 import { Level1Test } from './Level1Test';
-import { CategoryTabs } from '../../../../components/CategoryTabs';
 import { Toast } from '../../../../components/Toast/Toast';
+import { ModeToggleFAB, type LearnMode } from '../ModeToggleFAB';
 
 type Mode = 'learn' | 'test';
 
@@ -59,26 +58,11 @@ export const Level1 = () => {
     }, 2000);
   };
 
-  // 手动切换模式时的处理
-  const handleModeChange = (newMode: Mode) => {
+  const handleToggleMode = () => {
+    const newMode = mode === 'learn' ? 'test' : 'learn';
     setMode(newMode);
-    if (newMode === 'test') {
-      setReviewNum(null);
-    }
+    if (newMode === 'test') setReviewNum(null);
   };
-
-  const modeOptions = [
-    {
-      id: 'learn',
-      label: t('number_study.common.mode_learn'),
-      icon: <BookOpen size={16} />,
-    },
-    {
-      id: 'test',
-      label: t('number_study.common.mode_test'),
-      icon: <Swords size={16} />,
-    },
-  ];
 
   return (
     <div className={styles.container}>
@@ -88,21 +72,7 @@ export const Level1 = () => {
         description={toastConfig.description}
       />
 
-      <div className={styles.header}>
-        <div style={{ width: '240px' }}>
-          <CategoryTabs
-            options={modeOptions}
-            activeId={mode}
-            onChange={(id) => handleModeChange(id as Mode)}
-            renderTab={(item) => (
-              <>
-                {item.icon}
-                <span>{item.label}</span>
-              </>
-            )}
-          />
-        </div>
-      </div>
+      <ModeToggleFAB mode={mode} onToggle={handleToggleMode} />
 
       {mode === 'learn' ? (
         <Level1Learn initialNum={reviewNum} />

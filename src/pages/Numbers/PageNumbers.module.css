@@ -154,7 +154,7 @@
 
   /* 具体的视觉样式 */
   color: var(--color-Blue);
-  background-color: rgba(59, 130, 246, 0.1); /* 淡淡的蓝色背景 */
+  background-color: rgba(59, 130, 246, 0.1);
   border-radius: 8px;
   width: 36px;
   height: 36px;
