@@ -1,18 +1,14 @@
-// Level 3: 百位学习 (100-999)
+// Level 2: 十位组合 (11-99) - 纯测试模式
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Level3Learn } from './Level3Learn';
-import { NumberTestEngine, LEVEL_3_DATA } from '../NumberTestEngine';
-import { useSettings } from '../../../../context/SettingsContext';
+import { NumberTestEngine, LEVEL_2_DATA } from '../NumberTestEngine';
 import { ModeToggleFAB } from '../ModeToggleFAB';
 import { Toast } from '../../../../components/Toast/Toast';
-import styles from './Level3.module.css';
+import styles from './Level2.module.css';
 
-type Mode = 'learn' | 'test';
-
-export const Level3 = () => {
+// Level 2 只有 Test 模式
+export const Level2 = () => {
   const { t } = useTranslation();
-  const [mode, setMode] = useState<Mode>('learn');
 
   // Toast 状态
   const [toastConfig, setToastConfig] = useState({
@@ -28,8 +24,8 @@ export const Level3 = () => {
     };
   }, []);
 
-  // 生成 100-999 的数字范围
-  const numberRange = Array.from({ length: 900 }, (_, i) => i + 100);
+  // 生成 11-99 的数字范围
+  const numberRange = Array.from({ length: 89 }, (_, i) => i + 11);
 
   // 错误处理
   const handleMistake = (
@@ -40,6 +36,7 @@ export const Level3 = () => {
     setToastConfig({
       isVisible: true,
       message: t('number_study.numbers.interaction.toast_wrong_title'),
+      // 显示真正的正确答案（假名/汉字），而非阿拉伯数字
       description: `正确答案是：${correctAnswer}`,
     });
 
@@ -49,19 +46,14 @@ export const Level3 = () => {
     }, 2000);
   };
 
-  const handleToggleMode = () => {
-    setMode((prev) => (prev === 'learn' ? 'test' : 'learn'));
-  };
-
-  // Level 3 题型配置
+  // Level 2 题型配置 - 多样化考察
   const quizTypes = [
     'arabic-to-kana',
     'arabic-to-kanji',
     'kanji-to-kana',
     'kana-to-arabic',
+    'formula-to-kana',
     'audio-to-arabic',
-    'audio-to-kanji',
-    'audio-to-kana',
   ] as const;
 
   return (
@@ -72,21 +64,18 @@ export const Level3 = () => {
         description={toastConfig.description}
       />
 
-      <ModeToggleFAB mode={mode} onToggle={handleToggleMode} />
+      {/* Level 2 只有 test 模式，不需要切换按钮，但保留占位保持布局一致 */}
+      <div className={styles.fabPlaceholder} />
 
-      {mode === 'learn' ? (
-        <Level3Learn />
-      ) : (
-        <NumberTestEngine
-          data={LEVEL_3_DATA}
-          numberRange={numberRange}
-          quizTypes={[...quizTypes]}
-          onMistake={handleMistake}
-          level={3}
-        />
-      )}
+      <NumberTestEngine
+        data={LEVEL_2_DATA}
+        numberRange={numberRange}
+        quizTypes={[...quizTypes]}
+        onMistake={handleMistake}
+        onContinue={() => {}} // Toast 消失后自动继续下一题
+      />
     </div>
   );
 };
 
-export default Level3;
+export default Level2;

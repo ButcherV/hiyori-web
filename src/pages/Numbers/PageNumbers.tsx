@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './PageNumbers.module.css';
 import { Level1 } from './Levels/Level1/Level1';
+import { Level2 } from './Levels/Level2/Level2';
 import { Level3 } from './Levels/Level3/Level3';
 import { Level4 } from './Levels/Level4/Level4';
 import { ALL_LEVELS_CONFIG } from './Levels';
@@ -134,6 +135,8 @@ export const PageNumbers = () => {
 
       <div className={styles.workspace}>
         {activeLevelId === 'lvl1' && <Level1 />}
+
+        {activeLevelId === 'lvl2' && <Level2 />}
 
         {activeLevelId === 'lvl3' && <Level3 />}
 

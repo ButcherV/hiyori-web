@@ -9,14 +9,23 @@ export type KeypadDisplayMode =
   | 'romaji'
   | 'mixed';
 
+// 自定义键（用于 Level 2/3/4 的片段键盘）
+export interface CustomKey {
+  value: string;    // 实际值（用于拼接答案）
+  label: string;    // 显示文本
+  type?: 'digit' | 'unit' | 'variant';
+}
+
 interface NumberKeypadProps {
-  onKeyClick: (num: number) => void;
+  onKeyClick: (value: number | string) => void;
   activeNum?: number | null;
   shuffle?: boolean;
   displayMode?: KeypadDisplayMode;
   customNums?: number[];
   // 🟢 布局配置：splitIdx (在哪里折行), maxCols (这一关最宽的一排有几个按键)
   layout?: { splitIdx: number; maxCols: number };
+  // 🟢 自定义键模式（用于 Level 2/3/4）
+  customKeys?: CustomKey[];
 }
 
 const KEYPAD_DATA: Record<
@@ -52,8 +61,17 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
   displayMode = 'arabic',
   customNums,
   layout = { splitIdx: 5, maxCols: 6 }, // 默认适配 Level 1 (上5下6)
+  customKeys,
 }) => {
   const keys = useMemo(() => {
+    // 如果传入了 customKeys，优先使用（Level 2/3/4 场景）
+    if (customKeys) {
+      let result = [...customKeys];
+      if (shuffle) result = shuffleList(result);
+      return result;
+    }
+
+    // 原有逻辑（Level 1 场景）
     let nums = customNums ?? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     if (shuffle) nums = shuffleList([...nums]);
 
@@ -81,7 +99,7 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
       }
       return { value: num, label };
     });
-  }, [shuffle, displayMode, customNums]);
+  }, [shuffle, displayMode, customNums, customKeys]);
 
   const row1 = keys.slice(0, layout.splitIdx);
   const row2 = keys.slice(layout.splitIdx);
@@ -93,11 +111,15 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
       style={{ '--max-cols': layout.maxCols } as React.CSSProperties}
     >
       <div className={styles.keyRow}>
-        {row1.map((key) => (
+        {row1.map((key, idx) => (
           <div
-            key={`k-${key.value}`}
+            key={`k-${key.value}-${idx}`}
             role="button"
-            className={`${styles.keyBtn} ${activeNum === key.value ? styles.keyBtnActive : ''} ${displayMode !== 'arabic' ? `jaFont ${styles.fontJa}` : ''}`}
+            className={`
+              ${styles.keyBtn} 
+              ${activeNum === key.value ? styles.keyBtnActive : ''} 
+              ${customKeys || displayMode !== 'arabic' ? 'jaFont' : ''}
+            `}
             onClick={() => onKeyClick(key.value)}
           >
             {key.label}
@@ -105,11 +127,15 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
         ))}
       </div>
       <div className={styles.keyRow}>
-        {row2.map((key) => (
+        {row2.map((key, idx) => (
           <div
-            key={`k-${key.value}`}
+            key={`k-${key.value}-${idx}`}
             role="button"
-            className={`${styles.keyBtn} ${activeNum === key.value ? styles.keyBtnActive : ''} ${displayMode !== 'arabic' ? `jaFont ${styles.fontJa}` : ''}`}
+            className={`
+              ${styles.keyBtn} 
+              ${activeNum === key.value ? styles.keyBtnActive : ''} 
+              ${customKeys || displayMode !== 'arabic' ? 'jaFont' : ''}
+            `}
             onClick={() => onKeyClick(key.value)}
           >
             {key.label}

@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  align-items: center;
   position: relative;
+}
+
+.fabPlaceholder {
+  height: 0;
 }

@@ -1,0 +1,422 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 32px 16px;
+  padding-top: 0px;
+  position: relative;
+}
+
+/* ============================================================
+   游戏舞台区域 (Game Stage) 
+   ============================================================ */
+
+.gameArea {
+  /* 布局与间距 */
+  margin-top: 12px;
+  margin-bottom: 24px;
+  flex: 1; /* 占据剩余空间 */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+
+  /* 视觉核心：聚光灯效果背景 */
+  background-color: #f8fafc; /* 浅灰底色 */
+  background-image: radial-gradient(
+    circle at 50% 40%,
+    #ffffff 0%,
+    #f1f5f9 60%,
+    #e2e8f0 100%
+  );
+
+  border-radius: 12px; /* 大圆角 */
+
+  /* 细腻的内阴影，增加层次感 */
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.02),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🟢 装饰：背景点阵纹理 (类似 Level 1) */
+.gameArea::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 极淡的圆点矩阵 */
+  background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.15;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 40%,
+    transparent 100%
+  );
+}
+
+/* 题面容器 */
+.promptContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px; /* 保证高度，避免跳动 */
+  z-index: 1; /* 浮在纹理之上 */
+}
+
+.promptContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.promptWithSpeaker {
+  display: flex;
+  flex-direction: column; /* 改为垂直排列，喇叭在文字下方，更平衡 */
+  align-items: center;
+  gap: 12px;
+}
+
+/* 🟢 题目文字：悬浮质感 */
+.promptText {
+  font-size: 72px; /* 加大 */
+  font-weight: 800;
+  color: #334155; /* Slate-700 */
+  line-height: 1.1;
+  text-align: center;
+  font-family: var(--font-family-ja); /* 确保日文字体 */
+
+  /* 浮起效果：下方深色阴影 + 上方白色高光 */
+  text-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 1);
+
+  transition: transform 0.2s;
+}
+
+/* 动态字号调整 */
+.promptText.smallText {
+  font-size: 56px;
+}
+.promptText.littleText {
+  font-size: 40px;
+}
+.promptText.tinyText {
+  font-size: 28px;
+}
+
+/* 小喇叭按钮 (文字题旁边的) */
+.speakerBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: none;
+
+  background: #ffffff;
+  color: var(--color-Blue);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* 漂浮阴影 */
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.speakerBtn:active {
+  transform: scale(0.9);
+  background: #f1f5f9;
+}
+
+/* 算式题面 */
+.formulaPrompt {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 48px; /* 加大 */
+  font-weight: 700;
+  color: #334155;
+
+  /* 同样加投影 */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.formulaPart {
+  padding: 8px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); /* 卡片感 */
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.formulaOperator {
+  color: #94a3b8; /* 浅灰色的加号，不抢戏 */
+  font-weight: 900;
+}
+
+/* 🟢 大音频按钮 (听音题)：高级渐变 + 弥散光 */
+.audioBtn {
+  width: 96px; /* 更大 */
+  height: 96px;
+  border-radius: 50%;
+  border: none;
+
+  /* 鲜艳的渐变 */
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+  color: white;
+
+  display: flex;
+  flex-direction: column; /* 图标+文字垂直排列 */
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  cursor: pointer;
+
+  /* 强烈的弥散投影 */
+  box-shadow:
+    0 12px 30px -8px rgba(37, 99, 235, 0.5),
+    0 4px 6px -2px rgba(37, 99, 235, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3); /* 顶部高光 */
+
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s;
+}
+
+.audioBtn:active {
+  transform: scale(0.92);
+  box-shadow:
+    0 6px 16px -4px rgba(37, 99, 235, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+/* 播放波纹动画 (可选，需配合 JS 状态) */
+/* .audioBtn.playing { animation: pulse 1s infinite; } */
+
+/* ============================================================
+   🟢 答案区域 (Answer Area) - 视觉升级版
+   ============================================================ */
+
+.answerContainer {
+  width: 100%;
+  max-width: 360px; /* 限制最大宽度，防止在大屏上太长 */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /*稍微拉大间距，更透气 */
+  margin: 0 auto; /* 居中 */
+}
+
+/* 1. 输入框容器：改为“实体卡片”风格 */
+.assemblyArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px 6px 16px; /* 右侧留给按钮，左侧文字留白 */
+
+  /* 视觉核心：白色背景 + 极其细腻的阴影 */
+  background: #ffffff;
+  border-radius: 16px; /* 更圆润 */
+
+  /* 边框：平时是淡灰色，不要虚线 */
+  border: 2px solid #e2e8f0;
+
+  /* 投影：给一点浮起的感觉 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+
+  /* 限制高度 */
+  height: 64px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 答题状态：微微发蓝光，表示激活 */
+/* 注意：需要在 TSX 里给 answerContainer 加个 active 类，或者直接利用 React state */
+/* 这里默认用边框颜色变化来体现 */
+
+.assemblySlots {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 文字左对齐或居中看喜好，这里推荐 flex-start 配合 padding */
+  overflow: hidden;
+}
+
+.assemblyPlaceholder {
+  color: var(--color-Gray5);
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* 文字样式：更清晰、更粗 */
+.assembledText {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-Gray9); /* 深灰/黑 */
+  font-family: var(--font-family-ja);
+  line-height: 1.1;
+
+  /* 允许长文字换行 */
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 动态字号 (配合你之前的 JS 修改) */
+.textMedium {
+  font-size: 22px;
+}
+.textSmall {
+  font-size: 18px;
+}
+.textTiny {
+  font-size: 15px;
+}
+
+/* 2. 退格按钮：改为 3D 实体按键 */
+.backspaceBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+
+  /* 3D 结构 */
+  background: #f1f5f9; /* 浅灰表面 */
+  border: 1px solid #cbd5e1; /* 轮廓 */
+  border-bottom: 3px solid #94a3b8; /* 🟢 底部加厚，形成立体感 */
+
+  color: var(--color-Gray6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.1s;
+
+  /* 图标 */
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* 按下效果：像真按钮一样陷下去 */
+.backspaceBtn:not(:disabled):active {
+  transform: translateY(2px); /* 下移 */
+  border-bottom-width: 1px; /* 底部变薄 */
+  background: #e2e8f0;
+  color: var(--color-Gray8);
+}
+
+.backspaceBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-bottom-width: 1px; /* 禁用时拍扁 */
+  transform: translateY(2px);
+}
+
+/* 3. 进度条：胶囊化 + 渐变 */
+.progressIndicator {
+  width: 100%;
+  height: 8px; /* 加粗 */
+  background: #f1f5f9; /* 轨道颜色 */
+  border-radius: 99px; /* 胶囊圆角 */
+  overflow: hidden;
+  /* border: 1px solid rgba(0,0,0,0.02); */
+  position: relative;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 99px;
+
+  /* 🟢 渐变色：让进度看起来更高级 */
+  background: linear-gradient(90deg, var(--color-Blue) 0%, #60a5fa 100%);
+
+  transition:
+    width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s;
+
+  /* 可选：加个光泽感 */
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* ============================================================
+   状态反馈 (Feedback States)
+   ============================================================ */
+
+/* 错误时：边框变红，背景微红 */
+.answerContainer.error .assemblyArea {
+  border-color: #fca5a5; /* Red-300 */
+  background-color: #fef2f2; /* Red-50 */
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.answerContainer.error .progressBar {
+  background: #ef4444; /* 纯红 */
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* 成功时：边框变绿，背景微绿 */
+.answerContainer.success .assemblyArea {
+  border-color: #86efac; /* Green-300 */
+  background-color: #f0fdf4; /* Green-50 */
+  transform: scale(1.02); /* 微微放大 */
+}
+
+.answerContainer.success .progressBar {
+  background: #10b981; /* Emerald-500 */
+}
+
+/* 震动动画关键帧 */
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+.shakeAnim {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* 键盘区域 (微调间距) */
+.keyboardContainer {
+  flex-shrink: 0;
+  padding-top: 24px; /* 增加与上方答案区的距离 */
+}
+
+.disabledKeyboard {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(0.5); /* 禁用时稍微变灰 */
+}

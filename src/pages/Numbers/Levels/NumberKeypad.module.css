@@ -7,6 +7,11 @@
   width: 100%;
 }
 
+.disabledKeypad {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .keyRow {
   display: flex;
   justify-content: center;
