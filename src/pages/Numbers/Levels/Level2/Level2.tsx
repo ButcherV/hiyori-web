@@ -72,11 +72,11 @@ export const Level2 = () => {
 
   // Level 2 题型配置 - 多样化考察
   const quizTypes = [
-    // 'arabic-to-kana',
-    // 'arabic-to-kanji',
-    // 'kanji-to-kana',
-    // 'kana-to-arabic',
-    // 'audio-to-arabic',
+    'arabic-to-kana',
+    'arabic-to-kanji',
+    'kanji-to-kana',
+    'kana-to-arabic',
+    'audio-to-arabic',
     'formula-to-kana',
     'formula-to-kanji',
   ] as const;

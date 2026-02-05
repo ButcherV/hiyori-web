@@ -17,7 +17,7 @@ export const ModeToggleFAB: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <button
+    <div
       className={`${styles.fabSwitch} ${mode === 'test' ? styles.modeTest : ''} ${className || ''}`}
       onClick={onToggle}
       aria-label={mode === 'learn' ? 'Switch to Challenge' : 'Back to Learn'}
@@ -28,6 +28,6 @@ export const ModeToggleFAB: React.FC<Props> = ({
       ) : (
         <BookOpen size={22} strokeWidth={2.5} />
       )}
-    </button>
+    </div>
   );
 };
