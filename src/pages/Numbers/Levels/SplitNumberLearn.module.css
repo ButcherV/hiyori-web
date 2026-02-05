@@ -293,7 +293,7 @@
 /* 底部解释 Note */
 .noteContainer {
   position: absolute;
-  bottom: -32px;
+  bottom: -16px;
   transform: translateY(100%);
   left: 0;
   width: 100%;
