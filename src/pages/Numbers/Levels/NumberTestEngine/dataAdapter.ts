@@ -313,7 +313,11 @@ function getKanjiForLevel3(
 
   // 十位
   if (tens > 0) {
-    result += kanjiDigits[tens] + '十';
+    if (tens === 1) {
+      result += '十'; // 如果是 1，只加 "十"，不要 "一"
+    } else {
+      result += kanjiDigits[tens] + '十'; // 如果是 2-9，加 "二十" 等
+    }
   }
 
   // 个位
@@ -499,7 +503,11 @@ function getKanjiForLevel4(
 
   // 十位
   if (tens > 0) {
-    result += kanjiDigits[tens] + '十';
+    if (tens === 1) {
+      result += '十'; // 正确：十五
+    } else {
+      result += kanjiDigits[tens] + '十'; // 正确：二十五
+    }
   }
 
   // 个位
