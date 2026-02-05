@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   motion,
   AnimatePresence,
@@ -297,30 +297,24 @@ export const SplitNumberLearn = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRomaji, setShowRomaji] = useState(true);
   const [isLeftVisible, setIsLeftVisible] = useState(true);
-  const [hasMounted, setHasMounted] = useState(false);
-
-  // 在组件挂载后设置 hasMounted 为 true
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  // const [hasMounted, setHasMounted] = useState(false);
 
   const currentItem = levelData[currentNum];
   // 🟢 关键：根据 baseUnit 计算索引 (100 或 1000)
   const currentIndex = Math.floor(currentNum / baseUnit);
   const finalRomaji = currentItem.mutation?.romaji || currentItem.romaji;
 
-  const playCurrentAudio = () => {
-    const leftPart =
-      currentItem.mutation?.multiplier || currentItem.parts.kana[0];
-    const rightPart = currentItem.mutation?.unit || currentItem.parts.kana[1];
+  const playCurrentAudio = (item = currentItem) => {
+    const leftPart = item.mutation?.multiplier || item.parts.kana[0];
+    const rightPart = item.mutation?.unit || item.parts.kana[1];
     speak(leftPart + rightPart);
   };
 
-  useEffect(() => {
-    if (showRomaji && hasMounted) {
-      playCurrentAudio();
-    }
-  }, [showRomaji, currentNum, hasMounted]);
+  // useEffect(() => {
+  //   if (showRomaji && hasMounted) {
+  //     playCurrentAudio();
+  //   }
+  // }, [showRomaji, currentNum, hasMounted]);
 
   const handleKeyClick = async (val: string | number) => {
     const targetNum = Number(val);
@@ -359,6 +353,8 @@ export const SplitNumberLearn = ({
 
     setShowRomaji(true);
     setIsAnimating(false);
+    // 只有点击键盘走完动画后，这里才会执行。加载时绝对不会执行。
+    playCurrentAudio(levelData[targetNum]);
   };
 
   // 🟢 严格保留 useMemo 计算 Transition 逻辑
@@ -430,13 +426,14 @@ export const SplitNumberLearn = ({
                   <Volume2
                     size={20}
                     className={styles.speakerIcon}
-                    onClick={playCurrentAudio}
+                    onClick={() => playCurrentAudio()}
                   />
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
+          {/* <div className={styles.drumsWrapper}> */}
           {/* 3. 滚轮层 */}
           <div className={styles.drumsContainer}>
             <motion.div
@@ -482,6 +479,7 @@ export const SplitNumberLearn = ({
               )}
             </AnimatePresence>
           </div>
+          {/* </div> */}
         </motion.div>
       </div>
 

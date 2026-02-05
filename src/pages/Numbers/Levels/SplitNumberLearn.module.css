@@ -35,6 +35,7 @@
   align-items: center;
   gap: 12px;
   width: 100%;
+  position: relative;
 }
 
 /* 汉字部分 */
@@ -285,10 +286,15 @@
   font-weight: 900;
 }
 
+/* .drumsWrapper {
+  position: relative;
+} */
+
 /* 底部解释 Note */
 .noteContainer {
   position: absolute;
-  bottom: 0; /* 贴在 Stage 底部 */
+  bottom: -32px;
+  transform: translateY(100%);
   left: 0;
   width: 100%;
   display: flex;
