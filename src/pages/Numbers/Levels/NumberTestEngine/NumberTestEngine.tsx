@@ -89,11 +89,17 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
         prompt = item.mutation?.kana || item.kana;
         break;
       case 'formula-to-kana':
-        // 简单生成算式：tens + ones
-        const tens = Math.floor(num / 10) * 10;
-        const ones = num % 10;
-        prompt = ones === 0 ? `${tens}` : `${tens} + ${ones}`;
-        correctAnswer = item.kana;
+      case 'formula-to-kanji':
+        // 保护性
+        if (num <= 1) {
+          prompt = num.toString();
+        } else {
+          const splitA = Math.floor(Math.random() * (num - 1)) + 1;
+          const splitB = num - splitA;
+          prompt = `${splitA} + ${splitB}`;
+        }
+        correctAnswer =
+          quizType === 'formula-to-kanji' ? item.kanji : item.kana;
         break;
       case 'audio-to-arabic':
         correctAnswer = num.toString();

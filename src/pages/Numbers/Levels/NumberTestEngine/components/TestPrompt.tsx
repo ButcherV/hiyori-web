@@ -64,7 +64,8 @@ export const TestPrompt: React.FC<TestPromptProps> = ({
             <button className={styles.audioBtn} onClick={onPlayAudio}>
               <Volume2 size={48} />
             </button>
-          ) : quiz.type === 'formula-to-kana' ? (
+          ) : quiz.type === 'formula-to-kana' ||
+            quiz.type === 'formula-to-kanji' ? (
             /* 算式题面 */
             <div className={styles.formulaPrompt}>
               {quiz.prompt.split(' + ').map((part, idx, arr) => (

@@ -5,7 +5,8 @@ export type QuizType =
   | 'kanji-to-kana' // 汉字 → 假名
   | 'kana-to-arabic' // 假名 → 阿拉伯数字
   | 'kana-to-kanji' // 假名 → 汉字
-  | 'formula-to-kana' // 算式 → 假名 (如 "40+7" → "よんじゅうなな")
+  | 'formula-to-kana' // 算式 → 假名 (如 "44+7")
+  | 'formula-to-kanji' // 算式 → 汉字
   | 'audio-to-arabic' // 听音 → 阿拉伯数字
   | 'audio-to-kanji' // 听音 → 汉字
   | 'audio-to-kana'; // 听音 → 假名

@@ -85,6 +85,14 @@ const LEVEL3_KANA_POOL: CustomKey[] = [
   { value: 'はっ', label: 'はっ' }, // 800
 ];
 
+// Level 4 假名片段池（千位 + 继承百位）
+const LEVEL4_KANA_POOL: CustomKey[] = [
+  ...LEVEL3_KANA_POOL,
+  { value: 'せん', label: 'せん' },    // 千位常规
+  { value: 'ぜん', label: 'ぜん' },    // 3000 连浊 s→z
+  // はっ 已包含在 LEVEL3_KANA_POOL 中（用于 8000）
+];
+
 // ============================================================
 // 2. 动态生成逻辑
 // ============================================================
@@ -158,6 +166,47 @@ export function generateDynamicKanjiKeyboard(
   return keyboardKeys;
 }
 
+// 动态生成 Level 4 假名键盘（千位）
+export function generateLevel4Keyboard(correctAnswer: string): CustomKey[] {
+  const requiredFragments: CustomKey[] = [];
+  let remaining = correctAnswer;
+
+  // 按长度降序排序，优先匹配长片段
+  const sortedPool = [...LEVEL4_KANA_POOL].sort(
+    (a, b) => b.value.length - a.value.length
+  );
+
+  // 贪心匹配，提取所需片段
+  while (remaining.length > 0) {
+    let matched = false;
+    for (const frag of sortedPool) {
+      if (remaining.startsWith(frag.value)) {
+        if (!requiredFragments.find((f) => f.value === frag.value)) {
+          requiredFragments.push(frag);
+        }
+        remaining = remaining.slice(frag.value.length);
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      remaining = remaining.slice(1);
+    }
+  }
+
+  // 补充干扰项，凑够 10 个
+  const needed = 10 - requiredFragments.length;
+  if (needed > 0) {
+    const remainingPool = LEVEL4_KANA_POOL.filter(
+      (f) => !requiredFragments.find((rf) => rf.value === f.value)
+    );
+    const shuffled = shuffle(remainingPool);
+    requiredFragments.push(...shuffled.slice(0, needed));
+  }
+
+  return requiredFragments;
+}
+
 // 工厂函数：根据题型决定使用哪种键盘
 export const getKeyboardForQuizType = (
   quizType: QuizType,
@@ -175,7 +224,11 @@ export const getKeyboardForQuizType = (
   if (quizType.endsWith('-to-arabic')) {
     return ARABIC_KEYS;
   }
-  // Level 3 假名答案：动态生成
+  // Level 4 假名答案：动态生成（千位）
+  if (level >= 4 && correctAnswer) {
+    return generateLevel4Keyboard(correctAnswer);
+  }
+  // Level 3 假名答案：动态生成（百位）
   if (level >= 3 && correctAnswer) {
     return generateLevel3Keyboard(correctAnswer);
   }

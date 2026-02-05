@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import styles from './TestAnswer.module.css';
 import { type GameStatus } from '../types';
+import { useTranslation } from 'react-i18next';
 
 interface TestAnswerProps {
   userAnswer: string;
@@ -16,7 +17,8 @@ export const TestAnswer: React.FC<TestAnswerProps> = ({
   status,
   onBackspace,
 }) => {
-  // 🟢 动态字号计算：根据答案长度自动缩小字体，防止溢出
+  const { t } = useTranslation();
+
   const getAssembledTextSizeClass = (text: string) => {
     const len = text.length;
     if (len >= 20) return styles.textTiny;
@@ -38,7 +40,9 @@ export const TestAnswer: React.FC<TestAnswerProps> = ({
       <div className={styles.assemblyArea}>
         <div className={styles.assemblySlots}>
           {userAnswer.length === 0 ? (
-            <span className={styles.assemblyPlaceholder}>点击键盘拼装答案</span>
+            <span className={styles.assemblyPlaceholder}>
+              {t('number_study.numbers.interaction.tap_to_assemble')}
+            </span>
           ) : (
             <motion.span
               className={`

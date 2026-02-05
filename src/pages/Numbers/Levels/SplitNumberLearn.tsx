@@ -299,6 +299,11 @@ export const SplitNumberLearn = ({
   const [isLeftVisible, setIsLeftVisible] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
 
+  // 在组件挂载后设置 hasMounted 为 true
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const currentItem = levelData[currentNum];
   // 🟢 关键：根据 baseUnit 计算索引 (100 或 1000)
   const currentIndex = Math.floor(currentNum / baseUnit);
@@ -317,7 +322,9 @@ export const SplitNumberLearn = ({
     }
   }, [showRomaji, currentNum, hasMounted]);
 
-  const handleKeyClick = async (targetNum: number) => {
+  const handleKeyClick = async (val: string | number) => {
+    const targetNum = Number(val);
+
     if (targetNum === currentNum || isAnimating) return;
 
     setIsAnimating(true);

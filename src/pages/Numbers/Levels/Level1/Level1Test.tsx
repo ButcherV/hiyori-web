@@ -48,7 +48,8 @@ export const Level1Test: React.FC<Level1TestProps> = ({ onMistake }) => {
     setRoundId((prev) => prev + 1);
   }, []);
 
-  const handleKeyClick = (inputNum: number) => {
+  const handleKeyClick = (val: string | number) => {
+    const inputNum = Number(val); // 强制转为数字
     // 锁定逻辑：只有 answering 状态才允许点击
     if (status !== 'answering' || !problem) return;
 

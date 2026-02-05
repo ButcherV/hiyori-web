@@ -280,7 +280,8 @@
         "common_badge": "Main",
         "toast_wrong_title": "Incorrect",
         "toast_wrong_desc": "Answer is {{val}}. Let's review!",
-        "toast_correct_answer_label": "The Correct Answer is: "
+        "toast_correct_answer_label": "The Correct Answer is: ",
+        "tap_to_assemble": "Tap keys to assemble"
       },
       "levels": {
         "lvl1": {

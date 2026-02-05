@@ -285,7 +285,8 @@
         "common_badge": "常用",
         "toast_wrong_title": "回答错误",
         "toast_wrong_desc": "正确答案是 {{val}}。我们复习一下！",
-        "toast_correct_answer_label": "正确答案："
+        "toast_correct_answer_label": "正确答案：",
+        "tap_to_assemble": "点击键盘拼装答案"
       },
       "levels": {
         "lvl1": {

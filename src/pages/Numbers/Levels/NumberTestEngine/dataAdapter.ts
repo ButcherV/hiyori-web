@@ -1,7 +1,7 @@
 import type { NumberDataItem } from './types';
 import { LEVEL_1_DATA } from '../Level1/Level1Data';
 import { LEVEL_3_DATA as SOURCE_LEVEL_3_DATA } from '../Level3/Level3Data';
-import { LEVEL_4_DATA } from '../Level4/Level4Data';
+import { LEVEL_4_DATA as SOURCE_LEVEL_4_DATA } from '../Level4/Level4Data';
 
 // 适配 Level 1 数据 (0-10)
 export function adaptLevel1Data(): Record<number, NumberDataItem> {
@@ -60,7 +60,7 @@ export function adaptLevel3Data(): Record<number, NumberDataItem> {
 export function adaptLevel4Data(): Record<number, NumberDataItem> {
   const adapted: Record<number, NumberDataItem> = {};
 
-  Object.entries(LEVEL_4_DATA).forEach(([numStr, item]) => {
+  Object.entries(SOURCE_LEVEL_4_DATA).forEach(([numStr, item]) => {
     const num = parseInt(numStr, 10);
 
     adapted[num] = {
@@ -324,8 +324,194 @@ function getKanjiForLevel3(
   return result;
 }
 
+// 生成 Level 4 数据 (1000-9999)
+export function generateLevel4Data(): Record<number, NumberDataItem> {
+  const data: Record<number, NumberDataItem> = {};
+
+  // 基础数字假名
+  const kanaDigits = [
+    '',
+    'いち',
+    'に',
+    'さん',
+    'よん',
+    'ご',
+    'ろく',
+    'なな',
+    'はち',
+    'きゅう',
+  ];
+
+  // 千位单位（含音便）
+  const getThousands = (digit: number): { kana: string; kanji: string } => {
+    const kanjiThousands = [
+      '',
+      '一千',
+      '二千',
+      '三千',
+      '四千',
+      '五千',
+      '六千',
+      '七千',
+      '八千',
+      '九千',
+    ];
+
+    switch (digit) {
+      case 0:
+        return { kana: '', kanji: '' };
+      case 1:
+        return { kana: 'せん', kanji: '一千' }; // 1000 省略 いち
+      case 3:
+        return { kana: 'さんぜん', kanji: '三千' }; // 连浊 s→z
+      case 8:
+        return { kana: 'はっせん', kanji: '八千' }; // 促音
+      default:
+        return {
+          kana: `${kanaDigits[digit]}せん`,
+          kanji: kanjiThousands[digit],
+        };
+    }
+  };
+
+  // 百位单位（含音便）- 复用 Level 3 的逻辑
+  const getHundreds = (digit: number): { kana: string; kanji: string } => {
+    const kanjiHundreds = [
+      '',
+      '一百',
+      '二百',
+      '三百',
+      '四百',
+      '五百',
+      '六百',
+      '七百',
+      '八百',
+      '九百',
+    ];
+
+    switch (digit) {
+      case 0:
+        return { kana: '', kanji: '' };
+      case 3:
+        return { kana: 'さんびゃく', kanji: '三百' };
+      case 6:
+        return { kana: 'ろっぴゃく', kanji: '六百' };
+      case 8:
+        return { kana: 'はっぴゃく', kanji: '八百' };
+      default:
+        return {
+          kana: `${kanaDigits[digit]}ひゃく`,
+          kanji: kanjiHundreds[digit],
+        };
+    }
+  };
+
+  // 十位单位
+  const getTens = (digit: number): { kana: string; kanji: string } => {
+    const kanjiTens = [
+      '',
+      '十',
+      '二十',
+      '三十',
+      '四十',
+      '五十',
+      '六十',
+      '七十',
+      '八十',
+      '九十',
+    ];
+
+    switch (digit) {
+      case 0:
+        return { kana: '', kanji: '' };
+      default:
+        return { kana: `${kanaDigits[digit]}じゅう`, kanji: kanjiTens[digit] };
+    }
+  };
+
+  for (let num = 1000; num <= 9999; num++) {
+    const thousands = Math.floor(num / 1000);
+    const hundreds = Math.floor((num % 1000) / 100);
+    const tens = Math.floor((num % 100) / 10);
+    const ones = num % 10;
+
+    const thousandsPart = getThousands(thousands);
+    const hundredsPart = getHundreds(hundreds);
+    const tensPart = getTens(tens);
+    const onesPart = ones === 0 ? '' : kanaDigits[ones];
+
+    // 构建完整假名和汉字
+    const kana =
+      thousandsPart.kana + hundredsPart.kana + tensPart.kana + onesPart;
+    const kanji = getKanjiForLevel4(thousands, hundreds, tens, ones);
+
+    data[num] = {
+      num,
+      kanji,
+      kana,
+      romaji: '',
+      parts: {
+        kanji: [
+          thousandsPart.kanji,
+          hundredsPart.kanji + tensPart.kanji + (onesPart ? '' : ''),
+        ],
+        kana: [
+          thousandsPart.kana,
+          hundredsPart.kana + tensPart.kana + onesPart,
+        ],
+      },
+    };
+  }
+
+  return data;
+}
+
+// 辅助函数：生成 Level 4 的汉字
+function getKanjiForLevel4(
+  thousands: number,
+  hundreds: number,
+  tens: number,
+  ones: number
+): string {
+  const kanjiDigits = [
+    '',
+    '一',
+    '二',
+    '三',
+    '四',
+    '五',
+    '六',
+    '七',
+    '八',
+    '九',
+  ];
+  let result = '';
+
+  // 千位
+  if (thousands > 0) {
+    result += kanjiDigits[thousands] + '千';
+  }
+
+  // 百位
+  if (hundreds > 0) {
+    result += kanjiDigits[hundreds] + '百';
+  }
+
+  // 十位
+  if (tens > 0) {
+    result += kanjiDigits[tens] + '十';
+  }
+
+  // 个位
+  if (ones > 0) {
+    result += kanjiDigits[ones];
+  }
+
+  return result;
+}
+
 // 预生成的数据
 export const LEVEL_1_ADAPTED = adaptLevel1Data();
 export const LEVEL_2_DATA = generateLevel2Data();
 export const LEVEL_3_DATA = generateLevel3Data();
-export const LEVEL_4_ADAPTED = adaptLevel4Data();
+export const LEVEL_4_DATA = generateLevel4Data();
