@@ -5,7 +5,7 @@ import styles from './Level1.module.css';
 import { Level1Learn } from './Level1Learn';
 import { Level1Test } from './Level1Test';
 import { Toast } from '../../../../components/Toast/Toast';
-import { ModeToggleFAB, type LearnMode } from '../ModeToggleFAB';
+import { ModeToggleFAB } from '../ModeToggleFAB';
 
 type Mode = 'learn' | 'test';
 

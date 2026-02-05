@@ -279,7 +279,8 @@
         "roll_hint": "Roll Dice to Start",
         "common_badge": "Main",
         "toast_wrong_title": "Incorrect",
-        "toast_wrong_desc": "Answer is {{val}}. Let's review!"
+        "toast_wrong_desc": "Answer is {{val}}. Let's review!",
+        "toast_correct_answer_label": "The Correct Answer is: "
       },
       "levels": {
         "lvl1": {

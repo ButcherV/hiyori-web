@@ -18,7 +18,7 @@ const Level4Description: React.FC = () => {
       {/* 板块 1: 本课目标 */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
-          <Target size={18} color="#ef4444" />
+          <Target size={18} color="var(--color-error)" />
           <span>{t('number_study.common.goal')}</span>
         </div>
         <div className={styles.sectionContent}>

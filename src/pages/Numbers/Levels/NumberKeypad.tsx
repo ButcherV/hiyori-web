@@ -11,8 +11,8 @@ export type KeypadDisplayMode =
 
 // 自定义键（用于 Level 2/3/4 的片段键盘）
 export interface CustomKey {
-  value: string;    // 实际值（用于拼接答案）
-  label: string;    // 显示文本
+  value: string; // 实际值（用于拼接答案）
+  label: string; // 显示文本
   type?: 'digit' | 'unit' | 'variant';
 }
 
@@ -101,46 +101,59 @@ export const NumberKeypad: React.FC<NumberKeypadProps> = ({
     });
   }, [shuffle, displayMode, customNums, customKeys]);
 
+  // 🟢 核心逻辑：根据内容长度计算字号样式类
+  const getKeySizeClass = (label: string) => {
+    const len = label.length;
+    // 简单判断是否为纯数字（因为数字字体本身比日文窄，所以容忍度更高）
+    const isNumber = /^\d+$/.test(label);
+
+    if (isNumber) {
+      if (len >= 4) return styles.textSmall; // 1000, 2000 -> 15px (数字较窄，Small即可)
+      if (len >= 3) return styles.textMedium; // 100 -> 19px
+      return styles.textLarge; // 1, 10 -> 24px
+    }
+
+    // 针对日文/文字 (假名比较宽，需要更早变小)
+    if (len >= 4) return styles.textTiny; // 极长假名 (如 ろっぴゃく 5字符) -> 12px
+    if (len >= 3) return styles.textSmall; // ひゃく, きゅう -> 15px
+    if (len >= 2) return styles.textMedium; // いち, さん -> 19px
+    return styles.textLarge; // 一, 二 -> 24px
+  };
+
   const row1 = keys.slice(0, layout.splitIdx);
   const row2 = keys.slice(layout.splitIdx);
+
+  // 渲染单个按键的辅助函数
+  const renderKey = (
+    key: { value: number | string; label: string },
+    idx: number
+  ) => (
+    <div
+      key={`k-${key.value}-${idx}`}
+      role="button"
+      className={`
+        ${styles.keyBtn} 
+        ${activeNum === key.value ? styles.keyBtnActive : ''} 
+        ${customKeys || displayMode !== 'arabic' ? 'jaFont' : ''}
+        ${getKeySizeClass(key.label)} /* 🟢 应用动态字号 */
+      `}
+      onClick={() => onKeyClick(key.value)}
+    >
+      {key.label}
+    </div>
+  );
 
   return (
     <div
       className={styles.keyboardArea}
-      // 🟢 注入当前关卡的列数基准
+      // 注入当前关卡的列数基准
       style={{ '--max-cols': layout.maxCols } as React.CSSProperties}
     >
       <div className={styles.keyRow}>
-        {row1.map((key, idx) => (
-          <div
-            key={`k-${key.value}-${idx}`}
-            role="button"
-            className={`
-              ${styles.keyBtn} 
-              ${activeNum === key.value ? styles.keyBtnActive : ''} 
-              ${customKeys || displayMode !== 'arabic' ? 'jaFont' : ''}
-            `}
-            onClick={() => onKeyClick(key.value)}
-          >
-            {key.label}
-          </div>
-        ))}
+        {row1.map((key, idx) => renderKey(key, idx))}
       </div>
       <div className={styles.keyRow}>
-        {row2.map((key, idx) => (
-          <div
-            key={`k-${key.value}-${idx}`}
-            role="button"
-            className={`
-              ${styles.keyBtn} 
-              ${activeNum === key.value ? styles.keyBtnActive : ''} 
-              ${customKeys || displayMode !== 'arabic' ? 'jaFont' : ''}
-            `}
-            onClick={() => onKeyClick(key.value)}
-          >
-            {key.label}
-          </div>
-        ))}
+        {row2.map((key, idx) => renderKey(key, idx))}
       </div>
     </div>
   );

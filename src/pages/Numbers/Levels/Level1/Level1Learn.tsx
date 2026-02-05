@@ -63,10 +63,11 @@ export const Level1Learn: React.FC<Level1LearnProps> = ({ initialNum }) => {
   }, [initialNum, speak]);
 
   // 切换数字
-  const handleKeyClick = (num: number) => {
+  const handleKeyClick = (val: string | number) => {
+    const num = Number(val); // 强制转为数字，消除类型隐患
     setCurrentNum(num);
     setActiveSplitIdx(0);
-    speak(LEVEL_1_DATA[num].readings[0].kana); // 切换数字时自动播放主读音
+    speak(LEVEL_1_DATA[num].readings[0].kana);
   };
 
   // 点击多音字卡片

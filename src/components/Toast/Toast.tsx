@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
@@ -7,7 +7,7 @@ import styles from './Toast.module.css';
 interface ToastProps {
   isVisible: boolean;
   message: string;
-  description?: string;
+  description?: string | ReactNode;
 }
 
 export const Toast: React.FC<ToastProps> = ({

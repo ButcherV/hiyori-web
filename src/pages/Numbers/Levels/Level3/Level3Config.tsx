@@ -3,8 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Target, Lightbulb } from 'lucide-react';
 import styles from '../LevelDescription.module.css';
 
-// 如果 LevelConfig 接口在公共文件中定义了，请改为 import；
-// 这里为了保持文件独立性，参照 Level1Config 暂时保留定义
 export interface LevelConfig {
   id: string;
   labelKey: string;
@@ -20,7 +18,7 @@ const Level3Description: React.FC = () => {
       {/* 板块 1: 本课目标 */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
-          <Target size={18} color="#ef4444" />
+          <Target size={18} color="var(--color-error)" />
           <span>{t('number_study.common.goal')}</span>
         </div>
         <div className={styles.sectionContent}>

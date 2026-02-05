@@ -1,12 +1,7 @@
-// 数据适配器 - 将不同 Level 的数据格式转换为统一的 NumberDataItem
-
 import type { NumberDataItem } from './types';
-import { LEVEL_1_DATA, type NumberLevel1Item } from '../Level1/Level1Data';
-import {
-  LEVEL_3_DATA as SOURCE_LEVEL_3_DATA,
-  type NumberLevel3Item,
-} from '../Level3/Level3Data';
-import { LEVEL_4_DATA, type NumberLevel4Item } from '../Level4/Level4Data';
+import { LEVEL_1_DATA } from '../Level1/Level1Data';
+import { LEVEL_3_DATA as SOURCE_LEVEL_3_DATA } from '../Level3/Level3Data';
+import { LEVEL_4_DATA } from '../Level4/Level4Data';
 
 // 适配 Level 1 数据 (0-10)
 export function adaptLevel1Data(): Record<number, NumberDataItem> {
@@ -332,5 +327,5 @@ function getKanjiForLevel3(
 // 预生成的数据
 export const LEVEL_1_ADAPTED = adaptLevel1Data();
 export const LEVEL_2_DATA = generateLevel2Data();
-export const LEVEL_3_DATA = generateLevel3Data(); // 100-999 完整数据（包含音便）
+export const LEVEL_3_DATA = generateLevel3Data();
 export const LEVEL_4_ADAPTED = adaptLevel4Data();

@@ -223,6 +223,7 @@ const getKeyboardForQuizType = (
 // ============================================================
 // 主组件
 // ============================================================
+export const DEFAULT_NEXT_QUESTION_DELAY = 2800;
 
 export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
   data,
@@ -231,6 +232,7 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
   onMistake,
   onContinue,
   level = 2,
+  nextQuestionDelay = DEFAULT_NEXT_QUESTION_DELAY,
 }) => {
   const { speak } = useTTS();
   const playSound = useSound();
@@ -395,14 +397,19 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
       triggerHaptic('error');
 
       if (currentQuiz) {
-        onMistake(currentQuiz.num, wrongAnswer, currentQuiz.correctAnswer);
+        onMistake(
+          currentQuiz.num,
+          wrongAnswer,
+          currentQuiz.correctAnswer,
+          currentQuiz.type
+        );
       }
 
       // 延迟后自动进入下一题（给 Toast 显示时间）
       setTimeout(() => {
         generateNewQuiz();
         onContinue?.();
-      }, 2000);
+      }, nextQuestionDelay);
     },
     [
       currentQuiz,
@@ -411,6 +418,7 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
       triggerHaptic,
       generateNewQuiz,
       onContinue,
+      nextQuestionDelay,
     ]
   );
 
@@ -473,11 +481,11 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
                   className={`
                     jaFont 
                     ${styles.promptText} 
-                    ${currentQuiz.prompt.length >= 12 ? styles.tinyText : ''}
-                    ${currentQuiz.prompt.length >= 8 ? styles.littleText : ''}
+                    ${currentQuiz.prompt.length >= 11 ? styles.tinyText : ''}
+                    ${currentQuiz.prompt.length >= 7 ? styles.littleText : ''}
                     ${currentQuiz.prompt.length > 4 ? styles.smallText : ''}`}
                 >
-                  {currentQuiz.prompt}
+                  {renderSemanticPrompt(currentQuiz.prompt)}
                 </span>
                 {/* <button
                   className={styles.speakerBtn}
@@ -500,6 +508,43 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
     if (len >= 12) return styles.textSmall; // > 12字符 (长假名)
     if (len >= 8) return styles.textMedium; // > 8字符 (中等)
     return ''; // 默认 28px
+  };
+
+  // 智能语义分词函数
+  // 将长日语字符串切分成 [三千] [六百] [五十] 这样的不换行积木块
+  const renderSemanticPrompt = (text: string) => {
+    // 1. 如果是纯数字或算式，直接返回（不干预）
+    if (/^[\d\s\+\-\.]+$/.test(text)) {
+      return text;
+    }
+
+    // 2. 定义分隔符（单位）：千、百、十、万 及其对应的假名
+    // 注意：捕获组 () 使得 split 后保留分隔符，这对拼接至关重要
+    const delimiters = /([千百十万]|せん|ぜん|ひゃく|びゃく|ぴゃく|じゅう)/;
+
+    // 分割字符串。例如 "さんぜんろっぴゃく" -> ["さん", "ぜん", "ろっ", "ぴゃく", ""]
+    const parts = text.split(delimiters);
+    const chunks: string[] = [];
+
+    // 3. 重新组合：内容 + 分隔符
+    // 逻辑：每次取两个元素，一个是内容，一个是紧跟的单位
+    for (let i = 0; i < parts.length; i += 2) {
+      const content = parts[i];
+      const delimiter = parts[i + 1] || '';
+
+      // 只要有内容或有分隔符，就合并成一个语义块
+      // 比如 "さん" + "ぜん" => "さんぜん" (一个整体)
+      if (content || delimiter) {
+        chunks.push(content + delimiter);
+      }
+    }
+
+    // 4. 渲染成 inline-block 的 span，配合 CSS 禁止内部换行
+    return chunks.map((chunk, idx) => (
+      <span key={idx} className={styles.semanticChunk}>
+        {chunk}
+      </span>
+    ));
   };
 
   // 渲染答案区域（拼装槽）
@@ -584,4 +629,4 @@ export const NumberTestEngine: React.FC<NumberTestEngineProps> = ({
   );
 };
 
-export default NumberTestEngine;
+// export default NumberTestEngine;

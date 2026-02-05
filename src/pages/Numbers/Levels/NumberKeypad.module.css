@@ -38,7 +38,6 @@
 
   /* 3. 字体 */
   color: #475569;
-  font-size: 22px;
   font-weight: 700;
   /* font-family: 'Nunito', 'SF Pro Rounded', sans-serif; */
 
@@ -77,10 +76,29 @@
   box-shadow: none;
 }
 
-/* 日文模式字体调整 */
-.fontJa {
-  font-size: 17px;
+/* 1. 大号：适用于 1 个字符 (如 "1", "一", "9") */
+.textLarge {
+  font-size: 24px;
   font-weight: 700;
+}
+
+/* 2. 中号：适用于 2 个字符 (如 "10", "いち", "よん") */
+.textMedium {
+  font-size: 19px;
+  font-weight: 700; /* 日文稍微细一点点可能更好看，或者保持 700 */
+}
+
+/* 3. 小号：适用于 3 个字符 (如 "100", "きゅう", "ひゃく") */
+.textSmall {
+  font-size: 16px;
+  font-weight: 600; /* 字太小的时候，太粗会糊成一团，稍微减低字重 */
+}
+
+/* 4. 特小号：适用于 4 个及以上字符 (如 "1000", "さんびゃく") */
+.textTiny {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.5px; /* 稍微挤一挤 */
 }
 
 /* 进场动画 */

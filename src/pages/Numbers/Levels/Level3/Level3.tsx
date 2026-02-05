@@ -1,9 +1,12 @@
-// Level 3: 百位学习 (100-999)
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Level3Learn } from './Level3Learn';
-import { NumberTestEngine, LEVEL_3_DATA } from '../NumberTestEngine';
-import { useSettings } from '../../../../context/SettingsContext';
+import {
+  NumberTestEngine,
+  LEVEL_3_DATA,
+  type QuizType,
+  DEFAULT_NEXT_QUESTION_DELAY,
+} from '../NumberTestEngine';
 import { ModeToggleFAB } from '../ModeToggleFAB';
 import { Toast } from '../../../../components/Toast/Toast';
 import styles from './Level3.module.css';
@@ -15,13 +18,17 @@ export const Level3 = () => {
   const [mode, setMode] = useState<Mode>('learn');
 
   // Toast 状态
-  const [toastConfig, setToastConfig] = useState({
+  const [toastConfig, setToastConfig] = useState<{
+    isVisible: boolean;
+    message: string;
+    description: string | ReactNode;
+  }>({
     isVisible: false,
     message: '',
     description: '',
   });
-  const timerRef = useRef<number | null>(null);
 
+  const timerRef = useRef<number | null>(null);
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -33,20 +40,36 @@ export const Level3 = () => {
 
   // 错误处理
   const handleMistake = (
-    targetNum: number,
-    userAnswer: string,
-    correctAnswer: string
+    _targetNum: number,
+    _userAnswer: string,
+    correctAnswer: string,
+    quizType: QuizType
   ) => {
+    // 如果题型是 "xxx-to-arabic"，说明答案是阿拉伯数字，不需要日文字体。
+    // 反之 (to-kana, to-kanji)，答案肯定是日文，需要加 jaFont。
+    const isArabicAnswer = quizType.endsWith('to-arabic');
+
     setToastConfig({
       isVisible: true,
       message: t('number_study.numbers.interaction.toast_wrong_title'),
-      description: `正确答案是：${correctAnswer}`,
+      description: (
+        <span>
+          {t('number_study.numbers.interaction.toast_correct_answer_label')}
+          <span
+            // 如果不是阿拉伯数字，就加上日文字体样式
+            className={!isArabicAnswer ? 'jaFont' : ''}
+            style={{ fontWeight: 'bold', marginLeft: 6, fontSize: '1.1em' }}
+          >
+            {correctAnswer}
+          </span>
+        </span>
+      ),
     });
 
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setToastConfig((prev) => ({ ...prev, isVisible: false }));
-    }, 2000);
+    }, DEFAULT_NEXT_QUESTION_DELAY);
   };
 
   const handleToggleMode = () => {

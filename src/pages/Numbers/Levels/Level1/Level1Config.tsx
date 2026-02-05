@@ -21,7 +21,7 @@ const Level1Description: React.FC = () => {
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
           {/* 使用红色/橙色图标表示目标 */}
-          <Target size={18} color="#ef4444" />
+          <Target size={18} color="var(--color-error)" />
           <span>{t('number_study.common.goal')}</span>
         </div>
         <div className={styles.sectionContent}>

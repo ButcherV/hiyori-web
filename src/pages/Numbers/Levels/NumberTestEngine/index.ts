@@ -1,6 +1,7 @@
-// NumberTestEngine - 通用数字测试引擎
-
-export { NumberTestEngine } from './NumberTestEngine';
+export {
+  NumberTestEngine,
+  DEFAULT_NEXT_QUESTION_DELAY,
+} from './NumberTestEngine';
 export type {
   QuizType,
   NumberDataItem,

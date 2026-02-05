@@ -13,7 +13,6 @@
    ============================================================ */
 
 .gameArea {
-  /* 布局与间距 */
   margin-top: 12px;
   margin-bottom: 24px;
   flex: 1; /* 占据剩余空间 */
@@ -45,7 +44,7 @@
   overflow: hidden;
 }
 
-/* 🟢 装饰：背景点阵纹理 (类似 Level 1) */
+/* 装饰：背景点阵纹理 (类似 Level 1) */
 .gameArea::before {
   content: '';
   position: absolute;
@@ -97,7 +96,6 @@
   color: #334155; /* Slate-700 */
   line-height: 1.1;
   text-align: center;
-  font-family: var(--font-family-ja); /* 确保日文字体 */
 
   /* 浮起效果：下方深色阴影 + 上方白色高光 */
   text-shadow:
@@ -105,6 +103,19 @@
     0 1px 0 rgba(255, 255, 255, 1);
 
   transition: transform 0.2s;
+
+  display: flex;
+  flex-wrap: wrap; /* 允许换行 */
+  justify-content: center;
+  gap: 2px; /* 块之间留一点微小的缝隙，防止粘连 */
+  word-break: normal; /* 移除之前的 break-all，防止暴力截断 */
+}
+
+/* 语义积木块：核心是 inline-block 和 nowrap */
+/* 这让 [さんぜん] 作为一个整体，要么都在这一行，要么都去下一行 */
+.semanticChunk {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 /* 动态字号调整 */
@@ -233,7 +244,7 @@
 
   /* 视觉核心：白色背景 + 极其细腻的阴影 */
   background: #ffffff;
-  border-radius: 16px; /* 更圆润 */
+  border-radius: 12px; /* 更圆润 */
 
   /* 边框：平时是淡灰色，不要虚线 */
   border: 2px solid #e2e8f0;
@@ -328,7 +339,7 @@
   opacity: 0.3;
   cursor: not-allowed;
   border-bottom-width: 1px; /* 禁用时拍扁 */
-  transform: translateY(2px);
+  /* transform: translateY(2px); */
 }
 
 /* 3. 进度条：胶囊化 + 渐变 */
@@ -412,7 +423,7 @@
 /* 键盘区域 (微调间距) */
 .keyboardContainer {
   flex-shrink: 0;
-  padding-top: 24px; /* 增加与上方答案区的距离 */
+  padding-top: 16px;
 }
 
 .disabledKeyboard {
