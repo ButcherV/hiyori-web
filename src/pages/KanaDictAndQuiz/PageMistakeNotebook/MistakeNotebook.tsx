@@ -190,14 +190,14 @@ export const MistakeNotebook = () => {
         <div className={styles.navBar}>
           <div className={styles.headerLeft}>
             <button onClick={() => navigate('/')} className={styles.iconBtn}>
-              <ChevronLeft size={24} color="var(--color-Blue)" />
+              <ChevronLeft size={24} color="white" />
             </button>
             <div className={styles.title}>
               <span>{t('mistake_notebook.title')}</span>
               <button
                 onClick={() => setIsHelpOpen(true)}
                 className={styles.iconBtn}
-                style={{ color: 'var(--color-Gray6)' }}
+                style={{ color: 'white' }}
               >
                 <HelpCircle size={20} />
               </button>

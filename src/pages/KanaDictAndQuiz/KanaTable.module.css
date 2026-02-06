@@ -1,20 +1,11 @@
-/* 表格组件的容器 */
 .container {
-  --header-height: 149px;
-  --section-header-height: 32px;
-  /* --sticky-top: calc(
-    env(safe-area-inset-top) + var(--header-height) +
-      var(--section-header-height) - 2px
-  ); */
-  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，
-    在浏览器端是正常的。打包进 IOS 就不正常了。 IOS 端总是计算误差 1-2px*/
-  --sticky-top: calc(env(safe-area-inset-top) + var(--header-height) - 2px);
+  /* 移除之前复杂的 sticky-top 和 calc */
+  /* 之前的 --sticky-top 已作废 */
 
-  /* 第一列是 32px (给侧边行头留位置)，后面 5 列平分 */
   --grid-5col: 32px repeat(5, 1fr);
   --grid-3col: 32px repeat(3, 1fr);
-
   --gap-size: 6px;
+
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -28,8 +19,9 @@
   grid-template-columns: var(--grid-5col);
   gap: 4px;
 
+  /* Sticky Level 2: 贴在 SectionHeader (36px) 下方 */
   position: sticky;
-  top: var(--sticky-top);
+  top: 48px; /* 对应 KanaBoard.module.css 里的 --section-header-height */
   z-index: 10;
 
   background-color: var(--color-bg);
@@ -46,14 +38,31 @@
   text-transform: uppercase;
 }
 
-/* --- 表格主体 --- */
+/* --- 拗音表头 --- */
+.headerRow3Col {
+  display: grid;
+  grid-template-columns: var(--grid-3col);
+  gap: 4px;
+
+  /* Sticky Level 2 */
+  position: sticky;
+  top: 48px;
+  z-index: 10;
+
+  background-color: var(--color-bg);
+  padding-bottom: 8px;
+  padding-top: 4px;
+  margin-bottom: 4px;
+  padding-right: 12px;
+}
+
+/* --- 以下样式保持不变 --- */
 .tableBody {
   display: flex;
   flex-direction: column;
   gap: var(--gap-size);
 }
 
-/* 每一行 */
 .row {
   display: grid;
   grid-template-columns: var(--grid-5col);
@@ -61,7 +70,6 @@
   align-items: center;
 }
 
-/* 侧边行头 (A, Ka, Sa...) */
 .rowHeader {
   font-size: 14px;
   font-weight: 700;
@@ -69,9 +77,8 @@
   text-align: center;
 }
 
-/* --- 单元格 --- */
 .cell {
-  aspect-ratio: 1; /* 保持正方形 */
+  aspect-ratio: 1;
   background: white;
   border-radius: 12px;
   display: flex;
@@ -79,7 +86,6 @@
   align-items: center;
   justify-content: center;
   position: relative;
-
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
   border: 1px solid white;
   cursor: pointer;
@@ -92,20 +98,11 @@
 }
 
 .disabledCell {
-  /* 1. 调整透明度：因为模糊会分散像素，太透明就看不清了，建议调高一点 */
   opacity: 0.6;
-
-  /* 2. 核心滤镜：灰度(100%) + 高斯模糊(2px) */
-  /* blur(2px) 是比较合适的“失焦感”，太大就彻底看不清了 */
   filter: grayscale(1) blur(2px);
-
-  /* 3. 背景色：稍微加深一点，增强“毛玻璃”的实体感 */
   background-color: #e5e5ea;
-
   cursor: not-allowed;
   color: #8e8e93;
-
-  /* 4. 增加过渡：让它变灰、变模糊的过程丝滑一点 */
   transition: all 0.3s ease;
 }
 
@@ -119,7 +116,6 @@
   aspect-ratio: 1;
 }
 
-/* 主假名 */
 .mainChar {
   font-size: 24px;
   font-weight: 800;
@@ -128,16 +124,12 @@
   display: inline-block;
 }
 
-/* 罗马音 */
 .romaji {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-Blue);
-  /* opacity: 0.8; */
-  /* margin-top: 2px; */
 }
 
-/* 对照小字 */
 .subChar {
   font-size: 14px;
   font-weight: 800;
@@ -146,37 +138,16 @@
   margin-left: 2px;
 }
 
-/* 🔥 新增：3 列布局的表头 (用于拗音) */
-/* 40px 是行头，后面 3 列平分 */
-.headerRow3Col {
-  display: grid;
-  grid-template-columns: var(--grid-3col);
-  gap: 4px;
-
-  position: sticky;
-  top: var(--sticky-top);
-  z-index: 10;
-
-  background-color: var(--color-bg);
-  padding-bottom: 8px;
-  padding-top: 4px;
-  margin-bottom: 4px;
-  padding-right: 12px;
-}
-
-/* 3 列布局的行 (用于拗音) */
 .row3Col {
   display: grid;
   grid-template-columns: var(--grid-3col);
   gap: var(--gap-size);
   align-items: center;
-
-  .cell {
-    aspect-ratio: 2.4/1.4;
-  }
+}
+.row3Col .cell {
+  aspect-ratio: 2.4/1.4;
 }
 
-/* 选中态 (Selected) - 必须放在最后以覆盖上面的颜色 */
 .selectedCell {
   background-color: var(--color-Blue);
   border-color: var(--color-Blue);
@@ -189,34 +160,24 @@
   color: white !important;
 }
 
-/* 生疏/错题 (Weak) - 红色背景 */
 .cellWeak {
   background-color: var(--color-weak-bg);
   border-color: var(--color-weak-border);
-
-  .mainChar,
-  .romaji {
-    color: var(--color-weak-text);
-  }
+}
+.cellWeak .mainChar,
+.cellWeak .romaji {
+  color: var(--color-weak-text);
 }
 
-/*  已掌握 (Mastered) - 绿色背景 */
 .cellMastered {
   background-color: var(--color-mastered-bg);
   border-color: var(--color-mastered-border);
-
-  .mainChar,
-  .romaji {
-    color: var(--color-mastered-text);
-  }
+}
+.cellMastered .mainChar,
+.cellMastered .romaji {
+  color: var(--color-mastered-text);
 }
 
-/* =================================================================
-   皇冠样式 (Perfect)
-   特征：金色渐变背景 + 金色边框 + 外部光晕 + 内部扫光动画
-================================================================= */
-
-/* 扫光动画关键帧 */
 @keyframes shineEffect {
   0% {
     left: -100%;
@@ -226,74 +187,61 @@
     opacity: 0.1;
   }
   50% {
-    opacity: 0.6; /* 最亮的时候 */
+    opacity: 0.6;
   }
   100% {
-    left: 200%; /* 扫出屏幕外 */
+    left: 200%;
     opacity: 0;
   }
 }
 
-/* --- 定义【常态】下的流光金样式 --- */
-/* 注意：这里只写 .cellPerfect，不要加 .selectedCell */
 .cellPerfect {
   background: linear-gradient(
     135deg,
     var(--color-perfect-bg-start) 0%,
     var(--color-perfect-bg-end) 100%
   );
-
   border: 1px solid var(--color-perfect-border);
   color: var(--color-perfect-text);
   box-shadow: 0 4px 12px var(--color-perfect-shadow);
-
   position: relative;
-  overflow: hidden; /* 防止扫光出界 */
-
-  .romaji,
-  .mainChar {
-    color: var(--color-perfect-text-sub);
-    /* opacity: 0.8; */
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    transform: skewX(-25deg);
-    animation: shineEffect 2.4s infinite ease-in-out;
-    pointer-events: none;
-  }
+  overflow: hidden;
 }
 
-/* --- 定义【选中态】的特殊逻辑（同步补丁） --- */
-/* 当格子既是 Perfect 又是 Selected 时 */
+.cellPerfect .romaji,
+.cellPerfect .mainChar {
+  color: var(--color-perfect-text-sub);
+}
+
+.cellPerfect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: shineEffect 2.4s infinite ease-in-out;
+  pointer-events: none;
+}
+
 .selectedCell.cellPerfect {
-  /* 强制变回蓝色背景，覆盖掉上面的金色渐变 */
   background: var(--color-Blue);
   border-color: var(--color-Blue);
   box-shadow: none;
   color: white;
-
-  .romaji,
-  .subChar {
-    color: white !important;
-    opacity: 1;
-  }
-
-  /* 关键：把流光“隐身”，而不是移除。
-     这样动画时间轴还在后台跑，取消选中时才能无缝衔接。 */
-  &::before {
-    visibility: hidden;
-  }
+}
+.selectedCell.cellPerfect .romaji,
+.selectedCell.cellPerfect .subChar {
+  color: white !important;
+  opacity: 1;
+}
+.selectedCell.cellPerfect::before {
+  visibility: hidden;
 }

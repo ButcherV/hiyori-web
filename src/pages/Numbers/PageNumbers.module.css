@@ -6,7 +6,7 @@
   /* background: linear-gradient(180deg, #f9f9fb 0%, #ffffff 100%); */
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
+  background: var(--gradient-header);
 }
 
 /* === Layer 1: 系统栏 === */
@@ -141,6 +141,7 @@
   background-color: white;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  box-shadow: var(--shadow-header);
 }
 
 /* Sheet Styles */

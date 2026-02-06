@@ -1,44 +1,42 @@
 .container {
-  min-height: 100vh;
+  /* 1. 占满屏幕，禁止 Body 滚动 */
+  height: 100dvh;
+  width: 100%;
   background-color: var(--color-bg);
-  padding-bottom: calc(32px + env(safe-area-inset-bottom));
-  --header-height: 149px;
-  --section-header-height: 32px;
-  background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* 定义高度变量供内部计算 (不再用于复杂的 calc) */
+  --section-header-height: 48px;
 }
 
 .selectionModeContainer {
-  /* 让底部留出更多空间给悬浮 Footer 
-     计算公式参考：Footer高度(约80px~140px) + 安全距离 
-  */
-  padding-bottom: calc(160px + env(safe-area-inset-bottom));
+  /* 选择模式下可能需要特殊处理，暂时保留钩子 */
 }
 
-/* --- 顶部导航栏 (Page Sticky Header) --- */
-
-.stickyHeader {
-  padding-top: calc(env(safe-area-inset-top) + 24px);
-  /* position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+/* --- 固定头部区域 (Fixed Header + Tabs) --- */
+.fixedHeaderArea {
+  flex-shrink: 0; /* 防止被压缩 */
   z-index: 20;
-  background-color: var(--color-bg);
-  height: var(--header-height); */
-}
-
-.stickyHeaderCol {
-  padding: 0 16px 16px 12px;
-  /* 视觉上左右对齐 */
+  background: var(--color-bg);
+  /* 可选：给头部加个阴影，标示层级 */
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
+  flex-direction: column;
+
+  /* 适配刘海屏顶部 */
+  padding-top: env(safe-area-inset-top);
+  /* 渐变背景移到这里，或者由 .container 透传 */
+  background: var(--gradient-header);
 }
 
-.stickyHeaderCol2 {
-  padding: 16px;
-  background-color: var(--color-bg);
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 12px;
+  padding-top: calc(env(safe-area-inset-top) + 24px);
 }
 
 .headerLeft {
@@ -55,13 +53,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--color-Blue);
+  color: white; /* 渐变背景上用白色文字更好看，或者维持 var(--color-Blue) */
 }
 
 .pageTitle {
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-Gray9);
+  color: white;
 }
 
 .headerRight {
@@ -72,42 +70,64 @@
 
 .romajiLabel {
   font-size: 13px;
-  color: var(--color-Gray7);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
 }
 
-/* --- Content Area --- */
-.content {
+/* Tab 区域背景需还原为白色/浅色，衔接下方的列表 */
+.tabRow {
+  background-color: var(--color-bg);
+  padding: 12px 16px;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
-  padding: 16px 8px;
-  background-color: var(--color-bg);
-  /* padding-top: calc(env(safe-area-inset-top) + var(--header-height)); */
+  box-shadow: var(--shadow-header);
 }
 
-/* --- Sections --- */
+/* --- 滚动区域 (Scroll Area) --- */
+.scrollArea {
+  flex: 1; /* 填满剩余空间 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
+
+  padding: 0 8px;
+  /* 底部留白，适配 Safe Area 和 Footer */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+
+  position: relative;
+  background-color: var(--color-bg);
+}
+
+/* 选择模式下底部留更多空给 Footer */
+.selectionModeContainer .scrollArea {
+  padding-bottom: calc(140px + env(safe-area-inset-bottom));
+}
+
+/* --- 章节标题 (Sticky Level 1) --- */
 .sectionsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
+  /* padding-top: 8px; */
 }
 
 .sectionHeader {
+  /* 关键：Sticky 定位 */
+  position: sticky;
+  top: 0;
+  z-index: 15;
+
+  /* height: var(--section-header-height); */
+  line-height: var(--section-header-height);
+
+  background-color: var(--color-bg); /* 必须不透明，挡住后面滚上来的内容 */
+  /* backdrop-filter: blur(8px); */ /* 可选：毛玻璃 */
+
   font-size: 16px;
+  font-weight: 700;
   color: var(--color-Gray7);
-  padding-bottom: 12px;
-  margin-left: 4px;
+  /* padding-left: 4px; */
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 600;
-  width: 100%;
-  /* position: sticky;
-  left: 0;
-  right: 0; */
   text-align: center;
-  z-index: 15;
-  height: var(--section-header-height);
-  background-color: var(--color-bg);
-  /* top: calc(env(safe-area-inset-top) + var(--header-height) - 2px); */
-  /* 打包进 IOS，像素计算因为分辨率总有误差。比如命名设置了 149px，在浏览器端是正常的。打包进 IOS 就不正常了。 */
 }

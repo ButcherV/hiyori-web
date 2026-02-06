@@ -17,32 +17,24 @@ import styles from './KanaBoard.module.css';
 import { type ProficiencyStatus } from './PageKanaQuiz/quizLogic';
 
 interface KanaBoardProps {
-  // --- 状态 ---
+  // ... (Props 保持不变)
   activeTab: 'hiragana' | 'katakana';
-  showRomaji: boolean; // 用于控制表格内显示
+  showRomaji: boolean;
   tabOptions: { id: string; label: string | React.ReactNode }[];
-
   title: string;
-  romajiLabel?: string; // 变为可选，因为可能被 headerRight 覆盖
+  romajiLabel?: string;
   seionTitle: string;
   dakuonTitle: string;
   yoonTitle: string;
-
-  // --- 事件 ---
   onBackClick: () => void;
   onTabChange: (id: 'hiragana' | 'katakana') => void;
-  onToggleRomaji?: () => void; // 变为可选
+  onToggleRomaji?: () => void;
   onItemClick: (data: any) => void;
-
-  // --- 透传给 KanaTable 的选择属性 ---
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
-
-  // --- 插槽 (Slots) ---
-  headerRight?: React.ReactNode; // 自定义右上角区域
-  footer?: React.ReactNode; // 自定义底部区域
+  headerRight?: React.ReactNode;
+  footer?: React.ReactNode;
   proficiencyMap?: Record<string, ProficiencyStatus>;
-
   disabledIds?: Set<string>;
   onDisabledItemClick?: () => void;
 }
@@ -72,9 +64,10 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
     <div
       className={`${styles.container} ${isSelectionMode ? styles.selectionModeContainer : ''}`}
     >
-      {/* 顶部固定 Header */}
-      <div className={styles.stickyHeader}>
-        <div className={styles.stickyHeaderCol}>
+      {/* 1. 固定头部区域：包含导航栏 + Tabs */}
+      <div className={styles.fixedHeaderArea}>
+        {/* Row 1: 导航 */}
+        <div className={styles.navRow}>
           <div className={styles.headerLeft}>
             <button className={styles.backBtn} onClick={onBackClick}>
               <ChevronLeft size={24} strokeWidth={2.5} />
@@ -82,7 +75,6 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <span className={styles.pageTitle}>{title}</span>
           </div>
 
-          {/* 如果有 headerRight 插槽，就渲染插槽；否则渲染默认的 Switch */}
           {headerRight ? (
             <div className={styles.headerRight}>{headerRight}</div>
           ) : (
@@ -94,21 +86,21 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             </div>
           )}
         </div>
+
+        {/* Row 2: Tabs (现在也固定在顶部了，不随内容滚动) */}
+        <div className={styles.tabRow}>
+          <CategoryTabs
+            options={tabOptions as any}
+            activeId={activeTab}
+            onChange={(id) => onTabChange(id as 'hiragana' | 'katakana')}
+          />
+        </div>
       </div>
 
-      {/* 内容区域 */}
-      <div className={styles.content}>
-        <div className={styles.stickyHeaderCol2}>
-          <div className={styles.tabWrapper}>
-            <CategoryTabs
-              options={tabOptions as any}
-              activeId={activeTab}
-              onChange={(id) => onTabChange(id as 'hiragana' | 'katakana')}
-            />
-          </div>
-        </div>
+      {/* 2. 滚动区域：包含 Sections */}
+      <div className={styles.scrollArea}>
         <div className={styles.sectionsWrapper}>
-          {/* 1. 清音 */}
+          {/* Section 1: 清音 */}
           <section>
             <h2 className={styles.sectionHeader}>{seionTitle}</h2>
             <KanaTable
@@ -118,7 +110,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={SEION_ROWS}
               rowHeaders={SEION_ROW_HEADERS}
               colHeaders={SEION_COL_HEADERS}
-              isSelectionMode={isSelectionMode} // 透传选择状态
+              isSelectionMode={isSelectionMode}
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
               disabledIds={disabledIds}
@@ -126,7 +118,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             />
           </section>
 
-          {/* 2. 浊音 */}
+          {/* Section 2: 浊音 */}
           <section>
             <h2 className={styles.sectionHeader}>{dakuonTitle}</h2>
             <KanaTable
@@ -136,7 +128,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={DAKUON_ROWS}
               rowHeaders={DAKUON_ROW_HEADERS}
               colHeaders={SEION_COL_HEADERS}
-              isSelectionMode={isSelectionMode} // 透传选择状态
+              isSelectionMode={isSelectionMode}
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
               disabledIds={disabledIds}
@@ -144,7 +136,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             />
           </section>
 
-          {/* 3. 拗音 */}
+          {/* Section 3: 拗音 */}
           <section>
             <h2 className={styles.sectionHeader}>{yoonTitle}</h2>
             <KanaTable
@@ -154,7 +146,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
               rows={YOON_ROWS}
               rowHeaders={YOON_ROW_HEADERS}
               colHeaders={YOON_COL_HEADERS}
-              isSelectionMode={isSelectionMode} // 透传选择状态
+              isSelectionMode={isSelectionMode}
               selectedIds={selectedIds}
               proficiencyMap={proficiencyMap}
               disabledIds={disabledIds}
@@ -164,7 +156,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
         </div>
       </div>
 
-      {/* 渲染底部插槽 (Footer) */}
+      {/* 3. 悬浮 Footer (绝对定位/Fixed在底部) */}
       {footer}
     </div>
   );

@@ -6,13 +6,13 @@
 }
 
 .headerWrapper {
-  background-color: white;
+  background: var(--gradient-header);
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
 }
 
 .navBar {
@@ -40,7 +40,7 @@
 .title {
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-Gray9);
+  color: white;
   display: flex;
   align-items: center;
   /* gap: 2px; */
@@ -74,6 +74,10 @@
 
 .tabBar {
   padding: 16px;
+  background-color: var(--color-bg);
+  box-shadow: var(--shadow-header);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
 
 .listArea {
