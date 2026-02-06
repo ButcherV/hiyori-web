@@ -1,30 +1,38 @@
+/* src/pages/Dates/DatesPage.module.css */
+
 .container {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f2f2f7;
+  background-color: #f2f2f7; /* iOS 风格底色 */
   font-family: var(--font-family-ja, sans-serif);
-  overflow: hidden; /* 防止页面整体滚动 */
-  font-feature-settings: 'palt';
+  overflow: hidden;
+  /* 解决 iOS 字体自动放大问题 */
+  text-size-adjust: 100%;
 }
 
-/* --- Top Area (Header + Tabs) --- */
+/* --- 1. 顶部 Header + Tab --- */
 .topArea {
   background-color: #fff;
+  padding-top: max(12px, env(safe-area-inset-top));
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 16px; /* 减小内边距 */
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 44px;
 }
 
 .headerTitle {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: #1c1c1e;
 }
@@ -35,309 +43,239 @@
   padding: 8px;
   color: #007aff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Tabs / Segmented Control */
+/* 分段控制器 */
 .tabsContainer {
   padding: 0 16px;
 }
 
 .segmentedControl {
   display: flex;
-  background-color: #7676801f; /* iOS 风格浅灰背景 */
+  background-color: #e5e5ea;
   border-radius: 9px;
   padding: 2px;
   height: 32px;
 }
 
-.tabBtn {
+.segmentBtn {
   flex: 1;
-  background: none;
   border: none;
-  border-radius: 7px;
+  background: none;
   font-size: 13px;
   font-weight: 500;
-  color: #1c1c1e;
+  color: #000;
+  border-radius: 7px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.tabActive {
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.segmentActive {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   font-weight: 600;
 }
 
-/* --- A. Compact Stage (紧凑型舞台 - 左右布局) --- */
-.stage {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* 整体居中 */
-  gap: 24px; /* 左右间距 */
-
-  padding: 16px 24px;
-  background-color: #fff;
+/* --- 2. 🟢 Hero 展示区 (核心优化) --- */
+.heroSection {
+  background: #fff;
+  margin: 16px 16px 0; /* 悬浮卡片感 */
+  padding: 20px 0;
+  border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  position: relative;
-  z-index: 5;
-}
-
-/* 左侧大数字 */
-.stageLeft {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 80px; /* 固定宽度防止抖动 */
+  justify-content: space-between; /* 箭头靠边，内容居中 */
+  min-height: 140px;
+  position: relative;
 }
 
-.mainNumber {
-  font-size: 64px; /* 稍微缩小一点 */
-  font-weight: 800;
-  line-height: 1;
-  color: #1c1c1e;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -2px;
-}
-
-/* 右侧信息堆叠 */
-.stageRight {
+.heroContent {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 左对齐 */
-  gap: 4px;
-  min-width: 120px;
-}
-
-.kana {
-  font-size: 28px;
-  font-weight: 700;
-  color: #007aff;
-  line-height: 1.1;
-}
-
-.warnText {
-  color: #ff3b30;
-}
-
-.subInfo {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.kanji {
-  font-size: 15px;
-  color: #8e8e93;
-  font-weight: 600;
-}
-
-.romaji {
-  font-size: 14px;
-  color: #aeaeb2;
-  font-weight: 500;
-}
-
-/* 进度点 (现在在右侧下方) */
-.dotsRow {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #e5e5ea;
-  transition: all 0.2s;
-}
-
-.dotActive {
-  background-color: #007aff;
-  transform: scale(1.3);
-}
-
-.dotFinished {
-  background-color: #8ebfff; /* 读过的点稍微淡一点 */
-}
-
-/* --- B. Scrollable Area --- */
-.scrollArea {
-  flex: 1; /* 占据剩余所有空间 */
-  overflow-y: auto; /* 允许滚动 */
-  -webkit-overflow-scrolling: touch;
-  padding-top: 20px;
-  padding-bottom: 100px; /* 底部给悬浮栏留出足够空间 */
-}
-
-.gridContainer {
-  padding: 0 20px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.weekHeader {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
+  align-items: center;
   text-align: center;
 }
 
-.weekDay {
-  font-size: 11px;
-  font-weight: 600;
-  color: #aeaeb2;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px; /* 稍微加大间距 */
-}
-
-.cell {
-  aspect-ratio: 1;
-  border: none;
-  background-color: white;
-  border-radius: 12px; /* 更圆润 */
-  font-size: 16px;
-  font-weight: 600;
+.heroKanji {
+  font-size: 42px;
+  font-weight: 800;
   color: #1c1c1e;
-  position: relative;
+  line-height: 1.2;
+}
+
+.heroKana {
+  font-size: 24px;
+  font-weight: 600;
+  color: #8e8e93;
+  margin-top: 4px;
+}
+
+.heroKanaIrregular {
+  color: #ff3b30; /* 特殊读音标红 */
+}
+
+.heroRomaji {
+  font-size: 14px;
+  font-weight: 500;
+  color: #aeaeb2;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 左右切换箭头 */
+.navArrow {
+  background: none;
+  border: none;
+  padding: 20px;
+  color: #c7c7cc;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
   display: flex;
   align-items: center;
+  transition: color 0.2s;
+}
+.navArrow:active {
+  color: #007aff;
+}
+.navArrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* --- 3. 内容网格区 --- */
+.contentArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 120px; /* 底部留白给播放器 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7列日历布局 */
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.dayCell {
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: 12px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.1s;
+  cursor: pointer;
 }
 
-.cell:active {
-  transform: scale(0.92);
-  background-color: #f2f2f7;
+.dayCell:active {
+  transform: scale(0.95);
 }
 
-.cellIrregular {
-  background-color: #fff0eb;
-  color: #ff3b30;
+.dayNumber {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1c1c1e;
 }
 
 .irregularDot {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+  width: 5px;
+  height: 5px;
   background-color: #ff3b30;
-  opacity: 0.6;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 8px; /* 固定在底部 */
 }
 
+/* 选中态 */
 .cellActive {
-  background-color: #007aff !important;
-  color: white !important;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
-  transform: scale(1.1);
+  background: #007aff !important;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+  transform: scale(1.05);
   z-index: 2;
 }
-
+.cellActive .dayNumber {
+  color: #fff;
+}
 .cellActive .irregularDot {
-  background-color: white;
-  opacity: 1;
+  background-color: #fff;
 }
 
-.placeholder {
-  text-align: center;
-  color: #8e8e93;
-  margin-top: 40px;
+/* 难点高亮 (未选中时) */
+.cellIrregular {
+  /* 可以给难点加个浅红背景，或者只靠圆点 */
+  /* background-color: #fff5f5; */
 }
 
-/* --- C. Floating Controller (悬浮控制栏) --- */
+/* --- 4. 底部控制器 (悬浮胶囊) --- */
 .controller {
-  position: absolute;
-  bottom: 32px; /* 距离底部有距离，形成悬浮感 */
+  position: fixed;
+  bottom: 34px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  pointer-events: none; /* 让点击穿透空白区域 */
-  z-index: 20;
+  pointer-events: none;
+  z-index: 50;
 }
 
 .controllerInner {
-  pointer-events: auto; /* 按钮恢复点击 */
-  background: rgba(255, 255, 255, 0.9); /* 半透明磨砂 */
+  pointer-events: auto;
+  background: rgba(28, 28, 30, 0.85); /* 深色磨砂 */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 8px 24px;
-  border-radius: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-
+  padding: 6px 8px 6px 20px; /* 右侧因为有播放按钮大圆，padding调小一点 */
+  border-radius: 44px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  margin-left: 8px; /* 与左侧文字拉开距离 */
 }
 
 .ctrlBtn {
   background: none;
   border: none;
-  color: #8e8e93;
   padding: 8px;
-  position: relative;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   display: flex;
   align-items: center;
 }
-
 .ctrlActive {
-  color: #007aff;
-}
-
-.loopBadge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  font-size: 8px;
-  font-weight: 800;
-  background: #007aff;
-  color: white;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.playBtn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: #007aff;
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-
-.playBtn:active {
-  transform: scale(0.95);
-}
-
-.playIconOffset {
-  margin-left: 3px;
+  color: #fff;
 }
 
 .progressText {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #8e8e93;
-  width: 50px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum'; /* 等宽数字 */
+  min-width: 50px;
 }

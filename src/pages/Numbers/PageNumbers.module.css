@@ -6,6 +6,7 @@
   /* background: linear-gradient(180deg, #f9f9fb 0%, #ffffff 100%); */
   position: relative;
   overflow: hidden;
+  background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
 }
 
 /* === Layer 1: 系统栏 === */
@@ -18,7 +19,7 @@
   padding-left: 12px;
   padding-top: calc(env(safe-area-inset-top) + 24px);
   z-index: 50;
-  background-color: white;
+  /* background-color: white; */
   /* 增加磨砂感 */
   /* background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px); */
@@ -37,7 +38,7 @@
 .headerTitle {
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-Gray9);
+  color: white;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64,8 +65,8 @@
 .levelNavWrapper {
   flex-shrink: 0;
   padding: 0 0 16px 0;
-  background: white;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* background: white; */
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
 }
 
 .levelNav {
@@ -137,6 +138,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
 
 /* Sheet Styles */
@@ -153,7 +157,7 @@
   cursor: pointer;
 
   /* 具体的视觉样式 */
-  color: var(--color-Blue);
+  color: white;
   background-color: rgba(59, 130, 246, 0.1);
   border-radius: 8px;
   width: 36px;

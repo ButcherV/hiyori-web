@@ -83,14 +83,14 @@ export const PageNumbers = () => {
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
           <button className={styles.iconBtn} onClick={() => navigate('/')}>
-            <ChevronLeft size={24} color="var(--color-Blue)" />
+            <ChevronLeft size={24} color="white" />
           </button>
           <div className={styles.titleWrapper}>
             <span className={styles.headerTitle}>{pageTitle}</span>
             <button
               onClick={() => setInfoOpen(true)}
               className={styles.iconBtn}
-              style={{ color: 'var(--color-Gray6)' }}
+              style={{ color: 'white' }}
             >
               <HelpCircle size={20} />
             </button>

@@ -94,6 +94,10 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             </div>
           )}
         </div>
+      </div>
+
+      {/* 内容区域 */}
+      <div className={styles.content}>
         <div className={styles.stickyHeaderCol2}>
           <div className={styles.tabWrapper}>
             <CategoryTabs
@@ -103,10 +107,6 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             />
           </div>
         </div>
-      </div>
-
-      {/* 内容区域 */}
-      <div className={styles.content}>
         <div className={styles.sectionsWrapper}>
           {/* 1. 清音 */}
           <section>

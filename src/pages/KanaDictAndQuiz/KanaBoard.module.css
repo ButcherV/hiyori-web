@@ -4,6 +4,7 @@
   padding-bottom: calc(32px + env(safe-area-inset-bottom));
   --header-height: 149px;
   --section-header-height: 32px;
+  background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
 }
 
 .selectionModeContainer {
@@ -17,13 +18,13 @@
 
 .stickyHeader {
   padding-top: calc(env(safe-area-inset-top) + 24px);
-  position: fixed;
+  /* position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 20;
   background-color: var(--color-bg);
-  height: var(--header-height);
+  height: var(--header-height); */
 }
 
 .stickyHeaderCol {
@@ -32,7 +33,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
 }
 
 .stickyHeaderCol2 {
@@ -77,8 +78,11 @@
 
 /* --- Content Area --- */
 .content {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   padding: 16px 8px;
-  padding-top: calc(env(safe-area-inset-top) + var(--header-height));
+  background-color: var(--color-bg);
+  /* padding-top: calc(env(safe-area-inset-top) + var(--header-height)); */
 }
 
 /* --- Sections --- */
