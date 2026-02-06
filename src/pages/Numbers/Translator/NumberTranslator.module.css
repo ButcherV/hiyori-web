@@ -1,11 +1,9 @@
-/* src/pages/Numbers/Translator/NumberTranslator.module.css */
-
 .container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-app);
+  background: var(--gradient-header-1);
   position: relative;
 }
 
@@ -15,9 +13,8 @@
   display: flex;
   align-items: center;
   padding: 16px;
-  padding-left: 12px;
+  /* padding-left: 12px; */
   padding-top: calc(env(safe-area-inset-top) + 24px);
-  background: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -27,7 +24,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: var(--color-Blue);
+  color: white;
 }
 
 .title {
@@ -35,6 +32,8 @@
   font-weight: 700;
   flex: 1;
   text-align: left;
+  color: white;
+  margin-left: 8px;
 }
 
 .headerPlaceholder {

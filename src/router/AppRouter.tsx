@@ -10,9 +10,10 @@ import { KanaQuizSelectionPage } from '../pages/KanaDictAndQuiz/PageKanaQuiz/Kan
 import { PageQuizSession } from '../pages/KanaDictAndQuiz/PageKanaQuiz/PageQuizSession';
 import { MistakeNotebook } from '../pages/KanaDictAndQuiz/PageMistakeNotebook/MistakeNotebook';
 import { DicePage } from '../pages/DicePage';
-import { DatesPage } from '../pages/DatesPage';
+// import { DatesPage } from '../pages/DatesPage';
 import { MagicClock } from '../pages/Clock/Clock';
 import { PageNumbers } from '../pages/Numbers/PageNumbers';
+import { PageDates } from '../pages/Dates/PageDates';
 import { NumberTranslator } from '../pages/Numbers/Translator/NumberTranslator';
 
 // 动画组件
@@ -86,8 +87,8 @@ export const AppRouter = () => {
         <Route
           path="/study/dates"
           element={
-            <PageTransition preset="scale" depth={2} direction={direction}>
-              <DatesPage />
+            <PageTransition preset="slide" depth={2} direction={direction}>
+              <PageDates />
             </PageTransition>
           }
         />

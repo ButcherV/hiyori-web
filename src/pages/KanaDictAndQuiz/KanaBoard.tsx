@@ -69,9 +69,9 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
         {/* Row 1: 导航 */}
         <div className={styles.navRow}>
           <div className={styles.headerLeft}>
-            <button className={styles.backBtn} onClick={onBackClick}>
+            <div className={styles.backBtn} onClick={onBackClick}>
               <ChevronLeft size={24} strokeWidth={2.5} />
-            </button>
+            </div>
             <span className={styles.pageTitle}>{title}</span>
           </div>
 

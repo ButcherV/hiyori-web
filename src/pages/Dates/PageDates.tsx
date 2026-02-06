@@ -1,90 +1,79 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, HelpCircle, Calculator } from 'lucide-react';
+import { ChevronLeft, HelpCircle, Calendar } from 'lucide-react'; // 换了个 Calendar 图标
 import { useTranslation } from 'react-i18next';
 
-import styles from './PageNumbers.module.css';
+import styles from './PageDates.module.css';
+import { ALL_DATE_LEVELS_CONFIG } from './Levels';
 import { Level1 } from './Levels/Level1/Level1';
-import { Level2 } from './Levels/Level2/Level2';
-import { Level3 } from './Levels/Level3/Level3';
-import { Level4 } from './Levels/Level4/Level4';
-import { ALL_LEVELS_CONFIG } from './Levels';
 import BottomSheet from '../../components/BottomSheet';
-import { useSettings } from '../../context/SettingsContext';
 
-export const PageNumbers = () => {
+// 注意：如果你想持久化“上次学到的位置”，需要在 SettingsContext 里加对应的逻辑
+// 这里为了演示，暂时使用本地 state
+// import { useSettings } from '../../context/SettingsContext';
+
+export const PageDates = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const navRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-  const {
-    lastNumberLevel,
-    setLastNumberLevel,
-    viewedNumberIntros,
-    markNumberIntroAsViewed,
-  } = useSettings();
+  // 如果有 Context，这里应该从 Context 获取 lastDateLevel
+  const [activeLevelId, setActiveLevelId] = useState(
+    ALL_DATE_LEVELS_CONFIG[0].id
+  );
 
-  const [activeLevelId, setActiveLevelId] = useState(lastNumberLevel);
+  // 控制 BottomSheet
+  const [isInfoOpen, setInfoOpen] = useState(false);
 
-  const [isInfoOpen, setInfoOpen] = useState(() => {
-    return !viewedNumberIntros.includes(activeLevelId);
-  });
-
-  useEffect(() => {
-    if (!isInfoOpen) {
-      markNumberIntroAsViewed(activeLevelId);
-    }
-  }, [isInfoOpen, activeLevelId, markNumberIntroAsViewed]);
-
-  // 计算并执行“尽力居中”滚动
+  // 1. 自动滚动居中逻辑 (和 PageNumbers 一模一样)
   const scrollToCenter = (levelId: string) => {
     const container = navRef.current;
     const item = itemsRef.current.get(levelId);
 
     if (container && item) {
-      // 计算公式：(元素左偏移 + 元素一半宽) - (容器一半宽)
-      // 浏览器会自动处理边界：如果是首尾项，计算结果超出范围，会自动停在尽头
       const targetLeft =
         item.offsetLeft + item.offsetWidth / 2 - container.offsetWidth / 2;
 
       container.scrollTo({
         left: targetLeft,
-        behavior: 'smooth', // 平滑滚动
+        behavior: 'smooth',
       });
     }
   };
 
-  // 监听 activeLevelId：只要切换关卡（包括初始化），就自动居中
+  // 2. 监听 activeLevelId 变化，触发滚动
   useEffect(() => {
-    // 稍微延迟确保 DOM 已经渲染完毕
     const timer = setTimeout(() => {
       scrollToCenter(activeLevelId);
     }, 100);
     return () => clearTimeout(timer);
   }, [activeLevelId]);
 
+  // 3. 获取当前配置
   const currentLevelConfig =
-    ALL_LEVELS_CONFIG.find((l) => l.id === activeLevelId) ||
-    ALL_LEVELS_CONFIG[0];
+    ALL_DATE_LEVELS_CONFIG.find((l) => l.id === activeLevelId) ||
+    ALL_DATE_LEVELS_CONFIG[0];
 
-  const pageTitle = t(currentLevelConfig.titleKey);
+  // 这里为了容错，如果 i18n key 没取到，暂时显示 fallback
+  const pageTitle = t(currentLevelConfig.titleKey) || 'Dates Study';
 
   const handleLevelClick = (levelId: string) => {
     setActiveLevelId(levelId);
-    setLastNumberLevel(levelId);
-    const hasViewedNewLevel = viewedNumberIntros.includes(levelId);
-    setInfoOpen(!hasViewedNewLevel);
+    // 这里可以添加逻辑：setLastDateLevel(levelId);
+    // 这里可以添加逻辑：如果是个新关卡，自动打开 info sheet
+    setInfoOpen(true);
   };
 
   return (
     <div className={styles.container}>
+      {/* Header */}
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
-          <div className={styles.iconBtn} onClick={() => navigate('/')}>
+          <button className={styles.iconBtn} onClick={() => navigate('/')}>
             <ChevronLeft size={24} color="white" />
-          </div>
+          </button>
           <div className={styles.titleWrapper}>
             <span className={styles.headerTitle}>{pageTitle}</span>
             <button
@@ -96,21 +85,18 @@ export const PageNumbers = () => {
             </button>
           </div>
         </div>
-        <div
-          className={styles.translatorEntryBtn}
-          onClick={() => navigate('/study/numbers/translator')}
-          aria-label="Number Translator"
-        >
-          <Calculator size={20} strokeWidth={2.5} />
+
+        {/* 这里预留一个入口，比如日历速查工具 */}
+        <div className={styles.iconBtn}>
+          <Calendar size={20} color="white" />
         </div>
       </div>
 
+      {/* Nav Pills */}
       <div className={styles.levelNavWrapper}>
-        {/* 绑定 navRef 容器 */}
         <div className={styles.levelNav} ref={navRef}>
-          {ALL_LEVELS_CONFIG.map((level) => {
+          {ALL_DATE_LEVELS_CONFIG.map((level) => {
             const isActive = activeLevelId === level.id;
-
             const pillClass = `${styles.levelPill} ${
               isActive ? styles.levelPillActive : styles.levelPillDefault
             }`;
@@ -118,7 +104,6 @@ export const PageNumbers = () => {
             return (
               <button
                 key={level.id}
-                // 将每个 Pill 的 DOM 存入 Map
                 ref={(el) => {
                   if (el) itemsRef.current.set(level.id, el);
                   else itemsRef.current.delete(level.id);
@@ -126,33 +111,31 @@ export const PageNumbers = () => {
                 className={pillClass}
                 onClick={() => handleLevelClick(level.id)}
               >
-                {t(level.labelKey)}
+                {t(level.labelKey) || level.id} {/* Fallback显示ID */}
               </button>
             );
           })}
         </div>
       </div>
 
+      {/* Workspace Area */}
       <div className={styles.workspace}>
-        {activeLevelId === 'lvl1' && <Level1 />}
+        {activeLevelId === 'lvl1_days' && <Level1 />}
 
-        {activeLevelId === 'lvl2' && <Level2 />}
-
-        {activeLevelId === 'lvl3' && <Level3 />}
-
-        {activeLevelId === 'lvl4' && <Level4 />}
-
-        {/* {(activeLevelId !== 'lvl1' || 'lvl3') && (
-          <div
-            className={styles.placeholder}
-            style={{ padding: 20, textAlign: 'center', color: '#999' }}
-          >
-            <h2>{t('number_study.common.coming_soon')}</h2>
-            <p>{pageTitle}</p>
+        {/* 以后加了 Level 2, 3 在这里扩展 */}
+        {activeLevelId === 'lvl2_months' && (
+          <div style={{ padding: 20, textAlign: 'center', color: '#ccc' }}>
+            Level 2 Coming Soon
           </div>
-        )} */}
+        )}
+        {activeLevelId === 'lvl3_weeks' && (
+          <div style={{ padding: 20, textAlign: 'center', color: '#ccc' }}>
+            Level 3 Coming Soon
+          </div>
+        )}
       </div>
 
+      {/* Info Sheet */}
       <BottomSheet
         isOpen={isInfoOpen}
         onClose={() => setInfoOpen(false)}

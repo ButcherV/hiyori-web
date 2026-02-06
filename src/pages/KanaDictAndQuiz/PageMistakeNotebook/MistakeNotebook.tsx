@@ -189,9 +189,9 @@ export const MistakeNotebook = () => {
       <div className={styles.headerWrapper}>
         <div className={styles.navBar}>
           <div className={styles.headerLeft}>
-            <button onClick={() => navigate('/')} className={styles.iconBtn}>
+            <div onClick={() => navigate('/')} className={styles.iconBtn}>
               <ChevronLeft size={24} color="white" />
-            </button>
+            </div>
             <div className={styles.title}>
               <span>{t('mistake_notebook.title')}</span>
               <button

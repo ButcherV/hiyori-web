@@ -95,16 +95,21 @@
 
   --color-study-number: #ff9500;
 
-  --gradient-header: linear-gradient(
-    to right,
+  --gradient-header-2: linear-gradient(
+    to bottom,
     rgb(17, 153, 142),
     rgb(56, 239, 125)
   );
-  /* --gradient-header: linear-gradient(
+  --gradient-header-1: linear-gradient(
+    to right,
+    rgb(192, 36, 37),
+    rgb(240, 203, 53)
+  );
+  --gradient-header-3: linear-gradient(
     to right,
     rgb(20, 136, 204),
     rgb(43, 50, 178)
-  ); */
+  );
   /* --gradient-header: linear-gradient(
     to right,
     rgb(20, 136, 204),

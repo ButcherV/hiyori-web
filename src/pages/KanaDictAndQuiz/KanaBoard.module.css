@@ -28,7 +28,7 @@
   /* padding-top: env(safe-area-inset-top); */
   padding-top: calc(env(safe-area-inset-top) + 24px);
   /* 渐变背景移到这里，或者由 .container 透传 */
-  background: var(--gradient-header);
+  background: var(--gradient-header-2);
 }
 
 .navRow {
@@ -48,7 +48,6 @@
 .backBtn {
   border: none;
   background: none;
-  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,9 +68,9 @@
 }
 
 .romajiLabel {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  font-weight: 800;
 }
 
 /* Tab 区域背景需还原为白色/浅色，衔接下方的列表 */
