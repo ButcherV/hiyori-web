@@ -323,24 +323,24 @@ export const KanaQuizSelectionPage = () => {
         headerRight={
           <div className={styles.iconGroup}>
             {!isLocked && (
-              <button
+              <div
                 className={styles.iconBtn}
                 onClick={handleRandomSelection}
                 aria-label={t('kana_quiz.aria.random')}
               >
                 <Dices size={22} />
-              </button>
+              </div>
             )}
 
             {/* 重置按钮：仅当有选中项时显示 (或者也可以设为 disabled) */}
             {selectedIds.size > 0 && (
-              <button
+              <div
                 className={styles.iconBtn}
                 onClick={() => setSelectedIds(new Set())}
                 aria-label={t('kana_quiz.aria.reset')}
               >
                 <RotateCcw size={22} />
-              </button>
+              </div>
             )}
           </div>
         }

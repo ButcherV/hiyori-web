@@ -1,7 +1,7 @@
 import React from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, BookA } from 'lucide-react';
 import { KanaTable } from './KanaTable';
-import { Switch } from '../../components/Switch';
+// import { Switch } from '../../components/Switch';
 import { CategoryTabs } from '../../components/CategoryTabs';
 import {
   SEION_ROWS,
@@ -22,7 +22,7 @@ interface KanaBoardProps {
   showRomaji: boolean;
   tabOptions: { id: string; label: string | React.ReactNode }[];
   title: string;
-  romajiLabel?: string;
+  // romajiLabel?: string;
   seionTitle: string;
   dakuonTitle: string;
   yoonTitle: string;
@@ -44,7 +44,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
   showRomaji,
   tabOptions,
   title,
-  romajiLabel,
+  // romajiLabel,
   seionTitle,
   dakuonTitle,
   yoonTitle,
@@ -79,10 +79,13 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <div className={styles.headerRight}>{headerRight}</div>
           ) : (
             <div className={styles.headerRight}>
-              <span className={styles.romajiLabel}>{romajiLabel}</span>
+              {/* <span className={styles.romajiLabel}>{romajiLabel}</span>
               {onToggleRomaji && (
                 <Switch checked={showRomaji} onChange={onToggleRomaji} />
-              )}
+              )} */}
+              <div onClick={onToggleRomaji}>
+                <BookA size={24} color="white" />
+              </div>
             </div>
           )}
         </div>

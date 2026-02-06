@@ -35,7 +35,7 @@ export const KanaDictionaryPage = () => {
       tabOptions={tabOptions}
       // I18n Texts
       title={t('kana_dictionary.title')}
-      romajiLabel={t('kana_dictionary.romaji_label')}
+      // romajiLabel={t('kana_dictionary.romaji_label')}
       seionTitle={t('kana_dictionary.sections.seion')}
       dakuonTitle={t('kana_dictionary.sections.dakuon')}
       yoonTitle={t('kana_dictionary.sections.yoon')}

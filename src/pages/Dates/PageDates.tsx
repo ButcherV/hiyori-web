@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, HelpCircle, Calendar } from 'lucide-react'; // 换了个 Calendar 图标
+import { ChevronLeft, HelpCircle, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import styles from './PageDates.module.css';
@@ -8,114 +8,79 @@ import { ALL_DATE_LEVELS_CONFIG } from './Levels';
 import { Level1 } from './Levels/Level1/Level1';
 import BottomSheet from '../../components/BottomSheet';
 
-// 注意：如果你想持久化“上次学到的位置”，需要在 SettingsContext 里加对应的逻辑
-// 这里为了演示，暂时使用本地 state
+// 引入通用导航组件
+import { LevelNav } from '../../components/LevelNav/LevelNav';
+
+// 如果未来需要持久化，从 Context 引入 useSettings
 // import { useSettings } from '../../context/SettingsContext';
 
 export const PageDates = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const navRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
-
-  // 如果有 Context，这里应该从 Context 获取 lastDateLevel
+  // 1. 状态管理
+  // 如果有 Context，这里初始化 activeLevelId = lastDateLevel
   const [activeLevelId, setActiveLevelId] = useState(
     ALL_DATE_LEVELS_CONFIG[0].id
   );
 
-  // 控制 BottomSheet
   const [isInfoOpen, setInfoOpen] = useState(false);
 
-  // 1. 自动滚动居中逻辑 (和 PageNumbers 一模一样)
-  const scrollToCenter = (levelId: string) => {
-    const container = navRef.current;
-    const item = itemsRef.current.get(levelId);
-
-    if (container && item) {
-      const targetLeft =
-        item.offsetLeft + item.offsetWidth / 2 - container.offsetWidth / 2;
-
-      container.scrollTo({
-        left: targetLeft,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  // 2. 监听 activeLevelId 变化，触发滚动
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToCenter(activeLevelId);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [activeLevelId]);
-
-  // 3. 获取当前配置
+  // 2. 获取当前关卡配置
   const currentLevelConfig =
     ALL_DATE_LEVELS_CONFIG.find((l) => l.id === activeLevelId) ||
     ALL_DATE_LEVELS_CONFIG[0];
 
-  // 这里为了容错，如果 i18n key 没取到，暂时显示 fallback
   const pageTitle = t(currentLevelConfig.titleKey) || 'Dates Study';
 
+  // 3. 处理点击
   const handleLevelClick = (levelId: string) => {
     setActiveLevelId(levelId);
-    // 这里可以添加逻辑：setLastDateLevel(levelId);
-    // 这里可以添加逻辑：如果是个新关卡，自动打开 info sheet
-    setInfoOpen(true);
+    // setLastDateLevel(levelId); // 如果有持久化
+    setInfoOpen(true); // 切换关卡时打开说明 (可选)
   };
+
+  // 4. 准备导航数据 (LevelNav 需要的格式)
+  const navItems = ALL_DATE_LEVELS_CONFIG.map((level) => ({
+    id: level.id,
+    label: t(level.labelKey) || level.id, // 增加 fallback 防止 key 没翻译时空白
+  }));
 
   return (
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
-          <button className={styles.iconBtn} onClick={() => navigate('/')}>
+          <div className={styles.iconBtn} onClick={() => navigate('/')}>
             <ChevronLeft size={24} color="white" />
-          </button>
+          </div>
           <div className={styles.titleWrapper}>
-            <span className={styles.headerTitle}>{pageTitle}</span>
-            <button
+            <span key={pageTitle} className={styles.headerTitle}>
+              {pageTitle}
+            </span>
+            <div
               onClick={() => setInfoOpen(true)}
               className={styles.iconBtn}
               style={{ color: 'white' }}
             >
               <HelpCircle size={20} />
-            </button>
+            </div>
           </div>
         </div>
 
-        {/* 这里预留一个入口，比如日历速查工具 */}
+        {/* 日历速查工具入口 */}
         <div className={styles.iconBtn}>
           <Calendar size={20} color="white" />
         </div>
       </div>
 
-      {/* Nav Pills */}
+      {/* Nav Pills (使用通用组件) */}
       <div className={styles.levelNavWrapper}>
-        <div className={styles.levelNav} ref={navRef}>
-          {ALL_DATE_LEVELS_CONFIG.map((level) => {
-            const isActive = activeLevelId === level.id;
-            const pillClass = `${styles.levelPill} ${
-              isActive ? styles.levelPillActive : styles.levelPillDefault
-            }`;
-
-            return (
-              <button
-                key={level.id}
-                ref={(el) => {
-                  if (el) itemsRef.current.set(level.id, el);
-                  else itemsRef.current.delete(level.id);
-                }}
-                className={pillClass}
-                onClick={() => handleLevelClick(level.id)}
-              >
-                {t(level.labelKey) || level.id} {/* Fallback显示ID */}
-              </button>
-            );
-          })}
-        </div>
+        <LevelNav
+          items={navItems}
+          activeId={activeLevelId}
+          onSelect={handleLevelClick}
+        />
       </div>
 
       {/* Workspace Area */}

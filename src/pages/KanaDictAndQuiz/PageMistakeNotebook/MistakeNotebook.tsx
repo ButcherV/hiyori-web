@@ -194,13 +194,13 @@ export const MistakeNotebook = () => {
             </div>
             <div className={styles.title}>
               <span>{t('mistake_notebook.title')}</span>
-              <button
+              <div
                 onClick={() => setIsHelpOpen(true)}
                 className={styles.iconBtn}
                 style={{ color: 'white' }}
               >
                 <HelpCircle size={20} />
-              </button>
+              </div>
             </div>
           </div>
           {/* 标题 */}

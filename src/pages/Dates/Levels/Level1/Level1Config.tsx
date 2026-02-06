@@ -5,19 +5,20 @@ import { type DateLevelConfig } from '../types';
 
 const Level1Description: React.FC = () => {
   return (
-    <div className={styles.container}>
-      <div className={styles.section}>
-        <div className={styles.sectionTitle}>
-          <span>本课目标</span>
-        </div>
-        <div className={styles.sectionContent}>
-          <p className={styles.text}>
-            学习日语日期的读法（1日-31日）。重点掌握 1-10 日以及 14/20/24
-            日的特殊读音。
-          </p>
-        </div>
-      </div>
-    </div>
+    <div></div>
+    // <div className={styles.container}>
+    //   <div className={styles.section}>
+    //     <div className={styles.sectionTitle}>
+    //       <span>本课目标</span>
+    //     </div>
+    //     <div className={styles.sectionContent}>
+    //       <p className={styles.text}>
+    //         学习日语日期的读法（1日-31日）。重点掌握 1-10 日以及 14/20/24
+    //         日的特殊读音。
+    //       </p>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

@@ -1,143 +1,180 @@
 // Dates/Levels/Level1/Level1.tsx
 
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, Repeat } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+  Repeat,
+  Repeat1,
+  Target,
+} from 'lucide-react';
 import styles from './Level1.module.css';
-import { datesData } from '../../../../datas/datesData'; // 路径根据实际调整
+import { datesData } from '../../../../datas/datesData';
 import { useTTS } from '../../../../hooks/useTTS';
 
 export const Level1 = () => {
   const { speak } = useTTS();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoopMode, setIsLoopMode] = useState(false);
+
+  // 新功能状态
+  const [isSingleLoop, setIsSingleLoop] = useState(false);
+  const [focusIrregular, setFocusIrregular] = useState(false);
+
   const timerRef = useRef<number | null>(null);
+  const currentItem = datesData[currentIndex];
 
-  const currentList = datesData;
-  const currentItem = currentList[currentIndex];
-
-  // --- 自动播放逻辑 ---
+  // 播放逻辑
   useEffect(() => {
-    if (!isPlaying || !currentList.length) {
+    if (!isPlaying) {
       if (timerRef.current) clearTimeout(timerRef.current);
       return;
     }
 
-    const playNext = () => {
-      if (currentItem) {
-        speak(currentItem.kana);
-      }
+    const nextStep = () => {
+      speak(datesData[currentIndex].kana);
 
       timerRef.current = window.setTimeout(() => {
-        setCurrentIndex((prev) => {
-          if (prev >= currentList.length - 1) {
-            if (isLoopMode) return 0;
-            setIsPlaying(false);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 1800); // 稍微调长一点，给用户反应时间
+        if (isSingleLoop) {
+          nextStep(); // 单曲循环：不改变 index，直接递归
+        } else {
+          // 列表循环逻辑
+          setCurrentIndex((prev) => {
+            let next = prev + 1;
+            // 如果开启了“只看特殊”，寻找下一个特殊日期
+            if (focusIrregular) {
+              while (next < datesData.length && !datesData[next].isIrregular) {
+                next++;
+              }
+            }
+            if (next >= datesData.length) {
+              setIsPlaying(false);
+              return prev;
+            }
+            return next;
+          });
+        }
+      }, 2000);
     };
 
-    playNext();
+    nextStep();
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isPlaying, currentIndex, isLoopMode, speak]);
+  }, [isPlaying, currentIndex, isSingleLoop, focusIrregular, speak]);
 
-  // --- 交互处理 ---
   const handleItemClick = (index: number) => {
     setCurrentIndex(index);
-    setIsPlaying(false); // 点击手动切换时停止自动播放
-    if (currentList[index]) {
-      speak(currentList[index].kana);
-    }
+    setIsPlaying(false);
+    speak(datesData[index].kana);
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        position: 'relative',
-      }}
-    >
-      {/* 1. Hero 展示区 */}
+    <div className={styles.container}>
+      {/* 1. Hero Card */}
       <div className={styles.heroSection}>
-        <button
+        <div
           className={styles.navArrow}
-          onClick={() => handleItemClick(currentIndex - 1)}
-          disabled={currentIndex === 0}
+          onClick={() => handleItemClick(Math.max(0, currentIndex - 1))}
         >
           <ChevronLeft size={28} />
-        </button>
+        </div>
 
         <div className={styles.heroContent}>
-          <div className={`${styles.heroKanji} jaFont`}>{currentItem.id}日</div>
+          <div className={`${styles.heroKanji} jaFont`}>
+            {currentItem.id} 日
+          </div>
+          <div className={styles.heroRomaji}>{currentItem.romaji}</div>
           <div
             className={`${styles.heroKana} jaFont ${currentItem.isIrregular ? styles.heroKanaIrregular : ''}`}
           >
             {currentItem.kana}
           </div>
-          <div className={styles.heroRomaji}>{currentItem.romaji}</div>
         </div>
 
-        <button
+        <div
           className={styles.navArrow}
-          onClick={() => handleItemClick(currentIndex + 1)}
-          disabled={currentIndex === currentList.length - 1}
+          onClick={() =>
+            handleItemClick(Math.min(datesData.length - 1, currentIndex + 1))
+          }
         >
           <ChevronRight size={28} />
-        </button>
-      </div>
-
-      {/* 2. 日历网格区 */}
-      <div className={styles.contentArea}>
-        <div className={styles.calendarGrid}>
-          {currentList.map((day, index) => (
-            <button
-              key={day.id}
-              className={`
-                ${styles.dayCell} 
-                ${currentIndex === index ? styles.cellActive : ''}
-              `}
-              onClick={() => handleItemClick(index)}
-            >
-              <span className={styles.dayNumber}>{day.id}</span>
-              {day.isIrregular && currentIndex !== index && (
-                <div className={styles.irregularDot} />
-              )}
-            </button>
-          ))}
         </div>
       </div>
 
-      {/* 3. 底部悬浮控制器 */}
+      {/* 2. Calendar Grid */}
+      <div className={styles.contentArea}>
+        <div className={styles.calendarGrid}>
+          {datesData.map((day, index) => {
+            const isDimmed =
+              focusIrregular && !day.isIrregular && currentIndex !== index;
+            return (
+              <div
+                key={day.id}
+                className={`
+                  ${styles.dayCell} 
+                  ${currentIndex === index ? styles.cellActive : ''}
+                  ${isDimmed ? styles.dimmed : ''}
+                `}
+                onClick={() => handleItemClick(index)}
+              >
+                <span className={styles.dayNumber}>{day.id}</span>
+                {day.isIrregular && (
+                  <div className={styles.irregularIndicator} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 3. Control Capsule */}
       <div className={styles.controller}>
         <div className={styles.controllerInner}>
-          <button
-            className={`${styles.ctrlBtn} ${isLoopMode ? styles.ctrlActive : ''}`}
-            onClick={() => setIsLoopMode(!isLoopMode)}
+          {/* 只看特殊日期 */}
+          <div
+            className={`${styles.ctrlBtn} ${focusIrregular ? styles.ctrlActive : ''}`}
+            onClick={() => setFocusIrregular(!focusIrregular)}
           >
-            <Repeat size={20} />
-          </button>
-
-          <div className={styles.progressText}>
-            {currentIndex + 1} / {currentList.length}
+            <Target size={20} />
+            <span className={styles.btnLabel}>重点</span>
           </div>
 
-          <button
+          {/* 单曲循环开关 */}
+          <div
+            className={`${styles.ctrlBtn} ${isSingleLoop ? styles.ctrlActive : ''}`}
+            onClick={() => setIsSingleLoop(!isSingleLoop)}
+          >
+            {isSingleLoop ? <Repeat1 size={20} /> : <Repeat size={20} />}
+            <span className={styles.btnLabel}>
+              {isSingleLoop ? '单曲' : '列表'}
+            </span>
+          </div>
+
+          {/* 进度 */}
+          <div
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              minWidth: 40,
+              textAlign: 'center',
+            }}
+          >
+            {currentIndex + 1}/31
+          </div>
+
+          <div
             className={styles.playBtn}
             onClick={() => setIsPlaying(!isPlaying)}
           >
             {isPlaying ? (
-              <Pause size={24} fill="currentColor" />
+              <Pause size={24} fill="black" />
             ) : (
-              <Play size={24} fill="currentColor" />
+              <Play size={24} fill="black" style={{ marginLeft: 2 }} />
             )}
-          </button>
+          </div>
         </div>
       </div>
     </div>

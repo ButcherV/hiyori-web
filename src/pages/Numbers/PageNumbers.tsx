@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, HelpCircle, Calculator } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -12,12 +12,12 @@ import { ALL_LEVELS_CONFIG } from './Levels';
 import BottomSheet from '../../components/BottomSheet';
 import { useSettings } from '../../context/SettingsContext';
 
+// 引入新封装的组件
+import { LevelNav } from '../../components/LevelNav/LevelNav';
+
 export const PageNumbers = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const navRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
   const {
     lastNumberLevel,
@@ -38,33 +38,6 @@ export const PageNumbers = () => {
     }
   }, [isInfoOpen, activeLevelId, markNumberIntroAsViewed]);
 
-  // 计算并执行“尽力居中”滚动
-  const scrollToCenter = (levelId: string) => {
-    const container = navRef.current;
-    const item = itemsRef.current.get(levelId);
-
-    if (container && item) {
-      // 计算公式：(元素左偏移 + 元素一半宽) - (容器一半宽)
-      // 浏览器会自动处理边界：如果是首尾项，计算结果超出范围，会自动停在尽头
-      const targetLeft =
-        item.offsetLeft + item.offsetWidth / 2 - container.offsetWidth / 2;
-
-      container.scrollTo({
-        left: targetLeft,
-        behavior: 'smooth', // 平滑滚动
-      });
-    }
-  };
-
-  // 监听 activeLevelId：只要切换关卡（包括初始化），就自动居中
-  useEffect(() => {
-    // 稍微延迟确保 DOM 已经渲染完毕
-    const timer = setTimeout(() => {
-      scrollToCenter(activeLevelId);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [activeLevelId]);
-
   const currentLevelConfig =
     ALL_LEVELS_CONFIG.find((l) => l.id === activeLevelId) ||
     ALL_LEVELS_CONFIG[0];
@@ -78,6 +51,12 @@ export const PageNumbers = () => {
     setInfoOpen(!hasViewedNewLevel);
   };
 
+  // 准备导航数据
+  const navItems = ALL_LEVELS_CONFIG.map((level) => ({
+    id: level.id,
+    label: t(level.labelKey),
+  }));
+
   return (
     <div className={styles.container}>
       <div className={styles.systemHeader}>
@@ -86,14 +65,16 @@ export const PageNumbers = () => {
             <ChevronLeft size={24} color="white" />
           </div>
           <div className={styles.titleWrapper}>
-            <span className={styles.headerTitle}>{pageTitle}</span>
-            <button
+            <span key={pageTitle} className={styles.headerTitle}>
+              {pageTitle}
+            </span>
+            <div
               onClick={() => setInfoOpen(true)}
               className={styles.iconBtn}
               style={{ color: 'white' }}
             >
               <HelpCircle size={20} />
-            </button>
+            </div>
           </div>
         </div>
         <div
@@ -106,51 +87,18 @@ export const PageNumbers = () => {
       </div>
 
       <div className={styles.levelNavWrapper}>
-        {/* 绑定 navRef 容器 */}
-        <div className={styles.levelNav} ref={navRef}>
-          {ALL_LEVELS_CONFIG.map((level) => {
-            const isActive = activeLevelId === level.id;
-
-            const pillClass = `${styles.levelPill} ${
-              isActive ? styles.levelPillActive : styles.levelPillDefault
-            }`;
-
-            return (
-              <button
-                key={level.id}
-                // 将每个 Pill 的 DOM 存入 Map
-                ref={(el) => {
-                  if (el) itemsRef.current.set(level.id, el);
-                  else itemsRef.current.delete(level.id);
-                }}
-                className={pillClass}
-                onClick={() => handleLevelClick(level.id)}
-              >
-                {t(level.labelKey)}
-              </button>
-            );
-          })}
-        </div>
+        <LevelNav
+          items={navItems}
+          activeId={activeLevelId}
+          onSelect={handleLevelClick}
+        />
       </div>
 
       <div className={styles.workspace}>
         {activeLevelId === 'lvl1' && <Level1 />}
-
         {activeLevelId === 'lvl2' && <Level2 />}
-
         {activeLevelId === 'lvl3' && <Level3 />}
-
         {activeLevelId === 'lvl4' && <Level4 />}
-
-        {/* {(activeLevelId !== 'lvl1' || 'lvl3') && (
-          <div
-            className={styles.placeholder}
-            style={{ padding: 20, textAlign: 'center', color: '#999' }}
-          >
-            <h2>{t('number_study.common.coming_soon')}</h2>
-            <p>{pageTitle}</p>
-          </div>
-        )} */}
       </div>
 
       <BottomSheet

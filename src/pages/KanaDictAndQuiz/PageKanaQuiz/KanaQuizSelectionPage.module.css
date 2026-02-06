@@ -133,13 +133,13 @@
 .iconGroup {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .iconBtn {
   background: none;
   border: none;
-  padding: 4px;
+  /* padding: 4px; */
   color: white;
   cursor: pointer;
   display: flex;

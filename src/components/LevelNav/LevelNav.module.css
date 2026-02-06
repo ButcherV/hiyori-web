@@ -1,0 +1,79 @@
+/* src/components/LevelNav/LevelNav.module.css */
+
+.container {
+  display: flex;
+  gap: 8px;
+  /* 显式开启水平滚动 */
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* iOS 惯性滚动 */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+
+  scroll-snap-type: x mandatory;
+
+  /* 外部容器负责 padding，或者这里给一点基础 padding */
+  padding: 4px 16px;
+
+  scrollbar-width: none;
+  align-items: center;
+  width: 100%;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.pillBtn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  scroll-snap-align: center;
+  background: transparent;
+  z-index: 1;
+  /* 消除默认 button 样式干扰 */
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 默认状态 */
+.pillDefault {
+  color: rgba(255, 255, 255, 0.6);
+  transition: transform 0.1s;
+}
+
+.pillDefault:active {
+  transform: scale(0.96);
+}
+
+/* 选中状态 */
+.pillActive {
+  color: var(--color-Gray10); /* 假设你有这个变量，或者直接写死深色 */
+}
+
+/* 滑动背景块 */
+.activeBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  border-radius: 18px;
+  z-index: -1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pillText {
+  position: relative;
+  z-index: 1;
+}

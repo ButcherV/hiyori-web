@@ -309,5 +309,25 @@
         }
       }
     }
+  },
+  "date_study": {
+    "levels": {
+      "days": {
+        "label": "Days",
+        "title": "Date Intensive"
+      },
+      "months": {
+        "label": "Months",
+        "title": "Month Intensive"
+      },
+      "weeks": {
+        "label": "Weeks",
+        "title": "Week Intensive"
+      },
+      "years": {
+        "label": "Years",
+        "title": "Year Intensive"
+      }
+    }
   }
 }
