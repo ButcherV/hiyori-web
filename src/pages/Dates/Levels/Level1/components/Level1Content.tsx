@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Level1Content.module.css'; // 🟢 引用自己的样式
 import { type DateItem, type DateType } from '../Level1Data';
+import { useTranslation } from 'react-i18next';
 
 interface Level1ContentProps {
   list: DateItem[];
@@ -17,6 +18,7 @@ export const Level1Content: React.FC<Level1ContentProps> = ({
   onItemClick,
   onFilterChange,
 }) => {
+  const { t } = useTranslation();
   const legendTypes: DateType[] = ['rune', 'mutant', 'trap', 'regular'];
 
   return (
@@ -30,12 +32,7 @@ export const Level1Content: React.FC<Level1ContentProps> = ({
             style={{ opacity: filterType && filterType !== type ? 0.4 : 1 }}
           >
             <div className={styles.legendDot} />
-            <span>
-              {type === 'rune' && '特殊'}
-              {type === 'mutant' && '音变'}
-              {type === 'trap' && '陷阱'}
-              {type === 'regular' && '规则'}
-            </span>
+            <span>{t(`date_study.level1.types.${type}.legend`)}</span>
           </div>
         ))}
       </div>

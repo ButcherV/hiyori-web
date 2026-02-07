@@ -124,7 +124,7 @@ body {
   color: var(--color-error);
   font-weight: 600;
   text-align: left;
-  line-height: 1.4;
+  line-height: 1.2;
 
   /* 允许换行，防止内容过长撑爆 */
   white-space: pre-wrap;

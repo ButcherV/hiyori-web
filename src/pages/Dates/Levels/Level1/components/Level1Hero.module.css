@@ -17,33 +17,43 @@
   z-index: 2;
   overflow: hidden;
 
-  /* 基础质感：非常干净的白底+模糊 */
-  background: rgba(255, 255, 255, 0.6);
+  /* 基础质感：玻璃拟态 */
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
-  /* 极细的内发光描边 */
+
+  /* 🟢 修改 1：收敛的阴影 */
+  /* 去掉了大范围扩散，改为精致的浮起阴影，干净利落 */
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.5),
-    0 12px 24px -8px rgba(0, 0, 0, 0.06);
+    /* 内描边保留，维持精致感 */ 0 8px 20px -6px rgba(0, 0, 0, 0.06); /* 淡淡的投影，不抢戏 */
 
   transition: background 0.4s ease;
 }
 
-/* 🟢 状态皮肤：只改变微妙的背景渐变 */
-/* 保持非常克制，只有一点点色倾向 */
+/* 🟢 修改 2：极淡的克制渐变 (50色阶) */
+/* 只有一点点色温倾向，像白纸上反射的一点光 */
+
+/* Regular: 极淡蓝 (Blue-50) */
 .heroType_regular {
-  background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
 }
+
+/* Trap: 极淡黄 (Yellow-50) */
 .heroType_trap {
-  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #fefce8 0%, #ffffff 100%);
 }
+
+/* Mutant: 极淡红 (Rose-50) */
 .heroType_mutant {
   background: linear-gradient(180deg, #fff1f2 0%, #ffffff 100%);
 }
+
+/* Rune: 极淡紫 (Purple-50) */
 .heroType_rune {
-  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%);
 }
 
-/* 🟢 Badge：极简胶囊，无边框 */
+/* Badge：极简胶囊，无边框 */
 .typeBadge {
   position: absolute;
   top: 16px;
@@ -55,11 +65,9 @@
   border-radius: 99px;
   text-transform: uppercase;
   letter-spacing: 1px;
-
-  /* 这里的颜色需要跟上面的 variables 对应 */
 }
 
-/* Badge 颜色逻辑 */
+/* Badge 颜色逻辑 (保持不变) */
 .badge_regular {
   background: #f3f4f6;
   color: #6b7280;
@@ -77,7 +85,7 @@
   color: #7c3aed;
 }
 
-/* 布局修正 (保持之前修复好的 Flex 布局) */
+/* 布局修正 */
 .heroMainRow {
   display: flex;
   width: 100%;
@@ -98,14 +106,14 @@
   min-width: 0;
 }
 
-/* 导航箭头：极简圆形 */
+/* 导航箭头 */
 .navArrow {
-  background: rgba(255, 255, 255, 0.01); /* 几乎透明 */
+  background: rgba(255, 255, 255, 0.01);
   border: none;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  color: #94a3b8; /* 浅灰 */
+  color: #94a3b8;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -114,7 +122,7 @@
   flex-shrink: 0;
 }
 .navArrow:active {
-  background: rgba(0, 0, 0, 0.03);
+  background: rgba(0, 0, 0, 0.05);
   transform: scale(0.9);
   color: #1e293b;
 }
@@ -127,24 +135,24 @@
 .heroSubNumber {
   font-size: 14px;
   font-weight: 700;
-  color: #cbd5e1; /* 非常浅的灰，不抢戏 */
+  color: #cbd5e1;
   margin-bottom: 2px;
   font-family: var(--font-family-ja);
 }
 
 .heroKanji {
-  font-size: 64px; /* 字体加大，撑起场面 */
+  font-size: 64px;
   font-weight: 900;
-  color: #1e293b; /* 墨黑 */
+  color: #1e293b;
   line-height: 1.1;
   white-space: nowrap;
-  letter-spacing: -2px; /* 紧凑一点更好看 */
+  letter-spacing: -2px;
 }
 
 .heroKana {
   font-size: 20px;
   font-weight: 600;
-  color: #64748b;
+  color: #64748b; /* 回到稍微柔和一点的灰 */
   margin-top: 4px;
 }
 
@@ -157,28 +165,15 @@
   letter-spacing: 2px;
 }
 
-/* Description: 浮动文字，无框 */
+/* Description: 浮动文字 */
 .heroDescWrapper {
   position: absolute;
-  bottom: 20px;
+  transform: translateY(100%);
   left: 0;
+  bottom: -4px;
   right: 0;
   display: flex;
   justify-content: center;
-  padding: 0 24px;
+  padding: 0 12px;
   z-index: 5;
-}
-
-.heroDescription {
-  font-size: 13px;
-  font-weight: 500;
-  color: #475569;
-  /* 去掉卡片背景，直接悬浮文字，或者给极淡的背景 */
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-  padding: 6px 12px;
-  border-radius: 8px;
-  text-align: center;
-  line-height: 1.4;
-  max-width: 100%;
 }

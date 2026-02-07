@@ -2,7 +2,7 @@
 
 /* === Legend 图例区 (保持克制) === */
 .legendArea {
-  padding: 16px 16px 0;
+  padding: 8px 16px 8px;
   display: flex;
   gap: 12px; /* 间距拉大，更透气 */
   overflow-x: auto;
@@ -65,7 +65,7 @@
 .contentArea {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 16px 100px;
+  padding: 16px 16px 100px;
   display: flex;
   flex-direction: column;
   align-items: center;

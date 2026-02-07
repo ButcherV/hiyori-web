@@ -474,7 +474,11 @@ export const SplitNumberLearn = ({
                   exit={{ opacity: 0, y: 10 }}
                   className={styles.noteBadge}
                 >
-                  {currentItem.note[lang]}
+                  {/* {currentItem.note[lang]} */}
+                  <span className="notePill">
+                    {/* <Lightbulb size={14} className="noteIcon" /> */}
+                    <span>{currentItem.note[lang]}</span>
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>

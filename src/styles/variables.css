@@ -103,7 +103,7 @@
   --gradient-header-1: linear-gradient(
     to right,
     rgb(192, 36, 37),
-    rgb(240, 203, 53)
+    /* rgb(240, 171, 53), */ rgb(240, 131, 53)
   );
   --gradient-header-3: linear-gradient(
     to right,

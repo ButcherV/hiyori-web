@@ -302,7 +302,7 @@
   /* padding-bottom: 24px; */
 }
 
-.noteBadge {
+/* .noteBadge {
   background-color: var(--color-Gray2);
   color: var(--color-Gray8);
   padding: 6px 16px;
@@ -313,4 +313,4 @@
   border: 1px dashed var(--color-Gray4);
   max-width: 90%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-}
+} */

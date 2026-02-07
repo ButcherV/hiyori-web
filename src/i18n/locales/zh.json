@@ -337,6 +337,27 @@
         "label": "年",
         "title": "年份特训"
       }
+    },
+    "level1": {
+      "loading": "加载中...",
+      "types": {
+        "rune": {
+          "badge": "特殊词 (RUNE)",
+          "legend": "特殊"
+        },
+        "mutant": {
+          "badge": "音变 (MUTANT)",
+          "legend": "音变"
+        },
+        "trap": {
+          "badge": "注意 (TRAP)",
+          "legend": "陷阱"
+        },
+        "regular": {
+          "badge": "规则 (REGULAR)",
+          "legend": "规则"
+        }
+      }
     }
   }
 }

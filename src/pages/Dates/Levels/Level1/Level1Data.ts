@@ -1,3 +1,5 @@
+// src/pages/Dates/Levels/Level1/Level1Data.ts
+
 export type DateType = 'regular' | 'trap' | 'mutant' | 'rune';
 
 export interface DateItem {
@@ -6,7 +8,11 @@ export interface DateItem {
   kana: string;
   romaji: string;
   type: DateType;
-  description?: string;
+  // 🟢 修改点：description 变为支持多语言的对象
+  description?: {
+    zh: string;
+    en: string;
+  };
 }
 
 export const datesData: DateItem[] = [
@@ -17,7 +23,10 @@ export const datesData: DateItem[] = [
     kana: 'ついたち',
     romaji: 'tsu·i·ta·chi',
     type: 'rune',
-    description: '特殊读法：语源是“月立”，代表新月出现',
+    description: {
+      zh: '特殊读法：语源为“月立 (Tsuki Tachi)”，意为新月出现。',
+      en: "Special reading: Derived from 'Tsuki Tachi', meaning the rising moon.",
+    },
   },
   {
     id: 2,
@@ -25,7 +34,10 @@ export const datesData: DateItem[] = [
     kana: 'ふつか',
     romaji: 'fu·tsu·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“ふたつ (2个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“ふたつ (2个)”。',
+      en: "Native reading: Derived from the general counter 'Futatsu' (2 items).",
+    },
   },
   {
     id: 3,
@@ -33,7 +45,10 @@ export const datesData: DateItem[] = [
     kana: 'みっか',
     romaji: 'mi·k·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“みっつ (3个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“みっつ (3个)”。',
+      en: "Native reading: Derived from the general counter 'Mittsu' (3 items).",
+    },
   },
   {
     id: 4,
@@ -41,7 +56,10 @@ export const datesData: DateItem[] = [
     kana: 'よっか',
     romaji: 'yo·k·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“よっつ (4个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“よっつ (4个)”。',
+      en: "Native reading: Derived from the general counter 'Yottsu' (4 items).",
+    },
   },
   {
     id: 5,
@@ -49,7 +67,10 @@ export const datesData: DateItem[] = [
     kana: 'いつか',
     romaji: 'i·tsu·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“いつつ (5个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“いつつ (5个)”。',
+      en: "Native reading: Derived from the general counter 'Itsutsu' (5 items).",
+    },
   },
   {
     id: 6,
@@ -57,7 +78,10 @@ export const datesData: DateItem[] = [
     kana: 'むいか',
     romaji: 'mu·i·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“むっつ (6个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“むっつ (6个)”。',
+      en: "Native reading: Derived from the general counter 'Muttsu' (6 items).",
+    },
   },
   {
     id: 7,
@@ -65,7 +89,10 @@ export const datesData: DateItem[] = [
     kana: 'なのか',
     romaji: 'na·no·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“ななつ (7个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“ななつ (7个)”。',
+      en: "Native reading: Derived from the general counter 'Nanatsu' (7 items).",
+    },
   },
   {
     id: 8,
@@ -73,7 +100,10 @@ export const datesData: DateItem[] = [
     kana: 'ようか',
     romaji: 'yo·u·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“やっつ (8个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“やっつ (8个)”。',
+      en: "Native reading: Derived from the general counter 'Yattsu' (8 items).",
+    },
   },
   {
     id: 9,
@@ -81,7 +111,10 @@ export const datesData: DateItem[] = [
     kana: 'ここのか',
     romaji: 'ko·ko·no·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“ここのつ (9个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“ここのつ (9个)”。',
+      en: "Native reading: Derived from the general counter 'Kokonotsu' (9 items).",
+    },
   },
   {
     id: 10,
@@ -89,7 +122,10 @@ export const datesData: DateItem[] = [
     kana: 'とおか',
     romaji: 'to·o·ka',
     type: 'rune',
-    description: '固有训读：对应的计数是“とお (10个)”',
+    description: {
+      zh: '固有训读：源自通用计数法“とお (10个)”。',
+      en: "Native reading: Derived from the general counter 'Too' (10 items).",
+    },
   },
 
   // 11-13: Regular
@@ -122,7 +158,10 @@ export const datesData: DateItem[] = [
     kana: 'じゅうよっか',
     romaji: 'ju·u·yo·k·ka',
     type: 'mutant',
-    description: '音变：4 读作“よっか”，而不是“よん”',
+    description: {
+      zh: '音变现象：数字 4 需读作“よっか (yokka)”。',
+      en: "Sound change: The number 4 must be read as 'yokka'.",
+    },
   },
 
   // 15-16: Regular
@@ -148,7 +187,10 @@ export const datesData: DateItem[] = [
     kana: 'じゅうしちにち',
     romaji: 'ju·u·shi·chi·ni·chi',
     type: 'trap',
-    description: '注意：7 读作“しち” (shichi)，不是“なな”',
+    description: {
+      zh: '发音注意：7 必须读作“しち (shichi)”，不能读“なな (nana)”。',
+      en: "Warning: 7 must be read as 'shichi', not 'nana'.",
+    },
   },
 
   // 18: Regular
@@ -167,7 +209,10 @@ export const datesData: DateItem[] = [
     kana: 'じゅうくにち',
     romaji: 'ju·u·ku·ni·chi',
     type: 'trap',
-    description: '注意：9 读作“く” (ku)，不是“きゅう”',
+    description: {
+      zh: '发音注意：9 必须读作“く (ku)”，不能读“きゅう (kyuu)”。',
+      en: "Warning: 9 must be read as 'ku', not 'kyuu'.",
+    },
   },
 
   // 20: Rune (大Boss)
@@ -177,7 +222,10 @@ export const datesData: DateItem[] = [
     kana: 'はつか',
     romaji: 'ha·tsu·ka',
     type: 'rune',
-    description: '特殊单词：完全独立的读法，不仅是数字',
+    description: {
+      zh: '特殊读法：完全独立的单词，不遵循数字拼接规律。',
+      en: 'Special reading: A unique word that does not follow number rules.',
+    },
   },
 
   // 21-23: Regular
@@ -210,7 +258,10 @@ export const datesData: DateItem[] = [
     kana: 'にじゅうよっか',
     romaji: 'ni·ju·u·yo·k·ka',
     type: 'mutant',
-    description: '音变：4 依然读作“よっか”',
+    description: {
+      zh: '音变现象：数字 4 需读作“よっか (yokka)”。',
+      en: "Sound change: The number 4 must be read as 'yokka'.",
+    },
   },
 
   // 25-26: Regular
@@ -236,7 +287,10 @@ export const datesData: DateItem[] = [
     kana: 'にじゅうしちにち',
     romaji: 'ni·ju·u·shi·chi·ni·chi',
     type: 'trap',
-    description: '注意：7 读作“しち”',
+    description: {
+      zh: '发音注意：7 必须读作“しち (shichi)”，不能读“なな (nana)”。',
+      en: "Warning: 7 must be read as 'shichi', not 'nana'.",
+    },
   },
 
   // 28: Regular
@@ -255,7 +309,10 @@ export const datesData: DateItem[] = [
     kana: 'にじゅうくにち',
     romaji: 'ni·ju·u·ku·ni·chi',
     type: 'trap',
-    description: '注意：9 读作“く”',
+    description: {
+      zh: '发音注意：9 必须读作“く (ku)”，不能读“きゅう (kyuu)”。',
+      en: "Warning: 9 must be read as 'ku', not 'kyuu'.",
+    },
   },
 
   // 30-31: Regular

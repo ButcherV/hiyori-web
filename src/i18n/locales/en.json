@@ -328,6 +328,27 @@
         "label": "Years",
         "title": "Year Intensive"
       }
+    },
+    "level1": {
+      "loading": "Loading...",
+      "types": {
+        "rune": {
+          "badge": "RUNE",
+          "legend": "Rune"
+        },
+        "mutant": {
+          "badge": "MUTANT",
+          "legend": "Mutant"
+        },
+        "trap": {
+          "badge": "TRAP",
+          "legend": "Trap"
+        },
+        "regular": {
+          "badge": "REGULAR",
+          "legend": "Regular"
+        }
+      }
     }
   }
 }
