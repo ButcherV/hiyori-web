@@ -23,6 +23,7 @@ export const Level1Hero: React.FC<Level1HeroProps> = ({
   const { i18n, t } = useTranslation();
 
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
+  const descText = item?.description?.[currentLang] ?? '';
 
   if (!item)
     return (
@@ -69,30 +70,29 @@ export const Level1Hero: React.FC<Level1HeroProps> = ({
           <ChevronRight size={24} />
         </button>
 
-        {/* 🟢 优化后的 Description 区域 */}
+        {/* Description 区域 */}
         <div className={styles.heroDescWrapper}>
           <AnimatePresence mode="wait">
             {item.description && (
               <motion.div
-                key={`desc-${item.id}`} // 确保 key 随 ID 变化，触发切换动画
-                // 🟢 初始状态：透明 + 向下偏移 10px (看起来在下面)
+                key={`desc-${item.id}`}
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                // 🟢 进场状态：完全显示 + 回到原位 (上升效果)
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                // 🟢 离场状态：透明 + 向下偏移 (下沉消失，或者向上飘走也可以，这里选下沉更自然)
                 exit={{ opacity: 0, y: 5, scale: 0.98 }}
-                // 🟢 动画曲线：使用 easeOut 更加平滑
                 transition={{ delay: 0.06, duration: 0.25, ease: 'easeOut' }}
               >
-                <span className="notePill">
-                  {item.description[currentLang]}
+                {/* 🟢 替换 notePill，使用专属样式的 Pill */}
+                <span className={`${styles.descPill}`}>
+                  {descText.split('\n').map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      {index < descText.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
                 </span>
               </motion.div>
             )}
           </AnimatePresence>
-          {/* {item.description && (
-            <span className="notePill">{item.description[currentLang]}</span>
-          )} */}
         </div>
       </div>
     </div>

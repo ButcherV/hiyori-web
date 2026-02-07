@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './PageDates.module.css';
 import { ALL_DATE_LEVELS_CONFIG } from './Levels';
 import { Level1 } from './Levels/Level1/Level1';
+import { Level4 } from './Levels/Level4/Level4';
 import BottomSheet from '../../components/BottomSheet';
 
 // 引入通用导航组件
@@ -98,6 +99,7 @@ export const PageDates = () => {
             Level 3 Coming Soon
           </div>
         )}
+        {activeLevelId === 'lvl4_years' && <Level4 />}
       </div>
 
       {/* Info Sheet */}

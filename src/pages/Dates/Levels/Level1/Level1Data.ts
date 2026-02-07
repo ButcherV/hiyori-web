@@ -8,7 +8,7 @@ export interface DateItem {
   kana: string;
   romaji: string;
   type: DateType;
-  // 🟢 修改点：description 变为支持多语言的对象
+  // 🟢 description 变为支持多语言的对象，且文案中包含 \n 用于换行
   description?: {
     zh: string;
     en: string;
@@ -24,8 +24,8 @@ export const datesData: DateItem[] = [
     romaji: 'tsu·i·ta·chi',
     type: 'rune',
     description: {
-      zh: '特殊读法：语源为“月立 (Tsuki Tachi)”，意为新月出现。',
-      en: "Special reading: Derived from 'Tsuki Tachi', meaning the rising moon.",
+      zh: '特殊读法：语源为“月立 (Tsuki Tachi)”\n意为新月出现。',
+      en: "Special reading: Derived from 'Tsuki Tachi'\nMeaning the rising moon.",
     },
   },
   {
@@ -35,8 +35,8 @@ export const datesData: DateItem[] = [
     romaji: 'fu·tsu·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“ふたつ (2个)”。',
-      en: "Native reading: Derived from the general counter 'Futatsu' (2 items).",
+      zh: '固有训读：源自通用计数法，“ふたつ (2个)”。',
+      en: "Native reading: Derived from the general counter\n'Futatsu' (2 items).",
     },
   },
   {
@@ -46,8 +46,8 @@ export const datesData: DateItem[] = [
     romaji: 'mi·k·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“みっつ (3个)”。',
-      en: "Native reading: Derived from the general counter 'Mittsu' (3 items).",
+      zh: '固有训读：源自通用计数法，“みっつ (3个)”。',
+      en: "Native reading: Derived from the general counter\n'Mittsu' (3 items).",
     },
   },
   {
@@ -57,8 +57,8 @@ export const datesData: DateItem[] = [
     romaji: 'yo·k·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“よっつ (4个)”。',
-      en: "Native reading: Derived from the general counter 'Yottsu' (4 items).",
+      zh: '固有训读：源自通用计数法，“よっつ (4个)”。',
+      en: "Native reading: Derived from the general counter\n'Yottsu' (4 items).",
     },
   },
   {
@@ -68,8 +68,8 @@ export const datesData: DateItem[] = [
     romaji: 'i·tsu·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“いつつ (5个)”。',
-      en: "Native reading: Derived from the general counter 'Itsutsu' (5 items).",
+      zh: '固有训读：源自通用计数法，“いつつ (5个)”。',
+      en: "Native reading: Derived from the general counter\n'Itsutsu' (5 items).",
     },
   },
   {
@@ -79,8 +79,8 @@ export const datesData: DateItem[] = [
     romaji: 'mu·i·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“むっつ (6个)”。',
-      en: "Native reading: Derived from the general counter 'Muttsu' (6 items).",
+      zh: '固有训读：源自通用计数法，“むっつ (6个)”。',
+      en: "Native reading: Derived from the general counter\n'Muttsu' (6 items).",
     },
   },
   {
@@ -90,8 +90,8 @@ export const datesData: DateItem[] = [
     romaji: 'na·no·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“ななつ (7个)”。',
-      en: "Native reading: Derived from the general counter 'Nanatsu' (7 items).",
+      zh: '固有训读：源自通用计数法，“ななつ (7个)”。',
+      en: "Native reading: Derived from the general counter\n'Nanatsu' (7 items).",
     },
   },
   {
@@ -101,8 +101,8 @@ export const datesData: DateItem[] = [
     romaji: 'yo·u·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“やっつ (8个)”。',
-      en: "Native reading: Derived from the general counter 'Yattsu' (8 items).",
+      zh: '固有训读：源自通用计数法，“やっつ (8个)”。',
+      en: "Native reading: Derived from the general counter\n'Yattsu' (8 items).",
     },
   },
   {
@@ -112,8 +112,8 @@ export const datesData: DateItem[] = [
     romaji: 'ko·ko·no·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“ここのつ (9个)”。',
-      en: "Native reading: Derived from the general counter 'Kokonotsu' (9 items).",
+      zh: '固有训读：源自通用计数法，“ここのつ (9个)”。',
+      en: "Native reading: Derived from the general counter\n'Kokonotsu' (9 items).",
     },
   },
   {
@@ -123,8 +123,8 @@ export const datesData: DateItem[] = [
     romaji: 'to·o·ka',
     type: 'rune',
     description: {
-      zh: '固有训读：源自通用计数法“とお (10个)”。',
-      en: "Native reading: Derived from the general counter 'Too' (10 items).",
+      zh: '固有训读：源自通用计数法，“とお (10个)”。',
+      en: "Native reading: Derived from the general counter\n'Too' (10 items).",
     },
   },
 
@@ -160,7 +160,7 @@ export const datesData: DateItem[] = [
     type: 'mutant',
     description: {
       zh: '音变现象：数字 4 需读作“よっか (yokka)”。',
-      en: "Sound change: The number 4 must be read as 'yokka'.",
+      en: "Sound change:The number 4 must be\nread as 'yokka'.",
     },
   },
 
@@ -188,8 +188,8 @@ export const datesData: DateItem[] = [
     romaji: 'ju·u·shi·chi·ni·chi',
     type: 'trap',
     description: {
-      zh: '发音注意：7 必须读作“しち (shichi)”，不能读“なな (nana)”。',
-      en: "Warning: 7 must be read as 'shichi', not 'nana'.",
+      zh: '发音注意：7 必须读作“しち (shichi)”\n不能读“なな (nana)”。',
+      en: "Warning: 7 must be read as 'shichi'\nnot 'nana'.",
     },
   },
 
@@ -210,7 +210,7 @@ export const datesData: DateItem[] = [
     romaji: 'ju·u·ku·ni·chi',
     type: 'trap',
     description: {
-      zh: '发音注意：9 必须读作“く (ku)”，不能读“きゅう (kyuu)”。',
+      zh: '发音注意：9 必须读作“く (ku)”\n不能读“きゅう (kyuu)”。',
       en: "Warning: 9 must be read as 'ku', not 'kyuu'.",
     },
   },
@@ -224,7 +224,7 @@ export const datesData: DateItem[] = [
     type: 'rune',
     description: {
       zh: '特殊读法：完全独立的单词，不遵循数字拼接规律。',
-      en: 'Special reading: A unique word that does not follow number rules.',
+      en: 'Special reading: A unique word\nthat does not follow number rules.',
     },
   },
 
@@ -260,7 +260,7 @@ export const datesData: DateItem[] = [
     type: 'mutant',
     description: {
       zh: '音变现象：数字 4 需读作“よっか (yokka)”。',
-      en: "Sound change: The number 4 must be read as 'yokka'.",
+      en: "Sound change: The number 4 \nmust be read as 'yokka'.",
     },
   },
 
@@ -288,8 +288,8 @@ export const datesData: DateItem[] = [
     romaji: 'ni·ju·u·shi·chi·ni·chi',
     type: 'trap',
     description: {
-      zh: '发音注意：7 必须读作“しち (shichi)”，不能读“なな (nana)”。',
-      en: "Warning: 7 must be read as 'shichi', not 'nana'.",
+      zh: '发音注意：7 必须读作“しち (shichi)”\n不能读“なな (nana)”。',
+      en: "Warning: 7 must be read as 'shichi'\nnot 'nana'.",
     },
   },
 
@@ -310,8 +310,8 @@ export const datesData: DateItem[] = [
     romaji: 'ni·ju·u·ku·ni·chi',
     type: 'trap',
     description: {
-      zh: '发音注意：9 必须读作“く (ku)”，不能读“きゅう (kyuu)”。',
-      en: "Warning: 9 must be read as 'ku', not 'kyuu'.",
+      zh: '发音注意：9 必须读作“く (ku)”\n不能读“きゅう (kyuu)”。',
+      en: "Warning: 9 must be read as 'ku'\nnot 'kyuu'.",
     },
   },
 

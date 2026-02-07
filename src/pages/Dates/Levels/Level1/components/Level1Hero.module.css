@@ -177,3 +177,30 @@
   padding: 0 12px;
   z-index: 5;
 }
+
+/* 🟢 Description Pill: 专属提示气泡 */
+.descPill {
+  display: inline-flex; /* 方便以后万一要加图标 */
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px; /* 稍微宽一点，更有呼吸感 */
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+
+  /* 🎨 核心：极简白风格 (Neutral / Clean) */
+  background: transparent;
+  color: #334155; /* Slate-700: 深灰，比纯黑柔和，比浅灰清晰 */
+
+  /* 💎 质感：微弱的边框 + 柔和投影 */
+  /* border: 1px solid rgba(0, 0, 0, 0.05); */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); */
+
+  /* 磨砂效果 */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}

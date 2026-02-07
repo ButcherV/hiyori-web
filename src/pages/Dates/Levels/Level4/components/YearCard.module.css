@@ -1,0 +1,143 @@
+.cardContainer {
+  margin: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 顶部导航 */
+.eraHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+}
+.eraTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.eraRomaji {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.eraKanji {
+  font-size: 18px;
+}
+
+.navBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: inherit;
+  transition: background 0.2s;
+}
+.navBtn:active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* 主内容区 */
+.mainContent {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* 头像占位 */
+.avatarPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  border: 3px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+.avatarText {
+  font-size: 40px;
+  font-weight: 900;
+  opacity: 0.2;
+  font-family: var(--font-family-ja);
+}
+
+/* 信息组 */
+.infoGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.westernYear {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  color: #1e293b;
+  font-family: 'SF Mono', monospace;
+  letter-spacing: -2px;
+}
+.unit {
+  font-size: 16px;
+  margin-left: 4px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.japaneseYear {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b; /* 在淡色背景上用深色字 */
+}
+
+.readings {
+  margin-top: 4px;
+}
+.romaji {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+/* 标签 */
+.tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.tagTrap {
+  font-size: 10px;
+  background: #fef2f2;
+  color: #ef4444;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 1px solid #fee2e2;
+}
+.tagSpecial {
+  font-size: 10px;
+  background: #eff6ff;
+  color: #3b82f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 1px solid #dbeafe;
+}
