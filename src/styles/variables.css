@@ -122,6 +122,41 @@
   ); */
 
   --shadow-header: 0 -4px 12px rgba(0, 0, 0, 0.1);
+
+  /* =================================================================
+     🚀 Tech Palette (现代科技感色系)
+     特点：高饱和、高明度、带荧光感
+     ================================================================= */
+
+  /* 1. 🟦 Regular (规则) - Electric Blue (电光蓝) */
+  /* 代表：逻辑、秩序、数据流 */
+  --color-type-regular: #3b82f6;
+  --color-type-regular-bg: #eff6ff;
+  --glow-type-regular: rgba(59, 130, 246, 0.5);
+
+  /* 2. 🟨 Trap (陷阱) - Cyber Lemon (赛博柠檬) */
+  /* 代表：警示、高亮、注意 */
+  --color-type-trap: #facc15;
+  --color-type-trap-text: #854d0e; /* 并在黄底上用深褐/黑字 */
+  --color-type-trap-bg: #fefce8;
+  --glow-type-trap: rgba(250, 204, 21, 0.6);
+
+  /* 3. 🟧 Mutant (变异) - Neon Coral (霓虹珊瑚/橙) */
+  /* 代表：突变、不稳定、能量 */
+  --color-type-mutant: #ff6b6b; /* 比之前的橙色更红、更亮 */
+  --color-type-mutant-bg: #fff5f5;
+  --glow-type-mutant: rgba(255, 107, 107, 0.5);
+
+  /* 4. 🟪 Rune (符文) - Deep Violet (深空紫) */
+  /* 代表：神秘、核心、独立 */
+  --color-type-rune: #8b5cf6;
+  --color-type-rune-bg: #f5f3ff;
+  --glow-type-rune: rgba(139, 92, 246, 0.5);
+
+  /* --- 通用选中态光晕 --- */
+  --shadow-selected:
+    0 0 0 3px #ffffff, 0 0 0 6px var(--active-color),
+    0 8px 20px var(--active-glow);
 }
 
 .jaFont {
