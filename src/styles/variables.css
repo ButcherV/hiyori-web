@@ -124,39 +124,36 @@
   --shadow-header: 0 -4px 12px rgba(0, 0, 0, 0.1);
 
   /* =================================================================
-     🚀 Tech Palette (现代科技感色系)
-     特点：高饱和、高明度、带荧光感
+     💎 Minimalist Tech Palette (极简科技色板)
+     特点：克制、高对比、无边框设计
      ================================================================= */
 
-  /* 1. 🟦 Regular (规则) - Electric Blue (电光蓝) */
-  /* 代表：逻辑、秩序、数据流 */
-  --color-type-regular: #3b82f6;
-  --color-type-regular-bg: #eff6ff;
-  --glow-type-regular: rgba(59, 130, 246, 0.5);
+  /* 1. ⚪ Regular (规则) - 基础中性色 */
+  /* 设计意图：像键盘上的普通按键，低调存在 */
+  --color-type-regular-bg: #f3f4f6; /* 浅灰底 (Gray 100) */
+  --color-type-regular-text: #374151; /* 深灰字 (Gray 700) */
+  --glow-type-regular: rgba(0, 0, 0, 0.1); /* 几乎无光晕 */
 
-  /* 2. 🟨 Trap (陷阱) - Cyber Lemon (赛博柠檬) */
-  /* 代表：警示、高亮、注意 */
-  --color-type-trap: #facc15;
-  --color-type-trap-text: #854d0e; /* 并在黄底上用深褐/黑字 */
-  --color-type-trap-bg: #fefce8;
+  /* 2. 🟡 Trap (陷阱) - 警示黄 */
+  /* 设计意图：高亮，文字必须深色以保证可读性 */
+  --color-type-trap-bg: #facc15; /* Yellow 400 */
+  --color-type-trap-text: #422006; /* Brown 900 (接近黑) */
   --glow-type-trap: rgba(250, 204, 21, 0.6);
 
-  /* 3. 🟧 Mutant (变异) - Neon Coral (霓虹珊瑚/橙) */
-  /* 代表：突变、不稳定、能量 */
-  --color-type-mutant: #ff6b6b; /* 比之前的橙色更红、更亮 */
-  --color-type-mutant-bg: #fff5f5;
-  --glow-type-mutant: rgba(255, 107, 107, 0.5);
+  /* 3. 🟠 Mutant (变异) - 活力橙/红 */
+  /* 设计意图：能量感，深底白字 */
+  --color-type-mutant-bg: #ff5e5e; /* Bright Red/Coral */
+  --color-type-mutant-text: #ffffff; /* White */
+  --glow-type-mutant: rgba(255, 94, 94, 0.6);
 
-  /* 4. 🟪 Rune (符文) - Deep Violet (深空紫) */
-  /* 代表：神秘、核心、独立 */
-  --color-type-rune: #8b5cf6;
-  --color-type-rune-bg: #f5f3ff;
-  --glow-type-rune: rgba(139, 92, 246, 0.5);
+  /* 4. 🟣 Rune (符文) - 核心紫 */
+  /* 设计意图：深邃，深底白字 */
+  --color-type-rune-bg: #7c3aed; /* Violet 600 */
+  --color-type-rune-text: #ffffff; /* White */
+  --glow-type-rune: rgba(124, 58, 237, 0.6);
 
-  /* --- 通用选中态光晕 --- */
-  --shadow-selected:
-    0 0 0 3px #ffffff, 0 0 0 6px var(--active-color),
-    0 8px 20px var(--active-glow);
+  /* 通用阴影 */
+  --shadow-floating: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
 }
 
 .jaFont {

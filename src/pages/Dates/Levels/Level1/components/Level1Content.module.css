@@ -1,10 +1,10 @@
 /* src/pages/Dates/Levels/Level1/components/Level1Content.module.css */
 
-/* === Legend 图例区 === */
+/* === Legend 图例区 (保持克制) === */
 .legendArea {
   padding: 16px 16px 0;
   display: flex;
-  gap: 8px;
+  gap: 12px; /* 间距拉大，更透气 */
   overflow-x: auto;
   scrollbar-width: none;
   justify-content: center;
@@ -13,63 +13,55 @@
 
 .legendItem {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: #fff;
-  border: 1px solid #f3f4f6;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px; /* 胶囊形 */
+  background: transparent; /* 默认无背景 */
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 64px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid transparent;
 }
 
-.legendItem span {
-  font-size: 11px;
-  font-weight: 700;
-  color: #6b7280;
-  margin-top: 4px;
-}
-
+/* 图例的小圆点 */
 .legendDot {
-  width: 10px;
-  height: 10px;
-}
-
-.legendActive {
-  background: #1f2937;
-  border-color: #1f2937;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-.legendActive span {
-  color: #fff;
-}
-.legendActive .legendDot {
-  border: 2px solid #fff;
-}
-
-.legend_regular .legendDot {
-  background: var(--color-type-regular);
-  border-radius: 2px;
-}
-.legend_trap .legendDot {
-  background: var(--color-type-trap);
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-}
-.legend_mutant .legendDot {
-  background: var(--color-type-mutant);
-  border-radius: 2px;
-  border: 1px dashed #000;
-}
-.legend_rune .legendDot {
-  background: var(--color-type-rune);
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
-/* === Grid 内容区 === */
+.legendItem span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af; /* 默认灰色文字 */
+  letter-spacing: 0.5px;
+}
+
+/* 激活状态：文字变深，加一点底色 */
+.legendActive {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.legendActive span {
+  color: #1f2937;
+}
+
+/* 颜色映射 */
+.legend_regular .legendDot {
+  background: #9ca3af;
+} /* Regular 图例用灰色表示 */
+.legend_trap .legendDot {
+  background: var(--color-type-trap-bg);
+}
+.legend_mutant .legendDot {
+  background: var(--color-type-mutant-bg);
+}
+.legend_rune .legendDot {
+  background: var(--color-type-rune-bg);
+}
+
+/* === Grid 网格区 === */
 .contentArea {
   flex: 1;
   overflow-y: auto;
@@ -82,121 +74,98 @@
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 12px; /* 间距拉大 */
+  gap: 16px; /* 间距更大，增加高级感 */
   width: 100%;
   max-width: 400px;
 }
 
 .dayCell {
   aspect-ratio: 1;
-  background: #fff;
-  color: var(--color-Gray8);
+
+  /* 🟢 统一圆形 */
+  border-radius: 50%;
+  border: none; /* 去掉边框 */
+
   font-size: 16px;
   font-weight: 700;
   font-family: 'SF Mono', 'Roboto Mono', monospace, sans-serif;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 1px solid transparent;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* 默认微弱投影 */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-/* 1. 🟦 积木 (Regular) */
+/* --- 颜色逻辑 (Shape 全是圆形，只变颜色) --- */
+
+/* 1. Regular: 极简灰白 */
 .type_regular {
-  border-radius: 8px;
   background: var(--color-type-regular-bg);
-  color: var(--color-type-regular);
-  border-color: rgba(59, 130, 246, 0.2);
+  color: var(--color-type-regular-text);
 }
 
-/* 2. 🟨 陷阱 (Trap) - 芯片造型 */
+/* 2. Trap: 亮黄黑字 */
 .type_trap {
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
   background: var(--color-type-trap-bg);
   color: var(--color-type-trap-text);
-  border: 1px solid var(--color-type-trap);
-  border-radius: 4px;
-}
-.type_trap::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 4px;
-  height: 4px;
-  background: var(--color-type-trap);
-  border-radius: 50%;
 }
 
-/* 3. 🟧 变异 (Mutant) - 虚线框 */
+/* 3. Mutant: 红底白字 */
 .type_mutant {
-  border-radius: 8px;
   background: var(--color-type-mutant-bg);
-  color: var(--color-type-mutant);
-  border: 2px dashed var(--color-type-mutant);
-  background-image: radial-gradient(
-    var(--color-type-mutant-bg) 40%,
-    transparent 100%
-  );
+  color: var(--color-type-mutant-text);
 }
 
-/* 4. 🟪 符文 (Rune) - 双层圆 */
+/* 4. Rune: 紫底白字 */
 .type_rune {
-  border-radius: 50%;
   background: var(--color-type-rune-bg);
-  color: var(--color-type-rune);
-  border: 2px solid var(--color-type-rune);
-  box-shadow: inset 0 0 0 2px #fff;
+  color: var(--color-type-rune-text);
 }
 
-/* === 选中态 (光晕效果) === */
+/* === 选中态 (Pure Glow) === */
 .cellActive {
-  transform: scale(1.15) !important;
-  z-index: 20;
-  border-color: transparent !important;
-  background: #fff !important;
-  clip-path: none !important; /* 选中变回完整 */
-  border-radius: 12px !important;
+  transform: scale(1.2); /* 明显放大 */
+  z-index: 10;
+  /* 选中时，字体统一加粗一点 */
+  font-weight: 800;
 }
 
+/* 选中时光晕逻辑：同色系光晕扩散 */
 .cellActive.type_regular {
-  color: var(--color-type-regular) !important;
+  background: #fff; /* Regular 选中变白，显得干净 */
+  color: #000;
   box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 6px var(--color-type-regular),
-    0 12px 24px var(--glow-type-regular);
+    0 0 0 4px #e5e7eb,
+    0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .cellActive.type_trap {
-  color: var(--color-type-trap-text) !important;
   box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 6px var(--color-type-trap),
-    0 12px 24px var(--glow-type-trap);
+    0 0 0 4px rgba(250, 204, 21, 0.3),
+    0 8px 16px var(--glow-type-trap);
 }
 
 .cellActive.type_mutant {
-  color: var(--color-type-mutant) !important;
   box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 6px var(--color-type-mutant),
-    0 12px 24px var(--glow-type-mutant);
+    0 0 0 4px rgba(255, 94, 94, 0.3),
+    0 8px 16px var(--glow-type-mutant);
 }
 
 .cellActive.type_rune {
-  color: var(--color-type-rune) !important;
   box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 6px var(--color-type-rune),
-    0 12px 24px var(--glow-type-rune);
+    0 0 0 4px rgba(124, 58, 237, 0.3),
+    0 8px 16px var(--glow-type-rune);
 }
 
+/* Dimmed */
 .cellDimmed {
-  opacity: 0.2;
-  filter: grayscale(100%) blur(1px);
-  transform: scale(0.9);
+  opacity: 0.1; /* 更淡，让未选中的几乎隐身 */
+  transform: scale(0.8);
+  filter: grayscale(100%);
   pointer-events: none;
 }

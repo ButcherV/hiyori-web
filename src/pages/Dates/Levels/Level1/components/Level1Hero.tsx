@@ -52,8 +52,8 @@ export const Level1Hero: React.FC<Level1HeroProps> = ({
             >
               <div className={styles.heroSubNumber}>{item.id}日</div>
               <div className={`${styles.heroKanji} jaFont`}>{item.kanji}</div>
-              <div className={`${styles.heroKana} jaFont`}>{item.kana}</div>
               <div className={styles.heroRomaji}>{item.romaji}</div>
+              <div className={`${styles.heroKana} jaFont`}>{item.kana}</div>
             </motion.div>
           </AnimatePresence>
         </div>

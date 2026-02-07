@@ -1,3 +1,5 @@
+/* src/pages/Dates/Levels/Level1/components/Level1Controller.module.css */
+
 .controller {
   position: absolute;
   bottom: 24px;
@@ -11,50 +13,101 @@
 
 .controllerInner {
   pointer-events: auto;
-  background: #111827;
-  padding: 8px 12px 8px 24px;
-  border-radius: 100px;
+
+  /* 🟢 玻璃拟态 (Light Glass) */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.05);
+
+  /* 布局 */
+  padding: 0; /* 内部 padding 由子元素控制，方便进度条定位 */
+  width: 180px; /* 固定宽度，显得精致 */
+  height: 64px;
+  border-radius: 32px;
+
   display: flex;
   align-items: center;
-  gap: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
+  padding-left: 24px;
+  padding-right: 8px; /* 右侧给大按钮留空间 */
+
+  position: relative;
+  overflow: hidden; /* 裁剪进度条 */
 }
 
+/* 🟢 数据文字 (Data Text) */
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.progressLabel {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.progressValue {
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: -0.5px;
+}
+
+.totalValue {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* 🟢 播放按钮 (右侧大圆) */
 .playBtn {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: #fff;
-  color: #000;
+
+  /* 纯黑按钮，极高对比度 */
+  background: #1e293b;
+  color: #fff;
   border: none;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  margin-left: 8px;
-  transition: all 0.2s;
-}
-.playBtn:active {
-  transform: scale(0.95);
+
+  /* 微弱光晕 */
+  box-shadow: 0 4px 10px rgba(30, 41, 59, 0.3);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.ctrlBtn {
-  background: none;
-  border: none;
-  padding: 8px;
-  color: #9ca3af;
-  cursor: pointer;
+.playBtn:active {
+  transform: scale(0.92);
+  background: #0f172a;
 }
-.ctrlActive {
-  color: #fff;
+
+/* 🟢 底部细进度条 */
+.progressBarTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.05);
 }
-.progressText {
-  font-size: 15px;
-  font-weight: 700;
-  font-feature-settings: 'tnum';
-  min-width: 50px;
-  text-align: center;
+
+.progressBarFill {
+  height: 100%;
+  background: #3b82f6; /* Electric Blue */
+  transition: width 0.3s ease;
+  border-radius: 0 2px 2px 0;
 }
