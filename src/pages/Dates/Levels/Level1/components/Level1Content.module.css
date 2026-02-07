@@ -76,7 +76,7 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 16px; /* 间距更大，增加高级感 */
   width: 100%;
-  max-width: 400px;
+  /* max-width: 400px; */
 }
 
 .dayCell {

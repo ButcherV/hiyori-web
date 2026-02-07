@@ -1,143 +1,205 @@
+/* src/pages/Dates/Levels/Level4/components/YearCard.module.css */
+
 .cardContainer {
-  margin: 16px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
+  position: relative;
+  width: 100%;
+  max-width: 320px; /* 稍微调窄一点，显得更精致 */
+  aspect-ratio: 3 / 4;
+
+  /* 🟢 关键：下沉效果 */
+  /* 不需要 margin-bottom，因为我们在 Level4.module.css 里用 padding 控制了 */
+  /* 但我们可以加一点 translateY 动画让它出现时有插入感 */
+  transform: translateY(40px); /* 默认位置往下沉一点 */
+
+  /* 阴影调整：因为下半部分被遮挡，阴影要更聚拢 */
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+    0 20px 50px -20px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+
+  /* ... 其他保持不变 ... */
+  border-radius: 16px;
+  background: #1e293b;
+  border: 4px solid #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+/* 🟢 背景图片层 */
+.bgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+
+  /* 🔴 删除或忽略这一行 (它只对 img 标签有效) */
+  /* object-fit: cover; */
+
+  /* 🟢 新增：正确的背景图适配方式 */
+  background-size: cover; /* 铺满整个卡片 */
+  background-position: center; /*以此为中心裁剪 */
+  background-repeat: no-repeat;
+
+  /* 保持之前的呼吸动画 */
+  transform: scale(1.05);
+  transition: opacity 0.5s ease;
+}
+
+/* 🟢 胶片颗粒质感层 (可选，增加复古味) */
+.grainOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.3;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 🟢 渐变遮罩：保证文字清晰 */
+.contentOverlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 24px 20px;
+
+  /* 从底部向上的黑色渐变 */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    transparent 100%
+  );
 
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 增加文字阴影 */
 }
 
-/* 顶部导航 */
-.eraHeader {
+/* 顶部导航 (时代切换) - 悬浮在右上角 */
+.eraNav {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 800;
+  gap: 8px;
 }
-.eraTitle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.eraRomaji {
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
-.eraKanji {
-  font-size: 18px;
-}
-
 .navBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  color: inherit;
-  transition: background 0.2s;
-}
-.navBtn:active {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-/* 主内容区 */
-.mainContent {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-/* 头像占位 */
-.avatarPlaceholder {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  border: 3px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.avatarText {
-  font-size: 40px;
-  font-weight: 900;
-  opacity: 0.2;
-  font-family: var(--font-family-ja);
+.navBtn:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
 }
 
-/* 信息组 */
-.infoGroup {
-  flex: 1;
+/* 核心文字排版 */
+.mainTitleGroup {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
   gap: 8px;
+  margin-bottom: 4px;
+}
+
+.eraKanji {
+  /* 昭和、平成 */
+  font-family:
+    'Yu Mincho', 'Hiragino Mincho ProN', serif; /* 宋体/明朝体，更有历史感 */
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.yearNumber {
+  /* 64年 */
+  font-family: 'SF Mono', serif;
+  font-size: 24px;
+  font-weight: 400;
+  opacity: 0.9;
 }
 
 .westernYear {
-  font-size: 42px;
-  font-weight: 900;
-  line-height: 1;
-  color: #1e293b;
+  /* 1989 */
+  position: absolute;
+  top: 20px;
+  left: 20px;
   font-family: 'SF Mono', monospace;
-  letter-spacing: -2px;
-}
-.unit {
-  font-size: 16px;
-  margin-left: 4px;
-  font-weight: 600;
-  color: #94a3b8;
-}
-
-.japaneseYear {
-  align-self: flex-start;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #1e293b; /* 在淡色背景上用深色字 */
-}
-
-.readings {
-  margin-top: 4px;
-}
-.romaji {
   font-size: 14px;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 标签 */
-.tags {
+/* 读音区域 */
+.readingGroup {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
+  align-items: center;
+  gap: 12px;
+}
+
+.kana {
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.romaji {
+  font-size: 12px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 播音按钮 */
+.playBtn {
+  margin-left: auto; /* 挤到最右边 */
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.playBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* 陷阱/特殊标签 */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-weight: bold;
 }
 .tagTrap {
-  font-size: 10px;
-  background: #fef2f2;
-  color: #ef4444;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  border: 1px solid #fee2e2;
-}
-.tagSpecial {
-  font-size: 10px;
-  background: #eff6ff;
-  color: #3b82f6;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  border: 1px solid #dbeafe;
+  background: #ef4444;
+  color: white;
 }

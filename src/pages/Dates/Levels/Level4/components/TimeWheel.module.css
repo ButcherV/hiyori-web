@@ -3,41 +3,50 @@
 .wheelContainer {
   position: relative;
   width: 100%;
-  height: 260px; /* 舞台高度 */
-  background: #f8fafc; /* 干净的背景 */
-  overflow: hidden;
+  height: 260px;
 
-  /* 3D 舞台视距 */
+  /* 🟢 关键：背景改为透明，让底下的卡片或者页面背景透出来 */
+  background: transparent;
+
+  overflow: hidden;
   perspective: 1000px;
   perspective-origin: 50% 50%;
+
+  /* 🟢 关键：复合遮罩 */
+  /* 1. 左右渐变：为了让轮盘两侧消失 */
+  /* 2. 顶部渐变：为了让卡片“插进来”时没有硬切边，而是柔和过渡 */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    /* 顶部完全透明，露出更多卡片 */ black 20%,
+    /* 中间实心，显示轮盘 */ black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 100%
+  );
+
+  /* 如果觉得左右遮罩也需要保留，可以用 radial-gradient 配合 */
 }
 
-/* 红色指针：悬浮在圆柱体表面 */
-.cursor {
+/* 红色指针：倒三角 */
+/* .cursor {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 4px;
-  height: 60px; /* 对应圆柱体高度 */
-  background: #ef4444;
-  transform: translate(-50%, -50%) translateZ(220px); /* Z值要比圆柱半径稍大 */
+  width: 0;
+  height: 0;
   z-index: 100;
-  border-radius: 2px;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
   pointer-events: none;
-}
-.cursor::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid #ef4444;
-}
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #ef4444;
+  transform: translate(-50%, -60px) translateZ(220px);
+  filter: drop-shadow(0 2px 4px rgba(239, 68, 68, 0.4));
+} */
 
-/* 隐形的滚动轨道：只负责产生滚动事件和惯性 */
 .scrollTrack {
   position: absolute;
   top: 0;
@@ -47,14 +56,13 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  opacity: 0; /* 完全透明，只用作交互层 */
-  z-index: 50; /* 在最上层接收触摸 */
+  opacity: 0;
+  z-index: 50;
   display: flex;
 }
 .scrollTrack::-webkit-scrollbar {
   display: none;
 }
-
 .spacer {
   flex-shrink: 0;
   width: 50vw;
@@ -66,51 +74,49 @@
   height: 100%;
 }
 
-/* 🟢 3D 渲染层：真正的圆柱体 */
 .cylinderStage {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
-
-  /* 整体姿态：向后倒 25 度 (俯视) */
   transform-style: preserve-3d;
+  /* 俯视前倾角度 */
   transform: rotateX(-15deg);
 }
 
-/* 圆柱体容器：负责旋转 (Spin) */
 .cylinderBody {
   position: absolute;
   top: 0;
   left: 0;
   transform-style: preserve-3d;
   will-change: transform;
-  /* 初始角度 */
 }
 
-/* 🟢 顶盖 (实心圆) */
+/* 顶盖：实体旋钮风格 */
 .topFace {
   position: absolute;
   top: 0;
   left: 0;
-  width: 400px; /* 2 * 半径 */
+  width: 400px;
   height: 400px;
   border-radius: 50%;
-
-  /* 材质：带一点渐变，模拟光照 */
-  background: radial-gradient(circle at 50% 30%, #f1f5f9 0%, #cbd5e1 100%);
-  border: 1px solid #94a3b8;
-
-  /* 位置：向上平移半个高度，并旋转放平 */
-  /* 高度设为 60px，所以这里上移 30px */
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border: 1px solid #cbd5e1;
+  background-image: repeating-radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 3px,
+    transparent 4px
+  );
   transform: translate(-50%, -50%) translateY(-30px) rotateX(90deg);
-
-  /* 阴影增加立体感 */
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    inset 0 0 60px rgba(255, 255, 255, 0.8),
+    inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 🟢 底盖 */
+/* 底盖 */
 .bottomFace {
   position: absolute;
   top: 0;
@@ -118,46 +124,75 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: #94a3b8; /* 底面深一点，当影子 */
+
+  /* background: #cbd5e1; */
+  border: 1px solid #94a3b8;
+
+  /* 之前是 40px，现在改为 30px，消除缝隙 */
   transform: translate(-50%, -50%) translateY(30px) rotateX(90deg);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* 地面投影 */
+
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); */
 }
 
-/* 侧面的年份卡片 */
+/* 🟢 刻度单元：加高至 64px (上下各插入盖子 2px) */
 .faceItem {
   position: absolute;
   top: 0;
   left: 0;
   width: 80px;
-  height: 50px; /* 略小于圆柱高度，留出上下边沿 */
+  height: 60px; /* 加高 4px */
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-
-  font-family: monospace;
-  font-weight: 800;
-  font-size: 18px;
-  color: #64748b;
-
-  /* 默认隐藏背面，提升性能 */
+  background: transparent;
   backface-visibility: hidden;
 
-  /* 确保中心对齐 */
-  margin-top: -25px; /* height/2 */
-  margin-left: -40px; /* width/2 */
+  margin-top: -30px; /* 居中修正 (64/2) */
+  margin-left: -40px;
 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  font-weight: 500;
+  font-size: 16px;
+  color: #94a3b8;
+
+  /* 刻度线 */
+  background-image:
+    linear-gradient(to bottom, #cbd5e1 12px, transparent 12px),
+    /* 上线略加长 */ linear-gradient(to top, #cbd5e1 12px, transparent 12px); /* 下线略加长 */
+  background-position:
+    top center,
+    bottom center;
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+
+  transition: color 0.2s;
 }
 
-/* 选中态 */
+/* 🟢 副刻度线 (侧面的短线) */
+/* 这个保留用伪元素，因为它位置比较特殊 */
+.faceItem::before {
+  content: '';
+  position: absolute;
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%) translateX(40px); /* 稍微右移，放在两个年份中间 */
+  left: 0;
+  width: 1px;
+  height: 8px; /* 短刻度 */
+  background-color: #e2e8f0;
+}
+
+/* 🟢 选中态 */
 .faceActive {
-  background: #fff7ed;
-  color: #ea580c;
-  border-color: #f97316;
-  box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+  color: #1e293b;
+  font-weight: 800;
+  font-size: 20px;
+
+  /* 选中时：刻度线变红、变长、变粗 */
+  background-image:
+    linear-gradient(to bottom, #ef4444 16px, transparent 16px),
+    /* 上刻度变长 */ linear-gradient(to top, #ef4444 16px, transparent 16px); /* 下刻度变长 */
+
+  background-size: 3px 100%; /* 线变粗 */
 }

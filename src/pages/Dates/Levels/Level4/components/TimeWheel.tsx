@@ -1,6 +1,6 @@
 // src/pages/Dates/Levels/Level4/components/TimeWheel.tsx
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styles from './TimeWheel.module.css';
 
 interface TimeWheelProps {
@@ -24,14 +24,11 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
     (_, i) => minYear + i
   );
 
-  // 🟢 物理参数
-  const RADIUS = 200; // 圆柱半径
-  const ANGLE_PER_ITEM = 18; // 每个年份占多少度 (越小越密)
-
-  // 用来控制虚拟滚动的宽度，模拟阻尼
-  // 360度 = 多少像素的滚动距离？设大一点手感好
+  // 物理参数
+  const RADIUS = 200;
+  const ANGLE_PER_ITEM = 18;
   const PIXELS_PER_DEGREE = 3;
-  const ITEM_PIXEL_WIDTH = ANGLE_PER_ITEM * PIXELS_PER_DEGREE;
+  const ITEM_PIXEL_WIDTH = ANGLE_PER_ITEM * PIXELS_PER_DEGREE; // 54px
 
   // 渲染循环
   const updateRotation = () => {
@@ -39,28 +36,18 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
 
     const scrollLeft = scrollRef.current.scrollLeft;
 
-    // 计算当前总旋转角度
-    // 滚动 1个 itemWidth = 旋转 1个 angle
+    // 旋转圆柱体
     const currentAngle = -(scrollLeft / ITEM_PIXEL_WIDTH) * ANGLE_PER_ITEM;
-
-    // 应用旋转到圆柱体
     cylinderRef.current.style.transform = `rotateY(${currentAngle}deg)`;
 
-    // 计算当前选中的年份 (用于高亮)
-    // 加上一个微小的偏移防止 flicker
+    // 高亮逻辑
     const index = Math.round(scrollLeft / ITEM_PIXEL_WIDTH);
     const activeYear = minYear + index;
 
-    // 我们不需要 React state 来控制高亮（太慢），直接操作 DOM class
-    // 这里简单起见，我们还是通知父组件，但也做一些本地优化
     if (activeYear !== currentYearRef.current) {
-      // 更新高亮 class
       const oldEl = cylinderRef.current.querySelector(`.${styles.faceActive}`);
       if (oldEl) oldEl.classList.remove(styles.faceActive);
 
-      // 找到新的 element
-      // 注意：数据量大时 querySelector 可能会慢，生产环境建议用 Map 缓存 Refs
-      // 这里为了演示直接查 data-year
       const newEl = cylinderRef.current.querySelector(
         `[data-year="${activeYear}"]`
       );
@@ -68,13 +55,11 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
     }
   };
 
-  // 使用 ref 追踪 currentYear 避免闭包陷阱
   const currentYearRef = useRef(currentYear);
   useEffect(() => {
     currentYearRef.current = currentYear;
   }, [currentYear]);
 
-  // 滚动处理
   const handleScroll = () => {
     if (!scrollRef.current) return;
     window.requestAnimationFrame(updateRotation);
@@ -97,7 +82,6 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
     if (scrollRef.current) {
       const targetScrollLeft = (currentYear - minYear) * ITEM_PIXEL_WIDTH;
       if (Math.abs(scrollRef.current.scrollLeft - targetScrollLeft) > 2) {
-        // 简单判断是否需要动画
         const isFar =
           Math.abs(scrollRef.current.scrollLeft - targetScrollLeft) > 500;
         scrollRef.current.scrollTo({
@@ -118,7 +102,12 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
         ref={scrollRef}
         onScroll={handleScroll}
       >
-        <div className={styles.spacer} />
+        {/* 🟢 修复：Spacer 减去半个刻度宽，确保 Item 中心完美对齐屏幕中心 */}
+        <div
+          className={styles.spacer}
+          style={{ width: `calc(50% - ${ITEM_PIXEL_WIDTH / 2}px)` }}
+        />
+
         {years.map((y) => (
           <div
             key={y}
@@ -126,22 +115,24 @@ export const TimeWheel: React.FC<TimeWheelProps> = ({
             style={{ width: ITEM_PIXEL_WIDTH }}
           />
         ))}
-        <div className={styles.spacer} />
+
+        {/* 右侧 Spacer 也要对称 */}
+        <div
+          className={styles.spacer}
+          style={{ width: `calc(50% - ${ITEM_PIXEL_WIDTH / 2}px)` }}
+        />
       </div>
 
       {/* 3D 视觉层 */}
       <div className={styles.cylinderStage}>
         <div className={styles.cylinderBody} ref={cylinderRef}>
-          {/* 顶盖和底盖 */}
           <div className={styles.topFace} />
           <div className={styles.bottomFace} />
 
           {/* 侧面年份 */}
           {years.map((year, i) => {
-            // 只渲染视野附近的 DOM 以提升性能 (可视角度 +/- 100度)
-            const relativeIndex = i - (currentYear - minYear);
-            const angleDiff = relativeIndex * ANGLE_PER_ITEM;
-            // if (Math.abs(angleDiff) > 120) return null; // 简单剔除不可见项
+            const distance = Math.abs(year - currentYear);
+            if (distance > 15) return null;
 
             return (
               <div
