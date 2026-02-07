@@ -52,3 +52,43 @@ html {
   /* 禁止用户手势缩放，模拟 App 体验 */
   touch-action: manipulation;
 }
+
+/* 解决 IOS 对 button 的顽固默认样式 */
+
+button {
+  /* 1. 清除 iOS 默认外观（最关键的一步） */
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* 2. 清除默认边框、背景、内边距 */
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  /* 3. 继承字体设置，防止 iOS 强制改字体大小 */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+  /* 4. 解决布局问题：让 button 像 div 一样好排版 */
+  /* iOS 的 button 默认可能是 inline-block，且 vertical-align 有问题 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 5. 消除点击高亮背景（可选，如果你自己做了 active 态建议加上） */
+  -webkit-tap-highlight-color: transparent;
+
+  /* 6. 确保鼠标手型（PC端） */
+  cursor: pointer;
+}
+
+/* 7. 解决 Icon 被挤压变小的问题（核心修复） */
+button svg,
+button img {
+  /* 告诉浏览器：无论空间多挤，图标都不许缩小！ */
+  flex-shrink: 0;
+  display: block; /* 消除图片底部的幽灵间距 */
+}

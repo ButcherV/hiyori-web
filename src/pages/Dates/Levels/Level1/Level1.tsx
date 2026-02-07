@@ -2,27 +2,33 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './Level1.module.css';
-import { datesData, type DateType } from './Level1Data'; // 注意路径
+import { datesData, type DateType } from './Level1Data';
 import { useTTS } from '../../../../hooks/useTTS';
 
 import { Level1Hero } from './components/Level1Hero';
 import { Level1Content } from './components/Level1Content';
 import { Level1Controller } from './components/Level1Controller';
 
+export type LoopMode = 'off' | 'all' | 'one';
+
 export const Level1 = () => {
   const { speak } = useTTS();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [loopMode, setLoopMode] = useState<LoopMode>('off');
   const [filterType, setFilterType] = useState<DateType | null>(null);
+
+  // 🟢 新增：心跳状态，用于强制触发 useEffect
+  // 专门解决 "单曲循环时 index 不变导致 useEffect 不跑" 的 Bug
+  const [tick, setTick] = useState(0);
 
   const timerRef = useRef<number | null>(null);
   const currentList = datesData || [];
   const currentItem = currentList[currentIndex];
 
-  // 🟢 新增：计算“有效播放队列”的信息，传给 Controller
+  // 进度计算 (保持不变)
   const progressInfo = useMemo(() => {
-    // 1. 如果没筛选，就是简单索引
     if (!filterType) {
       return {
         current: currentIndex + 1,
@@ -30,18 +36,12 @@ export const Level1 = () => {
         percent: ((currentIndex + 1) / currentList.length) * 100,
       };
     }
-
-    // 2. 如果有筛选，计算当前项在“筛选列表”里的排名
     const filteredList = currentList.filter((d) => d.type === filterType);
     const total = filteredList.length;
-    // 找当前 ID 在筛选列表里的位置
     const indexInFilter = filteredList.findIndex(
       (d) => d.id === currentItem.id
     );
-
-    // 如果当前选中的项不符合筛选（比如用户手动点了灰色的），进度显示为 "- / Total" 或者保持上一个
     const current = indexInFilter !== -1 ? indexInFilter + 1 : 0;
-
     return {
       current,
       total,
@@ -49,75 +49,95 @@ export const Level1 = () => {
     };
   }, [currentIndex, currentList, filterType, currentItem]);
 
-  // --- 播放逻辑 ---
-  // 查找下一个符合条件的索引
-  const findNextValidIndex = (startIndex: number): number => {
-    if (!filterType) return startIndex + 1; // 没筛选直接+1
+  // 查找下一个索引 (保持不变)
+  const findNextIndex = (currentIdx: number): number => {
+    if (loopMode === 'one') return currentIdx; // 单曲循环：永远返回自己
 
-    let searchIndex = startIndex + 1;
+    let searchIndex = currentIdx + 1;
     while (searchIndex < currentList.length) {
-      if (currentList[searchIndex].type === filterType) return searchIndex;
+      if (!filterType || currentList[searchIndex].type === filterType) {
+        return searchIndex;
+      }
       searchIndex++;
     }
-    return -1; // 没找到（到头了）
+
+    if (loopMode === 'all') {
+      let firstIndex = 0;
+      while (firstIndex < currentList.length) {
+        if (!filterType || currentList[firstIndex].type === filterType) {
+          return firstIndex;
+        }
+        firstIndex++;
+      }
+    }
+    return -1;
   };
 
+  // --- 播放核心逻辑 ---
   useEffect(() => {
     if (!isPlaying || !currentList.length) {
       if (timerRef.current) clearTimeout(timerRef.current);
       return;
     }
 
-    const playNext = () => {
-      // 1. 只有当前项符合筛选（或没筛选）时才发声
+    const playStep = () => {
+      // 1. 发声
       const isVisible = !filterType || currentItem.type === filterType;
-      if (isVisible && currentItem) speak(currentItem.kana);
+      if (isVisible && currentItem) {
+        speak(currentItem.kana);
+      }
 
-      // 2. 找下一个
-      const nextIndex = findNextValidIndex(currentIndex);
+      // 2. 计算下一跳
+      const nextIndex = findNextIndex(currentIndex);
 
-      // 如果当前项被过滤掉了，0秒跳过；否则正常间隔
-      const duration = isVisible ? 1500 : 0;
+      let duration = isVisible ? 1600 : 0;
+      if (loopMode === 'one') duration = 1200;
 
       timerRef.current = window.setTimeout(() => {
         if (nextIndex !== -1) {
-          // 还有下一个，继续
           setCurrentIndex(nextIndex);
+
+          // 🟢 关键修复：
+          // 无论 index 变没变，都更新 tick，强行触发下一次 useEffect
+          setTick((t) => t + 1);
         } else {
-          // 到头了，停止播放 (去掉了 Loop 逻辑，保持克制)
           setIsPlaying(false);
         }
       }, duration);
     };
 
-    playNext();
+    playStep();
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
+
+    // 🟢 依赖数组里加入 `tick`
+    // 这样每次 setTick，useEffect 都会重新运行，实现单曲循环
   }, [
     isPlaying,
     currentIndex,
-    currentList.length,
-    speak,
+    loopMode,
     filterType,
     currentItem,
+    speak,
+    currentList.length,
+    tick,
   ]);
 
   // --- 交互 ---
   const handleFilterChange = (type: DateType) => {
     const newFilter = filterType === type ? null : type;
     setFilterType(newFilter);
-    // 切换筛选时，如果当前项不符合，自动跳到该类型的第一个
     if (newFilter && currentItem.type !== newFilter) {
       const firstValid = datesData.findIndex((d) => d.type === newFilter);
       if (firstValid !== -1) setCurrentIndex(firstValid);
     }
   };
 
-  const handleItemClick = (index: number) => {
-    setCurrentIndex(index);
-    setIsPlaying(false);
-    speak(currentList[index].kana);
+  const toggleLoopMode = () => {
+    if (loopMode === 'off') setLoopMode('all');
+    else if (loopMode === 'all') setLoopMode('one');
+    else setLoopMode('off');
   };
 
   return (
@@ -137,14 +157,19 @@ export const Level1 = () => {
         currentIndex={currentIndex}
         filterType={filterType}
         onFilterChange={handleFilterChange}
-        onItemClick={handleItemClick}
+        onItemClick={(idx) => {
+          setCurrentIndex(idx);
+          setIsPlaying(false);
+          speak(currentList[idx].kana);
+        }}
       />
 
       <Level1Controller
         isPlaying={isPlaying}
-        onTogglePlay={() => setIsPlaying(!isPlaying)}
-        // 🟢 传入新的进度对象
+        loopMode={loopMode}
         progress={progressInfo}
+        onTogglePlay={() => setIsPlaying(!isPlaying)}
+        onToggleLoop={toggleLoopMode}
       />
     </div>
   );

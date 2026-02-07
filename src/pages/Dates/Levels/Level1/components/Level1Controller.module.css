@@ -14,45 +14,77 @@
 .controllerInner {
   pointer-events: auto;
 
-  /* 🟢 玻璃拟态 (Light Glass) */
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /* 💎 极简玻璃质感 */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.8);
+
+  /* 悬浮阴影 */
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    0 12px 24px -4px rgba(0, 0, 0, 0.08);
 
-  /* 布局 */
-  padding: 0; /* 内部 padding 由子元素控制，方便进度条定位 */
-  width: 180px; /* 固定宽度，显得精致 */
+  /* 布局调整：加宽以容纳 Loop 按钮 */
+  width: 220px;
   height: 64px;
   border-radius: 32px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 24px;
-  padding-right: 8px; /* 右侧给大按钮留空间 */
+  padding: 0 8px 0 16px; /* 左宽右窄，因为右边按钮大 */
 
   position: relative;
-  overflow: hidden; /* 裁剪进度条 */
+  overflow: hidden;
 }
 
-/* 🟢 数据文字 (Data Text) */
-.progressInfo {
+/* === 1. Loop 按钮 (左) === */
+.loopBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #94a3b8; /* 默认浅灰 */
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
 }
 
-.progressLabel {
-  font-size: 10px;
-  color: #94a3b8;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.loopBtn:active {
+  transform: scale(0.9);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* 激活状态：深色 + 强对比 */
+.loopActive {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 激活指示点 (可选) */
+.loopIndicator {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  background: #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #3b82f6;
+}
+
+/* === 2. 数据展示 (中) === */
+.progressInfo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .progressValue {
@@ -61,21 +93,26 @@
   font-weight: 700;
   color: #334155;
   letter-spacing: -0.5px;
+
+  /* 垂直居中微调 */
+  display: flex;
+  align-items: baseline;
 }
 
 .totalValue {
   font-size: 14px;
   color: #94a3b8;
   font-weight: 500;
+  margin-left: 2px;
 }
 
-/* 🟢 播放按钮 (右侧大圆) */
+/* === 3. 播放按钮 (右) === */
 .playBtn {
   width: 48px;
   height: 48px;
   border-radius: 50%;
 
-  /* 纯黑按钮，极高对比度 */
+  /* 纯黑实体，极高对比度 */
   background: #1e293b;
   color: #fff;
   border: none;
@@ -85,9 +122,10 @@
   justify-content: center;
   cursor: pointer;
 
-  /* 微弱光晕 */
-  box-shadow: 0 4px 10px rgba(30, 41, 59, 0.3);
+  box-shadow: 0 6px 16px rgba(30, 41, 59, 0.25);
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  flex-shrink: 0;
 }
 
 .playBtn:active {
@@ -95,14 +133,14 @@
   background: #0f172a;
 }
 
-/* 🟢 底部细进度条 */
+/* === 4. 底部细进度条 === */
 .progressBarTrack {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 3px;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .progressBarFill {
@@ -110,4 +148,7 @@
   background: #3b82f6; /* Electric Blue */
   transition: width 0.3s ease;
   border-radius: 0 2px 2px 0;
+
+  /* 增加一点发光感 */
+  box-shadow: 0 -1px 4px rgba(59, 130, 246, 0.3);
 }

@@ -46,7 +46,7 @@ export const Level1Content: React.FC<Level1ContentProps> = ({
             const isDimmed = filterType && filterType !== day.type;
             const isActive = currentIndex === index;
             return (
-              <button
+              <div
                 key={day.id}
                 className={`
                   ${styles.dayCell} 
@@ -57,7 +57,7 @@ export const Level1Content: React.FC<Level1ContentProps> = ({
                 onClick={() => onItemClick(index)}
               >
                 {day.id}
-              </button>
+              </div>
             );
           })}
         </div>
