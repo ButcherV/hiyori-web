@@ -13,6 +13,8 @@ interface SmartCalendarProps {
   activeMode: NavMode;
   onDateSelect: (date: Date) => void;
   onModeChange: (mode: NavMode) => void;
+  // 🟢 1. 接收子组件 (这就是我们的"特种子弹")
+  children?: React.ReactNode;
 }
 
 export const SmartCalendar: React.FC<SmartCalendarProps> = ({
@@ -20,29 +22,40 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   activeMode,
   onDateSelect,
   onModeChange,
+  children,
 }) => {
+  // 判断是否处于 Day 模式
+  const isFocusMode = activeMode === 'day';
+
   return (
-    <div className={styles.wrapper}>
-      {/* 1. 头部积木 */}
-      <CalendarHeader
-        date={date}
-        activeMode={activeMode}
-        onModeChange={onModeChange}
-      />
+    <div
+      className={`${styles.wrapper} ${isFocusMode ? styles.wrapperFocus : ''}`}
+    >
+      {/* 🟢 2. 折叠区：Header 和 Week 在这里，Day 模式下会被 CSS 动画收起 */}
+      <div
+        className={`${styles.collapseSection} ${isFocusMode ? styles.collapsed : ''}`}
+      >
+        <div className={styles.collapseInner}>
+          <CalendarHeader date={date} />
+          <WeekRow
+            currentWeekDay={date.getDay()}
+            activeMode={activeMode}
+            onModeChange={onModeChange}
+          />
+        </div>
+      </div>
 
-      {/* 2. 星期积木 */}
-      <WeekRow
-        currentWeekDay={date.getDay()}
-        activeMode={activeMode}
-        onModeChange={onModeChange}
-      />
-
-      {/* 3. 网格积木 */}
-      <CalendarGrid
-        date={date}
-        activeMode={activeMode}
-        onDateSelect={onDateSelect}
-      />
+      {/* 🟢 3. 内容切换区 */}
+      {/* 如果有子组件 (DayCanvas)，就渲染子组件；否则渲染默认网格 */}
+      {children ? (
+        children
+      ) : (
+        <CalendarGrid
+          date={date}
+          activeMode={activeMode}
+          onDateSelect={onDateSelect}
+        />
+      )}
     </div>
   );
 };

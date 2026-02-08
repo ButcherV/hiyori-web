@@ -8,11 +8,18 @@ interface DateCellProps {
   dayNum: number;
   isGhost: boolean;
   isSelected: boolean;
-  isFocus: boolean;
+
+  // 变形相关的 Props
+  isLevel1Mode: boolean; // 是否进入 Level 1 变形模式
+  level1Type: string; // 'rune' | 'trap' | 'mutant' | 'regular'
+
+  isDimmed: boolean;
+  hideContent: boolean;
+
   holiday: string | null;
   relative: string | null;
-  isRed: boolean; // 新增：是否红日子 (周日/祝日)
-  isSaturday: boolean; // 新增：是否蓝日子 (周六)
+  isRed: boolean;
+  isSaturday: boolean;
   onSelect: (date: Date) => void;
 }
 
@@ -21,7 +28,12 @@ export const DateCell: React.FC<DateCellProps> = ({
   dayNum,
   isGhost,
   isSelected,
-  isFocus,
+
+  isLevel1Mode,
+  level1Type,
+
+  isDimmed,
+  hideContent,
   holiday,
   relative,
   isRed,
@@ -32,15 +44,25 @@ export const DateCell: React.FC<DateCellProps> = ({
     <div
       className={`
         ${styles.dayCell} 
+        
+        /* 基础状态 */
         ${isGhost ? styles.dayGhost : ''}
         ${isSelected ? styles.daySelected : ''}
-        ${isFocus ? styles.dayFocus : ''}
         ${isRed ? styles.dayRed : ''}
         ${isSaturday ? styles.dayBlue : ''}
+        
+        /* 🟢 Level 1 变形模式类 */
+        ${isLevel1Mode ? styles.modeLevel1 : ''}
+        ${isLevel1Mode ? styles[`type_${level1Type}`] : ''}
+        
+        /* 其他状态 */
+        ${isDimmed ? styles.dayDimmed : ''} 
+        ${hideContent ? styles.contentHidden : ''}
       `}
       onClick={() => onSelect(date)}
     >
       <span className={styles.dayNum}>{dayNum}</span>
+
       <div className={styles.tagContainer}>
         {relative && (
           <span className={`${styles.tag} ${styles.tagRelative}`}>

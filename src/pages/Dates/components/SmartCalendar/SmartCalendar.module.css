@@ -1,7 +1,66 @@
 /* src/pages/Dates/components/SmartCalendar/SmartCalendar.module.css */
 
 .wrapper {
-  padding: 16px;
+  padding: 16px 12px 0;
   max-width: 480px;
   margin: 0 auto;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+
+.wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #cbd5e1 20%,
+    #cbd5e1 80%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+/* 🟢 进入 Focus 模式时，顶部装饰线消失 */
+.wrapperFocus::before {
+  opacity: 0;
+}
+
+/* === 🟢 核心折叠动画 (Collapse Animation) === */
+
+.collapseSection {
+  /* 使用 Grid 动画技术实现高度从有到无 */
+  display: grid;
+  grid-template-rows: 1fr; /* 默认：撑开 */
+  opacity: 1;
+
+  /* 贝塞尔曲线模拟机械收缩感 */
+  transition:
+    grid-template-rows 0.5s cubic-bezier(0.1, 0.7, 0.1, 1),
+    opacity 0.3s ease-out,
+    margin-bottom 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+
+  margin-bottom: 0;
+}
+
+.collapseInner {
+  /* 必须有 overflow: hidden 才能实现折叠 */
+  overflow: hidden;
+  /* 让内部内容底部对齐，这样折叠时看起来像“向上卷起” */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* 🟢 折叠态 */
+.collapsed {
+  grid-template-rows: 0fr; /* 高度塌陷为 0 */
+  opacity: 0; /* 透明度变 0 */
+  margin-bottom: -16px; /* 负边距，把下面的 Grid 再往上拉一点 */
+  pointer-events: none; /* 禁止交互 */
 }

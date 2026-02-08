@@ -1,0 +1,200 @@
+/* src/pages/Dates/components/DateDetailPanel/DateDetailPanel.module.css */
+
+.panel {
+  width: 100%;
+  padding: 0 16px 24px;
+  animation: slideUp 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === 头部装饰 === */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.headerLabel {
+  font-family: 'SF Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 1px;
+}
+
+.divider {
+  flex: 1;
+  height: 1px;
+  background: #cbd5e1;
+}
+
+/* === 列表 === */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* === 单个条目 (Item) === */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* 框体样式 */
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 4px; /* 直角微圆，工业感 */
+
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.item:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+  transform: translateX(4px); /* 悬停时整体右移一点点 */
+}
+
+/* 装饰左侧边条 */
+.item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #cbd5e1;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.item:hover::before {
+  opacity: 1;
+}
+
+/* === 1. Label Group (左侧) === */
+.labelGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 80px; /* 固定宽度对齐 */
+}
+
+.icon {
+  color: #94a3b8;
+}
+
+.label {
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+/* === 2. Value Group (中间核心) === */
+.valueGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 12px;
+  border-left: 1px dashed #e2e8f0; /* 虚线分隔 */
+}
+
+.mainValue {
+  font-family: -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.subValue {
+  font-family: 'SF Mono', monospace;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* === 3. Action (右侧交互) === */
+.action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #cbd5e1;
+  transition: color 0.2s;
+}
+
+.actionText {
+  font-family: 'SF Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0; /* 默认隐藏文字，只留箭头 */
+  transform: translateX(10px);
+  transition: all 0.2s;
+}
+
+.item:hover .action {
+  color: #3b82f6;
+}
+.item:hover .actionText {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* === 特殊区块样式 === */
+
+/* 相对时间 (高亮蓝) */
+.itemHighlight {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+.itemHighlight .label,
+.itemHighlight .icon {
+  color: #0284c7;
+}
+.itemHighlight .statusDot {
+  width: 6px;
+  height: 6px;
+  background: #0ea5e9;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #0ea5e9;
+}
+.itemHighlight:hover {
+  border-color: #0284c7;
+}
+.itemHighlight::before {
+  background: #0ea5e9;
+}
+
+/* 节日 (危险红) */
+.itemDanger {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.itemDanger .label,
+.itemDanger .icon {
+  color: #dc2626;
+}
+.itemDanger:hover {
+  border-color: #dc2626;
+}
+.itemDanger::before {
+  background: #dc2626;
+}

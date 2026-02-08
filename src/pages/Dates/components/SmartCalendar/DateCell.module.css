@@ -1,21 +1,26 @@
 /* src/pages/Dates/components/SmartCalendar/DateCell.module.css */
 
+/* === 基础样式 (Overview Mode) === */
 .dayCell {
   aspect-ratio: 1;
   width: 100%;
   position: relative;
-
-  border-radius: 6px;
+  border-radius: 6px; /* 平时是圆角方块 */
   background: #f8fafc;
-
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.15s ease-out;
+
+  /* 🟢 关键：增加 border-radius 和 background 的过渡，实现方变圆、白变色的动画 */
+  transition:
+    border-radius 0.5s cubic-bezier(0.1, 0.7, 0.1, 1),
+    background-color 0.4s ease,
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity 0.4s ease,
+    box-shadow 0.4s ease;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid #f1f5f9;
 }
 
@@ -25,36 +30,24 @@
   z-index: 1;
 }
 
-/* === 水印数字 (背景) === */
+/* === 水印数字 (平时) === */
 .dayNum {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
   font-size: 26px;
   font-weight: 700;
-
-  /* 颜色清晰化，避免太淡看不见 */
   color: #64748b;
   opacity: 0.25;
-
   z-index: 0;
   pointer-events: none;
   line-height: 1;
+  transition: all 0.3s ease;
 }
 
-.dayRed .dayNum {
-  color: #ef4444;
-  opacity: 0.2;
-}
-.dayBlue .dayNum {
-  color: #3b82f6;
-  opacity: 0.2;
-}
-
-/* === 标签容器 (前景) === */
+/* 标签容器 */
 .tagContainer {
   position: relative;
   z-index: 1;
@@ -65,46 +58,120 @@
   align-items: center;
   justify-content: center;
   gap: 1px;
-  padding: 1px; /* 极小内边距 */
+  padding: 1px;
+  transition: opacity 0.2s ease;
 }
 
-/* 标签样式：支持折行 */
 .tag {
-  font-family:
-    'Hiragino Sans', 'Noto Sans JP', 'Meiryo', 'Yu Gothic', sans-serif;
-  font-size: 9px; /* 小字号 */
-  line-height: 1.1; /* 紧凑行高 */
+  font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+  line-height: 1.1;
   font-weight: 700;
-
-  /* 🟢 核心修改：允许折行，完整展示长文字 */
   white-space: normal;
-  word-break: break-all; /* 日文折行规则 */
-  overflow: visible; /* 即使超出一丢丢也显示出来 */
-
-  width: 100%;
-  padding: 0 1px;
+  word-break: break-all;
   text-align: center;
-
-  /* 保持阴影，确保在水印上方清晰可见 */
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
-
 .tagRelative {
   color: #0284c7;
   border-left: 2px solid #0284c7;
   padding-left: 2px;
 }
-
 .tagHoliday {
   color: #dc2626;
 }
 
-/* === 状态 (States) === */
+/* ========================================= */
+/* 🟢 变形核心：Level 1 Mode (Day Learning)  */
+/* ========================================= */
 
-/* 幽灵日 (2月底的29/30/31) */
+/* 1. 形状改变：方块 -> 圆形 */
+.modeLevel1 {
+  border-radius: 50% !important; /* 变圆 */
+  border: none !important; /* 去掉边框 */
+  background: #e2e8f0; /* 默认底色 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 增加一点立体感 */
+}
+
+/* 2. 内容改变：Level 1 模式下，原来的标签要隐藏，数字要变清晰 */
+.modeLevel1 .tagContainer {
+  opacity: 0; /* 隐藏节日标签 */
+}
+
+.modeLevel1 .dayNum {
+  opacity: 1; /* 数字完全显形 */
+  color: #fff; /* 默认白色文字 */
+  font-size: 16px; /* 字号调整 */
+  font-weight: 700;
+}
+
+/* 3. 颜色映射 (Level 1 的配色) */
+/* Regular: 灰 */
+.type_regular.modeLevel1 {
+  background: #9ca3af;
+  color: white;
+}
+/* Trap: 黄 */
+.type_trap.modeLevel1 {
+  background: #facc15; /* yellow-400 */
+}
+.type_trap.modeLevel1 .dayNum {
+  color: #713f12;
+} /* 深褐字 */
+
+/* Mutant: 红 */
+.type_mutant.modeLevel1 {
+  background: #f87171; /* red-400 */
+}
+
+/* Rune: 紫 */
+.type_rune.modeLevel1 {
+  background: #a78bfa; /* violet-400 */
+}
+
+/* === 状态：选中 (Active) 在 Level 1 模式下的表现 === */
+/* 实现原来的 "Pure Glow" 效果 */
+
+.modeLevel1.daySelected {
+  transform: scale(1.25); /* 明显放大 */
+  z-index: 10;
+  background: #fff !important; /* 选中变白，显得干净 */
+  box-shadow:
+    0 0 0 4px #e5e7eb,
+    0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.modeLevel1.daySelected .dayNum {
+  color: #1e293b !important; /* 文字变黑 */
+  opacity: 1 !important;
+}
+
+/* 各个颜色的选中光晕 */
+.modeLevel1.daySelected.type_trap {
+  box-shadow:
+    0 0 0 4px rgba(250, 204, 21, 0.3),
+    0 8px 16px rgba(250, 204, 21, 0.4);
+}
+.modeLevel1.daySelected.type_mutant {
+  box-shadow:
+    0 0 0 4px rgba(248, 113, 113, 0.3),
+    0 8px 16px rgba(248, 113, 113, 0.4);
+}
+.modeLevel1.daySelected.type_rune {
+  box-shadow:
+    0 0 0 4px rgba(167, 139, 250, 0.3),
+    0 8px 16px rgba(167, 139, 250, 0.4);
+}
+
+/* === 状态：未选中 (Dimmed) 在 Level 1 模式下 === */
+/* 原来 Level 1 没有 dim，所有球都亮着。但这里为了聚焦，可以稍微淡一点点，或者保持全亮 */
+.modeLevel1.dayDimmed {
+  opacity: 0.6; /* 稍微暗一点，体现出选中项 */
+  transform: scale(0.9);
+  filter: grayscale(0.2);
+}
+
+/* === 兼容旧的 Ghost 样式 === */
 .dayGhost {
   opacity: 1;
-  /* 虚线边框 + 条纹背景，清晰展示“这里有格子” */
   background: repeating-linear-gradient(
     45deg,
     transparent,
@@ -119,51 +186,8 @@
   color: #cbd5e1;
   opacity: 0.4;
 }
-
-/* 选中态 */
-@keyframes pressDown {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.92);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.daySelected {
-  background: #0f172a !important;
-  border-color: #0f172a !important;
-  animation: pressDown 0.2s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
-  z-index: 2;
-}
-.daySelected .dayNum {
-  color: #fff;
-  opacity: 0.15;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-.daySelected .tag {
-  color: #fff;
-  text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
-}
-.daySelected .tagRelative {
-  border-color: #fff;
-}
-
-/* 聚焦态 */
-.dayFocus {
-  background: #3b82f6 !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
-  z-index: 10;
-}
-.dayFocus .dayNum {
-  color: #fff;
-  opacity: 0.25;
-}
-.dayFocus .tag {
-  color: #fff;
+.modeLevel1.dayGhost {
+  /* 在 Level 1 模式下，Ghost 直接消失，因为只要显示 1-31 */
+  opacity: 0;
+  pointer-events: none;
 }

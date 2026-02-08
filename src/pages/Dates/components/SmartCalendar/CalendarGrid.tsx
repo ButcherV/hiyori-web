@@ -1,14 +1,16 @@
 // src/pages/Dates/components/SmartCalendar/CalendarGrid.tsx
 
 import React from 'react';
-import styles from './CalendarGrid.module.css'; // 确保引用了正确的 CSS
+import styles from './CalendarGrid.module.css';
 import { DateCell } from './DateCell';
 import { type NavMode } from '../../PageDates';
 import {
   getJapaneseHoliday,
   getRelativeLabel,
   isRedDay,
-} from '../../../../utils/dateHelper';
+} from '../../../../utils/dateHelper'; // 修正路径
+// 🟢 引入 Level 1 数据
+import { datesData } from '../../Levels/Level1/Level1Data';
 
 interface CalendarGridProps {
   date: Date;
@@ -25,13 +27,13 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   const month = date.getMonth();
   const day = date.getDate();
 
-  // 计算月初空白
   const firstDayObj = new Date(year, month, 1);
   const startDayOfWeek = firstDayObj.getDay();
   const blanks = Array(startDayOfWeek).fill(null);
-
-  // 固定 31 天
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+  // 判断是否处于 Day Mode (Level 1 变形模式)
+  const isLevel1Mode = activeMode === 'day';
 
   return (
     <div className={styles.grid}>
@@ -41,13 +43,13 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
       {days.map((d) => {
         const currentCellDate = new Date(year, month, d);
-        // 判断是否是“幽灵日” (即实际上已经跳到了下个月)
         const isGhostDay = currentCellDate.getMonth() !== month;
-
         const isSelected = d === day && !isGhostDay;
-        const isFocus = activeMode === 'day' && isSelected;
 
-        // 获取情报 (幽灵日不计算)
+        // 🟢 获取 Level 1 的类型数据 (d-1 因为数组从0开始)
+        const level1Item = datesData[d - 1];
+        const level1Type = level1Item ? level1Item.type : 'regular';
+
         const holiday = !isGhostDay
           ? getJapaneseHoliday(currentCellDate)
           : null;
@@ -63,13 +65,17 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
             dayNum={d}
             isGhost={isGhostDay}
             isSelected={isSelected}
-            isFocus={isFocus}
+            // 🟢 传入变形开关和类型
+            isLevel1Mode={isLevel1Mode}
+            level1Type={level1Type}
+            // 在 Level 1 模式下，选中的格子不需要 hideContent 了，而是高亮显示
+            // 只有非 Level 1 模式下的聚焦才需要 hideContent
+            hideContent={false}
+            isDimmed={isLevel1Mode && !isSelected} // Level 1 模式下，非选中的变暗一点
             holiday={holiday}
             relative={relative}
             isRed={isRed}
             isSaturday={isSaturday}
-            // 🟢 修复核心：如果是幽灵日，就传一个空函数，或者在 DateCell 里拦截
-            // 这里我们选择直接拦截：只有非幽灵日才触发 onDateSelect
             onSelect={(dt) => {
               if (!isGhostDay) {
                 onDateSelect(dt);

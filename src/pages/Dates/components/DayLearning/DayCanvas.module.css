@@ -1,0 +1,155 @@
+/* src/pages/Dates/components/DayLearning/DayCanvas.module.css */
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* 进场动画 */
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Legend 图例区 === */
+.legendArea {
+  padding: 12px 0 8px;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  justify-content: center;
+  flex-shrink: 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.legendLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.legend_regular .legendDot {
+  background: #9ca3af;
+}
+.legend_trap .legendDot {
+  background: #facc15;
+}
+.legend_mutant .legendDot {
+  background: #f87171;
+}
+.legend_rune .legendDot {
+  background: #a78bfa;
+}
+
+.legendActive {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.legendActive .legendLabel {
+  color: #1e293b;
+}
+
+/* === Grid 网格区 === */
+.contentArea {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 顶对齐 */
+  overflow-y: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.cell {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-family: 'SF Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 颜色定义 */
+.type_regular {
+  background: #9ca3af;
+  color: white;
+}
+.type_trap {
+  background: #facc15;
+  color: #713f12;
+}
+.type_mutant {
+  background: #f87171;
+  color: white;
+}
+.type_rune {
+  background: #a78bfa;
+  color: white;
+}
+
+/* 选中态 (Glow) */
+.cellSelected {
+  transform: scale(1.15);
+  z-index: 10;
+  background: #fff !important;
+  color: #1e293b !important;
+  font-weight: 800;
+}
+
+.cellSelected.type_regular {
+  box-shadow: 0 0 0 4px #e5e7eb;
+}
+.cellSelected.type_trap {
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.4);
+}
+.cellSelected.type_mutant {
+  box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.4);
+}
+.cellSelected.type_rune {
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.4);
+}
+
+/* Dimmed */
+.cellDimmed {
+  opacity: 0.15;
+  filter: grayscale(100%);
+  transform: scale(0.9);
+  pointer-events: none;
+}

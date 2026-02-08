@@ -1,0 +1,15 @@
+/* src/pages/Dates/components/DayLearning/DayLearning.module.css */
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* 上方留白，让 Hero 垂直位置视觉平衡 */
+  padding-top: 10px;
+
+  position: relative;
+  /* 确保不会被 header 遮挡，也不会遮挡 header */
+}
