@@ -21,13 +21,6 @@
   letter-spacing: 1px;
 }
 
-.sunday {
-  color: #ef4444;
-}
-.saturday {
-  color: #3b82f6;
-}
-
 /* 激活态：加粗，无背景色块 */
 .weekActive {
   color: #0f172a !important;

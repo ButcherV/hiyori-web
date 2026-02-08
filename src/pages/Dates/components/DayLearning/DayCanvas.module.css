@@ -29,7 +29,7 @@
   scrollbar-width: none;
   justify-content: center;
   flex-shrink: 0;
-  border-bottom: 1px dashed #e2e8f0;
+  /* border-bottom: 1px dashed #e2e8f0; */
 }
 
 .legendItem {
@@ -54,17 +54,18 @@
   color: #94a3b8;
 }
 
+/* 颜色映射 */
 .legend_regular .legendDot {
   background: #9ca3af;
-}
+} /* Regular 图例用灰色表示 */
 .legend_trap .legendDot {
-  background: #facc15;
+  background: var(--color-type-trap-bg);
 }
 .legend_mutant .legendDot {
-  background: #f87171;
+  background: var(--color-type-mutant-bg);
 }
 .legend_rune .legendDot {
-  background: #a78bfa;
+  background: var(--color-type-rune-bg);
 }
 
 .legendActive {
@@ -78,7 +79,7 @@
 /* === Grid 网格区 === */
 .contentArea {
   flex: 1;
-  padding: 16px;
+  /* padding: 8px; */
   display: flex;
   justify-content: center;
   align-items: flex-start; /* 顶对齐 */
@@ -88,12 +89,13 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 4px;
   width: 100%;
 }
 
 .cell {
   aspect-ratio: 1;
+  margin: 6px;
   border-radius: 50%;
   font-family: 'SF Mono', monospace;
   font-size: 16px;
@@ -106,27 +108,33 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 颜色定义 */
+/* 1. Regular: 极简灰白 */
 .type_regular {
-  background: #9ca3af;
-  color: white;
+  background: var(--color-type-regular-bg);
+  color: var(--color-type-regular-text);
 }
+
+/* 2. Trap: 亮黄黑字 */
 .type_trap {
-  background: #facc15;
-  color: #713f12;
+  background: var(--color-type-trap-bg);
+  color: var(--color-type-trap-text);
 }
+
+/* 3. Mutant: 红底白字 */
 .type_mutant {
-  background: #f87171;
-  color: white;
+  background: var(--color-type-mutant-bg);
+  color: var(--color-type-mutant-text);
 }
+
+/* 4. Rune: 紫底白字 */
 .type_rune {
-  background: #a78bfa;
-  color: white;
+  background: var(--color-type-rune-bg);
+  color: var(--color-type-rune-text);
 }
 
 /* 选中态 (Glow) */
 .cellSelected {
-  transform: scale(1.15);
+  /* transform: scale(1.15); */
   z-index: 10;
   background: #fff !important;
   color: #1e293b !important;

@@ -33,28 +33,7 @@ export const DayCanvas: React.FC<DayCanvasProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* 1. 图例区 (Legend) */}
-      <div className={styles.legendArea}>
-        {legendTypes.map((type) => (
-          <div
-            key={type}
-            className={`
-              ${styles.legendItem} 
-              ${styles[`legend_${type}`]} 
-              ${filterType === type ? styles.legendActive : ''}
-            `}
-            onClick={() => onFilterChange(type)}
-            style={{ opacity: filterType && filterType !== type ? 0.3 : 1 }}
-          >
-            <div className={styles.legendDot} />
-            <span className={styles.legendLabel}>
-              {t(`date_study.level1.types.${type}.legend`)}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* 2. 网格区 (Grid) - 纯粹的 1-31 */}
+      {/* 网格区 (Grid) - 纯粹的 1-31 */}
       <div className={styles.contentArea}>
         <div className={styles.grid}>
           {datesData.map((item) => {
@@ -78,6 +57,27 @@ export const DayCanvas: React.FC<DayCanvasProps> = ({
             );
           })}
         </div>
+      </div>
+
+      {/* 图例区 (Legend) */}
+      <div className={styles.legendArea}>
+        {legendTypes.map((type) => (
+          <div
+            key={type}
+            className={`
+              ${styles.legendItem} 
+              ${styles[`legend_${type}`]} 
+              ${filterType === type ? styles.legendActive : ''}
+            `}
+            onClick={() => onFilterChange(type)}
+            style={{ opacity: filterType && filterType !== type ? 0.3 : 1 }}
+          >
+            <div className={styles.legendDot} />
+            <span className={styles.legendLabel}>
+              {t(`date_study.level1.types.${type}.legend`)}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -61,6 +61,6 @@
 .collapsed {
   grid-template-rows: 0fr; /* 高度塌陷为 0 */
   opacity: 0; /* 透明度变 0 */
-  margin-bottom: -16px; /* 负边距，把下面的 Grid 再往上拉一点 */
+  /* margin-bottom: -16px;  */
   pointer-events: none; /* 禁止交互 */
 }

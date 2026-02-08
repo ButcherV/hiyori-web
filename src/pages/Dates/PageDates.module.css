@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  padding-top: calc(env(safe-area-inset-top) + 16px);
+  padding-top: calc(env(safe-area-inset-top) + 24px);
   z-index: 50;
   color: white;
 }
@@ -51,7 +51,7 @@
   color: white;
   opacity: 0.9;
   transition: opacity 0.2s;
-  padding: 8px;
+  /* padding: 8px; */
 }
 .iconBtn:active {
   opacity: 0.6;
@@ -84,7 +84,7 @@
 .calendarSection {
   flex: 0 0 auto; /* 高度自适应 */
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  /* border-bottom: 1px solid #e2e8f0; */
   /* padding-bottom: 16px;
   padding-top: 16px; */
   z-index: 20;
@@ -98,7 +98,6 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow-y: auto;
 }
 
 /* === Debug Box (临时) === */

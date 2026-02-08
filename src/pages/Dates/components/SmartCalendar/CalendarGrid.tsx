@@ -8,9 +8,7 @@ import {
   getJapaneseHoliday,
   getRelativeLabel,
   isRedDay,
-} from '../../../../utils/dateHelper'; // 修正路径
-// 🟢 引入 Level 1 数据
-import { datesData } from '../../Levels/Level1/Level1Data';
+} from '../../../../utils/dateHelper';
 
 interface CalendarGridProps {
   date: Date;
@@ -32,8 +30,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   const blanks = Array(startDayOfWeek).fill(null);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-  // 判断是否处于 Day Mode (Level 1 变形模式)
-  const isLevel1Mode = activeMode === 'day';
+  // 🟢 核心逻辑：如果处于 Day 模式，就要求隐藏所有标签
+  const shouldHideTags = activeMode === 'day';
 
   return (
     <div className={styles.grid}>
@@ -46,17 +44,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         const isGhostDay = currentCellDate.getMonth() !== month;
         const isSelected = d === day && !isGhostDay;
 
-        // 🟢 获取 Level 1 的类型数据 (d-1 因为数组从0开始)
-        const level1Item = datesData[d - 1];
-        const level1Type = level1Item ? level1Item.type : 'regular';
-
         const holiday = !isGhostDay
           ? getJapaneseHoliday(currentCellDate)
           : null;
         const relative = !isGhostDay ? getRelativeLabel(currentCellDate) : null;
-        const isRed = !isGhostDay && isRedDay(currentCellDate);
-        const isSaturday =
-          !isGhostDay && currentCellDate.getDay() === 6 && !isRed;
 
         return (
           <DateCell
@@ -65,17 +56,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
             dayNum={d}
             isGhost={isGhostDay}
             isSelected={isSelected}
-            // 🟢 传入变形开关和类型
-            isLevel1Mode={isLevel1Mode}
-            level1Type={level1Type}
-            // 在 Level 1 模式下，选中的格子不需要 hideContent 了，而是高亮显示
-            // 只有非 Level 1 模式下的聚焦才需要 hideContent
-            hideContent={false}
-            isDimmed={isLevel1Mode && !isSelected} // Level 1 模式下，非选中的变暗一点
+            // 🟢 传给子组件
+            hideTags={shouldHideTags}
             holiday={holiday}
             relative={relative}
-            isRed={isRed}
-            isSaturday={isSaturday}
             onSelect={(dt) => {
               if (!isGhostDay) {
                 onDateSelect(dt);
