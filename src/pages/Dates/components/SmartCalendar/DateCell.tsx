@@ -9,19 +9,14 @@ interface DateCellProps {
   isGhost: boolean;
   isSelected: boolean;
 
-  // 🟢 仅保留这一个控制属性：用于进场动画时隐藏标签
-  hideTags?: boolean;
+  // 🟢 加回这两个属性，用于控制背景色
+  isSaturday: boolean;
+  isSunday: boolean;
 
-  // 数据属性
+  hideTags?: boolean;
   holiday: string | null;
   relative: string | null;
-
-  // 交互
   onSelect: (date: Date) => void;
-
-  // ❌ 已删除废弃属性：
-  // isRed, isSaturday (已去色)
-  // hideContent, isDimmed (逻辑已移除)
 }
 
 export const DateCell: React.FC<DateCellProps> = ({
@@ -29,15 +24,17 @@ export const DateCell: React.FC<DateCellProps> = ({
   dayNum,
   isGhost,
   isSelected,
+
+  // 解构
+  isSaturday,
+  isSunday,
+
   hideTags,
   holiday,
   relative,
   onSelect,
 }) => {
-  // 1. 判断内容情况：如果有额外内容，数字就退居二线（变淡）
   const hasExtraContent = Boolean(holiday || relative);
-
-  // 2. 字数判断逻辑：决定是否使用大字号
   const contentText = relative || holiday || '';
   const isShortText = contentText.length > 0 && contentText.length <= 6;
 
@@ -46,16 +43,18 @@ export const DateCell: React.FC<DateCellProps> = ({
       className={`
         ${styles.dayCell} 
         ${isGhost ? styles.dayGhost : ''}
+        
+        /* 🟢 结构层：周六日背景 (优先级低) */
+        ${isSaturday ? styles.isSaturday : ''}
+        ${isSunday ? styles.isSunday : ''}
+
+        /* 🟢 交互层：选中态 (优先级高，放在后面) */
         ${isSelected ? styles.daySelected : ''}
         
-        /* ❌ 删除了 styles.dayRed, styles.dayBlue, styles.dayDimmed */
-        
-        /* 🟢 仅保留这个隐藏类 */
         ${hideTags ? styles.tagsHidden : ''}
       `}
       onClick={() => onSelect(date)}
     >
-      {/* 数字：如果没有额外内容，应用清晰模式 (numClear) */}
       <span
         className={`${styles.dayNum} ${!hasExtraContent ? styles.numClear : ''}`}
       >

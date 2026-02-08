@@ -1,75 +1,111 @@
 /* src/pages/Dates/components/SmartCalendar/DateCell.module.css */
 
-/* === 基础样式 === */
+/* === 基础样式 (Default) === */
 .dayCell {
   aspect-ratio: 1;
   width: 100%;
   position: relative;
+  border-radius: 8px;
 
-  border-radius: 8px; /* 圆润方块 */
+  /* 默认背景：极浅灰/白 */
   background: #f8fafc;
+  border: 1px solid #f1f5f9;
 
   cursor: pointer;
   overflow: hidden;
-
-  /* 🟢 优化过渡： */
-  /* 1. 分别指定属性，性能更好 */
-  /* 2. transform 使用贝塞尔曲线，实现“微弹”效果 */
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #f1f5f9;
-
-  /* 消除移动端点击的高亮色块，使用我们自定义的 active 样式 */
   -webkit-tap-highlight-color: transparent;
 }
 
-.dayCell:hover {
-  background: white;
-  border-color: #cbd5e1;
-  z-index: 1;
-}
-
-/* 🟢 新增：按压时的微缩反馈 (物理触感) */
 .dayCell:active {
   transform: scale(0.95);
-  transition-duration: 0.1s; /* 按下去要快 */
 }
 
-/* === 水印数字 (默认状态) === */
+/* === 水印数字 (基础) === */
 .dayNum {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
   font-size: 26px;
   font-weight: 700;
-  color: #64748b;
-  opacity: 0.25; /* 默认作为背景纹理 */
-
+  color: #64748b; /* 默认灰字 */
+  opacity: 0.15;
   z-index: 0;
   pointer-events: none;
   line-height: 1;
   transition: all 0.2s ease;
 }
 
-/* 清晰模式 */
 .dayNum.numClear {
   opacity: 1 !important;
-  color: #334155;
+  color: #334155; /* 默认清晰灰字 */
   font-weight: 600;
   transform: translate(-50%, -50%) scale(0.75);
 }
 
-/* === 标签容器 === */
+/* ==============================================
+   🥉 结构层：周六日 (Structure Layer)
+   使用淡色背景，增加文字色相
+   ============================================== */
+
+.isSaturday {
+  background-color: var(--color-date-sat-bg); /* 淡蓝底 */
+  border-color: rgba(59, 130, 246, 0.1);
+}
+/* 周六的数字微带蓝色 */
+/* .isSaturday .dayNum {
+  color: var(--color-date-sat-text);
+}
+.isSaturday .dayNum.numClear {
+  color: var(--color-date-sat-text);
+} */
+
+.isSunday {
+  background-color: var(--color-date-sun-bg); /* 淡红底 */
+  border-color: rgba(239, 68, 68, 0.1);
+}
+/* 周日的数字微带红色 */
+/* .isSunday .dayNum {
+  color: var(--color-date-sun-text);
+}
+.isSunday .dayNum.numClear {
+  color: var(--color-date-sun-text);
+} */
+
+/* ==============================================
+   🥇 交互层：选中态 (Interaction Layer)
+   霸道覆盖一切
+   ============================================== */
+
+.daySelected {
+  /* 强制深蓝背景 */
+  background: var(--color-date-selected-bg) !important;
+  border-color: var(--color-date-selected-bg) !important;
+
+  box-shadow: var(--shadow-date-selected);
+  z-index: 10;
+  transform: scale(1.08);
+}
+
+/* 选中时：数字强制反白 */
+.daySelected .dayNum {
+  color: var(--color-date-selected-text) !important;
+}
+/* 选中时：标签强制反白 */
+.daySelected .tag {
+  color: var(--color-date-selected-text) !important;
+  text-shadow: none;
+}
+.daySelected .tagRelative {
+  border-color: var(--color-date-selected-text) !important;
+}
+
+/* === 标签容器 & 样式 (Information Layer) === */
 .tagContainer {
   position: relative;
   z-index: 1;
@@ -83,12 +119,10 @@
   transition: opacity 0.3s ease;
   padding: 0 2px;
 }
-
 .tagsHidden .tagContainer {
   opacity: 0;
 }
 
-/* 基础标签文字 */
 .tag {
   font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   font-size: 9px;
@@ -100,26 +134,21 @@
   transition: color 0.2s ease;
 }
 
-/* 短文本大字号适配 */
 .tagLarge {
   font-size: 11px;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
-/* 信息层颜色 */
+/* 标签颜色 (使用变量) */
 .tagRelative {
-  color: #0284c7;
-  border-left: 2px solid #0284c7;
+  color: var(--color-date-relative);
+  border-left: 2px solid var(--color-date-relative);
   padding-left: 2px;
-  transition: all 0.2s ease;
 }
 .tagHoliday {
-  color: #dc2626;
-  transition: color 0.2s ease;
+  color: var(--color-date-holiday);
 }
-
-/* === 状态 (States) === */
 
 /* 幽灵日 */
 .dayGhost {
@@ -137,35 +166,4 @@
 .dayGhost .dayNum {
   color: #cbd5e1;
   opacity: 0.4;
-}
-
-/* === 🟢 交互层：选中态 (最高优先级) === */
-.daySelected {
-  /* 使用深邃的皇家蓝 */
-  background: #1e3a8a !important;
-  border-color: #1e3a8a !important;
-
-  /* 阴影加重一点，增加悬浮感 */
-  box-shadow: 0 8px 20px -4px rgba(30, 58, 138, 0.4);
-  z-index: 10; /* 提高层级，保证放大时不被遮挡 */
-
-  /* 🟢 启用缩放：配合上面的贝塞尔曲线，会有“弹出来”的感觉 */
-  transform: scale(1.08);
-}
-
-/* 选中时：数字强制反白 */
-.daySelected .dayNum {
-  color: white !important;
-}
-.daySelected .dayNum:not(.numClear) {
-  opacity: 0.25;
-}
-
-/* 选中时：标签强制反白 */
-.daySelected .tag {
-  color: white !important;
-  text-shadow: none;
-}
-.daySelected .tagRelative {
-  border-color: white !important;
 }

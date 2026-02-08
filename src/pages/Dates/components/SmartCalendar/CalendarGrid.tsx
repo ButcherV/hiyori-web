@@ -30,7 +30,6 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   const blanks = Array(startDayOfWeek).fill(null);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-  // 🟢 核心逻辑：如果处于 Day 模式，就要求隐藏所有标签
   const shouldHideTags = activeMode === 'day';
 
   return (
@@ -44,6 +43,12 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         const isGhostDay = currentCellDate.getMonth() !== month;
         const isSelected = d === day && !isGhostDay;
 
+        // 🟢 计算星期属性
+        const dayOfWeek = currentCellDate.getDay();
+        const isSunday = dayOfWeek === 0;
+        const isSaturday = dayOfWeek === 6;
+
+        // 辅助信息
         const holiday = !isGhostDay
           ? getJapaneseHoliday(currentCellDate)
           : null;
@@ -56,7 +61,9 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
             dayNum={d}
             isGhost={isGhostDay}
             isSelected={isSelected}
-            // 🟢 传给子组件
+            // 🟢 传递结构层属性
+            isSaturday={!isGhostDay && isSaturday}
+            isSunday={!isGhostDay && isSunday}
             hideTags={shouldHideTags}
             holiday={holiday}
             relative={relative}
