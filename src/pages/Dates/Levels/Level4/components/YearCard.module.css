@@ -2,32 +2,34 @@
 
 .cardContainer {
   position: relative;
-  width: 100%;
-  max-width: 320px; /* 稍微调窄一点，显得更精致 */
-  aspect-ratio: 3 / 4;
+  width: 320px;
+  height: 420px; /* 固定高度，方便计算 */
 
-  /* 🟢 关键：下沉效果 */
-  /* 不需要 margin-bottom，因为我们在 Level4.module.css 里用 padding 控制了 */
-  /* 但我们可以加一点 translateY 动画让它出现时有插入感 */
-  transform: translateY(40px); /* 默认位置往下沉一点 */
+  /* 🟢 关键修正：位置调整 */
+  /* -50%：卡片中心对齐轮盘中心 */
+  /* -100px：向上提，让卡片底部大概在轮盘底部附近 */
+  /* 你可以根据喜好调整这个 -100px */
+  transform: translateY(-50%) translateY(-100px);
 
-  /* 阴影调整：因为下半部分被遮挡，阴影要更聚拢 */
+  /* 3D 属性 */
+  z-index: 10;
+  /* 注意：这里不需要 transform-style: preserve-3d，因为卡片内部不需要 3D 穿插 */
+
+  border-radius: 16px;
+  background: #1e293b;
+  border: 4px solid #fff;
   box-shadow:
     0 20px 50px -20px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.1);
 
-  /* ... 其他保持不变 ... */
-  border-radius: 16px;
-  background: #1e293b;
-  border: 4px solid #fff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  transform-style: preserve-3d;
   transition: transform 0.3s ease;
 }
-/* 🟢 背景图片层 */
+
+/* ... 以下样式保持不变 ... */
 .bgImage {
   position: absolute;
   top: 0;
@@ -35,21 +37,13 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-
-  /* 🔴 删除或忽略这一行 (它只对 img 标签有效) */
-  /* object-fit: cover; */
-
-  /* 🟢 新增：正确的背景图适配方式 */
-  background-size: cover; /* 铺满整个卡片 */
-  background-position: center; /*以此为中心裁剪 */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-
-  /* 保持之前的呼吸动画 */
   transform: scale(1.05);
   transition: opacity 0.5s ease;
 }
 
-/* 🟢 胶片颗粒质感层 (可选，增加复古味) */
 .grainOverlay {
   position: absolute;
   inset: 0;
@@ -59,29 +53,24 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* 🟢 渐变遮罩：保证文字清晰 */
 .contentOverlay {
   position: relative;
   z-index: 2;
   width: 100%;
   padding: 24px 20px;
-
-  /* 从底部向上的黑色渐变 */
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.85) 0%,
     rgba(0, 0, 0, 0.5) 50%,
     transparent 100%
   );
-
   display: flex;
   flex-direction: column;
   gap: 8px;
   color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 增加文字阴影 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* 顶部导航 (时代切换) - 悬浮在右上角 */
 .eraNav {
   position: absolute;
   top: 16px;
@@ -109,7 +98,6 @@
   transform: scale(0.95);
 }
 
-/* 核心文字排版 */
 .mainTitleGroup {
   display: flex;
   align-items: baseline;
@@ -118,9 +106,7 @@
 }
 
 .eraKanji {
-  /* 昭和、平成 */
-  font-family:
-    'Yu Mincho', 'Hiragino Mincho ProN', serif; /* 宋体/明朝体，更有历史感 */
+  font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
   font-size: 32px;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -128,7 +114,6 @@
 }
 
 .yearNumber {
-  /* 64年 */
   font-family: 'SF Mono', serif;
   font-size: 24px;
   font-weight: 400;
@@ -136,7 +121,6 @@
 }
 
 .westernYear {
-  /* 1989 */
   position: absolute;
   top: 20px;
   left: 20px;
@@ -150,7 +134,6 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 读音区域 */
 .readingGroup {
   display: flex;
   align-items: center;
@@ -170,9 +153,8 @@
   letter-spacing: 1px;
 }
 
-/* 播音按钮 */
 .playBtn {
-  margin-left: auto; /* 挤到最右边 */
+  margin-left: auto;
   background: rgba(255, 255, 255, 0.2);
   border: none;
   width: 36px;
@@ -189,7 +171,6 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* 陷阱/特殊标签 */
 .tag {
   display: inline-block;
   font-size: 10px;

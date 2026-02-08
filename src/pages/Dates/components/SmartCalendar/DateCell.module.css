@@ -1,0 +1,169 @@
+/* src/pages/Dates/components/SmartCalendar/DateCell.module.css */
+
+.dayCell {
+  aspect-ratio: 1;
+  width: 100%;
+  position: relative;
+
+  border-radius: 6px;
+  background: #f8fafc;
+
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.15s ease-out;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #f1f5f9;
+}
+
+.dayCell:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  z-index: 1;
+}
+
+/* === 水印数字 (背景) === */
+.dayNum {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 26px;
+  font-weight: 700;
+
+  /* 颜色清晰化，避免太淡看不见 */
+  color: #64748b;
+  opacity: 0.25;
+
+  z-index: 0;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.dayRed .dayNum {
+  color: #ef4444;
+  opacity: 0.2;
+}
+.dayBlue .dayNum {
+  color: #3b82f6;
+  opacity: 0.2;
+}
+
+/* === 标签容器 (前景) === */
+.tagContainer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 1px; /* 极小内边距 */
+}
+
+/* 标签样式：支持折行 */
+.tag {
+  font-family:
+    'Hiragino Sans', 'Noto Sans JP', 'Meiryo', 'Yu Gothic', sans-serif;
+  font-size: 9px; /* 小字号 */
+  line-height: 1.1; /* 紧凑行高 */
+  font-weight: 700;
+
+  /* 🟢 核心修改：允许折行，完整展示长文字 */
+  white-space: normal;
+  word-break: break-all; /* 日文折行规则 */
+  overflow: visible; /* 即使超出一丢丢也显示出来 */
+
+  width: 100%;
+  padding: 0 1px;
+  text-align: center;
+
+  /* 保持阴影，确保在水印上方清晰可见 */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.tagRelative {
+  color: #0284c7;
+  border-left: 2px solid #0284c7;
+  padding-left: 2px;
+}
+
+.tagHoliday {
+  color: #dc2626;
+}
+
+/* === 状态 (States) === */
+
+/* 幽灵日 (2月底的29/30/31) */
+.dayGhost {
+  opacity: 1;
+  /* 虚线边框 + 条纹背景，清晰展示“这里有格子” */
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    #f1f5f9 2px,
+    #f1f5f9 4px
+  );
+  border: 1px dashed #cbd5e1;
+  pointer-events: none;
+}
+.dayGhost .dayNum {
+  color: #cbd5e1;
+  opacity: 0.4;
+}
+
+/* 选中态 */
+@keyframes pressDown {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.daySelected {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  animation: pressDown 0.2s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+  z-index: 2;
+}
+.daySelected .dayNum {
+  color: #fff;
+  opacity: 0.15;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.daySelected .tag {
+  color: #fff;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+}
+.daySelected .tagRelative {
+  border-color: #fff;
+}
+
+/* 聚焦态 */
+.dayFocus {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+  z-index: 10;
+}
+.dayFocus .dayNum {
+  color: #fff;
+  opacity: 0.25;
+}
+.dayFocus .tag {
+  color: #fff;
+}

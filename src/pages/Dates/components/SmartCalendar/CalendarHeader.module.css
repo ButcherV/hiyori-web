@@ -1,0 +1,59 @@
+/* src/pages/Dates/components/SmartCalendar/CalendarHeader.module.css */
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 8px;
+
+  /* 纯展示，无交互 */
+  pointer-events: none;
+  user-select: none;
+}
+
+.headerItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0.9;
+}
+
+.alignRight {
+  align-items: flex-end;
+}
+
+/* === 左侧：年号 (令和八年) === */
+.eraText {
+  /* 🟢 改回现代黑体 */
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
+    'Noto Sans CJK JP', sans-serif;
+  font-size: 18px; /* 稍微调小一点点，黑体显大 */
+  font-weight: 800; /* 极粗黑体，很有力量感 */
+  color: #0f172a;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.subText {
+  /* 西历小字 (2026) */
+  font-family: 'SF Mono', 'Menlo', monospace; /* 等宽字体保持科技感 */
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* === 右侧：月份 (二月) === */
+.monthText {
+  /* 🟢 改回现代黑体 */
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
+    'Noto Sans CJK JP', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+  letter-spacing: -0.02em; /* 稍微紧凑一点 */
+}

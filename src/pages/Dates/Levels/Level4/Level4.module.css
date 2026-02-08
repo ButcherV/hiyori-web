@@ -3,53 +3,12 @@
 .container {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  /* 背景保持统一，不再分上下 */
-  background: #f8fafc;
   position: relative;
+  background: #f8fafc; /* 背景色，遮罩层需要用到这个颜色 */
   overflow: hidden;
-}
 
-.topSection {
-  flex: 1;
+  /* 垂直居中 */
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* 卡片垂直居中 */
   align-items: center;
-
-  /* 关键：降低层级，让它在轮盘后面 */
-  z-index: 1;
-
-  /* 关键：给底部留出负空间，让卡片看起来往下沉 */
-  padding-bottom: 120px;
-}
-
-.bottomSection {
-  /* 布局定位 */
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 260px; /* 固定高度，与 TimeWheel 一致 */
-
-  /* 关键：提升层级，盖住卡片的下半截 */
-  z-index: 10;
-
-  /* ❌ 去掉背景色、阴影、圆角 */
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
-  padding-top: 0;
-
-  /* 这一行保证鼠标事件能穿透空白区域（可选，视交互需求而定） */
-  /* pointer-events: none; */
-}
-
-/* ❌ 删除旧的遮罩和安全区，因为现在整体融合了 */
-.gradientOverlay {
-  display: none;
-}
-.safeArea {
-  display: none;
+  justify-content: center;
 }

@@ -1,0 +1,9 @@
+/* src/pages/Dates/components/SmartCalendar/CalendarGrid.module.css */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 🟢 间距：保持独立性 */
+  gap: 4px;
+  /* padding-bottom: 12px; */
+}

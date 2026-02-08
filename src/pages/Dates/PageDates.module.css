@@ -1,3 +1,5 @@
+/* src/pages/Dates/PageDates.module.css */
+
 .container {
   width: 100%;
   height: 100%;
@@ -5,18 +7,23 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  background: var(--gradient-header-3);
+  /* 保持原本的渐变背景作为 Header 底色 */
+  background: var(
+    --gradient-header-3,
+    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
+  );
 }
 
-/* === System Header === */
+/* === System Header (保留) === */
 .systemHeader {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  padding-top: calc(env(safe-area-inset-top) + 24px);
+  padding-top: calc(env(safe-area-inset-top) + 16px);
   z-index: 50;
+  color: white;
 }
 
 .headerLeft {
@@ -32,20 +39,6 @@
   font-weight: 700;
   color: white;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  animation: titleSlideIn 0.3s ease-out forwards;
-}
-
-@keyframes titleSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px); /* 从下方 5px 处浮现 */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .iconBtn {
@@ -56,6 +49,12 @@
   justify-content: center;
   cursor: pointer;
   color: white;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+  padding: 8px;
+}
+.iconBtn:active {
+  opacity: 0.6;
 }
 
 .titleWrapper {
@@ -64,13 +63,7 @@
   gap: 4px;
 }
 
-/* === Level Nav Pills === */
-.levelNavWrapper {
-  flex-shrink: 0;
-  padding: 0 0 16px 0;
-}
-
-/* === Workspace === */
+/* === Workspace (新布局容器) === */
 .workspace {
   flex: 1;
   width: 100%;
@@ -78,12 +71,59 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  box-shadow: var(--shadow-header);
+
+  /* 🟢 关键视觉设计：圆角顶部的白色面板 */
+  background-color: #f8fafc; /* 整体浅灰底色 */
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* 给面板加点头部阴影，更有层次感 */
+  z-index: 10;
 }
 
-.infoSheetContent {
-  padding: 0 8px 32px 8px;
+/* === Calendar Section (日历区域) === */
+.calendarSection {
+  flex: 0 0 auto; /* 高度自适应 */
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  /* padding-bottom: 16px;
+  padding-top: 16px; */
+  z-index: 20;
+}
+
+/* === Content Section (内容区域) === */
+.contentSection {
+  flex: 1;
+  background: #f1f5f9; /* 比日历稍深一点的灰，区分层级 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* === Debug Box (临时) === */
+.debugBox {
+  text-align: center;
+  padding: 32px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  margin: 20px;
+}
+.debugLabel {
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.debugValue {
+  font-size: 32px;
+  color: #3b82f6;
+  margin: 8px 0;
+  font-family: 'SF Mono', monospace;
+}
+.debugInfo {
+  font-size: 14px;
+  color: #64748b;
 }

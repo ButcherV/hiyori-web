@@ -1,0 +1,7 @@
+/* src/pages/Dates/components/SmartCalendar/SmartCalendar.module.css */
+
+.wrapper {
+  padding: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}

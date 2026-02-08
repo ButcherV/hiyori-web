@@ -1,0 +1,48 @@
+/* src/pages/Dates/components/SmartCalendar/WeekRow.module.css */
+
+.weekRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  /* 🟢 分隔线：细实线，不再是模糊的阴影 */
+  border-bottom: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.weekItem {
+  text-align: center;
+  font-size: 12px; /* 极小字号，精致 */
+  color: #94a3b8;
+  font-weight: 600;
+  padding: 0;
+  font-family: 'SF Mono', monospace; /* 等宽 */
+  letter-spacing: 1px;
+}
+
+.sunday {
+  color: #ef4444;
+}
+.saturday {
+  color: #3b82f6;
+}
+
+/* 激活态：加粗，无背景色块 */
+.weekActive {
+  color: #0f172a !important;
+  font-weight: 800;
+  position: relative;
+}
+/* 激活时头顶有个小点 */
+.weekActive::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  background: #3b82f6;
+  border-radius: 50%;
+}

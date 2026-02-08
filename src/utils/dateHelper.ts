@@ -50,3 +50,53 @@ export const isRedDay = (date: Date = new Date()): boolean => {
   const isHoliday = !!JapaneseHolidays.isHoliday(date);
   return isSunday || isHoliday;
 };
+
+export const getRelativeLabel = (targetDate: Date): string | null => {
+  const now = new Date();
+  // 只比较日期部分，忽略时间
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const target = new Date(
+    targetDate.getFullYear(),
+    targetDate.getMonth(),
+    targetDate.getDate()
+  );
+
+  const diffTime = target.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return '今日';
+  if (diffDays === 1) return '明日';
+  if (diffDays === -1) return '昨日';
+  return null;
+};
+
+// 🟢 新增：数字转汉字 (用于月份 1-12)
+export const toKanjiNum = (num: number): string => {
+  const kanji = [
+    '〇',
+    '一',
+    '二',
+    '三',
+    '四',
+    '五',
+    '六',
+    '七',
+    '八',
+    '九',
+    '十',
+  ];
+  if (num <= 10) return kanji[num];
+  if (num < 20) {
+    return '十' + (num % 10 === 0 ? '' : kanji[num % 10]);
+  }
+  // 简单处理到 99 (满足年号和月份需求)
+  return (
+    kanji[Math.floor(num / 10)] + '十' + (num % 10 === 0 ? '' : kanji[num % 10])
+  );
+};
+
+// 🟢 新增：获取汉字年号数字 (特殊处理元年)
+export const getKanjiEraYear = (yearNum: number): string => {
+  if (yearNum === 1) return '元年';
+  return toKanjiNum(yearNum) + '年';
+};
