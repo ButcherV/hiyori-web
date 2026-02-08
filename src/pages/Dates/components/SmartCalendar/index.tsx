@@ -1,6 +1,6 @@
 // src/pages/Dates/components/SmartCalendar/index.tsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './SmartCalendar.module.css';
 import { type NavMode } from '../../PageDates';
 
@@ -25,32 +25,82 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
 }) => {
   const isFocusMode = activeMode === 'day';
 
-  // 🟢 新增：控制内容是否已经准备好切换
-  // 默认为 false，表示展示 CalendarGrid
-  const [isContentSwitched, setIsContentSwitched] = useState(false);
+  // 1. 状态初始化
+  const [showDayContent, setShowDayContent] = useState(isFocusMode);
+  const [headerCollapsed, setHeaderCollapsed] = useState(isFocusMode);
+  const [isContentInvisible, setIsContentInvisible] = useState(false);
+  const [cachedChildren, setCachedChildren] = useState(children);
+
+  // 2. 记录上一次模式，防止刷新闪烁
+  const prevFocusMode = useRef(isFocusMode);
 
   useEffect(() => {
-    if (isFocusMode) {
-      // 🟢 进入 Day 模式：延迟 500ms (等待 Header 折叠动画完成) 后再切换内容
-      // 对应 CSS 中的 transition-duration: 0.5s
-      const timer = setTimeout(() => {
-        setIsContentSwitched(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    } else {
-      // 🟢 退出 Day 模式：立即切回 Grid，然后 Header 再展开
-      // 这样用户会看到 Grid 出现，然后被 Header 顶下去，符合物理直觉
-      setIsContentSwitched(false);
+    if (children) {
+      setCachedChildren(children);
     }
+  }, [children]);
+
+  useEffect(() => {
+    // 只有模式改变时才执行动画
+    if (isFocusMode === prevFocusMode.current) {
+      return;
+    }
+    prevFocusMode.current = isFocusMode;
+
+    let step1Timer: number;
+    let step2Timer: number;
+
+    if (isFocusMode) {
+      // ===========================
+      // 🟢 进入 Day 模式 (正序)
+      // ===========================
+      // 1. 立即折叠 Header
+      setHeaderCollapsed(true);
+
+      // 2. 等待折叠动画 (500ms)
+      step1Timer = window.setTimeout(() => {
+        setIsContentInvisible(true); // Grid 开始淡出
+
+        // 3. 等待淡出 (300ms)
+        step2Timer = window.setTimeout(() => {
+          setShowDayContent(true); // 换 Canvas
+          setIsContentInvisible(false); // Canvas 淡入
+        }, 300);
+      }, 500);
+    } else {
+      // ===========================
+      // 🟢 退出 Day 模式 (倒序 - 三步走)
+      // ===========================
+
+      // 第1步 (0ms): Canvas 开始淡出
+      setIsContentInvisible(true);
+
+      // 第2步 (300ms): 切换内容，Grid 原地淡入
+      step1Timer = window.setTimeout(() => {
+        setShowDayContent(false); // 切回 Grid
+        setIsContentInvisible(false); // Grid 开始淡入
+        // 注意：此时 headerCollapsed 依然是 true！Header 还是收起的！
+
+        // 第3步 (600ms): Grid 完全出来了，才开始展开 Header
+        // 这里的 300ms 对应的是 contentContainer 的 transition: opacity 0.3s
+        step2Timer = window.setTimeout(() => {
+          setHeaderCollapsed(false); // Header 终于开始展开
+        }, 300);
+      }, 300); // 等待 Canvas 淡出
+    }
+
+    return () => {
+      clearTimeout(step1Timer);
+      clearTimeout(step2Timer);
+    };
   }, [isFocusMode]);
 
   return (
     <div
-      className={`${styles.wrapper} ${isFocusMode ? styles.wrapperFocus : ''}`}
+      className={`${styles.wrapper} ${headerCollapsed ? styles.wrapperFocus : ''}`}
     >
-      {/* 1. 折叠区 (0.5s 动画) */}
       <div
-        className={`${styles.collapseSection} ${isFocusMode ? styles.collapsed : ''}`}
+        className={`${styles.collapseSection} ${headerCollapsed ? styles.collapsed : ''}`}
       >
         <div className={styles.collapseInner}>
           <CalendarHeader date={date} />
@@ -62,22 +112,22 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         </div>
       </div>
 
-      {/* 2. 内容区 (带延迟的切换) */}
-      {/* 只有当：
-         1. 确实传了子组件 (children存在)
-         2. AND 动画时间到了 (isContentSwitched为true)
-         才渲染 DayCanvas。
-         否则一直保持渲染 CalendarGrid。
-      */}
-      {children && isContentSwitched ? (
-        children
-      ) : (
-        <CalendarGrid
-          date={date}
-          activeMode={activeMode}
-          onDateSelect={onDateSelect}
-        />
-      )}
+      <div
+        className={`
+          ${styles.contentContainer} 
+          ${isContentInvisible ? styles.contentHidden : ''}
+        `}
+      >
+        {cachedChildren && showDayContent ? (
+          cachedChildren
+        ) : (
+          <CalendarGrid
+            date={date}
+            activeMode={activeMode}
+            onDateSelect={onDateSelect}
+          />
+        )}
+      </div>
     </div>
   );
 };

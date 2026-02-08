@@ -1,26 +1,10 @@
-/* src/pages/Dates/components/DayLearning/DayCanvas.module.css */
-
 .container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 居中 */
-  /* 🟢 修正动画：只做透明度渐变，不做位移，确保原地替换感 */
-  animation: fadeIn 0.4s ease-out;
+  align-items: center;
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    /* transform: translateY(10px); ❌ 删掉位移 */
-  }
-  to {
-    opacity: 1;
-    /* transform: translateY(0); */
-  }
-}
-
 /* === Grid 网格区 === */
 .grid {
   display: grid;

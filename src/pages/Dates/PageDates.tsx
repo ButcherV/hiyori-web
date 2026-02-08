@@ -1,6 +1,6 @@
 // src/pages/Dates/PageDates.tsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // 🟢 记得引入 useEffect
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -30,19 +30,35 @@ export const PageDates = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // 1. 真实的日历时间 (决定了 Grid 的空白格、表头年份月份)
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // 🟢 2. 虚拟的学习游标 (1-31)
+  // 默认取今天的日期，但在学习模式下，它可以是 30 或 31，即使当前是 2 月
+  const [learningDay, setLearningDay] = useState(new Date().getDate());
+
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
   const pageTitle = t('date_study.title') || 'Dates Study';
   const isFocusMode = activeMode !== 'overview';
 
+  // 🟢 当进入 Day 模式时，将日历的选中日同步给学习游标
+  useEffect(() => {
+    if (activeMode === 'day') {
+      setLearningDay(selectedDate.getDate());
+    }
+  }, [activeMode, selectedDate]);
+
   const handleHeaderAction = () => {
     if (isFocusMode) {
       setActiveMode('overview');
       setFilterType(null);
     } else {
-      setSelectedDate(new Date());
+      // 回到今天
+      const today = new Date();
+      setSelectedDate(today);
+      setLearningDay(today.getDate()); // 顺便重置游标
     }
   };
 
@@ -84,10 +100,14 @@ export const PageDates = () => {
           >
             {activeMode === 'day' && (
               <DayCanvas
-                currentDate={selectedDate}
-                onDateSelect={setSelectedDate}
+                // 🟢 传入真实年月 (用于计算前面空几格，保持视觉对齐)
+                year={selectedDate.getFullYear()}
+                month={selectedDate.getMonth()}
+                // 🟢 传入虚拟游标 (控制高亮)
+                activeDay={learningDay}
+                // 🟢 点击时只改变游标，不碰 Date
+                onDaySelect={setLearningDay}
                 filterType={filterType}
-                // 🟢 移除了 onFilterChange，因为 Legend 不在这里显示了
               />
             )}
           </SmartCalendar>
@@ -101,10 +121,10 @@ export const PageDates = () => {
             />
           ) : activeMode === 'day' ? (
             <DayLearning
-              currentDate={selectedDate}
-              onDateChange={setSelectedDate}
+              // 🟢 传入学习游标，不再传 Date
+              learningDay={learningDay}
+              onDayChange={setLearningDay}
               filterType={filterType}
-              // 🟢 这里传入 Filter 控制权
               onFilterChange={handleFilterToggle}
             />
           ) : (

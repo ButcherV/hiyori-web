@@ -2,10 +2,13 @@
 
 .wrapper {
   padding: 12px;
-  /* max-width: 480px; */
   margin: 0 auto;
   position: relative;
-  transition: all 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+
+  /* 🟢 修复跳动：不要用 all，指定具体属性 */
+  /* 只过渡我们在 .wrapperFocus 中改变的属性 (如果有的话，目前主要是 padding 或 margin 可能会变) */
+  /* 如果 .wrapperFocus 没有改变 padding，甚至可以不需要这个 transition */
+  transition: padding 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
 
 .wrapper::before {
@@ -26,20 +29,18 @@
   transition: opacity 0.3s;
 }
 
-/* 🟢 进入 Focus 模式时，顶部装饰线消失 */
 .wrapperFocus::before {
   opacity: 0;
 }
 
-/* === 🟢 核心折叠动画 (Collapse Animation) === */
-
+/* === 折叠动画 === */
 .collapseSection {
-  /* 使用 Grid 动画技术实现高度从有到无 */
   display: grid;
-  grid-template-rows: 1fr; /* 默认：撑开 */
+  /* 默认状态：完全展开 */
+  grid-template-rows: 1fr;
   opacity: 1;
 
-  /* 贝塞尔曲线模拟机械收缩感 */
+  /* 🟢 修复跳动：明确指定过渡属性 */
   transition:
     grid-template-rows 0.5s cubic-bezier(0.1, 0.7, 0.1, 1),
     opacity 0.3s ease-out,
@@ -49,18 +50,29 @@
 }
 
 .collapseInner {
-  /* 必须有 overflow: hidden 才能实现折叠 */
   overflow: hidden;
-  /* 让内部内容底部对齐，这样折叠时看起来像“向上卷起” */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  /* 🟢 确保最小高度，防止计算时的抖动 */
+  min-height: 0;
 }
 
-/* 🟢 折叠态 */
+/* 折叠态 */
 .collapsed {
-  grid-template-rows: 0fr; /* 高度塌陷为 0 */
-  opacity: 0; /* 透明度变 0 */
-  /* margin-bottom: -16px;  */
-  pointer-events: none; /* 禁止交互 */
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+  /* margin-bottom: -xx 视情况而定，如果不动布局就保持0 */
+}
+
+/* === 内容容器 === */
+.contentContainer {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+
+.contentHidden {
+  opacity: 0;
+  pointer-events: none;
 }
