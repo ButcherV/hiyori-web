@@ -3,13 +3,33 @@
 .container {
   width: 100%;
   height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background-color: white;
+
+  /* 🟢 核心修复： */
+  /* 让 flex 布局认为底部 120px 是“不可用区域” */
+  /* 这样 justify-content: center 就会把内容往上提，避开绝对定位的 controller */
+  /* padding-bottom: 120px; */
+}
+
+/* 中间内容的包装器 */
+.contentWrapper {
+  flex: 1; /* 占满（除去 padding-bottom 后的）所有空间 */
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  /* 上方留白，让 Hero 垂直位置视觉平衡 */
-  /* padding-top: 10px; */
+  /* 🟢 垂直居中 */
+  /* 这里的“中”是基于剩余空间的，所以永远不会撞到底部的 controller */
+  justify-content: center;
 
-  position: relative;
-  /* 确保不会被 header 遮挡，也不会遮挡 header */
+  /* 防止内容过高时被切掉（虽理论上应该缩放，但加个滚动保险） */
+  min-height: 0;
+  overflow-y: auto;
 }

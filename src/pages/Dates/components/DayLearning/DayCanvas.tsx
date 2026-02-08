@@ -3,81 +3,64 @@
 import React from 'react';
 import styles from './DayCanvas.module.css';
 import { datesData, type DateType } from '../../Levels/Level1/Level1Data';
-import { useTranslation } from 'react-i18next';
 
 interface DayCanvasProps {
-  currentDate: Date;
+  currentDate: Date; // 需要根据这个来计算 offset
   onDateSelect: (date: Date) => void;
   filterType: DateType | null;
-  onFilterChange: (type: DateType) => void;
+  // 注意：onFilterChange 移除了，因为 Legend 不在这里了
 }
 
 export const DayCanvas: React.FC<DayCanvasProps> = ({
   currentDate,
   onDateSelect,
   filterType,
-  onFilterChange,
 }) => {
-  const { t } = useTranslation();
-  const legendTypes: DateType[] = ['rune', 'mutant', 'trap', 'regular'];
-
-  // 当前选中的是几号 (1-31)
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
   const currentDayNum = currentDate.getDate();
+
+  // 🟢 关键逻辑：计算当月1号是周几，生成对应数量的空白格
+  // 这样 1 号的位置就会和日历视图里的 1 号完全重合
+  const firstDayObj = new Date(year, month, 1);
+  const startDayOfWeek = firstDayObj.getDay(); // 0 (Sun) - 6 (Sat)
+  const blanks = Array(startDayOfWeek).fill(null);
 
   const handleItemClick = (dayId: number) => {
     // 保持年份月份不变，只切换日期
-    const newDate = new Date(currentDate);
-    newDate.setDate(dayId);
+    const newDate = new Date(year, month, dayId);
     onDateSelect(newDate);
   };
 
   return (
     <div className={styles.container}>
-      {/* 网格区 (Grid) - 纯粹的 1-31 */}
-      <div className={styles.contentArea}>
-        <div className={styles.grid}>
-          {datesData.map((item) => {
-            // 样式逻辑
-            const isSelected = item.id === currentDayNum;
-            const isDimmed = filterType && filterType !== item.type;
-
-            return (
-              <div
-                key={item.id}
-                className={`
-                  ${styles.cell} 
-                  ${styles[`type_${item.type}`]} 
-                  ${isSelected ? styles.cellSelected : ''}
-                  ${isDimmed ? styles.cellDimmed : ''}
-                `}
-                onClick={() => handleItemClick(item.id)}
-              >
-                {item.id}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 图例区 (Legend) */}
-      <div className={styles.legendArea}>
-        {legendTypes.map((type) => (
-          <div
-            key={type}
-            className={`
-              ${styles.legendItem} 
-              ${styles[`legend_${type}`]} 
-              ${filterType === type ? styles.legendActive : ''}
-            `}
-            onClick={() => onFilterChange(type)}
-            style={{ opacity: filterType && filterType !== type ? 0.3 : 1 }}
-          >
-            <div className={styles.legendDot} />
-            <span className={styles.legendLabel}>
-              {t(`date_study.level1.types.${type}.legend`)}
-            </span>
-          </div>
+      {/* 这里的 Grid 现在包含了 blanks，实现了物理对齐 */}
+      <div className={styles.grid}>
+        {/* 1. 渲染空白占位符 */}
+        {blanks.map((_, i) => (
+          <div key={`blank-${i}`} />
         ))}
+
+        {/* 2. 渲染 1-31 日数据 */}
+        {datesData.map((item) => {
+          const isSelected = item.id === currentDayNum;
+          const isDimmed = filterType && filterType !== item.type;
+
+          return (
+            <div
+              key={item.id}
+              className={`
+                ${styles.cell} 
+                ${styles[`type_${item.type}`]} 
+                ${isSelected ? styles.cellSelected : ''}
+                ${isDimmed ? styles.cellDimmed : ''}
+              `}
+              onClick={() => handleItemClick(item.id)}
+            >
+              {item.id}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

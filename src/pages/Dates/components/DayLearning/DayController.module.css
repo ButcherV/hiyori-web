@@ -1,47 +1,46 @@
 /* src/pages/Dates/components/DayLearning/DayController.module.css */
 
 .controller {
-  /* 布局：固定在容器底部，或者由父级 Flex 控制 */
-  /* 这里我们让它自己在 DayLearning 容器里定位 */
+  /* 🟢 改回绝对定位：固定在容器底部 */
   position: absolute;
-  bottom: 24px;
+  bottom: 20px; /* 稍微留点距离 */
   left: 0;
   right: 0;
+
   display: flex;
   justify-content: center;
-  pointer-events: none; /* 让两侧空白处不挡点击 */
+
+  /* 关键：让鼠标事件穿透两侧空白区，只让按钮挡手 */
+  pointer-events: none;
   z-index: 50;
+
+  /* 适配 iPhone 底部横条 */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .controllerInner {
-  pointer-events: auto;
+  pointer-events: auto; /* 恢复内部交互 */
 
-  /* 💎 极简玻璃质感 */
+  /* 样式保持不变... */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.9);
-
-  /* 悬浮阴影 */
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 12px 24px -4px rgba(0, 0, 0, 0.08);
-
-  /* 尺寸 */
   width: 220px;
   height: 64px;
   border-radius: 32px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px 0 16px; /* 左宽右窄 */
-
+  padding: 0 8px 0 16px;
   position: relative;
   overflow: hidden;
 }
 
-/* === Loop 按钮 === */
+/* ... loopBtn, playBtn 等保持不变 ... */
 .loopBtn {
   width: 36px;
   height: 36px;
@@ -70,8 +69,6 @@
   background: #3b82f6;
   border-radius: 50%;
 }
-
-/* === 进度数字 === */
 .progressInfo {
   flex: 1;
   display: flex;
@@ -91,8 +88,6 @@
   margin-left: 2px;
   font-weight: 500;
 }
-
-/* === 播放按钮 === */
 .playBtn {
   width: 48px;
   height: 48px;
@@ -110,8 +105,6 @@
 .playBtn:active {
   transform: scale(0.95);
 }
-
-/* === 底部进度条 === */
 .progressBarTrack {
   position: absolute;
   bottom: 0;

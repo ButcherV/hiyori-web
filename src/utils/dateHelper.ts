@@ -100,3 +100,27 @@ export const getKanjiEraYear = (yearNum: number): string => {
   if (yearNum === 1) return '元年';
   return toKanjiNum(yearNum) + '年';
 };
+
+// 🟢 新增：和风月名常量
+export const WAFU_GETSUMEI = [
+  '睦月', // 1月
+  '如月', // 2月
+  '弥生', // 3月
+  '卯月', // 4月
+  '皐月', // 5月
+  '水無月', // 6月
+  '文月', // 7月
+  '葉月', // 8月
+  '長月', // 9月
+  '神無月', // 10月
+  '霜月', // 11月
+  '師走', // 12月
+];
+
+/**
+ * 获取月份的和风雅称
+ * @param monthIndex 0-11 (Date.getMonth() 的返回值)
+ */
+export const getWafuMonth = (monthIndex: number): string => {
+  return WAFU_GETSUMEI[monthIndex] || '';
+};

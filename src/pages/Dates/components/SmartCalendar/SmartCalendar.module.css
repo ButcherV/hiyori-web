@@ -1,8 +1,8 @@
 /* src/pages/Dates/components/SmartCalendar/SmartCalendar.module.css */
 
 .wrapper {
-  padding: 16px 12px 0;
-  max-width: 480px;
+  padding: 12px;
+  /* max-width: 480px; */
   margin: 0 auto;
   position: relative;
   transition: all 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);

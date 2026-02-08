@@ -5,100 +5,41 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* 进场动画 */
-  animation: fadeIn 0.3s ease-out;
+  align-items: center; /* 居中 */
+  /* 🟢 修正动画：只做透明度渐变，不做位移，确保原地替换感 */
+  animation: fadeIn 0.4s ease-out;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    /* transform: translateY(10px); ❌ 删掉位移 */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    /* transform: translateY(0); */
   }
 }
 
-/* === Legend 图例区 === */
-.legendArea {
-  padding: 12px 0 8px;
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  justify-content: center;
-  flex-shrink: 0;
-  /* border-bottom: 1px dashed #e2e8f0; */
-}
-
-.legendItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.legendDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.legendLabel {
-  font-size: 11px;
-  font-weight: 600;
-  color: #94a3b8;
-}
-
-/* 颜色映射 */
-.legend_regular .legendDot {
-  background: #9ca3af;
-} /* Regular 图例用灰色表示 */
-.legend_trap .legendDot {
-  background: var(--color-type-trap-bg);
-}
-.legend_mutant .legendDot {
-  background: var(--color-type-mutant-bg);
-}
-.legend_rune .legendDot {
-  background: var(--color-type-rune-bg);
-}
-
-.legendActive {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-.legendActive .legendLabel {
-  color: #1e293b;
-}
-
 /* === Grid 网格区 === */
-.contentArea {
-  flex: 1;
-  /* padding: 8px; */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* 顶对齐 */
-  overflow-y: auto;
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   width: 100%;
+  /* 🟢 确保 Grid 的布局行为和 CalendarGrid 一致 */
+  padding: 0;
 }
+
+/* 删除了 .contentArea 的 flex 包装，直接用 grid 撑开 */
 
 .cell {
   aspect-ratio: 1;
-  margin: 6px;
+  /* margin: 6px; ❌ 删除 margin，因为 CalendarGrid 用的是 gap: 4px，这里要对齐 */
   border-radius: 50%;
   font-family: 'SF Mono', monospace;
   font-size: 16px;
+  margin: 6px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -108,6 +49,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* ... 颜色和选中态保持不变 ... */
 /* 1. Regular: 极简灰白 */
 .type_regular {
   background: var(--color-type-regular-bg);
@@ -134,7 +76,6 @@
 
 /* 选中态 (Glow) */
 .cellSelected {
-  /* transform: scale(1.15); */
   z-index: 10;
   background: #fff !important;
   color: #1e293b !important;

@@ -2,19 +2,21 @@
 
 .heroSection {
   /* 布局：在 DayLearning 容器中居中 */
-  /* margin: 16px auto 0; */
-  /* width: 90%; */
+  margin: 12px;
+  width: 90%;
+  flex: 1;
   /* max-width: 340px; */
   /* height: 260px; */
-  width: 100%;
   height: 100%;
-  /* border-radius: 24px; */
+  border-radius: 12px;
+  width: calc(100vw - 24px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 20px;
+  justify-content: center;
+  /* padding-top: 20px; */
+  padding-bottom: 40px;
 
   position: relative;
   flex-shrink: 0;
@@ -88,6 +90,11 @@
 }
 
 /* === 核心内容区 === */
+.heroMainRow {
+  position: relative;
+  width: 100%;
+}
+
 .heroContent {
   width: 100%;
   display: flex;
@@ -101,13 +108,13 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 2px;
 }
 
 .heroSubNumber {
   font-size: 15px;
   font-weight: 700;
   color: #cbd5e1;
-  margin-bottom: 2px;
 }
 
 .heroKanji {
@@ -123,22 +130,21 @@
   font-size: 20px;
   font-weight: 600;
   color: #64748b;
-  margin-top: 4px;
 }
 
 .heroRomaji {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #94a3b8;
-  margin-top: 6px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 2px;
 }
 
 /* === 底部说明气泡 (Description Pill) === */
 .heroDescWrapper {
   position: absolute;
-  bottom: -48px; /* 沉在卡片下方 */
+  transform: translateY(100%);
+  bottom: -4px;
   left: 0;
   right: 0;
   display: flex;
@@ -148,19 +154,19 @@
 
 .descPill {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 16px;
 
   font-size: 13px;
-  font-weight: 500;
-  line-height: 1.4;
+  font-weight: 400;
+  line-height: 1.2;
   text-align: center;
 
   color: #475569;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6); */
 }
