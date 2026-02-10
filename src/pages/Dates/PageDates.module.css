@@ -98,6 +98,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
 /* === Debug Box (临时) === */

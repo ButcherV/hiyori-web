@@ -2,202 +2,150 @@
 
 .panel {
   width: 100%;
-  padding: 16px;
-  overflow-y: auto;
   height: 100%;
-  background-color: white;
-  animation: slideUp 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* === 头部装饰 === */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  opacity: 0.6;
-}
-
-.headerLabel {
-  font-family: 'SF Mono', monospace;
-  font-size: 10px;
-  font-weight: 600;
-  color: #64748b;
-  letter-spacing: 1px;
-}
-
-.divider {
-  flex: 1;
-  height: 1px;
-  background: #cbd5e1;
-}
-
-/* === 列表 === */
-.list {
+  padding: 16px;
+  background-color: #f1f5f9;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-/* === 单个条目 (Item) === */
-.item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* 内容少时垂直居中 */
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin: auto; /* 关键：自动分配上下边距实现居中 */
+}
 
-  /* 框体样式 */
+/* === BentoCard 基础：全员 1x1 标准件 === */
+.bentoCard {
+  position: relative;
+  aspect-ratio: 1 / 1; /* 强制正方形 */
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  padding: 12px 16px;
-  border-radius: 4px; /* 直角微圆，工业感 */
-
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: all 0.2s ease-out;
-  position: relative;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
 }
 
-.item:hover {
-  border-color: #94a3b8;
-  background: #f8fafc;
-  transform: translateX(4px); /* 悬停时整体右移一点点 */
+.bentoCard:active {
+  transform: scale(0.96);
+  filter: brightness(0.98);
 }
 
-/* 装饰左侧边条 */
-.item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: #cbd5e1;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.item:hover::before {
-  opacity: 1;
+/* 🟢 万能补齐：奇数时最后一个变横向长卡 */
+.spanCol2 {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  min-height: 100px;
 }
 
-/* === 1. Label Group (左侧) === */
-.labelGroup {
+/* 顶部装饰/喇叭暗示 */
+.cardTop {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 80px; /* 固定宽度对齐 */
+  justify-content: flex-end;
+  height: 20px;
 }
 
-.icon {
+.speakerHint {
   color: #94a3b8;
+  opacity: 0.5;
 }
 
-.label {
-  font-family: 'SF Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: #64748b;
-  letter-spacing: 0.5px;
-}
-
-/* === 2. Value Group (中间核心) === */
-.valueGroup {
+/* 中心内容区：汉字+假名+罗马音 */
+.cardMain {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding-left: 12px;
-  border-left: 1px dashed #e2e8f0; /* 虚线分隔 */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
 }
 
-.mainValue {
-  font-family: -apple-system, sans-serif;
-  font-size: 15px;
-  font-weight: 700;
+.kanji {
+  font-family: var(--font-family-ja);
+  font-weight: 900;
+  font-size: 26px;
   color: #0f172a;
+  line-height: 1.2;
 }
 
-.subValue {
+.kana {
+  font-family: var(--font-family-ja);
+  font-weight: 600;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.romaji {
   font-family: 'SF Mono', monospace;
   font-size: 10px;
+  font-weight: 500;
   color: #94a3b8;
-  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* === 3. Action (右侧交互) === */
-.action {
+/* 底部动作区 */
+.actionArea {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.actionLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.arrowIcon {
   color: #cbd5e1;
-  transition: color 0.2s;
 }
 
-.actionText {
-  font-family: 'SF Mono', monospace;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  opacity: 0; /* 默认隐藏文字，只留箭头 */
-  transform: translateX(10px);
-  transition: all 0.2s;
+/* === 配色主题 === */
+.bentoCard[data-theme='neutral'] {
+  background: #ffffff;
 }
 
-.item:hover .action {
-  color: #3b82f6;
+/* 相对时间：青色 */
+.bentoCard[data-theme='cyan'] {
+  background: #ecfeff;
+  border-color: rgba(6, 182, 212, 0.2);
 }
-.item:hover .actionText {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* === 特殊区块样式 === */
-
-/* 相对时间 (高亮蓝) */
-.itemHighlight {
-  background: #f0f9ff;
-  border-color: #bae6fd;
-}
-.itemHighlight .label,
-.itemHighlight .icon {
-  color: #0284c7;
-}
-.itemHighlight .statusDot {
-  width: 6px;
-  height: 6px;
-  background: #0ea5e9;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #0ea5e9;
-}
-.itemHighlight:hover {
-  border-color: #0284c7;
-}
-.itemHighlight::before {
-  background: #0ea5e9;
+.bentoCard[data-theme='cyan'] .kanji {
+  color: #155e75;
 }
 
-/* 节日 (危险红) */
-.itemDanger {
+/* 周日/节日：红色 */
+.bentoCard[data-theme='red'] {
   background: #fef2f2;
-  border-color: #fecaca;
+  border-color: rgba(239, 68, 68, 0.2);
 }
-.itemDanger .label,
-.itemDanger .icon {
-  color: #dc2626;
+.bentoCard[data-theme='red'] .kanji {
+  color: #991b1b;
 }
-.itemDanger:hover {
-  border-color: #dc2626;
+
+/* 周六：蓝色 */
+.bentoCard[data-theme='blue'] {
+  background: #eff6ff;
+  border-color: rgba(59, 130, 246, 0.2);
 }
-.itemDanger::before {
-  background: #dc2626;
+.bentoCard[data-theme='blue'] .kanji {
+  color: #1e3a8a;
 }

@@ -30,13 +30,18 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ date }) => {
 
   return (
     <div className={styles.header}>
-      <div className={`${styles.headerItem} ${styles.alignRight}`}>
+      <div className={`${styles.headerItem} ${styles.alignLeft}`}>
         {/* 记得在 CSS 里把字体改成衬线体 (Mincho) 以匹配雅称的气质 */}
-        <span className={styles.monthText}>{monthText}</span>
-      </div>
-      <div className={styles.headerItem}>
-        <span className={styles.subText}>{year}</span>
+        {/* <span className={styles.monthText}>{monthText}</span> */}
         <span className={styles.eraText}>{eraText}</span>
+        <span className={styles.subText}>{year}</span>
+      </div>
+      <div className={`${styles.headerItem}`}>
+        <span className={styles.today}>{'12'}</span>
+      </div>
+      <div className={`${styles.headerItem} ${styles.alignRight}`}>
+        <span className={styles.subText}>{'February'}</span>
+        <span className={styles.eraText}>{monthText}</span>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 .heroSection {
   /* 布局：在 DayLearning 容器中居中 */
-  margin: 12px;
+  margin: 12px 16px;
   width: 90%;
   flex: 1;
   /* max-width: 340px; */
