@@ -1,0 +1,149 @@
+/* src/pages/Dates/components/WeekLearning/WeekCard.module.css */
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  /* 稍微增加高度以容纳三行文字，或者让 padding 撑开 */
+  min-height: 80px;
+
+  background: white;
+  border-radius: 12px; /* 更圆润一点 */
+  margin-bottom: 12px;
+
+  display: flex;
+  align-items: center;
+  padding: 16px; /* 调整内边距 */
+
+  /* 基础阴影 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+
+  /* 防止文字换行 */
+  white-space: nowrap;
+}
+
+.card:active {
+  transform: scale(0.98);
+  background: #f8fafc;
+}
+
+/* 🟢 选中高亮状态 */
+.activeCard {
+  border-color: #3b82f6;
+  background: #f0f9ff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: scale(1.02);
+  z-index: 2;
+}
+
+/* === 左侧：Logo 区域 === */
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+
+  background: #f1f5f9;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+/* === 中间：主要文字 (三行纵列) === */
+.mainInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* 左对齐 */
+  gap: 2px;
+  overflow: hidden;
+}
+
+.kanjiRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.kanji {
+  font-size: 22px; /* 加大汉字 */
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.1;
+}
+
+.kana {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+/* 🟢 罗马音移到这里 */
+.romaji {
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* === 右侧：功能区 (翻译 + 喇叭) === */
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.english {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* 🟢 独立的喇叭按钮 */
+.speakerBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.03);
+  border: none;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.speakerBtn:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.speakerBtn:active {
+  transform: scale(0.9);
+  background: #cbd5e1;
+}
+
+/* 选中状态下喇叭高亮 */
+.activeCard .speakerBtn {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.activeCard .speakerBtn:hover {
+  background: rgba(59, 130, 246, 0.2);
+}

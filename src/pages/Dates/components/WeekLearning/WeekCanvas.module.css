@@ -2,35 +2,31 @@
 
 .container {
   width: 100%;
-  /* 🟢 关键：高度匹配 WeekRow */
-  /* WeekRow = 28px(行高) + 2px(边框) = 30px */
-  height: 30px;
+  height: 30px; /* 确保高度匹配 */
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* 保持与 WeekRow 一致的底部间距，防止下方内容跳动 */
   /* margin-bottom: 8px; */
 }
 
 .weekGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px; /* 这里的 gap 不重要，因为是 grid */
+  gap: 4px;
   width: 100%;
 }
 
 .weekCell {
-  /* 去掉 aspect-ratio，强制高度 */
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer; /* 加上手型，提示可点击 */
 }
 
+/* 基础圆圈样式 */
 .circle {
-  /* 🟢 缩小尺寸以匹配 WeekRow 文字高度 */
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -38,18 +34,18 @@
   align-items: center;
   justify-content: center;
 
-  /* 字体调整 */
   font-size: 14px;
   font-weight: 700;
 
   color: #94a3b8;
-  background: transparent; /* 默认透明，像文字一样 */
-  border: 1px solid transparent; /* 默认无边框 */
+  background: transparent;
+  border: 1px solid transparent;
 
+  /* 加上过渡动画 */
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* 激活状态：变成实心圆 */
+/* 🟢 关键：激活状态的样式 (你可能少了这段) */
 .active .circle {
   background: #1e293b;
   color: white;
@@ -58,21 +54,24 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* 颜色逻辑保持不变 */
+/* === 周日的特殊颜色处理 === */
 .sunday .circle {
-  color: #ef4444;
+  color: #ef4444; /* 平时是红色字 */
 }
+/* 既是周日，又是激活状态 */
 .active.sunday .circle {
   color: white;
-  background: #ef4444;
+  background: #ef4444; /* 激活变成红色底 */
   border-color: #ef4444;
 }
 
+/* === 周六的特殊颜色处理 === */
 .saturday .circle {
-  color: #3b82f6;
+  color: #3b82f6; /* 平时是蓝色字 */
 }
+/* 既是周六，又是激活状态 */
 .active.saturday .circle {
   color: white;
-  background: #3b82f6;
+  background: #3b82f6; /* 激活变成蓝色底 */
   border-color: #3b82f6;
 }

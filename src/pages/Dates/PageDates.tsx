@@ -17,7 +17,8 @@ import { DayLearning } from './components/DayLearning';
 import { DayCanvas } from './components/DayLearning/DayCanvas';
 // 🟢 1. 引入 WeekCanvas
 import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
-import { type DateType } from './Levels/Level1/Level1Data';
+import { WeekLearning } from './components/WeekLearning';
+import { type DateType } from './components/DayLearning/DayData';
 
 export type NavMode =
   | 'overview'
@@ -34,6 +35,9 @@ export const PageDates = () => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [learningDay, setLearningDay] = useState(new Date().getDate());
+  // 🟢 Week 模式的状态 (0-6)
+  // 默认为今天 (new Date().getDay())，这样一进来就高亮今天
+  const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay());
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
@@ -107,7 +111,10 @@ export const PageDates = () => {
 
             {/* 🟢 Week 模式下渲染 WeekCanvas */}
             {activeMode === 'week' && (
-              <WeekCanvas currentWeekDay={selectedDate.getDay()} />
+              <WeekCanvas
+                currentWeekDay={currentWeekDay}
+                onDaySelect={setCurrentWeekDay}
+              />
             )}
           </SmartCalendar>
         </div>
@@ -127,8 +134,10 @@ export const PageDates = () => {
               onFilterChange={handleFilterToggle}
             />
           ) : activeMode === 'week' ? (
-            /* 🟢 3. Week 模式的学习内容 (暂时用占位符) */
-            <div className={styles.debugBox}>Week Learning Content WIP</div>
+            <WeekLearning
+              activeDay={currentWeekDay}
+              onDaySelect={setCurrentWeekDay}
+            />
           ) : (
             <div className={styles.debugBox}>WIP: {activeMode}</div>
           )}

@@ -5,9 +5,13 @@ import styles from './WeekCanvas.module.css';
 
 interface WeekCanvasProps {
   currentWeekDay: number; // 0-6
+  onDaySelect?: (day: number) => void;
 }
 
-export const WeekCanvas: React.FC<WeekCanvasProps> = ({ currentWeekDay }) => {
+export const WeekCanvas: React.FC<WeekCanvasProps> = ({
+  currentWeekDay,
+  onDaySelect,
+}) => {
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
   return (
@@ -23,6 +27,7 @@ export const WeekCanvas: React.FC<WeekCanvasProps> = ({ currentWeekDay }) => {
               ${idx === 6 ? styles.saturday : ''}
               jaFont
             `}
+            onClick={() => onDaySelect && onDaySelect(idx)}
           >
             <div className={styles.circle}>{day}</div>
           </div>
