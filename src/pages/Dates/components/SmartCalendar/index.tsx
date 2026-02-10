@@ -23,16 +23,25 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   onModeChange,
   children,
 }) => {
-  const isFocusMode = activeMode === 'day';
+  // 🟢 扩展焦点模式判定：Day 和 Week 都算 Focus
+  const isDayMode = activeMode === 'day';
+  const isWeekMode = activeMode === 'week';
+  const isFocusMode = isDayMode || isWeekMode;
 
-  // 1. 状态初始化
-  const [showDayContent, setShowDayContent] = useState(isFocusMode);
+  // 1. 状态初始化：继承原来的逻辑
+  const [showContent, setShowContent] = useState(isFocusMode);
+
+  // 🟢 拆分折叠状态
+  // Day模式: 两者都为 true (折叠)
+  // Week模式: header 为 true, weekRow 为 false (展开)
   const [headerCollapsed, setHeaderCollapsed] = useState(isFocusMode);
+  const [weekRowCollapsed, setWeekRowCollapsed] = useState(isDayMode);
+
   const [isContentInvisible, setIsContentInvisible] = useState(false);
   const [cachedChildren, setCachedChildren] = useState(children);
 
   // 2. 记录上一次模式，防止刷新闪烁
-  const prevFocusMode = useRef(isFocusMode);
+  const prevFocusModeRef = useRef(isFocusMode);
 
   useEffect(() => {
     if (children) {
@@ -41,69 +50,86 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   }, [children]);
 
   useEffect(() => {
-    // 只有模式改变时才执行动画
-    if (isFocusMode === prevFocusMode.current) {
+    // 守卫：只有模式真的变了才跑动画
+    if (prevFocusModeRef.current === isFocusMode) {
       return;
     }
-    prevFocusMode.current = isFocusMode;
+    prevFocusModeRef.current = isFocusMode;
 
     let step1Timer: number;
     let step2Timer: number;
 
     if (isFocusMode) {
       // ===========================
-      // 🟢 进入 Day 模式 (正序)
+      // 🟢 进入学习模式 (Day 或 Week)
       // ===========================
-      // 1. 立即折叠 Header
+
+      // 1. 立即执行折叠 (模拟原来的行为)
       setHeaderCollapsed(true);
+      if (isDayMode) {
+        setWeekRowCollapsed(true); // Day模式：连星期行一起折叠
+      } else {
+        setWeekRowCollapsed(false); // Week模式：星期行保持展开
+      }
 
       // 2. 等待折叠动画 (500ms)
       step1Timer = window.setTimeout(() => {
         setIsContentInvisible(true); // Grid 开始淡出
 
-        // 3. 等待淡出 (300ms)
+        // 3. 渐隐完成后 (300ms) 切换 Canvas 并渐现
         step2Timer = window.setTimeout(() => {
-          setShowDayContent(true); // 换 Canvas
-          setIsContentInvisible(false); // Canvas 淡入
+          setShowContent(true);
+          setIsContentInvisible(false);
         }, 300);
       }, 500);
     } else {
       // ===========================
-      // 🟢 退出 Day 模式 (倒序 - 三步走)
+      // 🟢 退出学习模式 (Day Exit)
       // ===========================
+      // 严格复刻您的“倒序三步走”，确保动画完全一致
 
       // 第1步 (0ms): Canvas 开始淡出
       setIsContentInvisible(true);
 
-      // 第2步 (300ms): 切换内容，Grid 原地淡入
       step1Timer = window.setTimeout(() => {
-        setShowDayContent(false); // 切回 Grid
-        setIsContentInvisible(false); // Grid 开始淡入
-        // 注意：此时 headerCollapsed 依然是 true！Header 还是收起的！
+        // 第2步 (300ms后): 切换回 Grid，Grid 开始渐现
+        setShowContent(false);
+        setIsContentInvisible(false);
 
-        // 第3步 (600ms): Grid 完全出来了，才开始展开 Header
-        // 这里的 300ms 对应的是 contentContainer 的 transition: opacity 0.3s
+        // 注意：此时 Header 依然保持折叠，等待 Grid 显影
+
+        // 第3步 (再过300ms): Grid 完全显形后，恢复 Header 高度
         step2Timer = window.setTimeout(() => {
-          setHeaderCollapsed(false); // Header 终于开始展开
-        }, 300);
-      }, 300); // 等待 Canvas 淡出
+          setHeaderCollapsed(false);
+          setWeekRowCollapsed(false); // 确保星期行也恢复
+        }, 300); // 对应 CSS transition 0.3s
+      }, 300);
     }
 
     return () => {
       clearTimeout(step1Timer);
       clearTimeout(step2Timer);
     };
-  }, [isFocusMode]);
+  }, [isFocusMode, isDayMode]); // 依赖 isDayMode 以区分进入时的折叠策略
 
   return (
     <div
-      className={`${styles.wrapper} ${headerCollapsed ? styles.wrapperFocus : ''}`}
+      className={`${styles.wrapper} ${isFocusMode ? styles.wrapperFocus : ''}`}
     >
+      {/* 🟢 区域 1：年号月份 (始终受控) */}
       <div
         className={`${styles.collapseSection} ${headerCollapsed ? styles.collapsed : ''}`}
       >
         <div className={styles.collapseInner}>
           <CalendarHeader date={date} />
+        </div>
+      </div>
+
+      {/* 🟢 区域 2：星期行 (Week 模式下不受控) */}
+      <div
+        className={`${styles.collapseSection} ${weekRowCollapsed ? styles.collapsed : ''}`}
+      >
+        <div className={styles.collapseInner}>
           <WeekRow
             currentWeekDay={date.getDay()}
             activeMode={activeMode}
@@ -118,7 +144,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
           ${isContentInvisible ? styles.contentHidden : ''}
         `}
       >
-        {cachedChildren && showDayContent ? (
+        {cachedChildren && showContent ? (
           cachedChildren
         ) : (
           <CalendarGrid
