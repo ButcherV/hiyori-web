@@ -23,86 +23,115 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   onModeChange,
   children,
 }) => {
-  // 🟢 扩展焦点模式判定：Day 和 Week 都算 Focus
   const isDayMode = activeMode === 'day';
   const isWeekMode = activeMode === 'week';
   const isFocusMode = isDayMode || isWeekMode;
 
-  // 1. 状态初始化：继承原来的逻辑
-  const [showContent, setShowContent] = useState(isFocusMode);
+  // 🟢 关键修复：引入 focusType
+  // 用它来“记住”我们是在 Day 还是 Week 模式，
+  // 即使 activeMode 瞬间变成了 overview，只要这个状态没变，我们依然知道该在哪个区域做退出动画。
+  const [focusType, setFocusType] = useState<'day' | 'week' | null>(() => {
+    if (activeMode === 'day') return 'day';
+    if (activeMode === 'week') return 'week';
+    return null;
+  });
 
-  // 🟢 拆分折叠状态
-  // Day模式: 两者都为 true (折叠)
-  // Week模式: header 为 true, weekRow 为 false (展开)
-  const [headerCollapsed, setHeaderCollapsed] = useState(isFocusMode);
-  const [weekRowCollapsed, setWeekRowCollapsed] = useState(isDayMode);
+  // === 1. 区域折叠控制 ===
+  const [headerCollapsed, setHeaderCollapsed] = useState(false);
+  const [weekSectionCollapsed, setWeekSectionCollapsed] = useState(false);
+  const [gridSectionCollapsed, setGridSectionCollapsed] = useState(false);
 
+  // === 2. 内容置换控制 ===
+  const [showLearningContent, setShowLearningContent] = useState(false);
   const [isContentInvisible, setIsContentInvisible] = useState(false);
+
+  // === 3. 缓存 Children (用于退出动画) ===
   const [cachedChildren, setCachedChildren] = useState(children);
-
-  // 2. 记录上一次模式，防止刷新闪烁
-  const prevFocusModeRef = useRef(isFocusMode);
-
   useEffect(() => {
-    if (children) {
+    if (isFocusMode && children) {
       setCachedChildren(children);
     }
-  }, [children]);
+  }, [children, isFocusMode]);
+
+  const prevModeRef = useRef(activeMode);
 
   useEffect(() => {
-    // 守卫：只有模式真的变了才跑动画
-    if (prevFocusModeRef.current === isFocusMode) {
+    // 首次加载初始化 (防止刷新后状态不对)
+    if (!prevModeRef.current) {
+      if (isDayMode) {
+        setFocusType('day'); // 🟢 记录身份
+        setHeaderCollapsed(true);
+        setWeekSectionCollapsed(true);
+        setShowLearningContent(true);
+      } else if (isWeekMode) {
+        setFocusType('week'); // 🟢 记录身份
+        setHeaderCollapsed(true);
+        setGridSectionCollapsed(true);
+        setShowLearningContent(true);
+      }
       return;
     }
-    prevFocusModeRef.current = isFocusMode;
+
+    if (prevModeRef.current === activeMode) return;
+    const prevMode = prevModeRef.current;
+    prevModeRef.current = activeMode;
+
+    const isEnteringFocus =
+      isFocusMode && prevMode !== 'day' && prevMode !== 'week';
+    const isExitingFocus =
+      !isFocusMode && (prevMode === 'day' || prevMode === 'week');
 
     let step1Timer: number;
     let step2Timer: number;
 
-    if (isFocusMode) {
-      // ===========================
-      // 🟢 进入学习模式 (Day 或 Week)
-      // ===========================
+    if (isEnteringFocus) {
+      // ===============================================
+      // 🟢 进入学习模式
+      // ===============================================
 
-      // 1. 立即执行折叠 (模拟原来的行为)
+      // 1. 立即锁定身份，防止渲染错乱
+      if (isDayMode) setFocusType('day');
+      else setFocusType('week');
+
       setHeaderCollapsed(true);
+
       if (isDayMode) {
-        setWeekRowCollapsed(true); // Day模式：连星期行一起折叠
+        setWeekSectionCollapsed(true);
+        setGridSectionCollapsed(false);
       } else {
-        setWeekRowCollapsed(false); // Week模式：星期行保持展开
+        setGridSectionCollapsed(true);
+        setWeekSectionCollapsed(false);
       }
 
-      // 2. 等待折叠动画 (500ms)
       step1Timer = window.setTimeout(() => {
-        setIsContentInvisible(true); // Grid 开始淡出
+        setIsContentInvisible(true); // 原地渐隐 (Grid/Row)
 
-        // 3. 渐隐完成后 (300ms) 切换 Canvas 并渐现
         step2Timer = window.setTimeout(() => {
-          setShowContent(true);
-          setIsContentInvisible(false);
+          setShowLearningContent(true); // 换上 Canvas
+          setIsContentInvisible(false); // 渐现
         }, 300);
       }, 500);
-    } else {
-      // ===========================
-      // 🟢 退出学习模式 (Day Exit)
-      // ===========================
-      // 严格复刻您的“倒序三步走”，确保动画完全一致
+    } else if (isExitingFocus) {
+      // ===============================================
+      // 🟢 退出学习模式
+      // ===============================================
 
-      // 第1步 (0ms): Canvas 开始淡出
+      // 1. 原地渐隐 (Canvas)
       setIsContentInvisible(true);
 
       step1Timer = window.setTimeout(() => {
-        // 第2步 (300ms后): 切换回 Grid，Grid 开始渐现
-        setShowContent(false);
-        setIsContentInvisible(false);
+        // 2. 换回旧内容
+        setShowLearningContent(false);
+        setIsContentInvisible(false); // Grid/Row 渐现
 
-        // 注意：此时 Header 依然保持折叠，等待 Grid 显影
-
-        // 第3步 (再过300ms): Grid 完全显形后，恢复 Header 高度
+        // 3. 恢复其他区域
         step2Timer = window.setTimeout(() => {
           setHeaderCollapsed(false);
-          setWeekRowCollapsed(false); // 确保星期行也恢复
-        }, 300); // 对应 CSS transition 0.3s
+          setWeekSectionCollapsed(false);
+          setGridSectionCollapsed(false);
+          // 动画彻底结束后，可以清理 focusType (虽不清理也不影响，但为了整洁)
+          setFocusType(null);
+        }, 300);
       }, 300);
     }
 
@@ -110,13 +139,43 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
       clearTimeout(step1Timer);
       clearTimeout(step2Timer);
     };
-  }, [isFocusMode, isDayMode]); // 依赖 isDayMode 以区分进入时的折叠策略
+  }, [activeMode, isFocusMode, isDayMode, isWeekMode]);
+
+  // === 渲染逻辑修正 ===
+  // 🟢 不再检查 isWeekMode/isDayMode (因为退出时它们是 false)
+  // 而是检查 focusType，只有它是 'week' 且 showLearningContent 为 true 时，才显示 Canvas
+
+  const renderWeekSectionContent = () => {
+    if (focusType === 'week' && showLearningContent) {
+      return cachedChildren;
+    }
+    return (
+      <WeekRow
+        currentWeekDay={date.getDay()}
+        activeMode={activeMode}
+        onModeChange={onModeChange}
+      />
+    );
+  };
+
+  const renderGridSectionContent = () => {
+    if (focusType === 'day' && showLearningContent) {
+      return cachedChildren;
+    }
+    return (
+      <CalendarGrid
+        date={date}
+        activeMode={activeMode}
+        onDateSelect={onDateSelect}
+      />
+    );
+  };
 
   return (
     <div
       className={`${styles.wrapper} ${isFocusMode ? styles.wrapperFocus : ''}`}
     >
-      {/* 🟢 区域 1：年号月份 (始终受控) */}
+      {/* 1. Header */}
       <div
         className={`${styles.collapseSection} ${headerCollapsed ? styles.collapsed : ''}`}
       >
@@ -125,34 +184,38 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         </div>
       </div>
 
-      {/* 🟢 区域 2：星期行 (Week 模式下不受控) */}
+      {/* 2. Week Section */}
       <div
-        className={`${styles.collapseSection} ${weekRowCollapsed ? styles.collapsed : ''}`}
+        className={`${styles.collapseSection} ${weekSectionCollapsed ? styles.collapsed : ''}`}
       >
         <div className={styles.collapseInner}>
-          <WeekRow
-            currentWeekDay={date.getDay()}
-            activeMode={activeMode}
-            onModeChange={onModeChange}
-          />
+          {/* 🟢 CSS 类名判断也改用 focusType */}
+          <div
+            className={`
+              ${styles.fadeWrapper} 
+              ${focusType === 'week' && isContentInvisible ? styles.hidden : ''}
+            `}
+          >
+            {renderWeekSectionContent()}
+          </div>
         </div>
       </div>
 
+      {/* 3. Grid Section */}
       <div
-        className={`
-          ${styles.contentContainer} 
-          ${isContentInvisible ? styles.contentHidden : ''}
-        `}
+        className={`${styles.collapseSection} ${gridSectionCollapsed ? styles.collapsed : ''}`}
       >
-        {cachedChildren && showContent ? (
-          cachedChildren
-        ) : (
-          <CalendarGrid
-            date={date}
-            activeMode={activeMode}
-            onDateSelect={onDateSelect}
-          />
-        )}
+        <div className={styles.collapseInner}>
+          {/* 🟢 CSS 类名判断也改用 focusType */}
+          <div
+            className={`
+              ${styles.fadeWrapper} 
+              ${focusType === 'day' && isContentInvisible ? styles.hidden : ''}
+            `}
+          >
+            {renderGridSectionContent()}
+          </div>
+        </div>
       </div>
     </div>
   );

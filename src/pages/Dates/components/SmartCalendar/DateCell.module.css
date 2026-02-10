@@ -89,7 +89,7 @@
 
   box-shadow: var(--shadow-date-selected);
   z-index: 10;
-  transform: scale(1.08);
+  /* transform: scale(1.08); */
 }
 
 /* 选中时：数字强制反白 */

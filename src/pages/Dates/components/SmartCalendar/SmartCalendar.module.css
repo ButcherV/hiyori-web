@@ -7,6 +7,7 @@
   transition: padding 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
 
+/* 顶部装饰线 */
 .wrapper::before {
   content: '';
   position: absolute;
@@ -29,25 +30,22 @@
   opacity: 0;
 }
 
-/* === 折叠区域 === */
+/* === 统一的折叠容器 (所有三个部分都用这个) === */
 .collapseSection {
   display: grid;
-  /* 默认完全展开 */
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr; /* 默认展开 */
   opacity: 1;
-  /* 您的原版动画参数 */
+  /* 丝滑的高度和透明度过渡 */
   transition:
     grid-template-rows 0.5s cubic-bezier(0.1, 0.7, 0.1, 1),
     opacity 0.3s ease-out;
-
-  /* 🟢 确保两个折叠区之间没有意外的 margin */
   margin: 0;
 }
 
 .collapseInner {
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  /* 保持最小高度为0，防止内容溢出 */
+  min-height: 0;
 }
 
 /* 折叠态 */
@@ -55,16 +53,20 @@
   grid-template-rows: 0fr;
   opacity: 0;
   pointer-events: none;
+  /* 确保折叠时 margin 也消失，防止布局间隙 */
+  margin: 0 !important;
 }
 
-/* === 内容容器 (Canvas/Grid) === */
-.contentContainer {
+/* === 渐隐渐现包装器 (用于内容切换) === */
+.fadeWrapper {
   opacity: 1;
-  /* 🟢 关键：这个 0.3s 必须对应 JS 里的 setTimeout */
   transition: opacity 0.3s ease-out;
+  width: 100%;
+  height: 100%;
 }
 
-.contentHidden {
+.hidden {
   opacity: 0;
-  pointer-events: none;
 }
+
+/* 之前 specific 的 contentContainer 不再需要，已经被统一逻辑取代 */

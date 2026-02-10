@@ -1,6 +1,6 @@
 // src/pages/Dates/PageDates.tsx
 
-import { useState, useEffect } from 'react'; // 🟢 记得引入 useEffect
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -15,13 +15,15 @@ import { SmartCalendar } from './components/SmartCalendar';
 import { DateDetailPanel } from './components/DateDetailPanel';
 import { DayLearning } from './components/DayLearning';
 import { DayCanvas } from './components/DayLearning/DayCanvas';
+// 🟢 1. 引入 WeekCanvas
+import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { type DateType } from './Levels/Level1/Level1Data';
 
 export type NavMode =
   | 'overview'
   | 'year'
   | 'month'
-  | 'week'
+  | 'week' // 🟢 确保类型定义包含 week
   | 'day'
   | 'holiday'
   | 'relative';
@@ -30,20 +32,15 @@ export const PageDates = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // 1. 真实的日历时间 (决定了 Grid 的空白格、表头年份月份)
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // 🟢 2. 虚拟的学习游标 (1-31)
-  // 默认取今天的日期，但在学习模式下，它可以是 30 或 31，即使当前是 2 月
   const [learningDay, setLearningDay] = useState(new Date().getDate());
-
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
   const pageTitle = t('date_study.title') || 'Dates Study';
+  // Day 和 Week 都属于专注模式，Header 需要显示 X 按钮
   const isFocusMode = activeMode !== 'overview';
 
-  // 🟢 当进入 Day 模式时，将日历的选中日同步给学习游标
   useEffect(() => {
     if (activeMode === 'day') {
       setLearningDay(selectedDate.getDate());
@@ -55,10 +52,9 @@ export const PageDates = () => {
       setActiveMode('overview');
       setFilterType(null);
     } else {
-      // 回到今天
       const today = new Date();
       setSelectedDate(today);
-      setLearningDay(today.getDate()); // 顺便重置游标
+      setLearningDay(today.getDate());
     }
   };
 
@@ -68,7 +64,6 @@ export const PageDates = () => {
 
   return (
     <div className={styles.container}>
-      {/* Header */}
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
           <div className={styles.iconBtn} onClick={() => navigate('/')}>
@@ -91,6 +86,7 @@ export const PageDates = () => {
       </div>
 
       <div className={styles.workspace}>
+        {/* 日历区域 */}
         <div className={styles.calendarSection}>
           <SmartCalendar
             date={selectedDate}
@@ -98,21 +94,25 @@ export const PageDates = () => {
             onDateSelect={(date) => setSelectedDate(date)}
             onModeChange={setActiveMode}
           >
+            {/* 🟢 2. 根据模式，把对应的 Canvas 传进去 */}
             {activeMode === 'day' && (
               <DayCanvas
-                // 🟢 传入真实年月 (用于计算前面空几格，保持视觉对齐)
                 year={selectedDate.getFullYear()}
                 month={selectedDate.getMonth()}
-                // 🟢 传入虚拟游标 (控制高亮)
                 activeDay={learningDay}
-                // 🟢 点击时只改变游标，不碰 Date
                 onDaySelect={setLearningDay}
                 filterType={filterType}
               />
             )}
+
+            {/* 🟢 Week 模式下渲染 WeekCanvas */}
+            {activeMode === 'week' && (
+              <WeekCanvas currentWeekDay={selectedDate.getDay()} />
+            )}
           </SmartCalendar>
         </div>
 
+        {/* 下方内容区域 */}
         <div className={styles.contentSection}>
           {activeMode === 'overview' ? (
             <DateDetailPanel
@@ -121,14 +121,16 @@ export const PageDates = () => {
             />
           ) : activeMode === 'day' ? (
             <DayLearning
-              // 🟢 传入学习游标，不再传 Date
               learningDay={learningDay}
               onDayChange={setLearningDay}
               filterType={filterType}
               onFilterChange={handleFilterToggle}
             />
+          ) : activeMode === 'week' ? (
+            /* 🟢 3. Week 模式的学习内容 (暂时用占位符) */
+            <div className={styles.debugBox}>Week Learning Content WIP</div>
           ) : (
-            <div className={styles.debugBox}>WIP</div>
+            <div className={styles.debugBox}>WIP: {activeMode}</div>
           )}
         </div>
       </div>
