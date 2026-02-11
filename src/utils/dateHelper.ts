@@ -72,24 +72,33 @@ export const getRelativeLabel = (targetDate: Date): string | null => {
 
 // 🟢 新增：数字转汉字 (用于月份 1-12)
 export const toKanjiNum = (num: number): string => {
-  const kanji = [
-    '〇',
-    '一',
-    '二',
-    '三',
-    '四',
-    '五',
-    '六',
-    '七',
-    '八',
-    '九',
-    '十',
-  ];
-  if (num <= 10) return kanji[num];
+  const kanji = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+  // 1. 针对年份的大数字逻辑 (>= 100)
+  // 规则：直接一位一位翻译，例如 2024 -> 二〇二四
+  if (num >= 100) {
+    return num
+      .toString()
+      .split('')
+      .map((char) => kanji[parseInt(char)])
+      .join('');
+  }
+
+  // 2. 针对日期/月份的小数字逻辑 (< 100)
+  // 规则：使用“十”的进位读法，例如 12 -> 十二，24 -> 二十四
+
+  // 特殊处理 10
+  if (num === 10) return '十';
+
+  // 个位数 (0-9)
+  if (num < 10) return kanji[num];
+
+  // 11-19 (十X)
   if (num < 20) {
     return '十' + (num % 10 === 0 ? '' : kanji[num % 10]);
   }
-  // 简单处理到 99 (满足年号和月份需求)
+
+  // 20-99 (X十X)
   return (
     kanji[Math.floor(num / 10)] + '十' + (num % 10 === 0 ? '' : kanji[num % 10])
   );
@@ -123,4 +132,151 @@ export const WAFU_GETSUMEI = [
  */
 export const getWafuMonth = (monthIndex: number): string => {
   return WAFU_GETSUMEI[monthIndex] || '';
+};
+
+/**
+ * 获取西历年份的完整读音 (Kana + Romaji)
+ * 例如：2024 -> { kana: 'にせんにじゅうよねん', romaji: 'ni·sen·ni·ju·u·yo·nen' }
+ */
+export const getWesternYearReading = (year: number) => {
+  const digits = year.toString().split('').map(Number);
+
+  // 简单防护：只处理 4 位数年份 (1000-9999)，其他直接返回
+  if (digits.length !== 4) {
+    return { kana: `${year}ねん`, romaji: `${year}·nen` };
+  }
+
+  const [th, hu, te, un] = digits;
+  let k = '';
+  let r = '';
+
+  // 1. 千位 (Thousands)
+  // 1000=sen, 3000=sanzen, 8000=hassen
+  const thKana = [
+    '',
+    'せん',
+    'にせん',
+    'さんぜん',
+    'よんせん',
+    'ごせん',
+    'ろくせん',
+    'ななせん',
+    'はっせん',
+    'きゅうせん',
+  ];
+  const thRomaji = [
+    '',
+    'sen',
+    'ni·sen',
+    'san·zen',
+    'yon·sen',
+    'go·sen',
+    'ro·ku·sen',
+    'na·na·sen',
+    'has·sen',
+    'kyu·u·sen',
+  ];
+
+  k += thKana[th];
+  r += thRomaji[th];
+
+  // 2. 百位 (Hundreds)
+  // 100=hyaku, 300=sanbyaku, 600=roppyaku, 800=happyaku
+  if (hu > 0) {
+    const huKana = [
+      '',
+      'ひゃく',
+      'にひゃく',
+      'さんびゃく',
+      'よんひゃく',
+      'ごひゃく',
+      'ろっぴゃく',
+      'ななひゃく',
+      'はっぴゃく',
+      'きゅうひゃく',
+    ];
+    const huRomaji = [
+      '',
+      'hya·ku',
+      'ni·hya·ku',
+      'san·bya·ku',
+      'yon·hya·ku',
+      'go·hya·ku',
+      'rop·pya·ku',
+      'na·na·hya·ku',
+      'hap·pya·ku',
+      'kyu·u·hya·ku',
+    ];
+    k += huKana[hu];
+    r += (r ? '·' : '') + huRomaji[hu];
+  }
+
+  // 3. 十位 (Tens)
+  // 10=juu (不是 ichi-juu), 20=ni-juu
+  if (te > 0) {
+    const teKana = [
+      '',
+      'じゅう',
+      'にじゅう',
+      'さんじゅう',
+      'よんじゅう',
+      'ごじゅう',
+      'ろくじゅう',
+      'ななじゅう',
+      'はちじゅう',
+      'きゅうじゅう',
+    ];
+    const teRomaji = [
+      '',
+      'ju·u',
+      'ni·ju·u',
+      'san·ju·u',
+      'yon·ju·u',
+      'go·ju·u',
+      'ro·ku·ju·u',
+      'na·na·ju·u',
+      'ha·chi·ju·u',
+      'kyu·u·ju·u',
+    ];
+    k += teKana[te];
+    r += (r ? '·' : '') + teRomaji[te];
+  }
+
+  // 4. 个位 (Units) + 年 (Nen)
+  // ⚠️ 特殊规则：4=yo-nen, 7=shichi-nen, 9=ku-nen
+  const unKana = [
+    'ぜろ',
+    'いち',
+    'に',
+    'さん',
+    'よ',
+    'ご',
+    'ろく',
+    'しち',
+    'はち',
+    'く',
+  ];
+  const unRomaji = [
+    'ze·ro',
+    'i·chi',
+    'ni',
+    'san',
+    'yo',
+    'go',
+    'ro·ku',
+    'shi·chi',
+    'ha·chi',
+    'ku',
+  ];
+
+  if (un === 0) {
+    // 结尾是0，例如 2020，十位已经读了 juu，这里直接加 nen
+    k += 'ねん';
+    r += '·nen';
+  } else {
+    k += unKana[un] + 'ねん';
+    r += (r ? '·' : '') + unRomaji[un] + '·nen';
+  }
+
+  return { kana: k, romaji: r };
 };

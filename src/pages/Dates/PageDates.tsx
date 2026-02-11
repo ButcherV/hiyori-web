@@ -9,22 +9,22 @@ import {
   X,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './PageDates.module.css';
 
 import { SmartCalendar } from './components/SmartCalendar';
 import { DateDetailPanel } from './components/DateDetailPanel';
 import { DayLearning } from './components/DayLearning';
 import { DayCanvas } from './components/DayLearning/DayCanvas';
-// 🟢 1. 引入 WeekCanvas
 import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
-import { type DateType } from './components/DayLearning/DayData';
+import { type DateType } from './Datas/DayData';
 
 export type NavMode =
   | 'overview'
   | 'year'
   | 'month'
-  | 'week' // 🟢 确保类型定义包含 week
+  | 'week'
   | 'day'
   | 'holiday'
   | 'relative';
@@ -35,14 +35,11 @@ export const PageDates = () => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [learningDay, setLearningDay] = useState(new Date().getDate());
-  // 🟢 Week 模式的状态 (0-6)
-  // 默认为今天 (new Date().getDay())，这样一进来就高亮今天
   const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay());
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
   const pageTitle = t('date_study.title') || 'Dates Study';
-  // Day 和 Week 都属于专注模式，Header 需要显示 X 按钮
   const isFocusMode = activeMode !== 'overview';
 
   useEffect(() => {
@@ -64,6 +61,63 @@ export const PageDates = () => {
 
   const handleFilterToggle = (type: DateType) => {
     setFilterType((prev) => (prev === type ? null : type));
+  };
+
+  // 🟢 1. 上半部分：日历区域的内容渲染器
+  const renderCalendarContent = () => {
+    switch (activeMode) {
+      case 'day':
+        return (
+          <DayCanvas
+            year={selectedDate.getFullYear()}
+            month={selectedDate.getMonth()}
+            activeDay={learningDay}
+            onDaySelect={setLearningDay}
+            filterType={filterType}
+          />
+        );
+      case 'week':
+        return (
+          <WeekCanvas
+            currentWeekDay={currentWeekDay}
+            onDaySelect={setCurrentWeekDay}
+          />
+        );
+      default:
+        // overview 或其他模式下，SmartCalendar 会显示默认网格，这里不需要传子组件
+        return null;
+    }
+  };
+
+  // 🟢 2. 下半部分：详情区域的内容渲染器
+  const renderDetailContent = () => {
+    switch (activeMode) {
+      case 'overview':
+        return (
+          <DateDetailPanel
+            date={selectedDate}
+            onNavigate={(mode) => setActiveMode(mode)}
+          />
+        );
+      case 'day':
+        return (
+          <DayLearning
+            learningDay={learningDay}
+            onDayChange={setLearningDay}
+            filterType={filterType}
+            onFilterChange={handleFilterToggle}
+          />
+        );
+      case 'week':
+        return (
+          <WeekLearning
+            activeDay={currentWeekDay}
+            onDaySelect={setCurrentWeekDay}
+          />
+        );
+      default:
+        return <div className={styles.debugBox}>WIP: {activeMode}</div>;
+    }
   };
 
   return (
@@ -98,49 +152,31 @@ export const PageDates = () => {
             onDateSelect={(date) => setSelectedDate(date)}
             onModeChange={setActiveMode}
           >
-            {/* 🟢 2. 根据模式，把对应的 Canvas 传进去 */}
-            {activeMode === 'day' && (
-              <DayCanvas
-                year={selectedDate.getFullYear()}
-                month={selectedDate.getMonth()}
-                activeDay={learningDay}
-                onDaySelect={setLearningDay}
-                filterType={filterType}
-              />
-            )}
-
-            {/* 🟢 Week 模式下渲染 WeekCanvas */}
-            {activeMode === 'week' && (
-              <WeekCanvas
-                currentWeekDay={currentWeekDay}
-                onDaySelect={setCurrentWeekDay}
-              />
-            )}
+            {renderCalendarContent()}
           </SmartCalendar>
         </div>
 
         {/* 下方内容区域 */}
         <div className={styles.contentSection}>
-          {activeMode === 'overview' ? (
-            <DateDetailPanel
-              date={selectedDate}
-              onNavigate={(mode) => setActiveMode(mode)}
-            />
-          ) : activeMode === 'day' ? (
-            <DayLearning
-              learningDay={learningDay}
-              onDayChange={setLearningDay}
-              filterType={filterType}
-              onFilterChange={handleFilterToggle}
-            />
-          ) : activeMode === 'week' ? (
-            <WeekLearning
-              activeDay={currentWeekDay}
-              onDaySelect={setCurrentWeekDay}
-            />
-          ) : (
-            <div className={styles.debugBox}>WIP: {activeMode}</div>
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeMode} // 关键：key 变化通知 Motion 这是一个新组件
+              className={styles.motionWrapper}
+              // 初始状态 (进入前)
+              initial={{ opacity: 0, y: 15 }}
+              // 激活状态 (进入后)
+              animate={{ opacity: 1, y: 0 }}
+              // 退出状态 (卸载前) - 这就是你想要的"渐退"
+              exit={{ opacity: 0, y: -15 }}
+              transition={{
+                delay: 0.24,
+                duration: 0.25,
+                ease: [0.4, 0, 0.2, 1], // 经典的 smooth easing
+              }}
+            >
+              {renderDetailContent()}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>

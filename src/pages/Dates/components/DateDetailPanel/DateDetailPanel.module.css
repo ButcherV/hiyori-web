@@ -3,149 +3,198 @@
 .panel {
   width: 100%;
   height: 100%;
-  padding: 16px;
-  background-color: #f1f5f9;
+  padding: 20px 16px;
+  background-color: #f8fafc; /* 更干净的背景 */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* 内容少时垂直居中 */
 .gridContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   width: 100%;
   max-width: 420px;
-  margin: auto; /* 关键：自动分配上下边距实现居中 */
+  margin: 0 auto;
+  padding-bottom: 40px; /* 底部留白 */
 }
 
-/* === BentoCard 基础：全员 1x1 标准件 === */
+/* === BentoCard === */
 .bentoCard {
   position: relative;
-  aspect-ratio: 1 / 1; /* 强制正方形 */
+  /* 🟢 移除 aspect-ratio，改为固定高度约束 */
+  min-height: 140px;
   border-radius: 12px;
-  padding: 16px;
+
+  /* 去掉 padding，由内部容器控制 */
+  padding: 0;
+
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .bentoCard:active {
-  transform: scale(0.96);
-  filter: brightness(0.98);
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
-/* 🟢 万能补齐：奇数时最后一个变横向长卡 */
+/* 横向长卡 */
 .spanCol2 {
   grid-column: span 2;
-  aspect-ratio: auto;
-  min-height: 100px;
+  height: 140px; /* 横卡可以稍微矮一点，因为宽 */
 }
 
-/* 顶部装饰/喇叭暗示 */
-.cardTop {
-  display: flex;
-  justify-content: flex-end;
-  height: 20px;
-}
-
+/* 喇叭图标 */
 .speakerHint {
-  color: #94a3b8;
-  opacity: 0.5;
+  color: #cbd5e1;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  z-index: 5;
 }
 
-/* 中心内容区：汉字+假名+罗马音 */
-.cardMain {
+/* === 卡片核心内容区 === */
+.cardContent {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  padding: 24px 0px 8px; /* 上多下少 */
+  gap: 4px;
+}
+
+/* 顶部元数据 (Romaji + Kana) */
+.metaInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2px;
-}
-
-.kanji {
-  font-family: var(--font-family-ja);
-  font-weight: 900;
-  font-size: 26px;
-  color: #0f172a;
-  line-height: 1.2;
-}
-
-.kana {
-  font-family: var(--font-family-ja);
-  font-weight: 600;
-  font-size: 14px;
-  color: #64748b;
-  margin-top: 4px;
+  /* margin-bottom: 4px; */
 }
 
 .romaji {
   font-family: 'SF Mono', monospace;
   font-size: 10px;
-  font-weight: 500;
+  line-height: 1.2;
+  font-weight: 600;
   color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  /* text-transform: uppercase;
+  letter-spacing: 1px; */
 }
 
-/* 底部动作区 */
+.kana {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* 主要视觉 (Kanji + Translation) */
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.kanji {
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.1;
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  /* 稍微收紧字间距 */
+  letter-spacing: -0.02em;
+  max-width: 100%;
+  padding: 0 4px;
+}
+
+.translation {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* === 底部固定 Action 栏 === */
 .actionArea {
+  height: 28px; /* 固定高度 */
+  background: #f8fafc; /* 浅灰底，区分内容区 */
+  border-top: 1px solid #f1f5f9;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  gap: 2px;
+
+  transition: background 0.2s;
+}
+
+.bentoCard:hover .actionArea {
+  background: #f1f5f9;
 }
 
 .actionLabel {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  color: #94a3b8;
-  white-space: nowrap;
+  color: #64748b;
 }
 
 .arrowIcon {
-  color: #cbd5e1;
+  color: #94a3b8;
+  transition: transform 0.2s;
 }
 
-/* === 配色主题 === */
-.bentoCard[data-theme='neutral'] {
-  background: #ffffff;
+.bentoCard:hover .arrowIcon {
+  transform: translateX(2px);
+  color: #64748b;
 }
 
-/* 相对时间：青色 */
-.bentoCard[data-theme='cyan'] {
-  background: #ecfeff;
-  border-color: rgba(6, 182, 212, 0.2);
-}
-.bentoCard[data-theme='cyan'] .kanji {
-  color: #155e75;
-}
+/* === 配色主题微调 === */
+/* 保持背景色极淡，重点变边框或文字 */
 
-/* 周日/节日：红色 */
-.bentoCard[data-theme='red'] {
-  background: #fef2f2;
-  border-color: rgba(239, 68, 68, 0.2);
-}
-.bentoCard[data-theme='red'] .kanji {
-  color: #991b1b;
-}
-
-/* 周六：蓝色 */
+/* Blue Theme (Saturday) */
 .bentoCard[data-theme='blue'] {
-  background: #eff6ff;
   border-color: rgba(59, 130, 246, 0.2);
+  background: linear-gradient(to bottom, #fff, #eff6ff);
 }
 .bentoCard[data-theme='blue'] .kanji {
-  color: #1e3a8a;
+  color: #1d4ed8;
+}
+.bentoCard[data-theme='blue'] .actionArea {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* Red Theme (Sunday/Holiday) */
+.bentoCard[data-theme='red'] {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: linear-gradient(to bottom, #fff, #fef2f2);
+}
+.bentoCard[data-theme='red'] .kanji {
+  color: #b91c1c;
+}
+.bentoCard[data-theme='red'] .actionArea {
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Cyan Theme (Relative) */
+.bentoCard[data-theme='cyan'] {
+  border-color: rgba(6, 182, 212, 0.2);
+  background: linear-gradient(to bottom, #fff, #ecfeff);
+}
+.bentoCard[data-theme='cyan'] .kanji {
+  color: #0e7490;
+}
+.bentoCard[data-theme='cyan'] .actionArea {
+  background: rgba(6, 182, 212, 0.05);
 }

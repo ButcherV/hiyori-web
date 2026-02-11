@@ -149,13 +149,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
     if (focusType === 'week' && showLearningContent) {
       return cachedChildren;
     }
-    return (
-      <WeekRow
-        currentWeekDay={date.getDay()}
-        activeMode={activeMode}
-        onModeChange={onModeChange}
-      />
-    );
+    return <WeekRow />;
   };
 
   const renderGridSectionContent = () => {

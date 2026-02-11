@@ -17,7 +17,7 @@
   flex-direction: column;
   justify-content: flex-end;
   gap: 4px;
-  width: 80px;
+  min-width: 80px;
   /* opacity: 0.9; */
 }
 
@@ -32,9 +32,9 @@
 /* === 左侧：年号 (令和八年) === */
 .eraText {
   /* 🟢 改回现代黑体 */
-  font-family:
+  /* font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
-    'Noto Sans CJK JP', sans-serif;
+    'Noto Sans CJK JP', sans-serif; */
   font-size: 18px; /* 稍微调小一点点，黑体显大 */
   font-weight: 800; /* 极粗黑体，很有力量感 */
   color: var(--color-Gray8);

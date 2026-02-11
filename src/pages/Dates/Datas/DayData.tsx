@@ -1,5 +1,3 @@
-// src/pages/Dates/Levels/Level1/Level1Data.ts
-
 export type DateType = 'regular' | 'trap' | 'mutant' | 'rune';
 
 export interface DateItem {

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './DayCanvas.module.css';
-import { datesData, type DateType } from './DayData';
+import { datesData, type DateType } from '../../Datas/DayData';
 
 interface DayCanvasProps {
   // 视觉定位用 (决定前面空几格)

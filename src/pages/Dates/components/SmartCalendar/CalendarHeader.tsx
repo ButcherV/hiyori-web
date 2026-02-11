@@ -2,12 +2,11 @@
 
 import React, { useMemo } from 'react';
 import styles from './CalendarHeader.module.css';
-import { getYearData } from '../../Levels/Level4/Level4Data';
-// 🟢 引入新写的 helper
+import { getYearData } from '../../Datas/YearData';
 import {
-  toKanjiNum,
   getKanjiEraYear,
   getWafuMonth,
+  toKanjiNum,
 } from '../../../../utils/dateHelper';
 
 interface CalendarHeaderProps {
@@ -17,31 +16,35 @@ interface CalendarHeaderProps {
 export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ date }) => {
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-11
+  const day = date.getDate(); // 🟢 获取动态日期 (1-31)
+
   const yearData = useMemo(() => getYearData(year), [year]);
 
   const eraText = `${yearData.era.kanji}${getKanjiEraYear(yearData.eraYear)}`;
+  const monthText = getWafuMonth(month); // 和风月名 (如月)
 
-  // 🟢 直接调用工具函数
-  // 方案 A: 纯雅称 (睦月)
-  const monthText = getWafuMonth(month);
-
-  // 方案 B: 混合式 (睦月 · 二月) - 如果你想对新手友好一点
-  // const monthText = `${getWafuMonth(month)} · ${toKanjiNum(month + 1)}月`;
+  // 🟢 获取英文月份 (February)
+  const enMonth = date.toLocaleString('en-US', { month: 'long' });
 
   return (
     <div className={styles.header}>
+      {/* 左侧：年号 + 西历 */}
       <div className={`${styles.headerItem} ${styles.alignLeft}`}>
-        {/* 记得在 CSS 里把字体改成衬线体 (Mincho) 以匹配雅称的气质 */}
-        {/* <span className={styles.monthText}>{monthText}</span> */}
-        <span className={styles.eraText}>{eraText}</span>
+        <span className={`${styles.eraText} jaFont`}>{eraText}</span>
         <span className={styles.subText}>{year}</span>
       </div>
+
+      {/* 中间：日期 (跟随选中) */}
       <div className={`${styles.headerItem}`}>
-        <span className={styles.today}>{'12'}</span>
+        <span className={styles.today}>{day}</span>
       </div>
+
+      {/* 右侧：英文月 + 和风月 */}
       <div className={`${styles.headerItem} ${styles.alignRight}`}>
-        <span className={styles.subText}>{'February'}</span>
-        <span className={styles.eraText}>{monthText}</span>
+        <span className={styles.subText}>{enMonth}</span>
+        <span
+          className={`${styles.eraText} jaFont`}
+        >{`${toKanjiNum(month + 1)}月（${monthText}）`}</span>
       </div>
     </div>
   );

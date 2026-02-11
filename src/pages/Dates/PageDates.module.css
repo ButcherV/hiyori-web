@@ -101,6 +101,13 @@
   overflow: hidden;
 }
 
+.motionWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* === Debug Box (临时) === */
 .debugBox {
   text-align: center;
