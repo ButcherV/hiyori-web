@@ -1,9 +1,8 @@
 /* src/pages/Dates/components/DayLearning/DayController.module.css */
 
 .controller {
-  /* 🟢 改回绝对定位：固定在容器底部 */
   position: absolute;
-  bottom: 20px; /* 稍微留点距离 */
+  bottom: 16px;
   left: 0;
   right: 0;
 
@@ -29,8 +28,8 @@
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 12px 24px -4px rgba(0, 0, 0, 0.08);
-  width: 220px;
-  height: 64px;
+  width: 180px;
+  height: 56px;
   border-radius: 32px;
   display: flex;
   align-items: center;
@@ -89,8 +88,8 @@
   font-weight: 500;
 }
 .playBtn {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #1e293b;
   color: white;

@@ -1,17 +1,25 @@
-// src/pages/Dates/components/DayLearning/DayHero.tsx
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// 🔴 引用独立的 CSS
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './DayHero.module.css';
-import { type DateItem } from '../../Levels/Level1/Level1Data';
+import { type DateItem } from '../../Datas/DayData';
 import { useTranslation } from 'react-i18next';
 
 interface DayHeroProps {
   item: DateItem | undefined;
+  onPrev: () => void;
+  onNext: () => void;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
-export const DayHero: React.FC<DayHeroProps> = ({ item }) => {
+export const DayHero: React.FC<DayHeroProps> = ({
+  item,
+  onPrev,
+  onNext,
+  isFirst,
+  isLast,
+}) => {
   const { i18n, t } = useTranslation();
   const currentLang = i18n.language.startsWith('zh') ? 'zh' : 'en';
 
@@ -26,6 +34,11 @@ export const DayHero: React.FC<DayHeroProps> = ({ item }) => {
       </div>
 
       <div className={styles.heroMainRow}>
+        {/* 🟢 3. 左侧按钮 */}
+        <button className={styles.navArrow} onClick={onPrev} disabled={isFirst}>
+          <ChevronLeft size={28} />
+        </button>
+
         <div className={styles.heroContent}>
           <AnimatePresence mode="wait">
             <motion.div
@@ -36,10 +49,6 @@ export const DayHero: React.FC<DayHeroProps> = ({ item }) => {
               transition={{ duration: 0.2 }}
               className={styles.heroInner}
             >
-              {/* 🟢 加上 jaFont 保证字体正确 */}
-              {/* <div className={`${styles.heroSubNumber} jaFont`}>
-                {item.id} 日
-              </div> */}
               <div className={`${styles.heroKanji} jaFont`}>{item.kanji}</div>
               <div className={styles.heroRomaji}>{item.romaji}</div>
               <div className={`${styles.heroKana} jaFont`}>{item.kana}</div>
@@ -47,7 +56,12 @@ export const DayHero: React.FC<DayHeroProps> = ({ item }) => {
           </AnimatePresence>
         </div>
 
-        {/* Description */}
+        {/* 🟢 4. 右侧按钮 */}
+        <button className={styles.navArrow} onClick={onNext} disabled={isLast}>
+          <ChevronRight size={28} />
+        </button>
+
+        {/* Description (这部分没变，依然浮动在底部) */}
         <div className={styles.heroDescWrapper}>
           <AnimatePresence mode="wait">
             {descText && (

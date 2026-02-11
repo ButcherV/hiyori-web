@@ -1,18 +1,14 @@
-// src/pages/Dates/components/DayLearning/index.tsx
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './DayLearning.module.css';
 import { DayHero } from './DayHero';
 import { DayController, type LoopMode } from './DayController';
 import { LegendArea } from './LegendArea';
-import { datesData, type DateType } from '../../Levels/Level1/Level1Data';
+import { datesData, type DateType } from '../../Datas/DayData';
 import { useTTS } from '../../../../hooks/useTTS';
 
 interface DayLearningProps {
-  // 🟢 接收纯数字
   learningDay: number;
   onDayChange: (day: number) => void;
-
   filterType: DateType | null;
   onFilterChange: (type: DateType) => void;
 }
@@ -28,12 +24,53 @@ export const DayLearning: React.FC<DayLearningProps> = ({
   const [loopMode, setLoopMode] = useState<LoopMode>('off');
   const timerRef = useRef<number | null>(null);
 
-  // 🟢 直接通过数字换算索引 (安全可靠，且不会越界，因为 datesData 固定31个)
-  // 注意：需要做一个简单的边界保护，防止初始 learningDay 越界
   const safeDay = Math.min(Math.max(1, learningDay), 31);
   const currentIndex = safeDay - 1;
   const currentItem = datesData[currentIndex];
 
+  // 1. 计算当前生效的列表
+  const displayList = useMemo(() => {
+    if (!filterType) return datesData;
+    return datesData.filter((d) => d.type === filterType);
+  }, [filterType]);
+
+  // 2. 找到当前显示的日期在这个列表里的下标
+  const currentIndexInList = displayList.findIndex((d) => d.id === safeDay);
+  const isInList = currentIndexInList !== -1;
+
+  // 3. 判断边界
+  const isFirst = isInList && currentIndexInList === 0;
+  const isLast = isInList && currentIndexInList === displayList.length - 1;
+
+  // 当 Filter 改变，且当前显示的日期不在新列表里时，自动跳到第一个符合条件的日期
+  useEffect(() => {
+    if (filterType && !isInList && displayList.length > 0) {
+      onDayChange(displayList[0].id);
+    }
+  }, [filterType, isInList, displayList, onDayChange]);
+
+  // 导航逻辑
+  const handlePrev = () => {
+    if (isInList) {
+      if (currentIndexInList > 0) {
+        onDayChange(displayList[currentIndexInList - 1].id);
+      }
+    } else if (displayList.length > 0) {
+      onDayChange(displayList[displayList.length - 1].id);
+    }
+  };
+
+  const handleNext = () => {
+    if (isInList) {
+      if (currentIndexInList < displayList.length - 1) {
+        onDayChange(displayList[currentIndexInList + 1].id);
+      }
+    } else if (displayList.length > 0) {
+      onDayChange(displayList[0].id);
+    }
+  };
+
+  // 自动播放逻辑
   useEffect(() => {
     if (!isPlaying) {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -43,7 +80,6 @@ export const DayLearning: React.FC<DayLearningProps> = ({
       const isVisible = !filterType || currentItem.type === filterType;
       if (isVisible) speak(currentItem.kana);
 
-      // 查找下一个符合条件的索引
       let nextIndex = -1;
       const findNext = (start: number) => {
         let idx = start + 1;
@@ -58,9 +94,7 @@ export const DayLearning: React.FC<DayLearningProps> = ({
         nextIndex = currentIndex;
       } else {
         nextIndex = findNext(currentIndex);
-        // 如果到了末尾，根据模式决定是否回到开头
         if (nextIndex === -1 && loopMode === 'all') {
-          // 简化的回头逻辑，实际可以用你之前的完整逻辑
           let first = 0;
           while (first < datesData.length) {
             if (!filterType || datesData[first].type === filterType) {
@@ -72,11 +106,11 @@ export const DayLearning: React.FC<DayLearningProps> = ({
         }
       }
 
-      const duration = isVisible ? 1600 : 0; // 这里的时长逻辑可微调
+      // 控制停留时间 (毫秒)
+      const duration = isVisible ? 3200 : 0;
 
       timerRef.current = window.setTimeout(() => {
         if (nextIndex !== -1) {
-          // 🟢 更新数字，而不是 Date
           onDayChange(nextIndex + 1);
         } else {
           setIsPlaying(false);
@@ -105,19 +139,31 @@ export const DayLearning: React.FC<DayLearningProps> = ({
     else setLoopMode('off');
   };
 
-  const progressInfo = useMemo(
-    () => ({
-      current: safeDay,
-      total: datesData.length,
-      percent: (safeDay / datesData.length) * 100,
-    }),
-    [safeDay]
-  );
+  const progressInfo = useMemo(() => {
+    const total = displayList.length;
+    // 如果当前项在列表里，显示它的位置 (1-based)
+    // 如果不在列表里(比如自动跳转生效前的一瞬间)，暂时显示 0，避免显示错误的数据
+    const current = isInList ? currentIndexInList + 1 : 0;
+
+    return {
+      current,
+      total,
+      percent: total > 0 ? (current / total) * 100 : 0,
+    };
+  }, [displayList.length, isInList, currentIndexInList]);
 
   return (
     <div className={styles.container}>
       <LegendArea filterType={filterType} onFilterChange={onFilterChange} />
-      <DayHero item={currentItem} />
+
+      <DayHero
+        item={currentItem}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        isFirst={isFirst}
+        isLast={isLast}
+      />
+
       <DayController
         isPlaying={isPlaying}
         loopMode={loopMode}

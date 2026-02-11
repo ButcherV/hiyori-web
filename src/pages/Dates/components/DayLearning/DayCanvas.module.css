@@ -82,7 +82,7 @@
 
 /* Dimmed */
 .cellDimmed {
-  opacity: 0.15;
+  opacity: 0.1;
   filter: grayscale(100%);
   transform: scale(0.9);
   pointer-events: none;
