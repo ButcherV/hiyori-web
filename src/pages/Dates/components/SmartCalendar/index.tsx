@@ -20,7 +20,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   date,
   activeMode,
   onDateSelect,
-  onModeChange,
+  // onModeChange,
   children,
 }) => {
   const isDayMode = activeMode === 'day';
@@ -183,7 +183,6 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         className={`${styles.collapseSection} ${weekSectionCollapsed ? styles.collapsed : ''}`}
       >
         <div className={styles.collapseInner}>
-          {/* 🟢 CSS 类名判断也改用 focusType */}
           <div
             className={`
               ${styles.fadeWrapper} 

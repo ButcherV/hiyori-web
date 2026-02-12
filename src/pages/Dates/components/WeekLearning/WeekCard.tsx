@@ -11,12 +11,12 @@ import {
   Trees,
   Gem,
   Mountain,
-  Volume2, // 🟢 引入喇叭图标
+  Volume2,
 } from 'lucide-react';
-import { useTTS } from '../../../../hooks/useTTS'; // 🟢 引入 TTS
+import { useTTS } from '../../../../hooks/useTTS';
 
 // 图标映射表
-const IconMap: Record<string, React.ElementType> = {
+const IconMap: Record<string, React.FC<any>> = {
   Sun,
   Moon,
   Flame,
@@ -45,7 +45,6 @@ export const WeekCard: React.FC<WeekCardProps> = ({
     ? `var(${item.colorVar})`
     : item.colorVar;
 
-  // 🟢 独立播放处理 (点击喇叭不触发切换，或者根据你的需求决定)
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 阻止冒泡，防止触发外层的 onDaySelect (也就是页面滚动)
     speak(item.kana);
@@ -64,19 +63,14 @@ export const WeekCard: React.FC<WeekCardProps> = ({
 
       {/* 2. 中间：纵向排列 (汉字 -> 假名 -> 罗马音) */}
       <div className={styles.mainInfo}>
+        <span className={styles.romaji}>{item.romaji}</span>
+        <span className={`${styles.kana} jaFont`}>{item.kana}</span>
         <div className={styles.kanjiRow}>
           <span className={`${styles.kanji} jaFont`}>{item.kanji}</span>
         </div>
-        <span className={`${styles.kana} jaFont`}>{item.kana}</span>
-        {/* 🟢 罗马音移到这里 */}
-        <span className={styles.romaji}>{item.romaji}</span>
       </div>
-
-      {/* 3. 右侧：功能区 (翻译 + 喇叭) */}
+      <span className={styles.english}>{item.english}</span>
       <div className={styles.rightSection}>
-        <span className={styles.english}>{item.english}</span>
-
-        {/* 🟢 喇叭按钮 */}
         <button
           className={styles.speakerBtn}
           onClick={handlePlayClick}

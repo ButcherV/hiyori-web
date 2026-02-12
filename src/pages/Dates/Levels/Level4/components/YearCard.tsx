@@ -25,8 +25,7 @@ interface YearCardProps {
 //     return 'linear-gradient(to bottom, #1e3a8a, #3b82f6)'; // 平成：商务蓝
 //   return 'linear-gradient(to bottom, #4c1d95, #8b5cf6)'; // 令和：紫罗兰
 // };
-const getEraBackground = (eraRomaji: string, year: number) => {
-  // 🟢 2. 针对昭和时代，返回图片 URL
+const getEraBackground = (eraRomaji: string) => {
   if (eraRomaji === 'showa') {
     // 注意：这里返回的是 CSS 的 background-image 语法
     return `url(${showaBgImage})`;
@@ -49,7 +48,7 @@ export const YearCard: React.FC<YearCardProps> = ({
 }) => {
   // 模拟背景，实际这里应该是 <img src="..." />
   const bgStyle = {
-    backgroundImage: getEraBackground(data.era.key, data.year),
+    backgroundImage: getEraBackground(data.era.key),
   };
 
   const handlePlayAudio = (e: React.MouseEvent) => {

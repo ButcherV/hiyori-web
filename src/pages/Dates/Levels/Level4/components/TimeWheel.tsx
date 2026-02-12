@@ -1,6 +1,6 @@
 // src/pages/Dates/Levels/Level4/components/TimeWheel.tsx
 
-import React, { useRef, useEffect, ReactNode } from 'react';
+import React, { useRef, useEffect, type ReactNode } from 'react';
 import styles from './TimeWheel.module.css';
 
 interface TimeWheelProps {

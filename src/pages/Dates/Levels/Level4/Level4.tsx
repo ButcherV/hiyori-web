@@ -1,6 +1,4 @@
-// src/pages/Dates/Levels/Level4/Level4.tsx
-
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import styles from './Level4.module.css';
 import { getYearData, ERAS } from './Level4Data';
 import { TimeWheel } from './components/TimeWheel';

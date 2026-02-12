@@ -57,7 +57,7 @@ export const DateDetailPanel: React.FC<{
       kana: dayItem?.kana || '',
       romaji: dayItem?.romaji || '', // 🟢 移除 toUpperCase，datesData 本身就是小写+点
       translation: `Day ${date.getDate()}`,
-      action: '日期读写学习',
+      action: '日期学习',
       mode: 'day',
     });
 
@@ -74,7 +74,7 @@ export const DateDetailPanel: React.FC<{
         kana: relData.kana,
         romaji: relData.romaji,
         translation: relData.en,
-        action: '学习相对时间',
+        action: '相对时间学习',
         mode: 'relative',
         theme: 'cyan',
       });

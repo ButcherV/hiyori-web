@@ -63,19 +63,6 @@ export interface YearData {
   specialTag?: string; // 今年, 去年, 明年
 }
 
-// 数字读音映射 (0-9)
-const NUM_KANA = [
-  'zero',
-  'ichi',
-  'ni',
-  'san',
-  'yon',
-  'go',
-  'roku',
-  'nana',
-  'hachi',
-  'kyuu',
-];
 // 实际上年份读法有特殊规则，我们需要专门处理后缀
 const getYearSuffixData = (
   yearNum: number
@@ -135,20 +122,20 @@ export const getYearData = (year: number): YearData => {
   // 5. 构建发音 (简易版，只处理后缀逻辑用于演示)
   // 实际读音 = 年号读音 + 数字读音 + 年
   // 注意：元年读 gannen
-  let suffixKana = '';
-  let suffixRomaji = '';
+  // let suffixKana = '';
+  // let suffixRomaji = '';
   let isTrap = false;
 
   if (isGannen) {
-    suffixKana = 'がんねん';
-    suffixRomaji = 'ga·n·nen';
+    // suffixKana = 'がんねん';
+    // suffixRomaji = 'ga·n·nen';
     isTrap = true;
   } else {
     // 这里简单处理：实际应用中你需要一个 numberToKana 的转换器
     // 为了 Level4 演示，我们只关注 4, 7, 9 的陷阱提示
     const suffixData = getYearSuffixData(eraYear);
-    suffixKana = suffixData.kana; // 注意：这里只是后缀，没包含前面的十位百位
-    suffixRomaji = suffixData.romaji;
+    // suffixKana = suffixData.kana; // 注意：这里只是后缀，没包含前面的十位百位
+    // suffixRomaji = suffixData.romaji;
     isTrap = suffixData.isTrap;
 
     // 补全前面的数字读音 (略，假设 Level 4 用户已经会读数字了，重点在后缀)

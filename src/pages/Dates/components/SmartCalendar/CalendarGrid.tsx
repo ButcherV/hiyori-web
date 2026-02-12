@@ -7,7 +7,6 @@ import { type NavMode } from '../../PageDates';
 import {
   getJapaneseHoliday,
   getRelativeLabel,
-  isRedDay,
 } from '../../../../utils/dateHelper';
 
 interface CalendarGridProps {
