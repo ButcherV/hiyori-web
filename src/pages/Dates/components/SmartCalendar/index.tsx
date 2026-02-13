@@ -7,12 +7,16 @@ import { type NavMode } from '../../PageDates';
 import { CalendarHeader } from './CalendarHeader';
 import { WeekRow } from './WeekRow';
 import { CalendarGrid } from './CalendarGrid';
+// 🟢 引入 MonthCanvas
+import { MonthCanvas } from '../MonthLearning/MonthCanvas';
 
 interface SmartCalendarProps {
   date: Date;
   activeMode: NavMode;
   onDateSelect: (date: Date) => void;
-  onModeChange: (mode: NavMode) => void;
+  // 🟢 新增 Props
+  activeMonth?: number;
+  onMonthSelect?: (m: number) => void;
   children?: React.ReactNode;
 }
 
@@ -20,32 +24,43 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   date,
   activeMode,
   onDateSelect,
-  // onModeChange,
+  activeMonth = 1,
+  onMonthSelect = () => {},
   children,
 }) => {
   const isDayMode = activeMode === 'day';
   const isWeekMode = activeMode === 'week';
-  const isFocusMode = isDayMode || isWeekMode;
+  const isMonthMode = activeMode === 'month';
+  const isFocusMode = isDayMode || isWeekMode || isMonthMode;
 
-  // 🟢 关键修复：引入 focusType
-  // 用它来“记住”我们是在 Day 还是 Week 模式，
-  // 即使 activeMode 瞬间变成了 overview，只要这个状态没变，我们依然知道该在哪个区域做退出动画。
-  const [focusType, setFocusType] = useState<'day' | 'week' | null>(() => {
-    if (activeMode === 'day') return 'day';
-    if (activeMode === 'week') return 'week';
-    return null;
-  });
+  // 1. 状态锁定 (Focus Identity)
+  const [focusType, setFocusType] = useState<'day' | 'week' | 'month' | null>(
+    () => {
+      if (isDayMode) return 'day';
+      if (isWeekMode) return 'week';
+      if (isMonthMode) return 'month';
+      return null;
+    }
+  );
 
-  // === 1. 区域折叠控制 ===
+  // 2. 区域折叠控制 (Layout Collapse)
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
   const [weekSectionCollapsed, setWeekSectionCollapsed] = useState(false);
   const [gridSectionCollapsed, setGridSectionCollapsed] = useState(false);
 
-  // === 2. 内容置换控制 ===
+  // 3. Header 内容置换控制 (Header Swap)
+  // headerContentVisible: 控制 Header 内容的 Fade 动画
+  const [headerContentVisible, setHeaderContentVisible] = useState(true);
+  // headerMode: 决定 Header 显示 CalendarHeader 还是 MonthCanvas
+  const [headerMode, setHeaderMode] = useState<'calendar' | 'month'>(
+    'calendar'
+  );
+
+  // 4. 内容区域置换控制 (Canvas Swap - for Day/Week)
   const [showLearningContent, setShowLearningContent] = useState(false);
   const [isContentInvisible, setIsContentInvisible] = useState(false);
 
-  // === 3. 缓存 Children (用于退出动画) ===
+  // 5. 缓存 Children (用于退出动画)
   const [cachedChildren, setCachedChildren] = useState(children);
   useEffect(() => {
     if (isFocusMode && children) {
@@ -56,18 +71,24 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   const prevModeRef = useRef(activeMode);
 
   useEffect(() => {
-    // 首次加载初始化 (防止刷新后状态不对)
+    // === 初始化逻辑 ===
     if (!prevModeRef.current) {
       if (isDayMode) {
-        setFocusType('day'); // 🟢 记录身份
+        setFocusType('day');
         setHeaderCollapsed(true);
         setWeekSectionCollapsed(true);
         setShowLearningContent(true);
       } else if (isWeekMode) {
-        setFocusType('week'); // 🟢 记录身份
+        setFocusType('week');
         setHeaderCollapsed(true);
         setGridSectionCollapsed(true);
         setShowLearningContent(true);
+      } else if (isMonthMode) {
+        setFocusType('month');
+        // Month 模式：Header 不折叠（因为要放 MonthCanvas），其他都折叠
+        setWeekSectionCollapsed(true);
+        setGridSectionCollapsed(true);
+        setHeaderMode('month'); // 直接显示
       }
       return;
     }
@@ -76,20 +97,60 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
     const prevMode = prevModeRef.current;
     prevModeRef.current = activeMode;
 
-    const isEnteringFocus =
-      isFocusMode && prevMode !== 'day' && prevMode !== 'week';
-    const isExitingFocus =
+    // === 动画状态机 ===
+
+    const isEnteringMonth = isMonthMode && prevMode === 'overview';
+    const isExitingMonth = !isMonthMode && prevMode === 'month';
+
+    // 复用之前的 Day/Week 逻辑判断
+    const isEnteringDayOrWeek =
+      (isDayMode || isWeekMode) && prevMode === 'overview';
+    const isExitingDayOrWeek =
       !isFocusMode && (prevMode === 'day' || prevMode === 'week');
 
-    let step1Timer: number;
-    let step2Timer: number;
+    let t1: number, t2: number;
 
-    if (isEnteringFocus) {
-      // ===============================================
-      // 🟢 进入学习模式
-      // ===============================================
+    // 🟢 CASE A: 进入 Month 模式 (三阶段)
+    if (isEnteringMonth) {
+      setFocusType('month');
 
-      // 1. 立即锁定身份，防止渲染错乱
+      // Stage 1: 其他部分折叠
+      setWeekSectionCollapsed(true);
+      setGridSectionCollapsed(true);
+
+      // Stage 2: Header 内容渐退
+      t1 = window.setTimeout(() => {
+        setHeaderContentVisible(false);
+
+        // Stage 3: 切换内容并渐现
+        t2 = window.setTimeout(() => {
+          setHeaderMode('month');
+          setHeaderContentVisible(true);
+        }, 300); // 等待 FadeOut (300ms)
+      }, 300); // 等待 Collapse (300ms)
+    }
+
+    // 🟢 CASE B: 退出 Month 模式 (三阶段)
+    else if (isExitingMonth) {
+      // Stage 1: MonthCanvas 原地渐退
+      setHeaderContentVisible(false);
+
+      // Stage 2: 换回 CalendarHeader 并渐现
+      t1 = window.setTimeout(() => {
+        setHeaderMode('calendar');
+        setHeaderContentVisible(true);
+
+        // Stage 3: 其他部分展开
+        t2 = window.setTimeout(() => {
+          setWeekSectionCollapsed(false);
+          setGridSectionCollapsed(false);
+          setFocusType(null);
+        }, 300);
+      }, 300);
+    }
+
+    // 🟡 CASE C: 进入 Day/Week 模式 (原有逻辑)
+    else if (isEnteringDayOrWeek) {
       if (isDayMode) setFocusType('day');
       else setFocusType('week');
 
@@ -103,47 +164,55 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         setWeekSectionCollapsed(false);
       }
 
-      step1Timer = window.setTimeout(() => {
-        setIsContentInvisible(true); // 原地渐隐 (Grid/Row)
-
-        step2Timer = window.setTimeout(() => {
-          setShowLearningContent(true); // 换上 Canvas
-          setIsContentInvisible(false); // 渐现
+      t1 = window.setTimeout(() => {
+        setIsContentInvisible(true);
+        t2 = window.setTimeout(() => {
+          setShowLearningContent(true);
+          setIsContentInvisible(false);
         }, 300);
       }, 500);
-    } else if (isExitingFocus) {
-      // ===============================================
-      // 🟢 退出学习模式
-      // ===============================================
+    }
 
-      // 1. 原地渐隐 (Canvas)
+    // 🟡 CASE D: 退出 Day/Week 模式 (原有逻辑)
+    else if (isExitingDayOrWeek) {
       setIsContentInvisible(true);
-
-      step1Timer = window.setTimeout(() => {
-        // 2. 换回旧内容
+      t1 = window.setTimeout(() => {
         setShowLearningContent(false);
-        setIsContentInvisible(false); // Grid/Row 渐现
-
-        // 3. 恢复其他区域
-        step2Timer = window.setTimeout(() => {
+        setIsContentInvisible(false);
+        t2 = window.setTimeout(() => {
           setHeaderCollapsed(false);
           setWeekSectionCollapsed(false);
           setGridSectionCollapsed(false);
-          // 动画彻底结束后，可以清理 focusType (虽不清理也不影响，但为了整洁)
           setFocusType(null);
         }, 300);
       }, 300);
     }
 
     return () => {
-      clearTimeout(step1Timer);
-      clearTimeout(step2Timer);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
-  }, [activeMode, isFocusMode, isDayMode, isWeekMode]);
+  }, [activeMode, isDayMode, isWeekMode, isMonthMode, isFocusMode]);
 
-  // === 渲染逻辑修正 ===
-  // 🟢 不再检查 isWeekMode/isDayMode (因为退出时它们是 false)
-  // 而是检查 focusType，只有它是 'week' 且 showLearningContent 为 true 时，才显示 Canvas
+  // 🟢 渲染 Header 内容 (支持 Fade)
+  const renderHeaderContent = () => {
+    // 注意：这里我们用一个 fadeWrapper 包裹，来实现内容切换时的渐隐渐现
+    return (
+      <div
+        className={styles.fadeWrapper}
+        style={{ opacity: headerContentVisible ? 1 : 0 }}
+      >
+        {headerMode === 'month' ? (
+          <MonthCanvas
+            activeMonth={activeMonth}
+            onMonthSelect={onMonthSelect}
+          />
+        ) : (
+          <CalendarHeader date={date} />
+        )}
+      </div>
+    );
+  };
 
   const renderWeekSectionContent = () => {
     if (focusType === 'week' && showLearningContent) {
@@ -169,13 +238,11 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
     <div
       className={`${styles.wrapper} ${isFocusMode ? styles.wrapperFocus : ''}`}
     >
-      {/* 1. Header */}
+      {/* 1. Header (Month 模式下复用此槽位) */}
       <div
         className={`${styles.collapseSection} ${headerCollapsed ? styles.collapsed : ''}`}
       >
-        <div className={styles.collapseInner}>
-          <CalendarHeader date={date} />
-        </div>
+        <div className={styles.collapseInner}>{renderHeaderContent()}</div>
       </div>
 
       {/* 2. Week Section */}
@@ -199,7 +266,6 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         className={`${styles.collapseSection} ${gridSectionCollapsed ? styles.collapsed : ''}`}
       >
         <div className={styles.collapseInner}>
-          {/* 🟢 CSS 类名判断也改用 focusType */}
           <div
             className={`
               ${styles.fadeWrapper} 

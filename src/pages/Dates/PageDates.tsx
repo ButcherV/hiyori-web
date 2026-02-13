@@ -18,6 +18,8 @@ import { DayLearning } from './components/DayLearning';
 import { DayCanvas } from './components/DayLearning/DayCanvas';
 import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
+// 🟢 引入 MonthLearning
+import { MonthLearning } from './components/MonthLearning';
 import { type DateType } from './Datas/DayData';
 
 export type NavMode =
@@ -36,15 +38,24 @@ export const PageDates = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [learningDay, setLearningDay] = useState(new Date().getDate());
   const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay());
+
+  // 🟢 新增 Month 状态
+  const [activeMonth, setActiveMonth] = useState(new Date().getMonth() + 1);
+
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
   const pageTitle = t('date_study.title') || 'Dates Study';
   const isFocusMode = activeMode !== 'overview';
 
+  // 同步逻辑
   useEffect(() => {
     if (activeMode === 'day') {
       setLearningDay(selectedDate.getDate());
+    }
+    // 如果进入 month 模式，默认选中当前 selectedDate 的月份
+    if (activeMode === 'month') {
+      setActiveMonth(selectedDate.getMonth() + 1);
     }
   }, [activeMode, selectedDate]);
 
@@ -56,6 +67,7 @@ export const PageDates = () => {
       const today = new Date();
       setSelectedDate(today);
       setLearningDay(today.getDate());
+      setActiveMonth(today.getMonth() + 1);
     }
   };
 
@@ -63,7 +75,7 @@ export const PageDates = () => {
     setFilterType((prev) => (prev === type ? null : type));
   };
 
-  // 🟢 1. 上半部分：日历区域的内容渲染器
+  // 1. 上半部分：日历区域的内容渲染器 (Children)
   const renderCalendarContent = () => {
     switch (activeMode) {
       case 'day':
@@ -83,13 +95,13 @@ export const PageDates = () => {
             onDaySelect={setCurrentWeekDay}
           />
         );
+      // 注意：Month 模式下，MonthCanvas 是作为 Header 渲染的，不是 Children
       default:
-        // overview 或其他模式下，SmartCalendar 会显示默认网格，这里不需要传子组件
         return null;
     }
   };
 
-  // 🟢 2. 下半部分：详情区域的内容渲染器
+  // 2. 下半部分：详情区域的内容渲染器
   const renderDetailContent = () => {
     switch (activeMode) {
       case 'overview':
@@ -113,6 +125,14 @@ export const PageDates = () => {
           <WeekLearning
             activeDay={currentWeekDay}
             onDaySelect={setCurrentWeekDay}
+          />
+        );
+      // 🟢 新增 Month Case
+      case 'month':
+        return (
+          <MonthLearning
+            activeMonth={activeMonth}
+            onMonthSelect={setActiveMonth}
           />
         );
       default:
@@ -150,7 +170,9 @@ export const PageDates = () => {
             date={selectedDate}
             activeMode={activeMode}
             onDateSelect={(date) => setSelectedDate(date)}
-            onModeChange={setActiveMode}
+            // 🟢 传递 Month Props
+            activeMonth={activeMonth}
+            onMonthSelect={setActiveMonth}
           >
             {renderCalendarContent()}
           </SmartCalendar>
@@ -160,18 +182,15 @@ export const PageDates = () => {
         <div className={styles.contentSection}>
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeMode} // 关键：key 变化通知 Motion 这是一个新组件
+              key={activeMode}
               className={styles.motionWrapper}
-              // 初始状态 (进入前)
               initial={{ opacity: 0, y: 15 }}
-              // 激活状态 (进入后)
               animate={{ opacity: 1, y: 0 }}
-              // 退出状态 (卸载前) - 这就是你想要的"渐退"
               exit={{ opacity: 0, y: -15 }}
               transition={{
                 delay: 0.24,
                 duration: 0.25,
-                ease: [0.4, 0, 0.2, 1], // 经典的 smooth easing
+                ease: [0.4, 0, 0.2, 1],
               }}
             >
               {renderDetailContent()}
