@@ -1,12 +1,17 @@
+// src/pages/Dates/components/WeekLearning/WeekData.tsx
+
 export interface WeekDayItem {
-  id: number; // 0 (Sun) - 6 (Sat)
+  id: number;
   kanji: string;
   kana: string;
   romaji: string;
   english: string;
-  element: string; // 中文意象
-  icon: string; // Lucide icon name
-  colorVar: string; // 对应的 CSS 变量名或颜色值
+  element: string;
+  icon: string;
+  // 🟢 新增：专属渐变背景
+  gradient: string;
+  // 🟢 新增：阴影色
+  shadowColor: string;
 }
 
 export const weekData: WeekDayItem[] = [
@@ -18,7 +23,9 @@ export const weekData: WeekDayItem[] = [
     english: 'Sunday',
     element: '日 (Sun)',
     icon: 'Sun',
-    colorVar: '--color-date-sun-text', // 红色
+    // 太阳：热烈的橙红渐变
+    gradient: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)',
+    shadowColor: 'rgba(239, 68, 68, 0.4)',
   },
   {
     id: 1,
@@ -28,7 +35,9 @@ export const weekData: WeekDayItem[] = [
     english: 'Monday',
     element: '月 (Moon)',
     icon: 'Moon',
-    colorVar: '#475569', // 深灰
+    // 月亮：静谧的岩石灰蓝
+    gradient: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
+    shadowColor: 'rgba(71, 85, 105, 0.4)',
   },
   {
     id: 2,
@@ -38,7 +47,9 @@ export const weekData: WeekDayItem[] = [
     english: 'Tuesday',
     element: '火 (Fire)',
     icon: 'Flame',
-    colorVar: '#ea580c', // 橙红
+    // 火：明亮的橘红
+    gradient: 'linear-gradient(135deg, #ea580c 0%, #dc2626 100%)',
+    shadowColor: 'rgba(234, 88, 12, 0.4)',
   },
   {
     id: 3,
@@ -48,7 +59,9 @@ export const weekData: WeekDayItem[] = [
     english: 'Wednesday',
     element: '水 (Water)',
     icon: 'Droplets',
-    colorVar: '#0ea5e9', // 亮蓝
+    // 水：清澈的青蓝
+    gradient: 'linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)',
+    shadowColor: 'rgba(14, 165, 233, 0.4)',
   },
   {
     id: 4,
@@ -58,7 +71,9 @@ export const weekData: WeekDayItem[] = [
     english: 'Thursday',
     element: '木 (Wood)',
     icon: 'Trees',
-    colorVar: '#16a34a', // 绿色
+    // 木：自然的翠绿
+    gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+    shadowColor: 'rgba(22, 163, 74, 0.4)',
   },
   {
     id: 5,
@@ -67,8 +82,10 @@ export const weekData: WeekDayItem[] = [
     romaji: 'ki·n·yo·u·bi',
     english: 'Friday',
     element: '金 (Gold)',
-    icon: 'Gem', // 宝石/金币
-    colorVar: '#ca8a04', // 金色
+    icon: 'Gem',
+    // 金：富贵的金黄
+    gradient: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
+    shadowColor: 'rgba(234, 179, 8, 0.4)',
   },
   {
     id: 6,
@@ -77,7 +94,9 @@ export const weekData: WeekDayItem[] = [
     romaji: 'do·yo·u·bi',
     english: 'Saturday',
     element: '土 (Earth)',
-    icon: 'Mountain', // 大地/山
-    colorVar: '--color-date-sat-text', // 蓝色
+    icon: 'Mountain',
+    // 土：深沉的靛蓝/大地色 (此处遵循日历习惯用蓝色系，或者你可以改为褐色)
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+    shadowColor: 'rgba(59, 130, 246, 0.4)',
   },
 ];

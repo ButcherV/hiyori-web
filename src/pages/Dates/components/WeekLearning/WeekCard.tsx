@@ -1,5 +1,3 @@
-// src/pages/Dates/components/WeekLearning/WeekCard.tsx
-
 import React from 'react';
 import styles from './WeekCard.module.css';
 import { type WeekDayItem } from './WeekData';
@@ -15,7 +13,6 @@ import {
 } from 'lucide-react';
 import { useTTS } from '../../../../hooks/useTTS';
 
-// 图标映射表
 const IconMap: Record<string, React.FC<any>> = {
   Sun,
   Moon,
@@ -40,43 +37,60 @@ export const WeekCard: React.FC<WeekCardProps> = ({
   const { speak } = useTTS();
   const IconComponent = IconMap[item.icon] || Sun;
 
-  // 颜色处理
-  const iconColor = item.colorVar.startsWith('--')
-    ? `var(${item.colorVar})`
-    : item.colorVar;
+  // 点击卡片：选中 + 播放
+  const handleCardClick = () => {
+    onClick();
+    speak(item.kana);
+  };
 
-  const handlePlayClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 阻止冒泡，防止触发外层的 onDaySelect (也就是页面滚动)
+  // 点击喇叭：选中 + 播放
+  const handleSpeakerClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick();
     speak(item.kana);
   };
 
   return (
     <div
       className={`${styles.card} ${isActive ? styles.activeCard : ''}`}
-      onClick={onClick}
+      onClick={handleCardClick}
       id={`week-card-${item.id}`}
+      style={
+        isActive
+          ? ({
+              background: item.gradient, // 选中时直接使用渐变背景
+              boxShadow: `0 12px 30px -8px ${item.shadowColor}`, // 对应颜色的扩散光晕
+            } as React.CSSProperties)
+          : undefined
+      }
     >
-      {/* 1. 左侧：Logo */}
-      <div className={styles.iconWrapper} style={{ color: iconColor }}>
-        <IconComponent size={24} strokeWidth={2.5} />
+      {/* 1. 背景大水印 (Decorative) */}
+      <div className={styles.bgIcon}>
+        <IconComponent strokeWidth={1.5} />
       </div>
 
-      {/* 2. 中间：纵向排列 (汉字 -> 假名 -> 罗马音) */}
-      <div className={styles.mainInfo}>
-        <span className={styles.romaji}>{item.romaji}</span>
-        <span className={`${styles.kana} jaFont`}>{item.kana}</span>
-        <div className={styles.kanjiRow}>
-          <span className={`${styles.kanji} jaFont`}>{item.kanji}</span>
+      {/* 2. 左侧：日文核心 (Information) */}
+      <div className={styles.leftSection}>
+        {/* 汉字 */}
+        <div className={`${styles.kanji} jaFont`}>{item.kanji}</div>
+
+        {/* 垂直堆叠的读音区 */}
+        <div className={styles.readingBlock}>
+          <div className={`${styles.kana} jaFont`}>{item.kana}</div>
+          <div className={styles.romaji}>{item.romaji}</div>
         </div>
       </div>
-      <span className={styles.english}>{item.english}</span>
+
+      {/* 3. 右侧：英文 + 操作 (Context & Action) */}
       <div className={styles.rightSection}>
+        <div className={styles.englishLarge}>{item.english}</div>
+
         <button
           className={styles.speakerBtn}
-          onClick={handlePlayClick}
+          onClick={handleSpeakerClick}
           aria-label="Play Audio"
         >
-          <Volume2 size={18} />
+          <Volume2 size={22} strokeWidth={2.5} />
         </button>
       </div>
     </div>

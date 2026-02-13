@@ -2,11 +2,10 @@
 
 .container {
   width: 100%;
-  height: 30px; /* 确保高度匹配 */
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin-bottom: 8px; */
 }
 
 .weekGrid {
@@ -14,6 +13,7 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   width: 100%;
+  position: relative; /* 为绝对定位的滑块提供参考 */
 }
 
 .weekCell {
@@ -22,56 +22,58 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  cursor: pointer; /* 加上手型，提示可点击 */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* 基础圆圈样式 */
-.circle {
+/* 🟢 新增：动画滑块样式 */
+.activeBg {
+  position: absolute;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* 默认颜色，具体颜色通过父级状态控制 */
+  background: #1e293b;
+  z-index: 0;
+}
 
+/* 🟢 文字样式：确保在滑块上方 */
+.text {
+  position: relative;
+  z-index: 1;
   font-size: 14px;
   font-weight: 700;
-
   color: #94a3b8;
-  background: transparent;
-  border: 1px solid transparent;
-
-  /* 加上过渡动画 */
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: color 0.3s ease;
 }
 
-/* 🟢 关键：激活状态的样式 (你可能少了这段) */
-.active .circle {
-  background: #1e293b;
+/* === 状态色控制 === */
+
+/* 1. 普通激活 */
+.active .text {
   color: white;
-  border-color: #1e293b;
-  /* transform: scale(1.1); */
-  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
 }
 
-/* === 周日的特殊颜色处理 === */
-.sunday .circle {
-  color: #ef4444; /* 平时是红色字 */
+/* 2. 周日处理 */
+.sunday .text {
+  color: #ef4444;
 }
-/* 既是周日，又是激活状态 */
-.active.sunday .circle {
+.active.sunday .text {
   color: white;
-  background: #ef4444; /* 激活变成红色底 */
-  border-color: #ef4444;
+}
+.active.sunday .activeBg {
+  background: #ef4444;
 }
 
-/* === 周六的特殊颜色处理 === */
-.saturday .circle {
-  color: #3b82f6; /* 平时是蓝色字 */
+/* 3. 周六处理 */
+.saturday .text {
+  color: #3b82f6;
 }
-/* 既是周六，又是激活状态 */
-.active.saturday .circle {
+.active.saturday .text {
   color: white;
-  background: #3b82f6; /* 激活变成蓝色底 */
-  border-color: #3b82f6;
 }
+.active.saturday .activeBg {
+  background: #3b82f6;
+}
+
+/* 移除原本 .circle 相关的硬背景逻辑，因为已被滑块取代 */

@@ -3,147 +3,179 @@
 .card {
   width: 100%;
   max-width: 500px;
-  /* 稍微增加高度以容纳三行文字，或者让 padding 撑开 */
-  min-height: 80px;
+  /* 增加高度，给垂直排版留出呼吸空间 */
+  min-height: 110px;
 
-  background: white;
-  border-radius: 12px; /* 更圆润一点 */
-  margin-bottom: 12px;
+  /* 默认态：白底 + 极淡的边框 */
+  background: #ffffff;
+  border-radius: 20px; /* 更圆润 */
+  margin-bottom: 16px;
 
   display: flex;
   align-items: center;
-  padding: 16px; /* 调整内边距 */
+  justify-content: space-between; /* 左右撑开 */
+  padding: 0 24px;
 
-  /* 基础阴影 */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden; /* 裁剪背景水印 */
+
+  /* 阴影：细腻的层级感 */
+  box-shadow:
+    0 4px 6px -2px rgba(0, 0, 0, 0.03),
+    0 10px 15px -3px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.02);
 
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-
-  /* 防止文字换行 */
-  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .card:active {
   transform: scale(0.98);
-  background: #f8fafc;
 }
 
-/* 🟢 选中高亮状态 */
+/* ============================================================
+   🟢 激活状态 (Active)
+   ============================================================ */
 .activeCard {
-  border-color: #3b82f6;
-  background: #f0f9ff;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  /* 背景色由 inline-style 注入渐变 */
+  border-color: transparent;
   transform: scale(1.02);
-  z-index: 2;
+  z-index: 5;
 }
 
-/* === 左侧：Logo 区域 === */
-.iconWrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-
-  background: #f1f5f9;
-  color: #64748b;
-  flex-shrink: 0;
+/* 激活时：文字全白 */
+.activeCard .kanji,
+.activeCard .kana,
+.activeCard .romaji,
+.activeCard .englishLarge {
+  color: white !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* === 中间：主要文字 (三行纵列) === */
-.mainInfo {
-  flex: 1;
+/* 激活时：背景 Icon 变白且稍微亮一点 */
+.activeCard .bgIcon {
+  color: white !important;
+  opacity: 0.2 !important;
+}
+
+/* 激活时：喇叭按钮 */
+.activeCard .speakerBtn {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+.activeCard .speakerBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================
+   🎨 布局分区
+   ============================================================ */
+
+/* 1. 背景水印 Icon (放在最底层) */
+.bgIcon {
+  position: absolute;
+  /* 放在右侧偏下，稍微大一点 */
+  right: 40px;
+  bottom: -24px;
+  width: 140px;
+  height: 140px;
+
+  color: #94a3b8;
+  opacity: 0.06; /* 极淡，不抢视线 */
+  transform: rotate(-10deg);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* 2. 左侧：日文核心学习区 (Vertical Stack) */
+.leftSection {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* 左对齐 */
-  gap: 2px;
-  overflow: hidden;
-}
-
-.kanjiRow {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 6px; /* 稍微拉开行距 */
+  z-index: 2; /* 浮在背景之上 */
+  flex: 1; /* 占据剩余空间 */
 }
 
 .kanji {
-  font-size: 22px; /* 加大汉字 */
-  font-weight: 800;
+  font-size: 32px; /* 巨大 */
+  font-weight: 900;
   color: #1e293b;
-  line-height: 1.1;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.readingBlock {
+  display: flex;
+  flex-direction: column; /* 🟢 关键：假名和罗马音垂直排列 */
+  gap: 2px;
 }
 
 .kana {
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
-  line-height: 1.2;
+  font-size: 16px;
+  font-weight: 700;
+  color: #64748b; /* 次级灰 */
 }
 
-/* 🟢 罗马音移到这里 */
 .romaji {
-  /* font-family: 'SF Mono', monospace; */
+  font-family: 'SF Mono', monospace; /* 等宽字体适合注音 */
   font-size: 11px;
   font-weight: 500;
-  color: #94a3b8;
-  /* text-transform: uppercase; */
-  margin-top: 2px;
+  color: #94a3b8; /* 最淡的灰 */
+  text-transform: uppercase; /* 罗马音大写看起来更整齐 */
+  letter-spacing: 1px;
 }
 
-/* === 右侧：功能区 (翻译 + 喇叭) === */
+/* 3. 右侧：英文 + 按钮区 */
 .rightSection {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-end; /* 右对齐 */
   justify-content: center;
-  gap: 8px;
-  flex-shrink: 0;
-  margin-left: 12px;
+  gap: 12px;
+  z-index: 2;
 }
 
-.english {
-  font-size: 12px;
-  color: #cbd5e1;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+/* 英文不再是小标签，而是右侧的一个平衡元素 */
+.englishLarge {
+  font-size: 14px;
+  font-weight: 800;
+  color: #cbd5e1; /* 非常淡，作为装饰 */
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: right;
 }
 
-/* 🟢 独立的喇叭按钮 */
+/* 喇叭按钮 */
 .speakerBtn {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.03);
+  background: #f1f5f9;
   border: none;
   color: #94a3b8;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* 给按钮一点投影，增加可点击感 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .speakerBtn:hover {
   background: #e2e8f0;
   color: #475569;
+  transform: translateY(-1px);
 }
 
 .speakerBtn:active {
-  transform: scale(0.9);
-  background: #cbd5e1;
-}
-
-/* 选中状态下喇叭高亮 */
-.activeCard .speakerBtn {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
-}
-.activeCard .speakerBtn:hover {
-  background: rgba(59, 130, 246, 0.2);
+  transform: scale(0.95) translateY(0);
 }
