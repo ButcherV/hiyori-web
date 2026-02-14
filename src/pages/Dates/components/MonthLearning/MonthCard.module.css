@@ -1,17 +1,16 @@
+/* src/pages/Dates/components/MonthLearning/MonthCard.module.css */
+
 .card {
   width: 100%;
   max-width: 500px;
-  /* 🟢 修复点 1：使用 min-height 而不是 height，防止被压扁到 0 */
-  min-height: 140px;
-
-  /* 🟢 修复点 2：禁止 Flex 压缩！这是最关键的一行 */
+  min-height: 160px;
   flex-shrink: 0;
 
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 20px;
   margin-bottom: 16px;
 
-  display: flex; /* Flex 布局 */
+  display: flex;
   overflow: hidden;
 
   box-shadow:
@@ -31,76 +30,140 @@
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* === 🟢 核心修复：左侧书签脊 === */
+/* === 左侧：文化侧栏 === */
 .leftSpine {
-  width: 72px; /* 撑开宽度 */
-  height: 100%; /* 撑满高度 */
+  width: 100px; /* 足够宽以容纳两列竖排文字 */
+  height: 100%;
+  min-height: 160px; /* 继承最小高度 */
+
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 16px 8px;
 
   color: white;
   position: relative;
+  flex-shrink: 0;
 }
 
-/* 竖排文字 */
-.wafuVertical {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
-  font-size: 20px;
+.spineLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  z-index: 2;
+  text-align: center;
 }
 
-.spinePattern {
+/* 🟢 中间竖排内容区 */
+.spineContent {
+  flex: 1;
+  display: flex;
+  flex-direction: row-reverse; /* 🟢 关键：反向排列，让汉字在右，假名在左（符合竖排习惯） */
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* 汉字和假名之间的间距 */
+  width: 100%;
+}
+
+/* 🟢 竖排核心样式 */
+.wafuVertical {
+  writing-mode: vertical-rl; /* 文字竖排：从右向左 */
+  text-orientation: upright; /* 字符直立 */
+  font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  letter-spacing: 0.3em; /* 竖排时的字间距 */
+  line-height: 1;
+}
+
+.wafuKanji {
+  font-size: 28px; /* 汉字大一点 */
+  font-weight: 700;
+}
+
+.wafuKana {
+  font-size: 13px; /* 假名小一点 */
+  opacity: 0.9;
+  font-weight: 500;
+  font-family: 'Hiragino Sans', sans-serif;
+}
+
+.wafuMeaning {
+  font-size: 10px;
+  text-align: center;
+  opacity: 0.9;
+  line-height: 1.2;
+  font-family: 'SF Mono', sans-serif;
+  max-width: 100%;
+}
+
+.spineSpeaker {
   position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-  background-size: 8px 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  padding: 8px;
+}
+.leftSpine:active .spineSpeaker {
+  opacity: 1;
 }
 
-/* === 🟢 核心修复：右侧主内容 === */
+/* === 右侧：现代主区 === */
 .rightBody {
-  flex: 1; /* 占满剩余宽度 */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 内容垂直居中 */
+  justify-content: center;
   padding: 0 24px;
   position: relative;
 }
 
+.headerRow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .kanjiMain {
-  font-size: 32px;
+  font-size: 40px; /* 放大主标题 */
   font-weight: 900;
   color: #1e293b;
-  line-height: 1.1;
-  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.enMonth {
+  font-size: 14px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .readingArea {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
 }
 
-/* 普通读音 */
 .normalReading {
   display: flex;
   flex-direction: column;
 }
 .kanaText {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   color: #475569;
 }
 .romajiText {
-  font-size: 12px;
+  font-size: 14px;
   color: #94a3b8;
   font-family: 'SF Mono', monospace;
+  margin-top: 2px;
 }
 
 /* 纠错区 */
@@ -108,7 +171,9 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-top: 2px;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed #f1f5f9; /* 增加分割线 */
 }
 
 .wrongRow {
