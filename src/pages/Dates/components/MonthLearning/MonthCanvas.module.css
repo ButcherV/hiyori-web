@@ -49,7 +49,7 @@
 
 /* 激活态：深色背景 + 放大 */
 .activeWrapper {
-  background: #1e293b;
+  /* background: #1e293b; */
   transform: scale(1.05); /* 稍微收敛一点放大倍数 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1;
