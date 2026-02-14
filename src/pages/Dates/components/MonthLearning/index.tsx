@@ -25,32 +25,42 @@ export const MonthLearning: React.FC<MonthLearningProps> = ({
 }) => {
   const { speak } = useTTS();
   const containerRef = useRef<HTMLDivElement>(null);
-  const isFirstRender = useRef(true);
 
-  // 自动滚动 (复用 WeekLearning 逻辑)
+  // 🟢 音频锁：默认锁住，防止进场自动播音
+  const audioEnabledRef = useRef(false);
+
+  // 🟢 1. 初始化：设置一个“进场静音期” (500ms)
+  // 这段时间足够覆盖页面切换动画和父组件可能的初始数据同步
   useEffect(() => {
+    const timer = setTimeout(() => {
+      audioEnabledRef.current = true;
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 🟢 2. 监听 activeMonth 变化：处理滚动 + 播音
+  useEffect(() => {
+    // === A. 滚动逻辑 (始终执行，保证视觉同步) ===
     const timer = setTimeout(() => {
       const cardElement = document.getElementById(`month-card-${activeMonth}`);
       if (cardElement && containerRef.current) {
         cardElement.scrollIntoView({
           behavior: 'smooth',
-          block: 'center',
+          block: 'center', // 垂直居中
         });
       }
     }, 100);
-    return () => clearTimeout(timer);
-  }, [activeMonth]);
 
-  // 自动播音 (复用 WeekLearning 逻辑)
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+    // === B. 播音逻辑 (受音频锁控制) ===
+    // 只有过了静音期（即用户开始交互了），这里才会执行
+    if (audioEnabledRef.current) {
+      const item = monthData.find((d) => d.id === activeMonth);
+      if (item) {
+        speak(item.kana);
+      }
     }
-    const item = monthData.find((d) => d.id === activeMonth);
-    if (item) {
-      speak(item.kana);
-    }
+
+    return () => clearTimeout(timer);
   }, [activeMonth, speak]);
 
   return (
@@ -61,6 +71,7 @@ export const MonthLearning: React.FC<MonthLearningProps> = ({
           key={m.id}
           item={m}
           isActive={m.id === activeMonth}
+          // 点击时只负责切换 ID，剩下的交给 useEffect
           onClick={() => onMonthSelect(m.id)}
         />
       ))}

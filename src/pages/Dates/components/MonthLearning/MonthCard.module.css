@@ -1,67 +1,151 @@
 .card {
   width: 100%;
   max-width: 500px;
-  min-height: 100px;
+  /* 🟢 修复点 1：使用 min-height 而不是 height，防止被压扁到 0 */
+  min-height: 140px;
+
+  /* 🟢 修复点 2：禁止 Flex 压缩！这是最关键的一行 */
+  flex-shrink: 0;
+
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 16px;
   margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  position: relative;
+
+  display: flex; /* Flex 布局 */
   overflow: hidden;
-  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-  border: 2px solid transparent;
+
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
 .activeCard {
   transform: scale(1.02);
   z-index: 5;
-  border-color: currentColor;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
-.left {
+
+/* === 🟢 核心修复：左侧书签脊 === */
+.leftSpine {
+  width: 72px; /* 撑开宽度 */
+  height: 100%; /* 撑满高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  color: white;
+  position: relative;
+}
+
+/* 竖排文字 */
+.wafuVertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  z-index: 2;
+}
+
+.spinePattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* === 🟢 核心修复：右侧主内容 === */
+.rightBody {
+  flex: 1; /* 占满剩余宽度 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 内容垂直居中 */
+  padding: 0 24px;
+  position: relative;
+}
+
+.kanjiMain {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.readingArea {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  z-index: 2;
 }
-.kanji {
-  font-size: 28px;
-  font-weight: 900;
-  color: #1e293b;
-}
-.kana {
-  font-size: 14px;
-  font-weight: 600;
-  color: #64748b;
-}
-.right {
+
+/* 普通读音 */
+.normalReading {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  z-index: 2;
 }
-.wafuName {
-  font-family: 'Yu Mincho', serif;
-  font-size: 20px;
+.kanaText {
+  font-size: 16px;
   font-weight: 700;
-  color: #334155;
+  color: #475569;
 }
-.romaji {
-  font-family: 'SF Mono', monospace;
-  font-size: 11px;
+.romajiText {
+  font-size: 12px;
   color: #94a3b8;
-  text-transform: uppercase;
+  font-family: 'SF Mono', monospace;
 }
+
+/* 纠错区 */
+.correctionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.wrongRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ef4444;
+  font-size: 13px;
+  opacity: 0.7;
+}
+.strikethrough {
+  text-decoration: line-through;
+  font-family: 'SF Mono', monospace;
+}
+
+.correctRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #16a34a;
+  font-size: 15px;
+  font-weight: 700;
+}
+.highlight {
+  font-family: 'SF Mono', monospace;
+  background: #dcfce7;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
 .iconBg {
   position: absolute;
-  right: -10px;
-  bottom: -10px;
-  opacity: 0.1;
-  transform: rotate(-15deg);
+  right: -20px;
+  bottom: -30px;
+  opacity: 0.08;
+  transform: rotate(-20deg) scale(1.4);
   z-index: 0;
   color: currentColor;
+  pointer-events: none;
 }
