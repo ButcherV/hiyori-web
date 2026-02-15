@@ -2,12 +2,12 @@
 
 .card {
   width: 100%;
-  max-width: 500px;
+  /* max-width: 500px; */
   min-height: 160px;
   flex-shrink: 0;
 
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 12px;
   margin-bottom: 16px;
 
   display: flex;
@@ -16,7 +16,7 @@
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  /* border: 1px solid rgba(0, 0, 0, 0.02); */
 
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -40,7 +40,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 8px;
+  padding: 8px;
 
   color: white;
   position: relative;
@@ -48,10 +48,10 @@
 }
 
 .spineLabel {
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  opacity: 0.8;
+  /* opacity: 0.8; */
   font-weight: 700;
   text-align: center;
 }
@@ -63,7 +63,7 @@
   flex-direction: row-reverse; /* 🟢 关键：反向排列，让汉字在右，假名在左（符合竖排习惯） */
   align-items: center;
   justify-content: center;
-  gap: 12px; /* 汉字和假名之间的间距 */
+  gap: 8px;
   width: 100%;
 }
 
@@ -72,13 +72,14 @@
   writing-mode: vertical-rl; /* 文字竖排：从右向左 */
   text-orientation: upright; /* 字符直立 */
   font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
-  letter-spacing: 0.3em; /* 竖排时的字间距 */
+  letter-spacing: 0.06em; /* 竖排时的字间距 */
   line-height: 1;
+  text-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px;
 }
 
 .wafuKanji {
-  font-size: 28px; /* 汉字大一点 */
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 900;
 }
 
 .wafuKana {
@@ -89,10 +90,10 @@
 }
 
 .wafuMeaning {
-  font-size: 10px;
+  font-size: 13px;
   text-align: center;
-  opacity: 0.9;
-  line-height: 1.2;
+  /* opacity: 0.9; */
+  line-height: 1.1;
   font-family: 'SF Mono', sans-serif;
   max-width: 100%;
 }
@@ -118,14 +119,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 24px;
+  padding: 0 8px 0 24px;
   position: relative;
 }
 
 .headerRow {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 8px;
 }
 
@@ -147,7 +148,7 @@
 .readingArea {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* gap: 12px; */
 }
 
 .normalReading {
@@ -172,17 +173,15 @@
   flex-direction: column;
   gap: 4px;
   margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px dashed #f1f5f9; /* 增加分割线 */
 }
 
 .wrongRow {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #ef4444;
-  font-size: 13px;
-  opacity: 0.7;
+  color: var(--color-error);
+  font-size: 14px;
+  /* opacity: 0.7; */
 }
 .strikethrough {
   text-decoration: line-through;

@@ -41,7 +41,7 @@ export const MonthCanvas: React.FC<MonthCanvasProps> = ({
           ? {
               backgroundColor: m.themeColor,
               // 为了防止浅色背景导致文字看不清，添加轻微阴影
-              boxShadow: `0 4px 12px ${m.themeColor}80`,
+              // boxShadow: `0 4px 12px ${m.themeColor}80`,
               color: '#fff',
               textShadow: '0 1px 2px rgba(0,0,0,0.15)', // 增加对比度
             }

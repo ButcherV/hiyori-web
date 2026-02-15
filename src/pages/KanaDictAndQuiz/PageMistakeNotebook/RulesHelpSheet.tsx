@@ -31,7 +31,7 @@ export const RulesHelpSheet: React.FC<Props> = ({ isOpen, onClose }) => {
               <Trans
                 i18nKey="mistake_notebook.help_sheet.mechanism_text"
                 components={{
-                  strong: <strong />,
+                  strong: <strong className="highlight-text" />,
                   br: <br />,
                 }}
               />

@@ -100,16 +100,16 @@ export const MonthCard: React.FC<{
       {/* === 右侧：现代教学区 === */}
       <div className={styles.rightBody}>
         <div className={styles.headerRow}>
-          <div className={styles.kanjiMain}>{item.kanji}</div>
-          <div className={styles.enMonth}>{displayMonth}</div>
+          <div className={styles.normalReading}>
+            <div className={styles.enMonth}>{displayMonth}</div>
+          </div>
+
+          <div className={`${styles.kanjiMain} jaFont`}>{item.kanji}</div>
         </div>
 
         <div className={styles.readingArea}>
-          <div className={styles.normalReading}>
-            <span className={styles.kanaText}>{item.kana}</span>
-            <span className={styles.romajiText}>{item.romaji}</span>
-          </div>
-
+          <span className={styles.romajiText}>{item.romaji}</span>
+          <div className={`${styles.kanaText} jaFont`}>{item.kana}</div>
           {item.trapDetail && (
             <div className={styles.correctionBlock}>
               <div className={styles.wrongRow}>
@@ -117,16 +117,9 @@ export const MonthCard: React.FC<{
                 <span className={styles.strikethrough}>
                   {item.trapDetail.wrongRomaji}
                 </span>
-                <span style={{ fontSize: 11 }}>
+                <span className={styles.strikethrough}>
                   ({item.trapDetail.wrongKana})
                 </span>
-              </div>
-              <div className={styles.correctRow}>
-                <Check size={16} strokeWidth={3} />
-                <span className={styles.highlight}>
-                  {item.trapDetail.correctRomaji}
-                </span>
-                <span>{item.trapDetail.correctKana}</span>
               </div>
             </div>
           )}

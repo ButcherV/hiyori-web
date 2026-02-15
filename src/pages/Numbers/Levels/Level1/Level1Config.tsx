@@ -26,7 +26,12 @@ const Level1Description: React.FC = () => {
         </div>
         <div className={styles.sectionContent}>
           <p className={styles.text}>
-            {t('number_study.numbers.levels.lvl1.goal_desc')}
+            <Trans
+              i18nKey="number_study.numbers.levels.lvl1.goal_desc"
+              components={{
+                highlight: <span className="highlight-text" />,
+              }}
+            />
           </p>
         </div>
       </div>
@@ -47,15 +52,10 @@ const Level1Description: React.FC = () => {
             <Trans
               i18nKey="number_study.numbers.levels.lvl1.keypoint_desc"
               components={{
-                // 1. 遇到 JSON 里的 <strong>，渲染为加粗类
                 strong: <strong className={styles.strong} />,
-
-                // 2. 遇到 JSON 里的 <br>，渲染为换行
                 br: <br />,
-
-                // 3. 关键：遇到 JSON 里的 <span>，渲染为带高亮样式的 span
-                // React 会自动把 JSON 里的文字内容填充进去，但会忽略 JSON 里的属性
                 span: <span className={styles.highlight} />,
+                highlight: <span className="highlight-text" />,
               }}
             />
           </div>

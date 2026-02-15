@@ -287,8 +287,8 @@
         "lvl1": {
           "label": "0-10",
           "title": "Basic Numbers",
-          "goal_desc": "Build an intuitive ear for numbers 0-10. This foundation is essential for mastering dates, time, and currency.",
-          "keypoint_desc": "<strong>Focus on 'Main' readings:</strong><br>Numbers 0, 4, 7, and 9 have multiple readings. Prioritize those marked with the <span>Main</span> badge for everyday use.<br><br><strong>Recommended Path:</strong><br>Start in \"Learn Mode\" to familiarize yourself with the sounds, then test your reflexes in \"Challenge Mode\"."
+          "goal_desc": "<highlight>Build an intuitive ear for numbers 0-10.</highlight> This foundation is essential for mastering dates, time, and currency.",
+          "keypoint_desc": "<strong>Focus on 'Main' readings:</strong><br><highlight>Numbers 0, 4, 7, and 9 have multiple readings.</highlight> Prioritize those marked with the <span>Main</span> badge for everyday use.<br><br><strong>Recommended Path:</strong><br>Start in \"Learn Mode\" to familiarize yourself with the sounds, then test your reflexes in \"Challenge Mode\"."
         },
         "lvl2": {
           "label": "11-99",

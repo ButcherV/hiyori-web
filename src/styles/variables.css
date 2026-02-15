@@ -190,6 +190,21 @@
   font-feature-settings: 'palt';
 }
 
+.highlight-text {
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    /* 上半部分 60% 透明 */ rgba(255, 215, 0, 0.6) 60%
+      /* 下半部分 40% 颜色，稍微带点透明度效果更好 */
+  );
+
+  /* 优化排版：让背景不紧贴文字边缘，稍微向两边延伸一点 */
+  padding: 0 2px;
+  /* 确保在换行时，每一行都有独立的背景样式（避免两端断裂） */
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-app: #000000;

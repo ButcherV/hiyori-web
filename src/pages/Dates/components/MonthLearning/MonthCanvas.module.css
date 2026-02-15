@@ -39,7 +39,7 @@
   /* 🟢 修正点：间距微调，让排列更紧凑自然 */
   margin: 0 4px;
 
-  border-radius: 14px;
+  border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   cursor: pointer;
 
@@ -51,7 +51,7 @@
 .activeWrapper {
   /* background: #1e293b; */
   transform: scale(1.05); /* 稍微收敛一点放大倍数 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   z-index: 1;
 }
 
