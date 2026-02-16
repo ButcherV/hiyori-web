@@ -21,7 +21,7 @@ const containerStyle: React.CSSProperties = {
 };
 
 const spacerStyle: React.CSSProperties = {
-  height: '120px', // 底部留白加大一点，防止卡片被手机底部遮挡
+  height: '120px',
   width: '100%',
   flexShrink: 0,
 };
@@ -75,7 +75,7 @@ export const WeekLearning: React.FC<WeekLearningProps> = ({
   return (
     <div style={containerStyle} ref={containerRef}>
       {/* 顶部留一点空间 */}
-      <div style={{ height: '20px', flexShrink: 0 }} />
+      {/* <div style={{ height: '20px', flexShrink: 0 }} /> */}
 
       {weekData.map((item) => (
         <WeekCard

@@ -58,7 +58,7 @@ export const WeekCard: React.FC<WeekCardProps> = ({
       style={
         isActive
           ? ({
-              background: item.gradient, // 选中时直接使用渐变背景
+              background: item.gradient,
               boxShadow: `0 12px 30px -8px ${item.shadowColor}`, // 对应颜色的扩散光晕
             } as React.CSSProperties)
           : undefined

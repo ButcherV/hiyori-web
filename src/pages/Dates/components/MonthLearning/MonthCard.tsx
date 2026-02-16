@@ -18,10 +18,9 @@ import {
   CloudSnow,
   Timer,
   X,
-  Check,
-  Volume2,
+  Volume2, // 🟢 确保引入 Volume2
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next'; // 🟢 引入 i18n
+import { useTranslation } from 'react-i18next';
 
 const IconMap: Record<string, React.FC<any>> = {
   Snowflake,
@@ -44,66 +43,87 @@ export const MonthCard: React.FC<{
   onClick: () => void;
 }> = ({ item, isActive, onClick }) => {
   const { speak } = useTTS();
-  const { i18n, t } = useTranslation(); // 🟢
+  const { i18n, t } = useTranslation();
   const Icon = IconMap[item.icon] || Sun;
 
-  // 🟢 动态获取当前语言的月份名称 (e.g. "January" or "一月")
+  // 获取当前语言的月份名称 (e.g. "January" or "一月")
   const displayMonth = new Date(2024, item.id - 1, 1).toLocaleString(
     i18n.language,
     { month: 'long' }
   );
 
+  // 1. 左侧点击：和风读音
   const handleWafuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     speak(item.wafuKana);
   };
 
+  // 2. 右侧点击：现代读音 + 选中逻辑
+  const handleModernClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!isActive) {
+      // 如果还没选中，只触发切换。
+      // 父组件 MonthLearning 的 useEffect 会监听到 activeMonth 变化并自动播放一次。
+      onClick();
+    } else {
+      // 如果已经选中了，则是用户想重听，直接播放
+      speak(item.kana);
+    }
+  };
+
+  // 3. 动态背景色：选中时，使用主题色 + 12 (Hex透明度，约7%)
+  // 例如 #ef4444 变成 #ef444412，营造淡淡的氛围感
+  const rightBodyStyle = isActive
+    ? { backgroundColor: `${item.themeColor}12` }
+    : undefined;
+
+  // 4. 动态喇叭颜色：选中时跟随主题色，未选中时灰色
+  const speakerStyle = isActive ? { color: item.themeColor, opacity: 1 } : {};
+
   return (
     <div
       id={`month-card-${item.id}`}
       className={`${styles.card} ${isActive ? styles.activeCard : ''}`}
-      onClick={onClick}
       style={{ color: item.themeColor }}
+      // 注意：这里移除了外层的 onClick，改为由左右两侧分别接管点击事件
     >
-      {/* === 左侧：文化侧栏 (竖排) === */}
+      {/* === 左侧：文化侧栏 (点击发音) === */}
       <div
         className={styles.leftSpine}
         style={{ backgroundColor: item.themeColor }}
         onClick={handleWafuClick}
       >
-        {/* 顶部标签：Old Name */}
         <span className={styles.spineLabel}>
           {t('date_study.month.old_name', 'Old Name')}
         </span>
 
-        {/* 中间：竖排核心内容 */}
         <div className={styles.spineContent}>
-          {/* 假名 (竖排) */}
+          {/* 🟢 左侧喇叭：常驻半透明显示 */}
+          <div className={styles.spineSpeaker}>
+            <Volume2 size={18} />
+          </div>
           <span className={`${styles.wafuVertical} ${styles.wafuKana}`}>
             {item.wafuKana}
           </span>
-          {/* 汉字 (竖排) */}
           <span className={`${styles.wafuVertical} ${styles.wafuKanji}`}>
             {item.wafuName}
           </span>
         </div>
 
-        {/* 底部意译 */}
         <span className={styles.wafuMeaning}>{item.wafuMeaning}</span>
-
-        {/* 交互提示图标 (隐式) */}
-        <div className={styles.spineSpeaker}>
-          <Volume2 size={20} color="white" />
-        </div>
       </div>
 
-      {/* === 右侧：现代教学区 === */}
-      <div className={styles.rightBody}>
+      {/* === 右侧：现代教学区 (点击发音/选中) === */}
+      <div
+        className={styles.rightBody}
+        onClick={handleModernClick}
+        style={rightBodyStyle} // 🟢 注入淡淡的背景色
+      >
         <div className={styles.headerRow}>
           <div className={styles.normalReading}>
             <div className={styles.enMonth}>{displayMonth}</div>
           </div>
-
           <div className={`${styles.kanjiMain} jaFont`}>{item.kanji}</div>
         </div>
 
@@ -125,8 +145,14 @@ export const MonthCard: React.FC<{
           )}
         </div>
 
+        {/* 背景大图标 */}
         <div className={styles.iconBg}>
           <Icon size={120} strokeWidth={1.5} />
+        </div>
+
+        {/* 🟢 新增：右侧发音喇叭 */}
+        <div className={styles.modernSpeaker} style={speakerStyle}>
+          <Volume2 size={18} />
         </div>
       </div>
     </div>

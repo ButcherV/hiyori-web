@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   padding: 20px 16px;
-  background-color: #f8fafc; /* 更干净的背景 */
+  padding-top: 0px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
 .gridContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
@@ -25,20 +25,21 @@
   position: relative;
   /* 🟢 移除 aspect-ratio，改为固定高度约束 */
   min-height: 140px;
-  border-radius: 12px;
+  /* border-radius: 12px; */
 
   /* 去掉 padding，由内部容器控制 */
   padding: 0;
 
   display: flex;
   flex-direction: column;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  /* background: var(--color-Gray2); */
+  /* border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.03); */
 
   cursor: pointer;
   overflow: hidden;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: linear-gradient(to top, #fff, var(--color-Gray2));
 }
 
 .bentoCard:active {
@@ -49,16 +50,16 @@
 /* 横向长卡 */
 .spanCol2 {
   grid-column: span 2;
-  height: 140px; /* 横卡可以稍微矮一点，因为宽 */
+  /* height: 140px; */
 }
 
 /* 喇叭图标 */
 .speakerHint {
   color: #cbd5e1;
   position: absolute;
-  right: 6px;
-  top: 6px;
-  z-index: 5;
+  right: 8px;
+  top: 8px;
+  /* z-index: 5; */
 }
 
 /* === 卡片核心内容区 === */
@@ -125,9 +126,8 @@
 
 /* === 底部固定 Action 栏 === */
 .actionArea {
-  height: 32px; /* 固定高度 */
-  background: #f8fafc; /* 浅灰底，区分内容区 */
-  /* border-top: 1px solid #f1f5f9; */
+  height: 32px;
+  background: var(--color-Gray3);
 
   display: flex;
   align-items: center;
@@ -135,10 +135,6 @@
   gap: 2px;
 
   transition: background 0.2s;
-}
-
-.bentoCard:hover .actionArea {
-  background: #f1f5f9;
 }
 
 .actionLabel {
@@ -162,8 +158,8 @@
 
 /* Blue Theme (Saturday) */
 .bentoCard[data-theme='blue'] {
-  border-color: rgba(59, 130, 246, 0.2);
-  background: linear-gradient(to bottom, #fff, #eff6ff);
+  /* border-color: rgba(59, 130, 246, 0.2); */
+  background: linear-gradient(to top, #fff, #eff6ff);
 }
 .bentoCard[data-theme='blue'] .kanji {
   color: #1d4ed8;
@@ -174,8 +170,8 @@
 
 /* Red Theme (Sunday/Holiday) */
 .bentoCard[data-theme='red'] {
-  border-color: rgba(239, 68, 68, 0.2);
-  background: linear-gradient(to bottom, #fff, #fef2f2);
+  /* border-color: rgba(239, 68, 68, 0.2); */
+  background: linear-gradient(to top, #fff, #fef2f2);
 }
 .bentoCard[data-theme='red'] .kanji {
   color: #b91c1c;
@@ -187,7 +183,7 @@
 /* Cyan Theme (Relative) */
 .bentoCard[data-theme='cyan'] {
   border-color: rgba(6, 182, 212, 0.2);
-  background: linear-gradient(to bottom, #fff, #ecfeff);
+  background: linear-gradient(to top, #fff, #ecfeff);
 }
 .bentoCard[data-theme='cyan'] .kanji {
   color: #0e7490;

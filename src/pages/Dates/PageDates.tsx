@@ -144,9 +144,11 @@ export const PageDates = () => {
     <div className={styles.container}>
       <div className={styles.systemHeader}>
         <div className={styles.headerLeft}>
-          <div className={styles.iconBtn} onClick={() => navigate('/')}>
-            <ChevronLeft size={24} color="white" />
-          </div>
+          {!isFocusMode && (
+            <div className={styles.iconBtn} onClick={() => navigate('/')}>
+              <ChevronLeft size={24} color="white" />
+            </div>
+          )}
           <div className={styles.titleWrapper}>
             <span className={styles.headerTitle}>{pageTitle}</span>
             <div className={styles.iconBtn} style={{ color: 'white' }}>

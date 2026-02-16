@@ -10,10 +10,8 @@
   position: relative;
   background-color: white;
 
-  /* 🟢 核心修复： */
-  /* 让 flex 布局认为底部 120px 是“不可用区域” */
-  /* 这样 justify-content: center 就会把内容往上提，避开绝对定位的 controller */
-  /* padding-bottom: 120px; */
+  padding: 16px;
+  padding-top: 0;
 }
 
 /* 中间内容的包装器 */

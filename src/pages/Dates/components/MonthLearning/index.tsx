@@ -65,7 +65,7 @@ export const MonthLearning: React.FC<MonthLearningProps> = ({
 
   return (
     <div style={containerStyle} ref={containerRef}>
-      <div style={{ height: '20px', flexShrink: 0 }} />
+      {/* <div style={{ height: '20px', flexShrink: 0 }} /> */}
       {monthData.map((m) => (
         <MonthCard
           key={m.id}

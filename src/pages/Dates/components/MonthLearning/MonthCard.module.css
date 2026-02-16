@@ -7,19 +7,22 @@
   flex-shrink: 0;
 
   background: #ffffff;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   margin-bottom: 16px;
 
   display: flex;
   overflow: hidden;
 
-  box-shadow:
+  /* box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    0 2px 4px -1px rgba(0, 0, 0, 0.03); */
   /* border: 1px solid rgba(0, 0, 0, 0.02); */
 
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* 🟢 新增：防止移动端点击时出现默认的高亮背景 */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .activeCard {
@@ -32,7 +35,7 @@
 
 /* === 左侧：文化侧栏 === */
 .leftSpine {
-  width: 100px; /* 足够宽以容纳两列竖排文字 */
+  width: 108px;
   height: 100%;
   min-height: 160px; /* 继承最小高度 */
 
@@ -56,18 +59,19 @@
   text-align: center;
 }
 
-/* 🟢 中间竖排内容区 */
+/* 中间竖排内容区 */
 .spineContent {
   flex: 1;
   display: flex;
-  flex-direction: row-reverse; /* 🟢 关键：反向排列，让汉字在右，假名在左（符合竖排习惯） */
+  flex-direction: row-reverse; /* 反向排列，让汉字在右，假名在左 */
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding-right: 8px;
   width: 100%;
 }
 
-/* 🟢 竖排核心样式 */
+/* 竖排核心样式 */
 .wafuVertical {
   writing-mode: vertical-rl; /* 文字竖排：从右向左 */
   text-orientation: upright; /* 字符直立 */
@@ -96,21 +100,38 @@
   line-height: 1.1;
   font-family: 'SF Mono', sans-serif;
   max-width: 100%;
+  /* padding-bottom: 24px; */
 }
 
+/* 🟢 修改：左侧喇叭样式 */
 .spineSpeaker {
-  position: absolute;
-  top: 50%;
+  /* position: absolute;
+  bottom: 8px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.2s;
-  background: rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%); */
+
+  /* 常驻显示，半透明 */
+  opacity: 0.5;
+  color: white;
+  transition: all 0.2s;
+
+  /* 增加点击热区 */
+  padding: 4px;
   border-radius: 50%;
-  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  right: 4px;
 }
-.leftSpine:active .spineSpeaker {
+
+/* 交互反馈 */
+.leftSpine:active .spineSpeaker,
+.leftSpine:hover .spineSpeaker {
   opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  /* transform: translateX(-50%) scale(1.1); */
 }
 
 /* === 右侧：现代主区 === */
@@ -119,8 +140,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 8px 0 24px;
+  padding: 0 0px 0 16px;
   position: relative;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
 }
 
 .headerRow {
@@ -212,4 +235,35 @@
   z-index: 0;
   color: currentColor;
   pointer-events: none;
+}
+
+/* 🟢 新增：右侧现代喇叭按钮 */
+.modernSpeaker {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #94a3b8; /* 默认灰色 */
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+/* 交互反馈 */
+.rightBody:active .modernSpeaker,
+.modernSpeaker:active {
+  transform: scale(0.95);
+  opacity: 1;
+  background: white;
 }

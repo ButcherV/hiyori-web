@@ -381,74 +381,78 @@ export const TestStudySession = () => {
         </button>
       </div>
 
-      {/* Header */}
-      <div className={styles.instructionBar}>
-        <div
-          className={`
-          ${styles.instructionTitle} 
-          ${currentItem?.type !== 'QUIZ' ? styles.passive : ''}
-          ${headerInfo.isJa ? styles.jaFont : ''}
-        `}
-        >
-          {t(headerInfo.title)}
+      <div className={styles.contentWrapper}>
+        {/* Header */}
+        <div className={styles.instructionBar}>
+          <div
+            className={`
+            ${styles.instructionTitle} 
+            ${currentItem?.type !== 'QUIZ' ? styles.passive : ''}
+            ${headerInfo.isJa ? styles.jaFont : ''}
+          `}
+          >
+            {t(headerInfo.title)}
+          </div>
+          {headerInfo.sub && (
+            <div className={styles.instructionSub}>{headerInfo.sub}</div>
+          )}
         </div>
-        {headerInfo.sub && (
-          <div className={styles.instructionSub}>{headerInfo.sub}</div>
+
+        {/* Card Area */}
+        <div
+          className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}
+        >
+          <div className={styles.cardArea}>
+            {visibleCards.map((card, index) => {
+              const isTopCard = index === 0;
+              // 样式计算 (保留旧代码的堆叠逻辑)
+              const cardStyle = {
+                zIndex: MAX_STACK_SIZE - index,
+                transform: `translateY(${index * 18}px) scale(${1 - index * 0.05})`,
+                pointerEvents: isTopCard ? 'auto' : 'none',
+              } as CSSProperties;
+
+              const contentBlurClass = isTopCard
+                ? styles.activeCard
+                : styles.backgroundCard;
+
+              // 锁定方向逻辑
+              let preventSwipe: ('left' | 'right')[] = [];
+              if (card.type === 'TRACE')
+                preventSwipe = ['left', 'right']; // 描红必须自己完成
+              else if (card.type !== 'QUIZ') preventSwipe = ['left']; // 学习卡只能右滑
+              const isSwipeEnabled = card.type !== 'TRACE';
+
+              return (
+                <div
+                  key={card.uniqueId}
+                  className={styles.stackWrapper}
+                  style={cardStyle}
+                >
+                  <TinderCard
+                    ref={isTopCard ? cardRef : null}
+                    touchEnabled={isTopCard && isSwipeEnabled}
+                    preventSwipe={preventSwipe}
+                    onSwipe={isTopCard ? handleSwipe : () => {}}
+                  >
+                    <div
+                      className={`${styles.cardContent} ${contentBlurClass}`}
+                    >
+                      {renderCardContent(card)}
+                    </div>
+                  </TinderCard>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Quiz Actions (Only for Quiz) */}
+
+        {currentItem?.type === 'QUIZ' && (
+          <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
         )}
       </div>
-
-      {/* Card Area */}
-      <div
-        className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}
-      >
-        <div className={styles.cardArea}>
-          {visibleCards.map((card, index) => {
-            const isTopCard = index === 0;
-            // 样式计算 (保留旧代码的堆叠逻辑)
-            const cardStyle = {
-              zIndex: MAX_STACK_SIZE - index,
-              transform: `translateY(${index * 18}px) scale(${1 - index * 0.05})`,
-              pointerEvents: isTopCard ? 'auto' : 'none',
-            } as CSSProperties;
-
-            const contentBlurClass = isTopCard
-              ? styles.activeCard
-              : styles.backgroundCard;
-
-            // 锁定方向逻辑
-            let preventSwipe: ('left' | 'right')[] = [];
-            if (card.type === 'TRACE')
-              preventSwipe = ['left', 'right']; // 描红必须自己完成
-            else if (card.type !== 'QUIZ') preventSwipe = ['left']; // 学习卡只能右滑
-            const isSwipeEnabled = card.type !== 'TRACE';
-
-            return (
-              <div
-                key={card.uniqueId}
-                className={styles.stackWrapper}
-                style={cardStyle}
-              >
-                <TinderCard
-                  ref={isTopCard ? cardRef : null}
-                  touchEnabled={isTopCard && isSwipeEnabled}
-                  preventSwipe={preventSwipe}
-                  onSwipe={isTopCard ? handleSwipe : () => {}}
-                >
-                  <div className={`${styles.cardContent} ${contentBlurClass}`}>
-                    {renderCardContent(card)}
-                  </div>
-                </TinderCard>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Quiz Actions (Only for Quiz) */}
-
-      {currentItem?.type === 'QUIZ' && (
-        <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
-      )}
 
       {/* Settings Sheet */}
       <BottomSheet

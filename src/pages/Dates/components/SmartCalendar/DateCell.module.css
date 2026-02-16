@@ -5,11 +5,11 @@
   aspect-ratio: 1;
   width: 100%;
   position: relative;
-  border-radius: 8px;
+  /* border-radius: 8px; */
 
   /* 默认背景：极浅灰/白 */
   background: #f8fafc;
-  border: 1px solid #f1f5f9;
+  /* border: 1px solid #f1f5f9; */
 
   cursor: pointer;
   overflow: hidden;

@@ -28,7 +28,7 @@ export const LegendArea: React.FC<LegendAreaProps> = ({
             ${filterType === type ? styles.legendActive : ''}
           `}
           onClick={() => onFilterChange(type)}
-          style={{ opacity: filterType && filterType !== type ? 0.3 : 1 }}
+          style={{ opacity: filterType && filterType !== type ? 0.2 : 1 }}
         >
           <div className={styles.legendDot} />
           <span className={styles.legendLabel}>

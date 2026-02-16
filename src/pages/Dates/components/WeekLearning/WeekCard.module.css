@@ -7,8 +7,8 @@
   min-height: 110px;
 
   /* 默认态：白底 + 极淡的边框 */
-  background: #ffffff;
-  border-radius: 20px; /* 更圆润 */
+  background: white;
+  /* border-radius: 20px; */
   margin-bottom: 16px;
 
   display: flex;
@@ -19,11 +19,10 @@
   position: relative;
   overflow: hidden; /* 裁剪背景水印 */
 
-  /* 阴影：细腻的层级感 */
-  box-shadow:
+  /* box-shadow:
     0 4px 6px -2px rgba(0, 0, 0, 0.03),
     0 10px 15px -3px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.02); */
 
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);

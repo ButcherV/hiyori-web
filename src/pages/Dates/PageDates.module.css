@@ -72,8 +72,7 @@
   display: flex;
   flex-direction: column;
 
-  /* 🟢 关键视觉设计：圆角顶部的白色面板 */
-  background-color: #f8fafc; /* 整体浅灰底色 */
+  /* background-color: #f8fafc; */
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* 给面板加点头部阴影，更有层次感 */
@@ -93,12 +92,12 @@
 /* === Content Section (内容区域) === */
 .contentSection {
   flex: 1;
-  background: #f1f5f9; /* 比日历稍深一点的灰，区分层级 */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  background-color: white;
 }
 
 .motionWrapper {

@@ -437,65 +437,69 @@ export const PageQuizSession = () => {
         </button>
       </div>
 
-      {/* Header */}
-      <div className={styles.instructionBar}>
-        <div
-          className={`
-          ${styles.instructionTitle} 
-          ${currentItem.type !== 'QUIZ' ? styles.passive : ''}
-          ${headerInfo.isJa ? styles.jaFont : ''}
-        `}
-        >
-          {headerInfo.isJa ? headerInfo.title : t(headerInfo.title || '')}
+      <div className={styles.contentWrapper}>
+        {/* Header */}
+        <div className={styles.instructionBar}>
+          <div
+            className={`
+            ${styles.instructionTitle} 
+            ${currentItem.type !== 'QUIZ' ? styles.passive : ''}
+            ${headerInfo.isJa ? styles.jaFont : ''}
+          `}
+          >
+            {headerInfo.isJa ? headerInfo.title : t(headerInfo.title || '')}
+          </div>
+          {headerInfo.sub && (
+            <div className={styles.instructionSub}>{headerInfo.sub}</div>
+          )}
         </div>
-        {headerInfo.sub && (
-          <div className={styles.instructionSub}>{headerInfo.sub}</div>
+
+        {/* Card Area */}
+        <div
+          className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}
+        >
+          <div className={styles.cardArea}>
+            {visibleCards.map((card, index) => {
+              const isTopCard = index === 0;
+              const cardStyle = {
+                zIndex: MAX_STACK_SIZE - index,
+                transform: `translateY(${index * 18}px) scale(${1 - index * 0.05})`,
+                pointerEvents: isTopCard ? 'auto' : 'none',
+              } as CSSProperties;
+
+              const contentBlurClass = isTopCard
+                ? styles.activeCard
+                : styles.backgroundCard;
+
+              return (
+                <div
+                  key={card.uniqueId}
+                  className={styles.stackWrapper}
+                  style={cardStyle}
+                >
+                  <TinderCard
+                    ref={isTopCard ? cardRef : null}
+                    touchEnabled={isTopCard}
+                    preventSwipe={card.type !== 'QUIZ' ? ['left'] : []}
+                    onSwipe={isTopCard ? handleSwipe : () => {}}
+                  >
+                    <div
+                      className={`${styles.cardContent} ${contentBlurClass}`}
+                    >
+                      {renderCardContent(card)}
+                    </div>
+                  </TinderCard>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Bottom Actions */}
+        {currentItem.type === 'QUIZ' && (
+          <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
         )}
       </div>
-
-      {/* Card Area */}
-      <div
-        className={`${styles.cardAreaWrapper} ${isShaking ? styles.shake : ''}`}
-      >
-        <div className={styles.cardArea}>
-          {visibleCards.map((card, index) => {
-            const isTopCard = index === 0;
-            const cardStyle = {
-              zIndex: MAX_STACK_SIZE - index,
-              transform: `translateY(${index * 18}px) scale(${1 - index * 0.05})`,
-              pointerEvents: isTopCard ? 'auto' : 'none',
-            } as CSSProperties;
-
-            const contentBlurClass = isTopCard
-              ? styles.activeCard
-              : styles.backgroundCard;
-
-            return (
-              <div
-                key={card.uniqueId}
-                className={styles.stackWrapper}
-                style={cardStyle}
-              >
-                <TinderCard
-                  ref={isTopCard ? cardRef : null}
-                  touchEnabled={isTopCard}
-                  preventSwipe={card.type !== 'QUIZ' ? ['left'] : []}
-                  onSwipe={isTopCard ? handleSwipe : () => {}}
-                >
-                  <div className={`${styles.cardContent} ${contentBlurClass}`}>
-                    {renderCardContent(card)}
-                  </div>
-                </TinderCard>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bottom Actions */}
-      {currentItem.type === 'QUIZ' && (
-        <QuizActionButtons onReject={handleReject} onAccept={handleAccept} />
-      )}
 
       <BottomSheet
         isOpen={isSettingsOpen}

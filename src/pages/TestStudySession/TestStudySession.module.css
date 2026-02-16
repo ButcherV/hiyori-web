@@ -39,6 +39,13 @@
   justify-content: center;
 }
 
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+}
+
 /* --- Header 区域 --- */
 .instructionBar {
   height: 64px;
