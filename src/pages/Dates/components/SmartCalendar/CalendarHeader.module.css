@@ -17,7 +17,7 @@
   flex-direction: column;
   justify-content: flex-end;
   gap: 4px;
-  min-width: 80px;
+  min-width: 100px;
   /* opacity: 0.9; */
 }
 
@@ -67,9 +67,30 @@
 }
 
 .today {
-  font-size: 40px;
-  line-height: 1;
+  font-size: 50px;
+  line-height: 0.8;
   font-weight: 800;
   text-align: center;
-  color: var(--color-primary);
+  /* color: var(--color-primary); */
+  /* color: var(
+    --gradient-header-3,
+    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
+  ) !important; */
+
+  /* 1. 把你的渐变变量设为背景 */
+  background: var(
+    --gradient-header-3,
+    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
+  ) !important;
+
+  /* 2. 核心魔法：将背景裁剪为文字的形状 */
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+
+  /* 3. 让文字本身的颜色变透明，从而透出背景的渐变色 */
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  /* 选做：防止背景重复（虽然 gradient 默认铺满，但习惯加上保险） */
+  background-repeat: no-repeat;
 }

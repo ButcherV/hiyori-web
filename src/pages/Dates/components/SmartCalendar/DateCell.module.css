@@ -30,7 +30,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  /* font-family: 'SF Mono', 'Menlo', 'Consolas', monospace; */
   font-size: 26px;
   font-weight: 700;
   color: #64748b; /* 默认灰字 */
@@ -43,8 +43,8 @@
 
 .dayNum.numClear {
   opacity: 1 !important;
-  color: #334155; /* 默认清晰灰字 */
-  font-weight: 600;
+  color: var(--color-Gray8);
+  font-weight: 900;
   transform: translate(-50%, -50%) scale(0.75);
 }
 
@@ -84,7 +84,11 @@
 
 .daySelected {
   /* 强制深蓝背景 */
-  background: var(--color-date-selected-bg) !important;
+  /* background: var(--color-date-selected-bg) !important; */
+  background: var(
+    --gradient-header-3,
+    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
+  ) !important;
   border-color: var(--color-date-selected-bg) !important;
 
   box-shadow: var(--shadow-date-selected);
