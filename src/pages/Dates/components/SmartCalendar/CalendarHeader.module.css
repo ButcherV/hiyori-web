@@ -6,19 +6,56 @@
   justify-content: space-between;
   padding-bottom: 8px;
   padding-top: 8px;
+  gap: 8px; /* Slightly increased gap for buttons */
+  position: relative;
 
-  /* 纯展示，无交互 */
-  pointer-events: none;
+  /* 🔴 Changed from none to auto to allow button clicks */
+  pointer-events: auto;
   user-select: none;
+}
+
+.headerCenterWrapper {
+  display: flex;
+  justify-content: center;
+  width: 260px;
+}
+
+.headerItem {
+  width: 96px;
+}
+
+/* 🟢 New Nav Button Style */
+.navBtn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1; /* Light gray */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-bottom: 4px; /* Align visually with text */
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.navBtn:hover {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.navBtn:active {
+  transform: scale(0.9);
+  background-color: #e2e8f0;
 }
 
 .headerItem {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 4px;
-  min-width: 100px;
-  /* opacity: 0.9; */
+  gap: 2px;
+  /* 🟢 Important: ensure text doesn't capture clicks accidentally */
+  pointer-events: none;
 }
 
 .alignRight {
@@ -29,68 +66,37 @@
   align-items: flex-start;
 }
 
-/* === 左侧：年号 (令和八年) === */
+/* ... (Keep existing text styles: .eraText, .subText, .monthText, .today) ... */
 .eraText {
-  /* 🟢 改回现代黑体 */
-  /* font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
-    'Noto Sans CJK JP', sans-serif; */
-  font-size: 18px; /* 稍微调小一点点，黑体显大 */
-  font-weight: 800; /* 极粗黑体，很有力量感 */
+  font-size: 16px;
+  font-weight: 800;
   color: var(--color-Gray8);
   line-height: 1.2;
   letter-spacing: 0.08em;
 }
 
 .subText {
-  /* 西历小字 (2026) */
-  font-family: 'SF Mono', 'Menlo', monospace; /* 等宽字体保持科技感 */
+  font-family: 'SF Mono', 'Menlo', monospace;
   font-size: 12px;
   color: var(--color-Gray6);
-  /* margin-bottom: 4px; */
   font-weight: 600;
   letter-spacing: 0;
   line-height: 1.2;
 }
 
-/* === 右侧：月份 (二月) === */
-.monthText {
-  /* 🟢 改回现代黑体 */
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans',
-    'Noto Sans CJK JP', sans-serif;
-  font-size: 28px;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1;
-  letter-spacing: -0.02em; /* 稍微紧凑一点 */
-}
-
 .today {
   font-size: 50px;
+  min-width: 64px;
   line-height: 0.8;
   font-weight: 800;
   text-align: center;
-  /* color: var(--color-primary); */
-  /* color: var(
-    --gradient-header-3,
-    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
-  ) !important; */
-
-  /* 1. 把你的渐变变量设为背景 */
   background: var(
     --gradient-header-3,
     linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
   ) !important;
-
-  /* 2. 核心魔法：将背景裁剪为文字的形状 */
   -webkit-background-clip: text !important;
   background-clip: text !important;
-
-  /* 3. 让文字本身的颜色变透明，从而透出背景的渐变色 */
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-
-  /* 选做：防止背景重复（虽然 gradient 默认铺满，但习惯加上保险） */
   background-repeat: no-repeat;
 }

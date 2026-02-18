@@ -1,6 +1,5 @@
-// src/pages/Dates/components/SmartCalendar/CalendarHeader.tsx
-
 import React, { useMemo } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react'; // 🟢 Import Icons
 import styles from './CalendarHeader.module.css';
 import { getYearData } from '../../Datas/YearData';
 import {
@@ -11,41 +10,58 @@ import {
 
 interface CalendarHeaderProps {
   date: Date;
+  // 🟢 Optional prop for navigation
+  onMonthChange?: (offset: number) => void;
 }
 
-export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ date }) => {
+export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
+  date,
+  onMonthChange,
+}) => {
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-11
-  const day = date.getDate(); // 🟢 获取动态日期 (1-31)
+  const day = date.getDate();
 
   const yearData = useMemo(() => getYearData(year), [year]);
 
   const eraText = `${yearData.era.kanji}${getKanjiEraYear(yearData.eraYear)}`;
-  const monthText = getWafuMonth(month); // 和风月名 (如月)
-
-  // 🟢 获取英文月份 (February)
+  const monthText = getWafuMonth(month);
   const enMonth = date.toLocaleString('en-US', { month: 'long' });
 
   return (
     <div className={styles.header}>
-      {/* 左侧：年号 + 西历 */}
-      <div className={`${styles.headerItem} ${styles.alignLeft}`}>
-        <span className={`${styles.eraText} jaFont`}>{eraText}</span>
-        <span className={styles.subText}>{year}</span>
+      {/* 🟢 Prev Button */}
+      {onMonthChange && (
+        <button className={styles.navBtn} onClick={() => onMonthChange(-1)}>
+          <ChevronLeft size={24} strokeWidth={2.5} />
+        </button>
+      )}
+
+      <div className={styles.headerCenterWrapper}>
+        {/* Left: Year + Era */}
+        <div className={`${styles.headerItem} ${styles.alignRight}`}>
+          <span className={styles.subText}>{year}</span>
+          <span className={`${styles.eraText} jaFont`}>{eraText}</span>
+        </div>
+
+        {/* Center: Date */}
+        <div className={styles.today}>{day}</div>
+
+        {/* Right: Month */}
+        <div className={`${styles.headerItem} ${styles.alignLeft}`}>
+          <span className={styles.subText}>{enMonth}</span>
+          <span className={`${styles.eraText} jaFont`}>
+            {`${toKanjiNum(month + 1)}月·${monthText}`}
+          </span>
+        </div>
       </div>
 
-      {/* 中间：日期 (跟随选中) */}
-      <div className={`${styles.headerItem}`}>
-        <span className={styles.today}>{day}</span>
-      </div>
-
-      {/* 右侧：英文月 + 和风月 */}
-      <div className={`${styles.headerItem} ${styles.alignRight}`}>
-        <span className={styles.subText}>{enMonth}</span>
-        <span
-          className={`${styles.eraText} jaFont`}
-        >{`${toKanjiNum(month + 1)}月（${monthText}）`}</span>
-      </div>
+      {/* 🟢 Next Button */}
+      {onMonthChange && (
+        <button className={styles.navBtn} onClick={() => onMonthChange(1)}>
+          <ChevronRight size={24} strokeWidth={2.5} />
+        </button>
+      )}
     </div>
   );
 };

@@ -18,7 +18,6 @@ import { DayLearning } from './components/DayLearning';
 import { DayCanvas } from './components/DayLearning/DayCanvas';
 import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
-// 🟢 引入 MonthLearning
 import { MonthLearning } from './components/MonthLearning';
 import { type DateType } from './Datas/DayData';
 
@@ -38,9 +37,10 @@ export const PageDates = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [learningDay, setLearningDay] = useState(new Date().getDate());
   const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay());
-
-  // 🟢 新增 Month 状态
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth() + 1);
+
+  // 🟢 New State: Track slide direction for animation (-1 or 1)
+  const [slideDirection, setSlideDirection] = useState(0);
 
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
@@ -48,12 +48,10 @@ export const PageDates = () => {
   const pageTitle = t('date_study.title') || 'Dates Study';
   const isFocusMode = activeMode !== 'overview';
 
-  // 同步逻辑
   useEffect(() => {
     if (activeMode === 'day') {
       setLearningDay(selectedDate.getDate());
     }
-    // 如果进入 month 模式，默认选中当前 selectedDate 的月份
     if (activeMode === 'month') {
       setActiveMonth(selectedDate.getMonth() + 1);
     }
@@ -75,7 +73,31 @@ export const PageDates = () => {
     setFilterType((prev) => (prev === type ? null : type));
   };
 
-  // 1. 上半部分：日历区域的内容渲染器 (Children)
+  // 🟢 Feature: Handle Month Navigation
+  const handleMonthChange = (offset: number) => {
+    setSlideDirection(offset); // Set animation direction
+
+    const newDate = new Date(selectedDate);
+    // 1. Shift month
+    newDate.setMonth(newDate.getMonth() + offset);
+
+    // 2. Auto-selection Logic
+    const today = new Date();
+    // If target month is current real-time month, select Today
+    if (
+      newDate.getMonth() === today.getMonth() &&
+      newDate.getFullYear() === today.getFullYear()
+    ) {
+      newDate.setDate(today.getDate());
+    } else {
+      // Otherwise, select the 1st
+      newDate.setDate(1);
+    }
+
+    setSelectedDate(newDate);
+  };
+
+  // 1. Children Renderers
   const renderCalendarContent = () => {
     switch (activeMode) {
       case 'day':
@@ -95,13 +117,12 @@ export const PageDates = () => {
             onDaySelect={setCurrentWeekDay}
           />
         );
-      // 注意：Month 模式下，MonthCanvas 是作为 Header 渲染的，不是 Children
       default:
         return null;
     }
   };
 
-  // 2. 下半部分：详情区域的内容渲染器
+  // 2. Detail Renderers
   const renderDetailContent = () => {
     switch (activeMode) {
       case 'overview':
@@ -127,7 +148,6 @@ export const PageDates = () => {
             onDaySelect={setCurrentWeekDay}
           />
         );
-      // 🟢 新增 Month Case
       case 'month':
         return (
           <MonthLearning
@@ -166,13 +186,14 @@ export const PageDates = () => {
       </div>
 
       <div className={styles.workspace}>
-        {/* 日历区域 */}
         <div className={styles.calendarSection}>
           <SmartCalendar
             date={selectedDate}
             activeMode={activeMode}
             onDateSelect={(date) => setSelectedDate(date)}
-            // 🟢 传递 Month Props
+            // 🟢 Pass new Props
+            onMonthChange={handleMonthChange}
+            slideDirection={slideDirection}
             activeMonth={activeMonth}
             onMonthSelect={setActiveMonth}
           >
@@ -180,7 +201,6 @@ export const PageDates = () => {
           </SmartCalendar>
         </div>
 
-        {/* 下方内容区域 */}
         <div className={styles.contentSection}>
           <AnimatePresence mode="wait">
             <motion.div

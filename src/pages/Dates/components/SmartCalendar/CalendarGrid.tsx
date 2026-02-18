@@ -1,5 +1,3 @@
-// src/pages/Dates/components/SmartCalendar/CalendarGrid.tsx
-
 import React from 'react';
 import styles from './CalendarGrid.module.css';
 import { DateCell } from './DateCell';
@@ -24,56 +22,97 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   const month = date.getMonth();
   const day = date.getDate();
 
-  const firstDayObj = new Date(year, month, 1);
-  const startDayOfWeek = firstDayObj.getDay();
-  const blanks = Array(startDayOfWeek).fill(null);
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
   const shouldHideTags = activeMode === 'day';
+
+  // 1. 本月第一天 & 星期几 (决定前面补几个)
+  const firstDayObj = new Date(year, month, 1);
+  const startDayOfWeek = firstDayObj.getDay(); // 0(Sun) - 6(Sat)
+
+  // 2. 本月最后一天 & 总天数 (决定中间渲染几个)
+  const lastDayObj = new Date(year, month + 1, 0);
+  const daysInMonth = lastDayObj.getDate();
+
+  // A. 【上月补位】 (Ghost)
+  const prevDays = Array.from({ length: startDayOfWeek }, (_, i) => {
+    // 倒推：1号往前数
+    return new Date(year, month, 1 - (startDayOfWeek - i));
+  });
+
+  // B. 【本月日期】 (Real)
+  const currentDays = Array.from({ length: daysInMonth }, (_, i) => {
+    return new Date(year, month, i + 1);
+  });
+
+  // C. 【下月补位】 (Ghost) - 关键逻辑：补齐最后一行
+  const totalCellsSoFar = prevDays.length + currentDays.length;
+  const remainder = totalCellsSoFar % 7;
+  // 如果能整除(0)，说明刚好填满，不用补；否则补 (7 - 余数) 个
+  const daysToAdd = remainder === 0 ? 0 : 7 - remainder;
+
+  const nextDays = Array.from({ length: daysToAdd }, (_, i) => {
+    return new Date(year, month + 1, i + 1);
+  });
 
   return (
     <div className={styles.grid}>
-      {blanks.map((_, i) => (
-        <div key={`blank-${i}`} />
+      {/* 1. 渲染上月 Ghost */}
+      {prevDays.map((dObj) => (
+        <DateCell
+          key={`prev-${dObj.getDate()}`}
+          date={dObj}
+          dayNum={dObj.getDate()}
+          isGhost={true}
+          isSelected={false}
+          isSaturday={dObj.getDay() === 6}
+          isSunday={dObj.getDay() === 0}
+          hideTags={shouldHideTags}
+          holiday={null}
+          relative={null}
+          onSelect={() => {}}
+        />
       ))}
 
-      {days.map((d) => {
-        const currentCellDate = new Date(year, month, d);
-        const isGhostDay = currentCellDate.getMonth() !== month;
-        const isSelected = d === day && !isGhostDay;
-
-        // 🟢 计算星期属性
-        const dayOfWeek = currentCellDate.getDay();
-        const isSunday = dayOfWeek === 0;
-        const isSaturday = dayOfWeek === 6;
-
-        // 辅助信息
-        const holiday = !isGhostDay
-          ? getJapaneseHoliday(currentCellDate)
-          : null;
-        const relative = !isGhostDay ? getRelativeLabel(currentCellDate) : null;
+      {/* 2. 渲染本月 Real */}
+      {currentDays.map((dObj) => {
+        const dNum = dObj.getDate();
+        const isSelected = dNum === day; // 这里肯定是本月，直接对比数字即可
+        const dayOfWeek = dObj.getDay();
+        const holiday = getJapaneseHoliday(dObj);
+        const relative = getRelativeLabel(dObj);
 
         return (
           <DateCell
-            key={d}
-            date={currentCellDate}
-            dayNum={d}
-            isGhost={isGhostDay}
+            key={`curr-${dNum}`}
+            date={dObj}
+            dayNum={dNum}
+            isGhost={false}
             isSelected={isSelected}
-            // 🟢 传递结构层属性
-            isSaturday={!isGhostDay && isSaturday}
-            isSunday={!isGhostDay && isSunday}
+            isSaturday={dayOfWeek === 6}
+            isSunday={dayOfWeek === 0}
             hideTags={shouldHideTags}
             holiday={holiday}
             relative={relative}
-            onSelect={(dt) => {
-              if (!isGhostDay) {
-                onDateSelect(dt);
-              }
-            }}
+            onSelect={onDateSelect}
           />
         );
       })}
+
+      {/* 3. 渲染下月 Ghost (填补空缺) */}
+      {nextDays.map((dObj) => (
+        <DateCell
+          key={`next-${dObj.getDate()}`}
+          date={dObj}
+          dayNum={dObj.getDate()}
+          isGhost={true}
+          isSelected={false}
+          isSaturday={dObj.getDay() === 6}
+          isSunday={dObj.getDay() === 0}
+          hideTags={shouldHideTags}
+          holiday={null}
+          relative={null}
+          onSelect={() => {}}
+        />
+      ))}
     </div>
   );
 };
