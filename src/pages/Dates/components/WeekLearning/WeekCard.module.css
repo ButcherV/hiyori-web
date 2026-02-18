@@ -1,180 +1,195 @@
 /* src/pages/Dates/components/WeekLearning/WeekCard.module.css */
 
+/* =============================================
+   卡片容器
+   ============================================= */
 .card {
   width: 100%;
-  max-width: 500px;
-  /* 增加高度，给垂直排版留出呼吸空间 */
-  min-height: 110px;
+  height: 116px;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+  border-radius: 18px;
 
-  /* 默认态：白底 + 极淡的边框 */
-  background: white;
-  /* border-radius: 20px; */
-  margin-bottom: 16px;
+  background: var(--card-bg);
+  box-shadow: 0 6px 24px -4px var(--card-shadow, transparent);
 
   display: flex;
-  align-items: center;
-  justify-content: space-between; /* 左右撑开 */
-  padding: 0 24px;
-
-  position: relative;
-  overflow: hidden; /* 裁剪背景水印 */
-
-  /* box-shadow:
-    0 4px 6px -2px rgba(0, 0, 0, 0.03),
-    0 10px 15px -3px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.02); */
+  overflow: hidden;
 
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition:
+    transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card:active {
-  transform: scale(0.98);
-}
-
-/* ============================================================
-   🟢 激活状态 (Active)
-   ============================================================ */
 .activeCard {
-  /* 背景色由 inline-style 注入渐变 */
-  border-color: transparent;
-  transform: scale(1.02);
-  z-index: 5;
+  transform: scale(1.015);
 }
 
-/* 激活时：文字全白 */
-.activeCard .kanji,
-.activeCard .kana,
-.activeCard .romaji,
-.activeCard .englishLarge {
-  color: white !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* =============================================
+   左柱：元素标识
+   ============================================= */
+.leftPanel {
+  width: 84px;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  background: var(--card-left-bg);
+  transition: background 0.3s ease;
+
+  /* 右侧微弱边界 */
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* 激活时：背景 Icon 变白且稍微亮一点 */
-.activeCard .bgIcon {
-  color: white !important;
-  opacity: 0.2 !important;
+/* 激活：左柱换上 gradient */
+.activeCard .leftPanel {
+  background: var(--card-gradient);
+  border-right-color: transparent;
 }
 
-/* 激活时：喇叭按钮 */
-.activeCard .speakerBtn {
-  background: rgba(255, 255, 255, 0.25);
+.elementKanji {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--card-accent);
+  transition: color 0.3s ease;
+}
+
+.activeCard .elementKanji {
   color: white;
 }
-.activeCard .speakerBtn:hover {
-  background: rgba(255, 255, 255, 0.4);
+
+/* 元素英文名（Sun/Fire/Water…） */
+.elementName {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--card-accent);
+  opacity: 0.55;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
 }
 
-/* ============================================================
-   🎨 布局分区
-   ============================================================ */
-
-/* 1. 背景水印 Icon (放在最底层) */
-.bgIcon {
-  position: absolute;
-  /* 放在右侧偏下，稍微大一点 */
-  right: 40px;
-  bottom: -24px;
-  width: 140px;
-  height: 140px;
-
-  color: #94a3b8;
-  opacity: 0.06; /* 极淡，不抢视线 */
-  transform: rotate(-10deg);
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 0;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+.activeCard .elementName {
+  color: white;
+  opacity: 0.75;
 }
 
-/* 2. 左侧：日文核心学习区 (Vertical Stack) */
-.leftSection {
+/* 星期几（Sunday/星期日…） */
+.dayLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--card-accent);
+  opacity: 0.4;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  text-align: center;
+  padding: 0 4px;
+}
+
+.activeCard .dayLabel {
+  color: white;
+  opacity: 0.65;
+}
+
+/* =============================================
+   右侧：日语学习内容
+   ============================================= */
+.rightPanel {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  gap: 6px; /* 稍微拉开行距 */
-  z-index: 2; /* 浮在背景之上 */
-  flex: 1; /* 占据剩余空间 */
+  padding: 0 14px 0 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰图标 */
+.bgIcon {
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  z-index: 0;
+  color: var(--card-accent);
+  opacity: 0.07;
+  transform: rotate(-10deg);
+  pointer-events: none;
+}
+
+/* 内容浮于图标之上 */
+.kanji,
+.kana,
+.romajiRow {
+  position: relative;
+  z-index: 1;
 }
 
 .kanji {
-  font-size: 32px; /* 巨大 */
+  font-size: 28px;
   font-weight: 900;
-  color: #1e293b;
   line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.readingBlock {
-  display: flex;
-  flex-direction: column; /* 🟢 关键：假名和罗马音垂直排列 */
-  gap: 2px;
+  color: var(--card-accent);
+  margin: 0 0 4px;
 }
 
 .kana {
-  font-size: 16px;
-  font-weight: 700;
-  color: #64748b; /* 次级灰 */
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--card-accent);
+  opacity: 0.65;
+  /* margin: 0 0 6px; */
+}
+
+.romajiRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .romaji {
-  font-family: 'SF Mono', monospace; /* 等宽字体适合注音 */
   font-size: 11px;
-  font-weight: 500;
-  color: #94a3b8; /* 最淡的灰 */
-  text-transform: uppercase; /* 罗马音大写看起来更整齐 */
-  letter-spacing: 1px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.4;
+  letter-spacing: 0.03em;
 }
 
-/* 3. 右侧：英文 + 按钮区 */
-.rightSection {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* 右对齐 */
-  justify-content: center;
-  gap: 12px;
-  z-index: 2;
-}
-
-/* 英文不再是小标签，而是右侧的一个平衡元素 */
-.englishLarge {
-  font-size: 14px;
-  font-weight: 800;
-  color: #cbd5e1; /* 非常淡，作为装饰 */
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-align: right;
-}
-
-/* 喇叭按钮 */
-.speakerBtn {
-  width: 44px;
-  height: 44px;
+.audioBtn {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: #f1f5f9;
   border: none;
-  color: #94a3b8;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--card-accent);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  /* 给按钮一点投影，增加可点击感 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    transform 0.15s;
 }
 
-.speakerBtn:hover {
-  background: #e2e8f0;
-  color: #475569;
-  transform: translateY(-1px);
+.audioBtn:hover {
+  background: rgba(255, 255, 255, 0.95);
 }
 
-.speakerBtn:active {
-  transform: scale(0.95) translateY(0);
+.audioBtn:active {
+  transform: scale(0.9);
 }

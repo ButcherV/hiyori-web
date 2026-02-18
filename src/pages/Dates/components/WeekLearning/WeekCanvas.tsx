@@ -1,11 +1,22 @@
 // src/pages/Dates/components/WeekLearning/WeekCanvas.tsx
 
 import React from 'react';
-import { motion } from 'framer-motion'; // 🟢 引入动画库
+import { motion } from 'framer-motion';
 import styles from './WeekCanvas.module.css';
 
+// 与 WeekCard DAY_STYLES 对应的 7 个激活色
+const PILL_COLORS = [
+  '#ef4444', // 日 Sun
+  '#64748b', // 月 Moon
+  '#ea580c', // 火 Fire
+  '#0ea5e9', // 水 Water
+  '#16a34a', // 木 Wood
+  '#eab308', // 金 Gold
+  '#3b82f6', // 土 Earth
+];
+
 interface WeekCanvasProps {
-  currentWeekDay: number; // 0-6
+  currentWeekDay: number; // 0–6
   onDaySelect?: (day: number) => void;
 }
 
@@ -13,6 +24,7 @@ export const WeekCanvas: React.FC<WeekCanvasProps> = ({
   currentWeekDay,
   onDaySelect,
 }) => {
+  // 日语星期缩写 = 学习内容本身，不走 i18n
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
   return (
@@ -20,36 +32,27 @@ export const WeekCanvas: React.FC<WeekCanvasProps> = ({
       <div className={styles.weekGrid}>
         {weekDays.map((day, idx) => {
           const isActive = idx === currentWeekDay;
-          const isSunday = idx === 0;
-          const isSaturday = idx === 6;
 
           return (
             <div
               key={day}
-              className={`
-                ${styles.weekCell} 
-                ${isActive ? styles.active : ''}
-                ${isSunday ? styles.sunday : ''}
-                ${isSaturday ? styles.saturday : ''}
-                jaFont
-              `}
-              onClick={() => onDaySelect && onDaySelect(idx)}
+              className={`${styles.weekCell} jaFont`}
+              onClick={() => onDaySelect?.(idx)}
             >
-              {/* 🟢 动画滑块背景 */}
               {isActive && (
                 <motion.div
-                  layoutId="active-pill" // 关键：layoutId 让它学会滑动
+                  layoutId="active-pill"
                   className={styles.activeBg}
-                  transition={{
-                    type: 'spring', // 使用弹簧动效，更灵动
-                    stiffness: 400,
-                    damping: 30,
-                  }}
+                  style={{ background: PILL_COLORS[idx] }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-
-              {/* 这里的文字加一层 span 以便 z-index 控制 */}
-              <span className={styles.text}>{day}</span>
+              <span
+                className={styles.text}
+                style={isActive ? { color: 'white' } : undefined}
+              >
+                {day}
+              </span>
             </div>
           );
         })}

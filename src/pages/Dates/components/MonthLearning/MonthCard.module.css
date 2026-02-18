@@ -8,7 +8,7 @@
   background-color: var(--card-bg, #fef2f2);
   border-radius: 20px;
   padding: 18px 20px 16px;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
 }
 
 .seasonLabel {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -82,7 +82,7 @@
 }
 
 .progressLabel {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   font-family: 'SF Mono', 'Fira Code', monospace;
   color: var(--card-accent);

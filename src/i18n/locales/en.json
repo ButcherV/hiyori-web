@@ -350,6 +350,16 @@
         }
       }
     },
+    "week": {
+      "day": {
+        "0": "Sunday",   "1": "Monday", "2": "Tuesday",
+        "3": "Wednesday","4": "Thursday","5": "Friday", "6": "Saturday"
+      },
+      "element": {
+        "0": "Sun",  "1": "Moon", "2": "Fire",
+        "3": "Water","4": "Wood", "5": "Gold","6": "Earth"
+      }
+    },
     "month": {
       "old_name": "Classical",
       "abbr": {
