@@ -116,7 +116,7 @@ export const MonthCard: React.FC<{
     speak(item.wafuKana);
   };
 
-  const formattedRomaji = item.romaji.replace(/·/g, ' · ');
+  const formattedRomaji = item.romaji.replace(/·/g, '·');
 
   return (
     <div
@@ -169,6 +169,19 @@ export const MonthCard: React.FC<{
           <Volume2 size={14} />
         </button>
       </div>
+
+      {/* ④.5 发音陷阱提示（仅 trapDetail 存在时显示）*/}
+      {item.trapDetail && (
+        <div className={styles.trapRow}>
+          <span className={styles.trapBadge}>{t('date_study.month.trap')}</span>
+          <span className={`${styles.trapWrong} jaFont`}>
+            {item.trapDetail.wrongKana}
+          </span>
+          <span className={styles.trapWrongRomaji}>
+            {item.trapDetail.wrongRomaji.replace(/·/g, '·')}
+          </span>
+        </div>
+      )}
 
       {/* ⑤ 古称分隔线 */}
       <div className={styles.dividerRow}>

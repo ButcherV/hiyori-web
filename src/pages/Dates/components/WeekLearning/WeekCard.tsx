@@ -34,7 +34,7 @@ export const WeekCard: React.FC<{
   const BgIcon = (Icons as Record<string, React.ElementType>)[item.icon];
   // 元素字 = 星期名第一个汉字（日/月/火/水/木/金/土）
   const elementKanji = item.kanji.charAt(0);
-  const formattedRomaji = item.romaji.replace(/·/g, ' · ');
+  const formattedRomaji = item.romaji.replace(/·/g, '·');
 
   const handleCardClick = () => {
     onClick();
