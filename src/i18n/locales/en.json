@@ -349,6 +349,34 @@
           "legend": "Regular"
         }
       }
+    },
+    "month": {
+      "old_name": "Classical",
+      "abbr": {
+        "1": "Jan", "2": "Feb", "3": "Mar", "4": "Apr",
+        "5": "May", "6": "Jun", "7": "Jul", "8": "Aug",
+        "9": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
+      },
+      "season": {
+        "winter": "❄️  Winter",
+        "spring": "🌸  Spring",
+        "summer": "🌺  Summer",
+        "autumn": "🍂  Autumn"
+      },
+      "meaning": {
+        "1": "Month of Harmony",
+        "2": "Month of Changing Clothes",
+        "3": "Month of Growth",
+        "4": "Month of U-Flowers",
+        "5": "Month of Rice Sprouts",
+        "6": "Month of Water",
+        "7": "Month of Letters",
+        "8": "Month of Leaves",
+        "9": "Month of Long Nights",
+        "10": "Month of No Gods",
+        "11": "Month of Frost",
+        "12": "Priests Running"
+      }
     }
   }
 }

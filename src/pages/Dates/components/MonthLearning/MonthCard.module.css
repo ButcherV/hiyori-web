@@ -1,269 +1,262 @@
 /* src/pages/Dates/components/MonthLearning/MonthCard.module.css */
 
+/* =============================================
+   卡片容器
+   ============================================= */
 .card {
   width: 100%;
-  /* max-width: 500px; */
-  min-height: 160px;
-  flex-shrink: 0;
-
-  background: #ffffff;
-  /* border-radius: 12px; */
-  margin-bottom: 16px;
+  background-color: var(--card-bg, #fef2f2);
+  border-radius: 20px;
+  padding: 18px 20px 16px;
+  margin-bottom: 12px;
 
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  /* 禁止在父级 flex 列中被压缩，保证卡片自然高度 */
+  flex-shrink: 0;
+
+  /* 为背景图标建立定位上下文 */
+  position: relative;
   overflow: hidden;
 
-  /* box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 2px 4px -1px rgba(0, 0, 0, 0.03); */
-  /* border: 1px solid rgba(0, 0, 0, 0.02); */
-
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition:
+    transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.25s ease;
 
-  /* 🟢 新增：防止移动端点击时出现默认的高亮背景 */
   -webkit-tap-highlight-color: transparent;
 }
 
 .activeCard {
-  transform: scale(1.02);
-  z-index: 5;
+  transform: scale(1.015);
   box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    0 12px 28px -6px rgba(0, 0, 0, 0.12),
+    0 6px 10px -4px rgba(0, 0, 0, 0.06);
 }
 
-/* === 左侧：文化侧栏 === */
-.leftSpine {
-  width: 108px;
-  height: 100%;
-  min-height: 160px; /* 继承最小高度 */
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-
-  color: white;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.spineLabel {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  /* opacity: 0.8; */
-  font-weight: 700;
-  text-align: center;
-}
-
-/* 中间竖排内容区 */
-.spineContent {
-  flex: 1;
-  display: flex;
-  flex-direction: row-reverse; /* 反向排列，让汉字在右，假名在左 */
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding-right: 8px;
-  width: 100%;
-}
-
-/* 竖排核心样式 */
-.wafuVertical {
-  writing-mode: vertical-rl; /* 文字竖排：从右向左 */
-  text-orientation: upright; /* 字符直立 */
-  font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
-  letter-spacing: 0.06em; /* 竖排时的字间距 */
-  line-height: 1;
-  text-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px;
-}
-
-.wafuKanji {
-  font-size: 26px;
-  font-weight: 900;
-}
-
-.wafuKana {
-  font-size: 13px; /* 假名小一点 */
-  opacity: 0.9;
-  font-weight: 500;
-  font-family: 'Hiragino Sans', sans-serif;
-}
-
-.wafuMeaning {
-  font-size: 13px;
-  text-align: center;
-  /* opacity: 0.9; */
-  line-height: 1.1;
-  font-family: 'SF Mono', sans-serif;
-  max-width: 100%;
-  /* padding-bottom: 24px; */
-}
-
-/* 🟢 修改：左侧喇叭样式 */
-.spineSpeaker {
-  /* position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%); */
-
-  /* 常驻显示，半透明 */
-  opacity: 0.5;
-  color: white;
-  transition: all 0.2s;
-
-  /* 增加点击热区 */
-  padding: 4px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  position: absolute;
-  right: 4px;
-}
-
-/* 交互反馈 */
-.leftSpine:active .spineSpeaker,
-.leftSpine:hover .spineSpeaker {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.2);
-  /* transform: translateX(-50%) scale(1.1); */
-}
-
-/* === 右侧：现代主区 === */
-.rightBody {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 0px 0 16px;
-  position: relative;
-  transition: background-color 0.3s ease;
-  overflow: hidden;
-}
-
-.headerRow {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.kanjiMain {
-  font-size: 40px; /* 放大主标题 */
-  font-weight: 900;
-  color: #1e293b;
-  line-height: 1;
-}
-
-.enMonth {
-  font-size: 14px;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.readingArea {
-  display: flex;
-  flex-direction: column;
-  /* gap: 12px; */
-}
-
-.normalReading {
-  display: flex;
-  flex-direction: column;
-}
-.kanaText {
-  font-size: 20px;
-  font-weight: 700;
-  color: #475569;
-}
-.romajiText {
-  font-size: 14px;
-  color: #94a3b8;
-  font-family: 'SF Mono', monospace;
-  margin-top: 2px;
-}
-
-/* 纠错区 */
-.correctionBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 4px;
-}
-
-.wrongRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--color-error);
-  font-size: 14px;
-  /* opacity: 0.7; */
-}
-.strikethrough {
-  text-decoration: line-through;
-  font-family: 'SF Mono', monospace;
-}
-
-.correctRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #16a34a;
-  font-size: 15px;
-  font-weight: 700;
-}
-.highlight {
-  font-family: 'SF Mono', monospace;
-  background: #dcfce7;
-  padding: 0 4px;
-  border-radius: 4px;
-}
-
-.iconBg {
+/* =============================================
+   背景装饰图标
+   ============================================= */
+.bgIcon {
   position: absolute;
   right: -20px;
-  bottom: -30px;
-  opacity: 0.08;
-  transform: rotate(-20deg) scale(1.4);
+  bottom: -20px;
   z-index: 0;
-  color: currentColor;
+
+  color: var(--card-accent);
+  opacity: 0.05;
+  transform: rotate(-15deg);
   pointer-events: none;
 }
 
-/* 🟢 新增：右侧现代喇叭按钮 */
-.modernSpeaker {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
+/* 所有内容元素浮于图标之上 */
+.metaRow,
+.modernKanji,
+.hiragana,
+.romajiRow,
+.dividerRow,
+.classicalSection {
+  position: relative;
+  z-index: 1;
+}
 
-  width: 36px;
-  height: 36px;
+/* =============================================
+   ① Meta 行：季节标签 + 进度
+   ============================================= */
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.seasonLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--card-accent);
+  opacity: 0.65;
+}
+
+.progressLabel {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.45;
+}
+
+/* =============================================
+   ② 现代月名（主角 Hero）
+   ============================================= */
+.modernKanji {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--card-accent);
+  margin: 0;
+  margin-bottom: 2px;
+}
+
+/* =============================================
+   ③ 假名读音
+   ============================================= */
+.hiragana {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--card-hiragana);
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+/* =============================================
+   ④ 罗马音 + 现代发音按钮
+   ============================================= */
+.romajiRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.romajiText {
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.55;
+  letter-spacing: 0.03em;
+}
+
+.audioBtn {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--card-accent);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: #94a3b8; /* 默认灰色 */
-  opacity: 0.6;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-  transition: all 0.2s;
-  z-index: 10;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    transform 0.15s;
 }
 
-/* 交互反馈 */
-.rightBody:active .modernSpeaker,
-.modernSpeaker:active {
-  transform: scale(0.95);
-  opacity: 1;
-  background: white;
+.audioBtn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.audioBtn:active {
+  transform: scale(0.9);
+}
+
+/* =============================================
+   ⑤ 古称分隔线
+   ============================================= */
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dividerLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--card-accent);
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--card-divider);
+}
+
+/* =============================================
+   ⑥ 古称区域
+   ============================================= */
+.classicalSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.classicalLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.classicalNameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.classicalKanji {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--card-accent);
+  line-height: 1;
+}
+
+.classicalHiragana {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--card-hiragana);
+  opacity: 0.75;
+}
+
+.classicalSubtext {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.classicalAudioBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--card-accent);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+.classicalAudioBtn:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.classicalAudioBtn:active {
+  transform: scale(0.9);
 }

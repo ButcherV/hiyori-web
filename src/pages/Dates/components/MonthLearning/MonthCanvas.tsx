@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './MonthCanvas.module.css';
 import { monthData } from '../../Datas/MonthData';
 
@@ -11,6 +12,7 @@ export const MonthCanvas: React.FC<MonthCanvasProps> = ({
   activeMonth,
   onMonthSelect,
 }) => {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // 自动居中逻辑 (保持不变)
@@ -55,7 +57,9 @@ export const MonthCanvas: React.FC<MonthCanvasProps> = ({
             style={dynamicStyle}
             onClick={() => onMonthSelect(m.id)}
           >
-            <span className={styles.label}>{m.id}月</span>
+            <span className={styles.label}>
+              {t(`date_study.month.abbr.${m.id}`)}
+            </span>
           </div>
         );
       })}

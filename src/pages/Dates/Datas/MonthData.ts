@@ -36,7 +36,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'mu·tsu·ki',
     wafuMeaning: 'Month of Harmony', // 亲友和睦
     season: 'winter',
-    themeColor: '#ef4444',
+    themeColor: '#C0392B', // 紅 crimson
     icon: 'Trees',
   },
   {
@@ -49,7 +49,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'ki·sa·ra·gi',
     wafuMeaning: 'Month of Changing Clothes', // 更衣（穿更多）
     season: 'winter',
-    themeColor: '#94a3b8',
+    themeColor: '#4A6FA5', // 藍鼠 slate blue
     icon: 'Snowflake',
   },
   {
@@ -61,8 +61,8 @@ export const monthData: MonthItem[] = [
     wafuKana: 'やよい',
     wafuRomaji: 'ya·yo·i',
     season: 'spring',
-    themeColor: '#f9a8d4', // 樱花粉
-    icon: 'Flower',
+    themeColor: '#C2185B', // 桜色 cherry blossom
+    icon: 'Flower2',
     wafuMeaning: 'Month of Growth', // 草木新生
   },
   // 🟢 4月 (陷阱)
@@ -76,7 +76,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'u·du·ki',
     wafuMeaning: 'Month of U-Flowers', // 卯花盛开
     season: 'spring',
-    themeColor: '#c084fc',
+    themeColor: '#7C3AED', // 藤色 wisteria
     icon: 'Sprout',
     trapDetail: {
       wrongKana: 'よんがつ', // ❌ 完整的错误读法
@@ -93,7 +93,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'sa·tsu·ki',
     wafuMeaning: 'Month of Rice Sprouts', // 插秧
     season: 'spring',
-    themeColor: '#4ade80',
+    themeColor: '#2F6E3B', // 若草色 fresh green
     icon: 'Leaf',
   },
   {
@@ -104,9 +104,9 @@ export const monthData: MonthItem[] = [
     wafuName: '水無月',
     wafuKana: 'みなづき',
     wafuRomaji: 'mi·na·du·ki',
-    wafuMeaning: 'Month of Water', // 这里的“无”其实是“之”的意思
+    wafuMeaning: 'Month of Water', // 这里的"无"其实是"之"的意思
     season: 'summer',
-    themeColor: '#38bdf8',
+    themeColor: '#0D7377', // 浅葱色 teal
     icon: 'Droplets',
   },
   // 🟢 7月 (陷阱)
@@ -120,7 +120,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'fu·mi·du·ki',
     wafuMeaning: 'Month of Letters', // 七夕写诗
     season: 'summer',
-    themeColor: '#60a5fa',
+    themeColor: '#1E3A8A', // 瑠璃色 lapis blue
     icon: 'Star',
     trapDetail: {
       wrongKana: 'なながつ',
@@ -137,7 +137,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'ha·du·ki',
     wafuMeaning: 'Month of Leaves', // 旧历叶落
     season: 'summer',
-    themeColor: '#facc15',
+    themeColor: '#B45309', // 向日葵 amber
     icon: 'Sun',
   },
   // 🟢 9月 (陷阱)
@@ -151,7 +151,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'na·ga·tsu·ki',
     wafuMeaning: 'Month of Long Nights', // 夜长
     season: 'autumn',
-    themeColor: '#fb923c',
+    themeColor: '#9A3412', // 柿色 persimmon
     icon: 'Moon',
     trapDetail: {
       wrongKana: 'きゅうがつ',
@@ -168,7 +168,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'ka·n·na·du·ki',
     wafuMeaning: 'Month of No Gods', // 众神去出云了
     season: 'autumn',
-    themeColor: '#f87171',
+    themeColor: '#9F1239', // 茜色 madder red
     icon: 'Wind',
   },
   {
@@ -181,7 +181,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'shi·mo·tsu·ki',
     wafuMeaning: 'Month of Frost',
     season: 'autumn',
-    themeColor: '#94a3b8',
+    themeColor: '#4B5563', // 利休鼠 sage grey
     icon: 'CloudSnow',
   },
   {
@@ -194,7 +194,7 @@ export const monthData: MonthItem[] = [
     wafuRomaji: 'shi·wa·su',
     wafuMeaning: 'Priests Running', // 忙碌的年末
     season: 'winter',
-    themeColor: '#475569',
+    themeColor: '#3730A3', // 藍 deep indigo
     icon: 'Timer',
   },
 ];
