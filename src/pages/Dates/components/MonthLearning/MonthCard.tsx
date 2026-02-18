@@ -96,7 +96,7 @@ export const MonthCard: React.FC<{
   const { t } = useTranslation();
 
   const ss = MONTH_STYLES[item.id] ?? MONTH_STYLES[1];
-  const BgIcon = (Icons as Record<string, React.ElementType>)[item.icon];
+  const BgIcon = (Icons as any)[item.icon];
 
   const handleCardClick = () => {
     if (!isActive) {
