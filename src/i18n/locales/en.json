@@ -311,6 +311,45 @@
     }
   },
   "date_study": {
+    "title": "Date Study",
+    "help": {
+      "day": {
+        "types_title": "Four Date Categories",
+        "rune_name": "RUNE — Ancient Readings",
+        "rune_desc": "Days 1–10 and day 20 use unique readings from ancient Japanese. They cannot be derived from number rules and must be memorized as whole words.",
+        "mutant_name": "MUTANT — Sound Mutation",
+        "mutant_desc": "When the digit \"4\" appears, it mutates to よっか (yokka). Affects days 4, 14, and 24.",
+        "trap_name": "TRAP — Fixed Pronunciation",
+        "trap_desc": "Digit \"7\" must always be read as しち (shichi); digit \"9\" must always be く (ku). Neither なな nor きゅう is accepted.",
+        "regular_name": "REGULAR — Standard Pattern",
+        "regular_desc": "Follows the normal [number + にち] pattern. e.g., day 11 → じゅういちにち.",
+        "tip_title": "Study Tip",
+        "tip_desc": "Rune days (1–10) are the most frequently used dates in daily Japanese — prioritize them. For the other three types, understanding the rule is enough."
+      },
+      "month": {
+        "traps_title": "Pronunciation Traps",
+        "traps_desc": "Three months have fixed readings that differ from everyday number pronunciation:",
+        "trap_4_month": "April",
+        "trap_4_rule": "\"4\" reads し — not よん",
+        "trap_7_month": "July",
+        "trap_7_rule": "\"7\" must be しち — not なな",
+        "trap_9_month": "September",
+        "trap_9_rule": "\"9\" must be く — not きゅう",
+        "classical_title": "Classical Month Names",
+        "classical_desc": "Each month has a traditional poetic name (e.g., January = 睦月 Mutsuki) used in greeting cards, literature, and seasonal content. Rare in everyday speech."
+      },
+      "holiday": {
+        "redday_title": "Japan's \"Red Day\" System",
+        "type_national_name": "国民の祝日 — National Holidays",
+        "type_national_desc": "16 legally defined public holidays per year. Schools, banks, and most businesses are closed.",
+        "type_substitute_name": "振替休日 — Substitute Holiday",
+        "type_substitute_desc": "When a national holiday falls on Sunday, the following Monday automatically becomes a holiday.",
+        "type_citizen_name": "国民の休日 — Citizens' Holiday",
+        "type_citizen_desc": "A weekday sandwiched between two public holidays also becomes a holiday. Rare — occurs roughly every few years.",
+        "distinction_title": "国民の祝日 vs 年中行事",
+        "distinction_desc": "This app distinguishes two types. 国民の祝日 are legal paid holidays. 年中行事 are traditional cultural events (e.g., Tanabata, Obon) — culturally important, but typically not days off."
+      }
+    },
     "levels": {
       "days": {
         "label": "Days",
@@ -327,6 +366,10 @@
       "years": {
         "label": "Years",
         "title": "Year Intensive"
+      },
+      "holiday": {
+        "label": "Holiday",
+        "title": "Holiday Intensive"
       }
     },
     "level1": {

@@ -20,6 +20,10 @@ import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
 import { MonthLearning } from './components/MonthLearning';
 import { HolidayLearning } from './components/HolidayLearning';
+import { DayHelpContent } from './components/DateHelp/DayHelpContent';
+import { MonthHelpContent } from './components/DateHelp/MonthHelpContent';
+import { HolidayHelpContent } from './components/DateHelp/HolidayHelpContent';
+import BottomSheet from '../../components/BottomSheet';
 import { type DateType } from './Datas/DayData';
 import { findFirstHolidayInMonth } from '../../utils/dateHelper';
 
@@ -44,8 +48,29 @@ export const PageDates = () => {
   const [slideDirection, setSlideDirection] = useState(0);
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
-  const pageTitle = t('date_study.title') || 'Dates Study';
+  const HELP_MODES: NavMode[] = ['day', 'month', 'holiday'];
+  const hasHelp = HELP_MODES.includes(activeMode);
+
+  const renderHelpContent = () => {
+    switch (activeMode) {
+      case 'day':     return <DayHelpContent />;
+      case 'month':   return <MonthHelpContent />;
+      case 'holiday': return <HolidayHelpContent />;
+      default:        return null;
+    }
+  };
+
+  const pageTitleMap: Partial<Record<NavMode, string>> = {
+    overview: t('date_study.title'),
+    day: t('date_study.levels.days.title'),
+    week: t('date_study.levels.weeks.title'),
+    month: t('date_study.levels.months.title'),
+    year: t('date_study.levels.years.title'),
+    holiday: t('date_study.levels.holiday.title'),
+  };
+  const pageTitle = pageTitleMap[activeMode] ?? t('date_study.title');
   const isFocusMode = activeMode !== 'overview';
 
   useEffect(() => {
@@ -196,9 +221,15 @@ export const PageDates = () => {
           )}
           <div className={styles.titleWrapper}>
             <span className={styles.headerTitle}>{pageTitle}</span>
-            <div className={styles.iconBtn} style={{ color: 'white' }}>
-              <HelpCircle size={20} />
-            </div>
+            {hasHelp && (
+              <div
+                className={styles.iconBtn}
+                style={{ color: 'white' }}
+                onClick={() => setIsHelpOpen(true)}
+              >
+                <HelpCircle size={20} />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.iconBtn} onClick={handleHeaderAction}>
@@ -247,6 +278,14 @@ export const PageDates = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      <BottomSheet
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
+        title={pageTitle}
+      >
+        {renderHelpContent()}
+      </BottomSheet>
     </div>
   );
 };

@@ -1,0 +1,149 @@
+/* src/pages/Dates/components/DateHelp/DateHelpContent.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--color-Gray9);
+}
+
+/* ── Section ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-Gray9);
+}
+
+.sectionContent {
+  padding-left: 26px;
+}
+
+.text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-Gray7);
+  margin: 0;
+}
+
+/* ── Day type list ── */
+.typeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 26px;
+}
+
+.typeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.typeHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.typeBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.badge_rune    { background: var(--color-type-rune-bg);   }
+.badge_mutant  { background: var(--color-type-mutant-bg); color: white; }
+.badge_trap    { background: var(--color-type-trap-bg);   color: var(--color-type-trap-text); }
+.badge_regular { background: #9ca3af; }
+
+.typeName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-Gray8);
+}
+
+.typeDesc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--color-Gray6);
+  margin: 0;
+  padding-left: 0;
+}
+
+/* ── Month trap list ── */
+.trapList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 26px;
+}
+
+.trapRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.trapMonth {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-Gray9);
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+.trapKana {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  color: var(--color-type-trap-text, #422006);
+  background: var(--color-type-trap-bg);
+  padding: 1px 7px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.trapRule {
+  font-size: 12px;
+  color: var(--color-Gray6);
+}
+
+/* ── Holiday type list ── */
+.holidayTypeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 26px;
+}
+
+.holidayTypeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.holidayTypeName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-Gray9);
+}
+
+.holidayTypeDesc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--color-Gray6);
+  margin: 0;
+}

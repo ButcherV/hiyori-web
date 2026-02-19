@@ -320,6 +320,45 @@
     }
   },
   "date_study": {
+    "title": "日期学习",
+    "help": {
+      "day": {
+        "types_title": "四种日期分类",
+        "rune_name": "RUNE — 古语读法",
+        "rune_desc": "1～10日 和 20日 使用源自古日语的独立读法，无法从数字规律推导，必须整体记忆。",
+        "mutant_name": "MUTANT — 音变",
+        "mutant_desc": "含数字「4」时，变读为 よっか (yokka)，影响 4日、14日、24日。",
+        "trap_name": "TRAP — 发音限制",
+        "trap_desc": "含「7」只能读 しち (shichi)，含「9」只能读 く (ku)，不可替换为 なな / きゅう。",
+        "regular_name": "REGULAR — 常规读法",
+        "regular_desc": "按「数字 + にち」规律读出，例如 11日 → じゅういちにち。",
+        "tip_title": "学习建议",
+        "tip_desc": "Rune 日（1～10日）是日常生活中使用频率最高的日期，建议优先记忆。其余三类理解规律即可。"
+      },
+      "month": {
+        "traps_title": "发音陷阱",
+        "traps_desc": "以下三个月份的读法与日常数字发音不同，需要特别注意：",
+        "trap_4_month": "4月",
+        "trap_4_rule": "「4」读 し，不读 よん",
+        "trap_7_month": "7月",
+        "trap_7_rule": "「7」必须读 しち，不可用 なな",
+        "trap_9_month": "9月",
+        "trap_9_rule": "「9」必须读 く，不可用 きゅう",
+        "classical_title": "古语月名",
+        "classical_desc": "每个月有一个传统雅称（如一月 = 睦月 むつき），常见于贺卡、文学及节气内容中，日常口语较少使用。"
+      },
+      "holiday": {
+        "redday_title": "日本的「赤い日」制度",
+        "type_national_name": "国民の祝日 — 法定节假日",
+        "type_national_desc": "由法律规定的公休日，全年共 16 天。学校、银行及大多数公司停业。",
+        "type_substitute_name": "振替休日 — 补偿假日",
+        "type_substitute_desc": "当法定假日恰逢星期日时，其后的第一个工作日（通常为周一）自动成为补偿假日。",
+        "type_citizen_name": "国民の休日 — 夹缝假日",
+        "type_citizen_desc": "若某个工作日被两个法定假日「夹住」，则该日自动成为假日。较为罕见，约数年发生一次。",
+        "distinction_title": "国民の祝日 vs 年中行事",
+        "distinction_desc": "本应用区分两类节日：国民の祝日 是法定假日，可以放假；年中行事 是传统民俗节日（如七夕、お盆），文化上重要，但通常不放假。"
+      }
+    },
     "levels": {
       "days": {
         "label": "日",
@@ -336,6 +375,10 @@
       "years": {
         "label": "年",
         "title": "年份特训"
+      },
+      "holiday": {
+        "label": "节日",
+        "title": "节日特训"
       }
     },
     "level1": {
