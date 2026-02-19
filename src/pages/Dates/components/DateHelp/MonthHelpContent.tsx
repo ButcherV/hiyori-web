@@ -27,14 +27,12 @@ export const MonthHelpContent: React.FC = () => {
           </p>
         </div>
         <div className={styles.trapList}>
-          {TRAP_MONTHS.map(({ key, kana, romaji }) => (
+          {TRAP_MONTHS.map(({ key, kana }) => (
             <div key={key} className={styles.trapRow}>
               <span className={styles.trapMonth}>
                 {t(`date_study.help.month.trap_${key}_month`)}
               </span>
-              <span className={`${styles.trapKana} jaFont`}>
-                {kana}
-              </span>
+              <span className={`${styles.trapKana} jaFont`}>{`${kana}`}</span>
               <span className={styles.trapRule}>
                 {t(`date_study.help.month.trap_${key}_rule`)}
               </span>

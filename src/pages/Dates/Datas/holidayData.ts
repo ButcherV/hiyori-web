@@ -62,6 +62,10 @@ export interface HolidayItem {
   romaji: string;
   /** true for pure-kana/katakana names — skip the kana row in HolidayCard */
   hideKana?: boolean;
+  /** optional emoji displayed after the name in HolidayCard */
+  emoji?: string;
+  /** word origin for katakana loan words */
+  etymology?: { zh: string; en: string };
   badgeType: HolidayBadgeType;
   theme: HolidayTheme;
   culturalNote: { zh: string; en: string };
@@ -78,6 +82,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '元日',
     kana: 'がんじつ',
     romaji: 'ga·n·ji·tsu',
+    emoji: '🎍',
     badgeType: 'national',
     theme: { bg: '#FFF0F0', accent: '#C0392B', sub: '#922B21', divider: '#FCCACA' },
     culturalNote: {
@@ -146,6 +151,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '春分の日',
     kana: 'しゅんぶんのひ',
     romaji: 'shu·n·bu·n·no·hi',
+    emoji: '🌸',
     badgeType: 'national',
     theme: { bg: '#FFF0F5', accent: '#C2185B', sub: '#AD1457', divider: '#F8BBD9' },
     culturalNote: {
@@ -198,6 +204,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: 'みどりの日',
     kana: 'みどりのひ',
     romaji: 'mi·do·ri·no·hi',
+    emoji: '🌿',
     badgeType: 'national',
     theme: { bg: '#F0FFF4', accent: '#2F6E3B', sub: '#1E4D29', divider: '#B7EBC7' },
     culturalNote: {
@@ -214,6 +221,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: 'こどもの日',
     kana: 'こどものひ',
     romaji: 'ko·do·mo·no·hi',
+    emoji: '🎏',
     badgeType: 'national',
     theme: { bg: '#EEF4FF', accent: '#1E3A8A', sub: '#163080', divider: '#BFDBFE' },
     culturalNote: {
@@ -232,6 +240,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '海の日',
     kana: 'うみのひ',
     romaji: 'u·mi·no·hi',
+    emoji: '🌊',
     badgeType: 'national',
     theme: { bg: '#F0F9FF', accent: '#0369A1', sub: '#075985', divider: '#BAE6FD' },
     culturalNote: {
@@ -250,6 +259,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '山の日',
     kana: 'やまのひ',
     romaji: 'ya·ma·no·hi',
+    emoji: '⛰️',
     badgeType: 'national',
     theme: { bg: '#F0FDF4', accent: '#15803D', sub: '#166534', divider: '#BBF7D0' },
     culturalNote: {
@@ -284,6 +294,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '秋分の日',
     kana: 'しゅうぶんのひ',
     romaji: 'shu·u·bu·n·no·hi',
+    emoji: '🍂',
     badgeType: 'national',
     theme: { bg: '#FFF1F2', accent: '#9F1239', sub: '#881337', divider: '#FECDD3' },
     culturalNote: {
@@ -354,6 +365,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '節分',
     kana: 'せつぶん',
     romaji: 'se·tsu·bu·n',
+    emoji: '👹',
     badgeType: 'traditional',
     theme: { bg: '#FEFCE8', accent: '#B45309', sub: '#78350F', divider: '#FDE68A' },
     culturalNote: {
@@ -370,6 +382,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: 'ひな祭り',
     kana: 'ひなまつり',
     romaji: 'hi·na·ma·tsu·ri',
+    emoji: '🎎',
     badgeType: 'traditional',
     theme: { bg: '#FDF2F8', accent: '#DB2777', sub: '#9D174D', divider: '#FBCFE8' },
     culturalNote: {
@@ -386,6 +399,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '七夕',
     kana: 'たなばた',
     romaji: 'ta·na·ba·ta',
+    emoji: '🎋',
     badgeType: 'traditional',
     theme: { bg: '#EFF6FF', accent: '#1D4ED8', sub: '#1E3A8A', divider: '#BFDBFE' },
     culturalNote: {
@@ -402,6 +416,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: 'お盆',
     kana: 'おぼん',
     romaji: 'o·bo·n',
+    emoji: '🏮',
     badgeType: 'traditional',
     theme: { bg: '#F5F3FF', accent: '#7C3AED', sub: '#5B21B6', divider: '#DDD6FE' },
     culturalNote: {
@@ -418,6 +433,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '七五三',
     kana: 'しちごさん',
     romaji: 'shi·chi·go·sa·n',
+    emoji: '🎀',
     badgeType: 'traditional',
     theme: { bg: '#FFF1F2', accent: '#BE123C', sub: '#9F1239', divider: '#FECDD3' },
     culturalNote: {
@@ -434,6 +450,7 @@ export const holidaysData: HolidayItem[] = [
     kanji: '大晦日',
     kana: 'おおみそか',
     romaji: 'o·o·mi·so·ka',
+    emoji: '🎆',
     badgeType: 'traditional',
     theme: { bg: '#EFF6FF', accent: '#1E40AF', sub: '#1E3A8A', divider: '#BFDBFE' },
     culturalNote: {
@@ -453,6 +470,8 @@ export const holidaysData: HolidayItem[] = [
     kana: 'ばれんたいんでー',
     romaji: 'ba·re·n·ta·i·n·de·e',
     hideKana: true,
+    emoji: '🍫',
+    etymology: { zh: '源自英语 Valentine\'s Day', en: 'from English "Valentine\'s Day"' },
     badgeType: 'global',
     theme: { bg: '#FFF0F3', accent: '#E11D48', sub: '#9F1239', divider: '#FECDD3' },
     culturalNote: {
@@ -470,6 +489,8 @@ export const holidaysData: HolidayItem[] = [
     kana: 'ほわいとでー',
     romaji: 'ho·wa·i·to·de·e',
     hideKana: true,
+    emoji: '🍬',
+    etymology: { zh: '源自英语 White Day（日本独创节日）', en: 'from English "White Day" (Japanese invention)' },
     badgeType: 'global',
     theme: { bg: '#FDF4FF', accent: '#A855F7', sub: '#7E22CE', divider: '#E9D5FF' },
     culturalNote: {
@@ -487,6 +508,8 @@ export const holidaysData: HolidayItem[] = [
     kana: 'はろうぃん',
     romaji: 'ha·ro·u·i·n',
     hideKana: true,
+    emoji: '🎃',
+    etymology: { zh: '源自英语 Halloween', en: 'from English "Halloween"' },
     badgeType: 'global',
     theme: { bg: '#FFF7ED', accent: '#EA580C', sub: '#9A3412', divider: '#FED7AA' },
     culturalNote: {
@@ -504,6 +527,8 @@ export const holidaysData: HolidayItem[] = [
     kana: 'くりすます',
     romaji: 'ku·ri·su·ma·su',
     hideKana: true,
+    emoji: '🎄',
+    etymology: { zh: '源自英语 Christmas', en: 'from English "Christmas"' },
     badgeType: 'global',
     theme: { bg: '#F0FDF4', accent: '#15803D', sub: '#14532D', divider: '#BBF7D0' },
     culturalNote: {

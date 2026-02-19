@@ -84,10 +84,24 @@
   margin: 0;
 }
 
+.emojiSuffix {
+  margin-left: 10px;
+  font-style: normal;
+  /* inherit font-size from parent <p> so it scales with clamp() */
+}
+
 .romajiRow {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.etymologyNote {
+  font-size: 11px;
+  color: var(--card-accent);
+  opacity: 0.5;
+  margin: 2px 0 0;
+  letter-spacing: 0.02em;
 }
 
 .romaji {

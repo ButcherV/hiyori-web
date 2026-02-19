@@ -1,16 +1,10 @@
 /* src/pages/Dates/components/SmartCalendar/DateCell.module.css */
 
-/* === 基础样式 (Default) === */
 .dayCell {
   aspect-ratio: 1;
   width: 100%;
   position: relative;
-  /* border-radius: 8px; */
-
-  /* 默认背景：极浅灰/白 */
   background: #f8fafc;
-  /* border: 1px solid #f1f5f9; */
-
   cursor: pointer;
   overflow: hidden;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -24,16 +18,14 @@
   transform: scale(0.95);
 }
 
-/* === 水印数字 (基础) === */
 .dayNum {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* font-family: 'SF Mono', 'Menlo', 'Consolas', monospace; */
   font-size: 26px;
   font-weight: 700;
-  color: #64748b; /* 默认灰字 */
+  color: #64748b;
   opacity: 0.15;
   z-index: 0;
   pointer-events: none;
@@ -48,68 +40,42 @@
   transform: translate(-50%, -50%) scale(0.75);
 }
 
-/* ==============================================
-   🥉 结构层：周六日 (Structure Layer)
-   使用淡色背景，增加文字色相
-   ============================================== */
-
+/* 结构层：周六日背景 */
 .isSaturday {
-  background-color: var(--color-date-sat-bg); /* 淡蓝底 */
+  background-color: var(--color-date-sat-bg);
   border-color: rgba(59, 130, 246, 0.1);
 }
-/* 周六的数字微带蓝色 */
-/* .isSaturday .dayNum {
-  color: var(--color-date-sat-text);
-}
-.isSaturday .dayNum.numClear {
-  color: var(--color-date-sat-text);
-} */
 
 .isSunday {
-  background-color: var(--color-date-sun-bg); /* 淡红底 */
+  background-color: var(--color-date-sun-bg);
   border-color: rgba(239, 68, 68, 0.1);
 }
-/* 周日的数字微带红色 */
-/* .isSunday .dayNum {
-  color: var(--color-date-sun-text);
-}
-.isSunday .dayNum.numClear {
-  color: var(--color-date-sun-text);
-} */
 
-/* ==============================================
-   🥇 交互层：选中态 (Interaction Layer)
-   霸道覆盖一切
-   ============================================== */
-
+/* 交互层：选中态 */
 .daySelected {
-  /* 强制深蓝背景 */
-  /* background: var(--color-date-selected-bg) !important; */
   background: var(
     --gradient-header-3,
     linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
   ) !important;
   border-color: var(--color-date-selected-bg) !important;
-
   box-shadow: var(--shadow-date-selected);
   z-index: 10;
-  /* transform: scale(1.08); */
 }
 
-/* 选中时：数字强制反白 */
 .daySelected .dayNum {
   color: var(--color-date-selected-text) !important;
 }
-/* 选中时：标签强制反白 */
+
 .daySelected .tag {
   color: var(--color-date-selected-text) !important;
   text-shadow: none;
 }
+
 .daySelected .tagRelative {
   border-color: var(--color-date-selected-text) !important;
 }
 
-/* === 标签容器 & 样式 (Information Layer) === */
+/* 标签容器 */
 .tagContainer {
   position: relative;
   z-index: 1;
@@ -123,14 +89,14 @@
   transition: opacity 0.3s ease;
   padding: 0 2px;
 }
+
 .tagsHidden .tagContainer {
   opacity: 0;
 }
 
+/* 标签基础样式 */
 .tag {
   font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  font-size: 9px;
-  line-height: 1.1;
   font-weight: 700;
   white-space: normal;
   word-break: break-all;
@@ -138,33 +104,42 @@
   transition: color 0.2s ease;
 }
 
-.tagLarge {
-  font-size: 11px;
-  line-height: 1.1;
+/* 🟢 档位 1：3字符以内 */
+.size_mini {
+  font-size: 13px;
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
-/* 标签颜色 (使用变量) */
+/* 🟢 档位 2：6字符以内 */
+.size_short {
+  font-size: 11px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* 🟢 档位 3：超过6字符或多行叠加 */
+.size_long {
+  font-size: 9px;
+  line-height: 1.1;
+}
+
 .tagRelative {
   color: var(--color-date-relative);
   border-left: 2px solid var(--color-date-relative);
   padding-left: 2px;
 }
+
 .tagHoliday {
   color: var(--color-date-holiday);
 }
 
-/* 节日模式：非节日格虚化 */
 .holidayDimmed {
   opacity: 0.18;
   cursor: default;
   filter: blur(2px);
 }
-.holidayDimmed:active {
-  transform: none;
-}
 
-/* 幽灵日 */
 .dayGhost {
   opacity: 1;
   background: repeating-linear-gradient(
@@ -177,6 +152,7 @@
   border: 1px dashed #cbd5e1;
   pointer-events: none;
 }
+
 .dayGhost .dayNum {
   color: #cbd5e1;
   opacity: 0.4;

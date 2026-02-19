@@ -63,6 +63,7 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({
           style={item.kanji.length >= 6 ? { fontSize: 'clamp(26px, 7vw, 36px)' } : undefined}
         >
           {item.kanji}
+          {item.emoji && <span className={styles.emojiSuffix}>{item.emoji}</span>}
         </p>
 
         {!item.hideKana && (
@@ -90,6 +91,10 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({
             </button>
           )}
         </div>
+
+        {item.etymology && (
+          <p className={styles.etymologyNote}>{item.etymology[locale]}</p>
+        )}
       </div>
 
       {/* ── Divider ── */}
