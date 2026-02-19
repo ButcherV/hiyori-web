@@ -154,6 +154,15 @@
   color: var(--color-date-holiday);
 }
 
+/* 节日模式：非节日格虚化 */
+.holidayDimmed {
+  opacity: 0.18;
+  cursor: default;
+}
+.holidayDimmed:active {
+  transform: none;
+}
+
 /* 幽灵日 */
 .dayGhost {
   opacity: 1;

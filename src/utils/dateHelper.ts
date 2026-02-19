@@ -51,6 +51,21 @@ export const isRedDay = (date: Date = new Date()): boolean => {
   return isSunday || isHoliday;
 };
 
+/**
+ * 在指定月份中找出第一个节日，没有则返回 null
+ */
+export const findFirstHolidayInMonth = (
+  year: number,
+  month: number
+): Date | null => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    if (JapaneseHolidays.isHoliday(date)) return date;
+  }
+  return null;
+};
+
 export const getRelativeLabel = (targetDate: Date): string | null => {
   const now = new Date();
   // 只比较日期部分，忽略时间

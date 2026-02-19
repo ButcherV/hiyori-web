@@ -1,7 +1,7 @@
 // src/pages/Dates/components/SmartCalendar/index.tsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // 🟢 Import Motion
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './SmartCalendar.module.css';
 import { type NavMode } from '../../PageDates';
 
@@ -16,13 +16,14 @@ interface SmartCalendarProps {
   onDateSelect: (date: Date) => void;
   activeMonth?: number;
   onMonthSelect?: (m: number) => void;
-  // 🟢 New Props for Navigation & Animation
   onMonthChange: (offset: number) => void;
   slideDirection: number;
+  // 🟢 新增 Props
+  canPrevMonth?: boolean;
+  canNextMonth?: boolean;
   children?: React.ReactNode;
 }
 
-// 🟢 Animation Variants
 const slideVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 50 : -50,
@@ -46,11 +47,15 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   onMonthSelect = () => {},
   onMonthChange,
   slideDirection,
+  // 🟢 解构
+  canPrevMonth = true,
+  canNextMonth = true,
   children,
 }) => {
   const isDayMode = activeMode === 'day';
   const isWeekMode = activeMode === 'week';
   const isMonthMode = activeMode === 'month';
+  const isHolidayMode = activeMode === 'holiday';
   const isFocusMode = isDayMode || isWeekMode || isMonthMode;
 
   const [focusType, setFocusType] = useState<'day' | 'week' | 'month' | null>(
@@ -82,10 +87,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   const prevModeRef = useRef(activeMode);
 
   useEffect(() => {
-    // ... (Keep existing State Machine Logic unchanged) ...
-    // Note: I'm omitting the exact copy of the useEffect logic here
-    // to save space, but ensure you keep the existing
-    // "CASE A/B/C/D" logic exactly as it was in your file.
+    // === 状态机逻辑保持不变 (省略以节省篇幅，请保持你原有的逻辑) ===
     if (!prevModeRef.current) {
       if (isDayMode) {
         setFocusType('day');
@@ -192,7 +194,10 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         ) : (
           <CalendarHeader
             date={date}
-            onMonthChange={onMonthChange} // 🟢 Pass handler
+            onMonthChange={onMonthChange}
+            // 🟢 透传边界状态
+            canPrev={canPrevMonth}
+            canNext={canNextMonth}
           />
         )}
       </div>
@@ -210,15 +215,12 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
     if (focusType === 'day' && showLearningContent) {
       return cachedChildren;
     }
-    // 🟢 Wrap CalendarGrid in AnimatePresence for sliding effect
-    // We use date.toISOString() or similar as key to trigger animation on change
     const animKey = `${date.getFullYear()}-${date.getMonth()}`;
-
     return (
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <AnimatePresence
           initial={false}
-          mode="popLayout" // Ensures smooth exit/enter overlap
+          mode="popLayout"
           custom={slideDirection}
         >
           <motion.div
@@ -240,6 +242,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
               date={date}
               activeMode={activeMode}
               onDateSelect={onDateSelect}
+              isHolidayMode={isHolidayMode}
             />
           </motion.div>
         </AnimatePresence>

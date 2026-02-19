@@ -1,0 +1,198 @@
+/* src/pages/Dates/components/HolidayLearning/HolidayCard.module.css */
+
+.card {
+  width: 100%;
+  border-radius: 20px;
+  background: var(--card-bg);
+  padding: 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Top row ── */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.badgeNational {
+  background: var(--card-accent);
+  color: #fff;
+}
+
+.badgeTraditional {
+  background: transparent;
+  color: var(--card-accent);
+  border: 1.5px solid var(--card-accent);
+  opacity: 0.75;
+}
+
+.dateLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--card-accent);
+  opacity: 0.45;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Hero section ── */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.kanji {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--card-accent);
+  margin: 0;
+}
+
+.kanaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kana {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--card-accent);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.romaji {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.35;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ── Audio button (shared) ── */
+.audioBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--card-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audioBtn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.audioBtn:active {
+  transform: scale(0.88);
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: var(--card-divider);
+  margin-bottom: 14px;
+}
+
+/* ── Cultural note ── */
+.culturalNote {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--card-sub);
+  margin: 0 0 16px;
+}
+
+/* ── Expression block ── */
+.expressionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.expressionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expressionJp {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--card-accent);
+  margin: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.expressionTranslation {
+  font-size: 12px;
+  color: var(--card-sub);
+  margin: 0;
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+/* ── Compact layout for small screens (iPhone SE etc.) ── */
+@media (max-height: 700px) {
+  .card {
+    padding: 14px 16px 16px;
+  }
+  .topRow {
+    margin-bottom: 10px;
+  }
+  .heroSection {
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .kanji {
+    font-size: 36px;
+  }
+  .kana {
+    font-size: 15px;
+  }
+  .divider {
+    margin-bottom: 10px;
+  }
+  .culturalNote {
+    font-size: 12px;
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .expressionBlock {
+    padding: 9px 12px;
+    gap: 3px;
+  }
+  .expressionJp {
+    font-size: 14px;
+  }
+}

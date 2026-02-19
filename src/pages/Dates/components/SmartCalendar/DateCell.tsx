@@ -16,6 +16,7 @@ interface DateCellProps {
   hideTags?: boolean;
   holiday: string | null;
   relative: string | null;
+  isHolidayMode?: boolean;
   onSelect: (date: Date) => void;
 }
 
@@ -32,6 +33,7 @@ export const DateCell: React.FC<DateCellProps> = ({
   hideTags,
   holiday,
   relative,
+  isHolidayMode,
   onSelect,
 }) => {
   const hasExtraContent = Boolean(holiday || relative);
@@ -50,10 +52,14 @@ export const DateCell: React.FC<DateCellProps> = ({
 
         /* 🟢 交互层：选中态 (优先级高，放在后面) */
         ${isSelected ? styles.daySelected : ''}
-        
+
         ${hideTags ? styles.tagsHidden : ''}
+        ${isHolidayMode && !holiday ? styles.holidayDimmed : ''}
       `}
-      onClick={() => onSelect(date)}
+      onClick={() => {
+        if (isHolidayMode && !holiday) return;
+        onSelect(date);
+      }}
     >
       <span
         className={`${styles.dayNum} ${!hasExtraContent ? styles.numClear : ''}`}

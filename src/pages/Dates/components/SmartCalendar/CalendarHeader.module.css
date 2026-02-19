@@ -2,7 +2,7 @@
 
 .header {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding-bottom: 8px;
   padding-top: 8px;
@@ -17,7 +17,8 @@
 .headerCenterWrapper {
   display: flex;
   justify-content: center;
-  width: 260px;
+  width: 250px;
+  gap: 4px;
 }
 
 .headerItem {
@@ -33,10 +34,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  margin-bottom: 4px; /* Align visually with text */
   border-radius: 50%;
   transition: all 0.2s;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
 .navBtn:hover {
@@ -53,8 +55,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 2px;
-  /* 🟢 Important: ensure text doesn't capture clicks accidentally */
+  gap: 6px;
   pointer-events: none;
 }
 
@@ -68,7 +69,7 @@
 
 /* ... (Keep existing text styles: .eraText, .subText, .monthText, .today) ... */
 .eraText {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--color-Gray8);
   line-height: 1.2;

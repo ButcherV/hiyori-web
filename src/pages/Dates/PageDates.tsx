@@ -19,7 +19,9 @@ import { DayCanvas } from './components/DayLearning/DayCanvas';
 import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
 import { MonthLearning } from './components/MonthLearning';
+import { HolidayLearning } from './components/HolidayLearning';
 import { type DateType } from './Datas/DayData';
+import { findFirstHolidayInMonth } from '../../utils/dateHelper';
 
 export type NavMode =
   | 'overview'
@@ -39,9 +41,7 @@ export const PageDates = () => {
   const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay());
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth() + 1);
 
-  // 🟢 New State: Track slide direction for animation (-1 or 1)
   const [slideDirection, setSlideDirection] = useState(0);
-
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
 
@@ -73,31 +73,55 @@ export const PageDates = () => {
     setFilterType((prev) => (prev === type ? null : type));
   };
 
-  // 🟢 Feature: Handle Month Navigation
+  // 🟢 1. 计算边界状态 (0 = 1月, 11 = 12月)
+  const currentMonthIndex = selectedDate.getMonth();
+  const canPrevMonth = currentMonthIndex > 0;
+  const canNextMonth = currentMonthIndex < 11;
+
+  // 🟢 2. 处理月份切换
   const handleMonthChange = (offset: number) => {
-    setSlideDirection(offset); // Set animation direction
+    // 边界拦截
+    if (offset < 0 && !canPrevMonth) return;
+    if (offset > 0 && !canNextMonth) return;
 
-    const newDate = new Date(selectedDate);
-    // 1. Shift month
-    newDate.setMonth(newDate.getMonth() + offset);
+    const targetYear = selectedDate.getFullYear();
 
-    // 2. Auto-selection Logic
+    // 节日模式：自动跳到下一个有节日的月份
+    if (activeMode === 'holiday') {
+      let targetMonth = selectedDate.getMonth() + offset;
+      while (targetMonth >= 0 && targetMonth <= 11) {
+        const firstHoliday = findFirstHolidayInMonth(targetYear, targetMonth);
+        if (firstHoliday) {
+          setSlideDirection(offset);
+          setSelectedDate(firstHoliday);
+          return;
+        }
+        targetMonth += offset;
+      }
+      return; // 该方向已无更多节日，不做任何事
+    }
+
+    setSlideDirection(offset);
+
+    // 算法优化：先构建目标月 1 号，防止从 1月31日 切到 2月 时溢出变成 3月
+    const targetMonth = selectedDate.getMonth() + offset;
+    const newDate = new Date(targetYear, targetMonth, 1);
+
+    // 自动选择逻辑
     const today = new Date();
-    // If target month is current real-time month, select Today
     if (
       newDate.getMonth() === today.getMonth() &&
       newDate.getFullYear() === today.getFullYear()
     ) {
-      newDate.setDate(today.getDate());
+      newDate.setDate(today.getDate()); // 如果是当月，选今天
     } else {
-      // Otherwise, select the 1st
-      newDate.setDate(1);
+      newDate.setDate(1); // 否则选 1 号
     }
 
     setSelectedDate(newDate);
   };
 
-  // 1. Children Renderers
+  // Renderers...
   const renderCalendarContent = () => {
     switch (activeMode) {
       case 'day':
@@ -122,7 +146,6 @@ export const PageDates = () => {
     }
   };
 
-  // 2. Detail Renderers
   const renderDetailContent = () => {
     switch (activeMode) {
       case 'overview':
@@ -155,6 +178,8 @@ export const PageDates = () => {
             onMonthSelect={setActiveMonth}
           />
         );
+      case 'holiday':
+        return <HolidayLearning selectedDate={selectedDate} />;
       default:
         return <div className={styles.debugBox}>WIP: {activeMode}</div>;
     }
@@ -191,11 +216,13 @@ export const PageDates = () => {
             date={selectedDate}
             activeMode={activeMode}
             onDateSelect={(date) => setSelectedDate(date)}
-            // 🟢 Pass new Props
             onMonthChange={handleMonthChange}
             slideDirection={slideDirection}
             activeMonth={activeMonth}
             onMonthSelect={setActiveMonth}
+            // 🟢 3. 传入边界状态
+            canPrevMonth={canPrevMonth}
+            canNextMonth={canNextMonth}
           >
             {renderCalendarContent()}
           </SmartCalendar>

@@ -11,12 +11,14 @@ interface CalendarGridProps {
   date: Date;
   activeMode: NavMode;
   onDateSelect: (date: Date) => void;
+  isHolidayMode?: boolean;
 }
 
 export const CalendarGrid: React.FC<CalendarGridProps> = ({
   date,
   activeMode,
   onDateSelect,
+  isHolidayMode,
 }) => {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -24,17 +26,27 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
   const shouldHideTags = activeMode === 'day';
 
-  // 1. 本月第一天 & 星期几 (决定前面补几个)
+  // 1. 本月第一天 & 星期几 (用于计算前面空几个)
   const firstDayObj = new Date(year, month, 1);
   const startDayOfWeek = firstDayObj.getDay(); // 0(Sun) - 6(Sat)
 
-  // 2. 本月最后一天 & 总天数 (决定中间渲染几个)
+  // 2. 本月真实天数
   const lastDayObj = new Date(year, month + 1, 0);
   const daysInMonth = lastDayObj.getDate();
 
+  // 🟢 核心算法：计算总格子数
+  // 规则 A: 视觉上必须至少能容纳 "31天" (即使本月只有28天，也要把位置留出来给下个月的头几天)
+  //        所以最小需要的格子位 = 前面补位 + 31
+  const minSlotsNeeded = startDayOfWeek + 31;
+
+  // 规则 B: 必须填满最后一行 (凑够 7 的倍数)
+  //        总格子数 = 大于等于 minSlotsNeeded 的最小 7 的倍数
+  const totalSlots = Math.ceil(minSlotsNeeded / 7) * 7;
+
+  // 3. 分段生成日期数组
+
   // A. 【上月补位】 (Ghost)
   const prevDays = Array.from({ length: startDayOfWeek }, (_, i) => {
-    // 倒推：1号往前数
     return new Date(year, month, 1 - (startDayOfWeek - i));
   });
 
@@ -43,11 +55,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
     return new Date(year, month, i + 1);
   });
 
-  // C. 【下月补位】 (Ghost) - 关键逻辑：补齐最后一行
-  const totalCellsSoFar = prevDays.length + currentDays.length;
-  const remainder = totalCellsSoFar % 7;
-  // 如果能整除(0)，说明刚好填满，不用补；否则补 (7 - 余数) 个
-  const daysToAdd = remainder === 0 ? 0 : 7 - remainder;
+  // C. 【下月补位】 (Ghost)
+  // 下月需要补的个数 = 总格子数 - (上月补位 + 本月真实天数)
+  const slotsUsedSoFar = startDayOfWeek + daysInMonth;
+  const daysToAdd = totalSlots - slotsUsedSoFar;
 
   const nextDays = Array.from({ length: daysToAdd }, (_, i) => {
     return new Date(year, month + 1, i + 1);
@@ -55,7 +66,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
   return (
     <div className={styles.grid}>
-      {/* 1. 渲染上月 Ghost */}
+      {/* 渲染上月 */}
       {prevDays.map((dObj) => (
         <DateCell
           key={`prev-${dObj.getDate()}`}
@@ -68,14 +79,15 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
           hideTags={shouldHideTags}
           holiday={null}
           relative={null}
+          isHolidayMode={isHolidayMode}
           onSelect={() => {}}
         />
       ))}
 
-      {/* 2. 渲染本月 Real */}
+      {/* 渲染本月 */}
       {currentDays.map((dObj) => {
         const dNum = dObj.getDate();
-        const isSelected = dNum === day; // 这里肯定是本月，直接对比数字即可
+        const isSelected = dNum === day;
         const dayOfWeek = dObj.getDay();
         const holiday = getJapaneseHoliday(dObj);
         const relative = getRelativeLabel(dObj);
@@ -92,12 +104,13 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
             hideTags={shouldHideTags}
             holiday={holiday}
             relative={relative}
+            isHolidayMode={isHolidayMode}
             onSelect={onDateSelect}
           />
         );
       })}
 
-      {/* 3. 渲染下月 Ghost (填补空缺) */}
+      {/* 渲染下月 (包含原来的29/30/31坑位 以及 填满行所需的日期) */}
       {nextDays.map((dObj) => (
         <DateCell
           key={`next-${dObj.getDate()}`}
@@ -110,6 +123,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
           hideTags={shouldHideTags}
           holiday={null}
           relative={null}
+          isHolidayMode={isHolidayMode}
           onSelect={() => {}}
         />
       ))}

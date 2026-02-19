@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'; // 🟢 Import Icons
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './CalendarHeader.module.css';
 import { getYearData } from '../../Datas/YearData';
 import {
@@ -10,13 +10,17 @@ import {
 
 interface CalendarHeaderProps {
   date: Date;
-  // 🟢 Optional prop for navigation
   onMonthChange?: (offset: number) => void;
+  // 🟢 新增控制属性
+  canPrev?: boolean;
+  canNext?: boolean;
 }
 
 export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   date,
   onMonthChange,
+  canPrev = true,
+  canNext = true,
 }) => {
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-11
@@ -32,11 +36,22 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
     <div className={styles.header}>
       {/* 🟢 Prev Button */}
       {onMonthChange && (
-        <button className={styles.navBtn} onClick={() => onMonthChange(-1)}>
-          <ChevronLeft size={24} strokeWidth={2.5} />
+        <button
+          className={styles.navBtn}
+          onClick={() => canPrev && onMonthChange(-1)}
+          disabled={!canPrev}
+          style={{
+            // 如果不可用，完全透明且不可点，但保留占位防止布局跳动
+            opacity: canPrev ? 1 : 0,
+            pointerEvents: canPrev ? 'auto' : 'none',
+            cursor: canPrev ? 'pointer' : 'default',
+          }}
+        >
+          <ChevronLeft size={24} strokeWidth={2} />
         </button>
       )}
 
+      {/* 中间信息区域 (保持你的 Wrapper 结构) */}
       <div className={styles.headerCenterWrapper}>
         {/* Left: Year + Era */}
         <div className={`${styles.headerItem} ${styles.alignRight}`}>
@@ -58,8 +73,17 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
       {/* 🟢 Next Button */}
       {onMonthChange && (
-        <button className={styles.navBtn} onClick={() => onMonthChange(1)}>
-          <ChevronRight size={24} strokeWidth={2.5} />
+        <button
+          className={styles.navBtn}
+          onClick={() => canNext && onMonthChange(1)}
+          disabled={!canNext}
+          style={{
+            opacity: canNext ? 1 : 0,
+            pointerEvents: canNext ? 'auto' : 'none',
+            cursor: canNext ? 'pointer' : 'default',
+          }}
+        >
+          <ChevronRight size={24} strokeWidth={2} />
         </button>
       )}
     </div>
