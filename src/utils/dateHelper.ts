@@ -1,4 +1,5 @@
 import JapaneseHolidays from 'japanese-holidays';
+import { getCustomHolidayName } from '../pages/Dates/Datas/holidayData';
 
 /**
  * 1. 获取日语问候语 (Morning/Afternoon/Evening)
@@ -61,7 +62,7 @@ export const findFirstHolidayInMonth = (
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   for (let d = 1; d <= daysInMonth; d++) {
     const date = new Date(year, month, d);
-    if (JapaneseHolidays.isHoliday(date)) return date;
+    if (JapaneseHolidays.isHoliday(date) || getCustomHolidayName(date)) return date;
   }
   return null;
 };

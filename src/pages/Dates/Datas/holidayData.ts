@@ -27,6 +27,18 @@ export const HOLIDAY_METADATA: Record<string, HolidayMeta> = {
   勤労感謝の日: { kana: 'きんろうかんしゃのひ', romaji: 'ki·n·ro·u·ka·n·sha·no·hi', en: 'Labor Thanksgiving Day' },
   振替休日: { kana: 'ふりかえきゅうじつ', romaji: 'fu·ri·ka·e·kyu·u·ji·tsu', en: 'Substitute Holiday' },
   国民の休日: { kana: 'こくみんのきゅうじつ', romaji: 'ko·ku·mi·n·no·kyu·u·ji·tsu', en: "Citizen's Holiday" },
+  // 年中行事
+  節分:       { kana: 'せつぶん',     romaji: 'se·tsu·bu·n',       en: 'Setsubun' },
+  'ひな祭り': { kana: 'ひなまつり',   romaji: 'hi·na·ma·tsu·ri',   en: "Hinamatsuri / Girls' Day" },
+  七夕:       { kana: 'たなばた',     romaji: 'ta·na·ba·ta',       en: 'Tanabata' },
+  お盆:       { kana: 'おぼん',       romaji: 'o·bo·n',            en: 'Obon' },
+  七五三:     { kana: 'しちごさん',   romaji: 'shi·chi·go·san',    en: 'Shichi-Go-San' },
+  大晦日:     { kana: 'おおみそか',   romaji: 'o·o·mi·so·ka',      en: "New Year's Eve" },
+  // 世界行事
+  'バレンタインデー': { kana: 'ばれんたいんでー', romaji: 'ba·re·n·ta·i·n·de·e', en: "Valentine's Day" },
+  'ホワイトデー':     { kana: 'ほわいとでー',     romaji: 'ho·wa·i·to·de·e',     en: 'White Day' },
+  'ハロウィン':       { kana: 'はろうぃん',       romaji: 'ha·ro·u·i·n',         en: 'Halloween' },
+  'クリスマス':       { kana: 'くりすます',       romaji: 'ku·ri·su·ma·su',      en: 'Christmas' },
 };
 
 export const getHolidayMeta = (name: string): HolidayMeta => {
@@ -34,7 +46,7 @@ export const getHolidayMeta = (name: string): HolidayMeta => {
 };
 
 // ─── 新增：完整学习数据 ───────────────────────────────────────────────────────
-export type HolidayBadgeType = 'national' | 'traditional';
+export type HolidayBadgeType = 'national' | 'traditional' | 'global';
 
 export interface HolidayTheme {
   bg: string;
@@ -48,6 +60,8 @@ export interface HolidayItem {
   kanji: string;
   kana: string;
   romaji: string;
+  /** true for pure-kana/katakana names — skip the kana row in HolidayCard */
+  hideKana?: boolean;
   badgeType: HolidayBadgeType;
   theme: HolidayTheme;
   culturalNote: { zh: string; en: string };
@@ -334,6 +348,174 @@ export const holidaysData: HolidayItem[] = [
     },
   },
 
+  // ─── 年中行事 (Traditional, fixed dates) ──────────
+  {
+    key: '節分',
+    kanji: '節分',
+    kana: 'せつぶん',
+    romaji: 'se·tsu·bu·n',
+    badgeType: 'traditional',
+    theme: { bg: '#FEFCE8', accent: '#B45309', sub: '#78350F', divider: '#FDE68A' },
+    culturalNote: {
+      zh: '立春前一天（2月3日前后），人们撒豆驱鬼迎福，喊"鬼は外！福は内！"，并吃与年龄等数的豆子。',
+      en: "The day before Setsubun (around Feb 3). People scatter roasted beans shouting 'Oni wa soto! Fuku wa uchi!' to drive away evil and invite good fortune.",
+    },
+    expression: {
+      jp: '鬼は外！福は内！',
+      translation: { zh: '鬼滚出去！福气进来！', en: 'Out with demons! In with good fortune!' },
+    },
+  },
+  {
+    key: 'ひな祭り',
+    kanji: 'ひな祭り',
+    kana: 'ひなまつり',
+    romaji: 'hi·na·ma·tsu·ri',
+    badgeType: 'traditional',
+    theme: { bg: '#FDF2F8', accent: '#DB2777', sub: '#9D174D', divider: '#FBCFE8' },
+    culturalNote: {
+      zh: '3月3日女儿节（桃の節句）。家中摆放象征皇室的雏人形，祈愿女儿健康成长，喝白酒吃菱饼。',
+      en: "March 3rd. Girls' Festival (Momo no Sekku). Families display Hina dolls and pray for their daughters' health.",
+    },
+    expression: {
+      jp: 'お雛様を飾りましたか？',
+      translation: { zh: '摆好雏人形了吗？', en: 'Have you set up the Hina dolls?' },
+    },
+  },
+  {
+    key: '七夕',
+    kanji: '七夕',
+    kana: 'たなばた',
+    romaji: 'ta·na·ba·ta',
+    badgeType: 'traditional',
+    theme: { bg: '#EFF6FF', accent: '#1D4ED8', sub: '#1E3A8A', divider: '#BFDBFE' },
+    culturalNote: {
+      zh: '7月7日，源自牛郎织女传说（织姬と彦星）。人们将心愿写在彩色纸条（短冊）上，挂在竹枝祈愿。',
+      en: "July 7th. Based on the legend of Orihime and Hikoboshi. People write wishes on colorful strips of paper (tanzaku) and hang them on bamboo.",
+    },
+    expression: {
+      jp: '願いが叶いますように。',
+      translation: { zh: '愿心愿成真。', en: 'May your wishes come true.' },
+    },
+  },
+  {
+    key: 'お盆',
+    kanji: 'お盆',
+    kana: 'おぼん',
+    romaji: 'o·bo·n',
+    badgeType: 'traditional',
+    theme: { bg: '#F5F3FF', accent: '#7C3AED', sub: '#5B21B6', divider: '#DDD6FE' },
+    culturalNote: {
+      zh: '8月13～16日，盂兰盆节（盆）。日本人相信此时祖先亡灵会回家探望，家家点迎火、送火，跳盆踊。',
+      en: 'Mid-August. Obon is a Buddhist custom to honor the spirits of ancestors. Families light ceremonial fires and perform Bon Odori dances.',
+    },
+    expression: {
+      jp: 'ご先祖様をお迎えします。',
+      translation: { zh: '迎接祖先的亡灵归来。', en: 'We welcome the spirits of our ancestors.' },
+    },
+  },
+  {
+    key: '七五三',
+    kanji: '七五三',
+    kana: 'しちごさん',
+    romaji: 'shi·chi·go·sa·n',
+    badgeType: 'traditional',
+    theme: { bg: '#FFF1F2', accent: '#BE123C', sub: '#9F1239', divider: '#FECDD3' },
+    culturalNote: {
+      zh: '11月15日，为3岁、5岁（男孩）及7岁（女孩）的孩子举办的成长祝福仪式。穿和服去神社参拜，吃千歳飴。',
+      en: "November 15th. A rite of passage for children aged 3, 5, and 7. They visit shrines in kimono and receive Chitose-ame (longevity candy).",
+    },
+    expression: {
+      jp: '元気に育ちますように。',
+      translation: { zh: '愿孩子健康茁壮成长。', en: 'May the children grow up healthy and strong.' },
+    },
+  },
+  {
+    key: '大晦日',
+    kanji: '大晦日',
+    kana: 'おおみそか',
+    romaji: 'o·o·mi·so·ka',
+    badgeType: 'traditional',
+    theme: { bg: '#EFF6FF', accent: '#1E40AF', sub: '#1E3A8A', divider: '#BFDBFE' },
+    culturalNote: {
+      zh: '12月31日除夕。晚上寺庙敲"除夜の鐘"108下，去除人的108种烦恼；全家看紅白歌合戰，吃跨年荞麦面（年越し蕎麦）。',
+      en: "December 31st. New Year's Eve. Temple bells ring 108 times (Joya no Kane) to dispel worldly desires, and families enjoy Toshikoshi Soba noodles.",
+    },
+    expression: {
+      jp: '良いお年をお迎えください。',
+      translation: { zh: '祝您新年顺利！', en: 'Wishing you a wonderful New Year.' },
+    },
+  },
+
+  // ─── 世界行事 (Global events) ──────────────────
+  {
+    key: 'バレンタインデー',
+    kanji: 'バレンタインデー',
+    kana: 'ばれんたいんでー',
+    romaji: 'ba·re·n·ta·i·n·de·e',
+    hideKana: true,
+    badgeType: 'global',
+    theme: { bg: '#FFF0F3', accent: '#E11D48', sub: '#9F1239', divider: '#FECDD3' },
+    culturalNote: {
+      zh: '2月14日情人节。日本独特习俗是女性向男性赠送巧克力，分为表达爱意的"本命チョコ"和社交用的"義理チョコ"两种。',
+      en: "February 14th. In Japan, women give chocolate to men — romantic 'Honmei Choco' to their loved one and obligatory 'Giri Choco' to coworkers.",
+    },
+    expression: {
+      jp: 'チョコレートをどうぞ。',
+      translation: { zh: '请收下这份巧克力。', en: 'Please accept this chocolate.' },
+    },
+  },
+  {
+    key: 'ホワイトデー',
+    kanji: 'ホワイトデー',
+    kana: 'ほわいとでー',
+    romaji: 'ho·wa·i·to·de·e',
+    hideKana: true,
+    badgeType: 'global',
+    theme: { bg: '#FDF4FF', accent: '#A855F7', sub: '#7E22CE', divider: '#E9D5FF' },
+    culturalNote: {
+      zh: '3月14日白色情人节，是日本独创的节日。情人节收到巧克力的男性，在这天回赠糖果或白巧克力。',
+      en: "March 14th. A Japanese invention. Men return a gift of sweets or white chocolate to women who gave them Valentine's chocolate.",
+    },
+    expression: {
+      jp: 'バレンタインのお返しです。',
+      translation: { zh: '这是情人节的回礼。', en: 'This is my return gift for Valentine\'s.' },
+    },
+  },
+  {
+    key: 'ハロウィン',
+    kanji: 'ハロウィン',
+    kana: 'はろうぃん',
+    romaji: 'ha·ro·u·i·n',
+    hideKana: true,
+    badgeType: 'global',
+    theme: { bg: '#FFF7ED', accent: '#EA580C', sub: '#9A3412', divider: '#FED7AA' },
+    culturalNote: {
+      zh: '10月31日万圣节前夕。在日本，渋谷等地会出现大规模的街头cosplay聚会，商业活动也极为热闹。',
+      en: "October 31st. In Japan, streets like Shibuya fill with elaborate cosplay. It's more of a street festival than a spooky holiday.",
+    },
+    expression: {
+      jp: 'トリック・オア・トリート！',
+      translation: { zh: '不给糖就捣蛋！', en: 'Trick or treat!' },
+    },
+  },
+  {
+    key: 'クリスマス',
+    kanji: 'クリスマス',
+    kana: 'くりすます',
+    romaji: 'ku·ri·su·ma·su',
+    hideKana: true,
+    badgeType: 'global',
+    theme: { bg: '#F0FDF4', accent: '#15803D', sub: '#14532D', divider: '#BBF7D0' },
+    culturalNote: {
+      zh: '12月25日圣诞节。在日本更多是情侣和商业节日而非宗教节日，圣诞蛋糕（クリスマスケーキ）和KFC炸鸡是标志性习俗。',
+      en: "December 25th. In Japan, Christmas is a romantic and commercial occasion. Couples share Christmas cake and KFC fried chicken — a beloved tradition since 1974.",
+    },
+    expression: {
+      jp: 'メリークリスマス！',
+      translation: { zh: '圣诞快乐！', en: 'Merry Christmas!' },
+    },
+  },
+
   // ─── 特殊 ─────────────────────────────────────
   {
     key: '振替休日',
@@ -369,7 +551,28 @@ export const holidaysData: HolidayItem[] = [
   },
 ];
 
-/** 按 japanese-holidays 返回的节日名查找完整学习数据 */
+/** 按节日名查找完整学习数据（兼容国民の祝日 key 和自定义节日 key）*/
 export const getHolidayItem = (name: string): HolidayItem | undefined => {
   return holidaysData.find((h) => h.key === name);
+};
+
+// ─── 固定日期自定义节日（年中行事 + 世界行事）────────────────────────────────
+// 格式：'月-日' → 节日 key
+const CUSTOM_HOLIDAY_DATES: Record<string, string> = {
+  '2-3':   '節分',
+  '2-14':  'バレンタインデー',
+  '3-3':   'ひな祭り',
+  '3-14':  'ホワイトデー',
+  '7-7':   '七夕',
+  '8-15':  'お盆',
+  '10-31': 'ハロウィン',
+  '11-15': '七五三',
+  '12-25': 'クリスマス',
+  '12-31': '大晦日',
+};
+
+/** 查询固定日期自定义节日名，没有则返回 null */
+export const getCustomHolidayName = (date: Date): string | null => {
+  const key = `${date.getMonth() + 1}-${date.getDate()}`;
+  return CUSTOM_HOLIDAY_DATES[key] ?? null;
 };

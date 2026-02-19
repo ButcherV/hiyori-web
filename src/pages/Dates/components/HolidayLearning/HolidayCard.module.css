@@ -39,6 +39,13 @@
   opacity: 0.75;
 }
 
+.badgeGlobal {
+  background: transparent;
+  color: var(--card-accent);
+  border: 1.5px dashed var(--card-accent);
+  opacity: 0.75;
+}
+
 .dateLabel {
   font-size: 13px;
   font-weight: 600;
@@ -75,6 +82,12 @@
   color: var(--card-accent);
   opacity: 0.7;
   margin: 0;
+}
+
+.romajiRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .romaji {

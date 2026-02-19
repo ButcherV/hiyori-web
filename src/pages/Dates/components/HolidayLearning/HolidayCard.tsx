@@ -24,8 +24,17 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({
   const day = selectedDate.getDate();
 
   const badgeClass =
-    item.badgeType === 'national' ? styles.badgeNational : styles.badgeTraditional;
-  const badgeLabel = item.badgeType === 'national' ? '国民の祝日' : '年中行事';
+    item.badgeType === 'national'
+      ? styles.badgeNational
+      : item.badgeType === 'global'
+        ? styles.badgeGlobal
+        : styles.badgeTraditional;
+  const badgeLabel =
+    item.badgeType === 'national'
+      ? '国民の祝日'
+      : item.badgeType === 'global'
+        ? '世界行事'
+        : '年中行事';
 
   return (
     <div
@@ -49,20 +58,38 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({
 
       {/* ── Hero: kanji, kana, romaji + audio ── */}
       <div className={styles.heroSection}>
-        <p className={`${styles.kanji} jaFont`}>{item.kanji}</p>
+        <p
+          className={`${styles.kanji} jaFont`}
+          style={item.kanji.length >= 6 ? { fontSize: 'clamp(26px, 7vw, 36px)' } : undefined}
+        >
+          {item.kanji}
+        </p>
 
-        <div className={styles.kanaRow}>
-          <p className={`${styles.kana} jaFont`}>{item.kana}</p>
-          <button
-            className={styles.audioBtn}
-            onClick={() => speak(item.kana)}
-            aria-label={`Play ${item.kana}`}
-          >
-            <Volume2 size={14} />
-          </button>
+        {!item.hideKana && (
+          <div className={styles.kanaRow}>
+            <p className={`${styles.kana} jaFont`}>{item.kana}</p>
+            <button
+              className={styles.audioBtn}
+              onClick={() => speak(item.kana)}
+              aria-label={`Play ${item.kana}`}
+            >
+              <Volume2 size={14} />
+            </button>
+          </div>
+        )}
+
+        <div className={styles.romajiRow}>
+          <p className={styles.romaji}>{item.romaji}</p>
+          {item.hideKana && (
+            <button
+              className={styles.audioBtn}
+              onClick={() => speak(item.kana)}
+              aria-label={`Play ${item.kana}`}
+            >
+              <Volume2 size={14} />
+            </button>
+          )}
         </div>
-
-        <p className={styles.romaji}>{item.romaji}</p>
       </div>
 
       {/* ── Divider ── */}

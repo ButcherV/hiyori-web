@@ -355,8 +355,13 @@
         "type_substitute_desc": "当法定假日恰逢星期日时，其后的第一个工作日（通常为周一）自动成为补偿假日。",
         "type_citizen_name": "国民の休日 — 夹缝假日",
         "type_citizen_desc": "若某个工作日被两个法定假日「夹住」，则该日自动成为假日。较为罕见，约数年发生一次。",
-        "distinction_title": "国民の祝日 vs 年中行事",
-        "distinction_desc": "本应用区分两类节日：国民の祝日 是法定假日，可以放假；年中行事 是传统民俗节日（如七夕、お盆），文化上重要，但通常不放假。"
+        "categories_title": "三类节日",
+        "cat_national_name": "国民の祝日  —  法定",
+        "cat_national_desc": "法律规定的公休日，日历上标注红色。",
+        "cat_traditional_name": "年中行事  —  传统",
+        "cat_traditional_desc": "日本传统民俗节日和季节仪式（七夕、お盆、節分等），文化意义重大，通常不放假。",
+        "cat_global_name": "世界行事  —  全球",
+        "cat_global_desc": "日本社会广泛庆祝的全球性节日（圣诞、万圣节、情人节等），属商业节日，不放假。"
       }
     },
     "levels": {

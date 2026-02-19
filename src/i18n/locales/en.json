@@ -346,8 +346,13 @@
         "type_substitute_desc": "When a national holiday falls on Sunday, the following Monday automatically becomes a holiday.",
         "type_citizen_name": "国民の休日 — Citizens' Holiday",
         "type_citizen_desc": "A weekday sandwiched between two public holidays also becomes a holiday. Rare — occurs roughly every few years.",
-        "distinction_title": "国民の祝日 vs 年中行事",
-        "distinction_desc": "This app distinguishes two types. 国民の祝日 are legal paid holidays. 年中行事 are traditional cultural events (e.g., Tanabata, Obon) — culturally important, but typically not days off."
+        "categories_title": "Three Holiday Categories",
+        "cat_national_name": "国民の祝日  —  Legal",
+        "cat_national_desc": "Legally mandated days off. Marked on calendars in red.",
+        "cat_traditional_name": "年中行事  —  Traditional",
+        "cat_traditional_desc": "Seasonal customs and folk events (Tanabata, Obon, Setsubun…). Culturally significant but usually not days off.",
+        "cat_global_name": "世界行事  —  Global",
+        "cat_global_desc": "Universally celebrated events adopted by Japan (Christmas, Halloween, Valentine's Day…). Commercial holidays — not days off."
       }
     },
     "levels": {

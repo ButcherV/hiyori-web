@@ -3,7 +3,7 @@
 import React from 'react';
 import { HolidayCard } from './HolidayCard';
 import { getJapaneseHoliday } from '../../../../utils/dateHelper';
-import { getHolidayItem } from '../../Datas/holidayData';
+import { getHolidayItem, getCustomHolidayName } from '../../Datas/holidayData';
 
 interface HolidayLearningProps {
   selectedDate: Date;
@@ -34,7 +34,8 @@ const emptyStyle: React.CSSProperties = {
 export const HolidayLearning: React.FC<HolidayLearningProps> = ({
   selectedDate,
 }) => {
-  const holidayName = getJapaneseHoliday(selectedDate);
+  const holidayName =
+    getJapaneseHoliday(selectedDate) ?? getCustomHolidayName(selectedDate);
   const item = holidayName ? getHolidayItem(holidayName) : undefined;
 
   if (!item) {

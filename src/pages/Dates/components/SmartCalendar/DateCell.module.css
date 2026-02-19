@@ -158,6 +158,7 @@
 .holidayDimmed {
   opacity: 0.18;
   cursor: default;
+  filter: blur(2px);
 }
 .holidayDimmed:active {
   transform: none;

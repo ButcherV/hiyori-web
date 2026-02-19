@@ -15,7 +15,7 @@ import { type NavMode } from '../../PageDates';
 import { useTTS } from '../../../../hooks/useTTS';
 import { ChevronRight, Volume2 } from 'lucide-react';
 
-import { getHolidayMeta } from '../../Datas/holidayData';
+import { getHolidayMeta, getCustomHolidayName, getHolidayItem } from '../../Datas/holidayData';
 
 import {
   WEEKDAY_DATA,
@@ -41,7 +41,7 @@ export const DateDetailPanel: React.FC<{
 }> = ({ date, onNavigate }) => {
   const { speak } = useTTS();
   const yearData = useMemo(() => getYearData(date.getFullYear()), [date]);
-  const holidayName = getJapaneseHoliday(date);
+  const holidayName = getJapaneseHoliday(date) ?? getCustomHolidayName(date);
   const relative = getRelativeLabel(date);
   const dayOfWeek = date.getDay();
 
@@ -82,15 +82,15 @@ export const DateDetailPanel: React.FC<{
 
     // [3] 节假日 (Holiday)
     if (holidayName) {
-      // 🟢 3. 数据层：用名字去查详细数据
+      const holidayItem = getHolidayItem(holidayName);
       const holidayInfo = getHolidayMeta(holidayName);
 
       list.push({
         id: 'hol',
-        kanji: holidayName, // 显示名字：元日
-        kana: holidayInfo.kana, // 显示假名：がんじつ
-        romaji: holidayInfo.romaji, // 显示罗马音：ga·n·ji·tsu
-        translation: holidayInfo.en, // 显示英文：New Year's Day
+        kanji: holidayName,
+        kana: holidayItem?.kana || holidayInfo.kana,
+        romaji: holidayItem?.romaji || holidayInfo.romaji,
+        translation: holidayInfo.en,
         action: '节假日学习',
         mode: 'holiday',
         theme: 'red',

@@ -6,6 +6,7 @@ import {
   getJapaneseHoliday,
   getRelativeLabel,
 } from '../../../../utils/dateHelper';
+import { getCustomHolidayName } from '../../Datas/holidayData';
 
 interface CalendarGridProps {
   date: Date;
@@ -89,7 +90,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         const dNum = dObj.getDate();
         const isSelected = dNum === day;
         const dayOfWeek = dObj.getDay();
-        const holiday = getJapaneseHoliday(dObj);
+        const holiday = getJapaneseHoliday(dObj) ?? getCustomHolidayName(dObj);
         const relative = getRelativeLabel(dObj);
 
         return (
