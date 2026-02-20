@@ -6,43 +6,45 @@ export interface HolidayMeta {
   kana: string;
   romaji: string;
   en: string;
+  zh: string;
 }
 
 export const HOLIDAY_METADATA: Record<string, HolidayMeta> = {
-  元日: { kana: 'がんじつ', romaji: 'ga·n·ji·tsu', en: "New Year's Day" },
-  成人の日: { kana: 'せいじんのひ', romaji: 'se·i·ji·n·no·hi', en: 'Coming of Age Day' },
-  建国記念の日: { kana: 'けんこくきねんのひ', romaji: 'ke·n·ko·ku·ki·ne·n·no·hi', en: 'Foundation Day' },
-  天皇誕生日: { kana: 'てんのうたんじょうび', romaji: 'te·n·no·u·ta·n·jo·u·bi', en: "Emperor's Birthday" },
-  春分の日: { kana: 'しゅんぶんのひ', romaji: 'shu·n·bu·n·no·hi', en: 'Vernal Equinox Day' },
-  昭和の日: { kana: 'しょうわのひ', romaji: 'sho·u·wa·no·hi', en: 'Showa Day' },
-  憲法記念日: { kana: 'けんぽうきねんび', romaji: 'ke·n·po·u·ki·ne·n·bi', en: 'Constitution Memorial Day' },
-  みどりの日: { kana: 'みどりのひ', romaji: 'mi·do·ri·no·hi', en: 'Greenery Day' },
-  こどもの日: { kana: 'こどものひ', romaji: 'ko·do·mo·no·hi', en: "Children's Day" },
-  海の日: { kana: 'うみのひ', romaji: 'u·mi·no·hi', en: 'Marine Day' },
-  山の日: { kana: 'やまのひ', romaji: 'ya·ma·no·hi', en: 'Mountain Day' },
-  敬老の日: { kana: 'けいろうのひ', romaji: 'ke·i·ro·u·no·hi', en: 'Respect for the Aged Day' },
-  秋分の日: { kana: 'しゅうぶんのひ', romaji: 'shu·u·bu·n·no·hi', en: 'Autumnal Equinox Day' },
-  スポーツの日: { kana: 'すぽーつのひ', romaji: 'su·po·o·tsu·no·hi', en: 'Sports Day' },
-  文化の日: { kana: 'ぶんかのひ', romaji: 'bu·n·ka·no·hi', en: 'Culture Day' },
-  勤労感謝の日: { kana: 'きんろうかんしゃのひ', romaji: 'ki·n·ro·u·ka·n·sha·no·hi', en: 'Labor Thanksgiving Day' },
-  振替休日: { kana: 'ふりかえきゅうじつ', romaji: 'fu·ri·ka·e·kyu·u·ji·tsu', en: 'Substitute Holiday' },
-  国民の休日: { kana: 'こくみんのきゅうじつ', romaji: 'ko·ku·mi·n·no·kyu·u·ji·tsu', en: "Citizen's Holiday" },
+  // 国民の祝日
+  元日:         { kana: 'がんじつ',           romaji: 'ga·n·ji·tsu',               en: "New Year's Day",          zh: '元旦' },
+  成人の日:     { kana: 'せいじんのひ',       romaji: 'se·i·ji·n·no·hi',           en: 'Coming of Age Day',       zh: '成人节' },
+  建国記念の日: { kana: 'けんこくきねんのひ', romaji: 'ke·n·ko·ku·ki·ne·n·no·hi', en: 'Foundation Day',          zh: '建国纪念日' },
+  天皇誕生日:   { kana: 'てんのうたんじょうび', romaji: 'te·n·no·u·ta·n·jo·u·bi', en: "Emperor's Birthday",      zh: '天皇诞生日' },
+  春分の日:     { kana: 'しゅんぶんのひ',     romaji: 'shu·n·bu·n·no·hi',         en: 'Vernal Equinox Day',      zh: '春分日' },
+  昭和の日:     { kana: 'しょうわのひ',       romaji: 'sho·u·wa·no·hi',           en: 'Showa Day',               zh: '昭和日' },
+  憲法記念日:   { kana: 'けんぽうきねんび',   romaji: 'ke·n·po·u·ki·ne·n·bi',     en: 'Constitution Memorial Day', zh: '宪法纪念日' },
+  みどりの日:   { kana: 'みどりのひ',         romaji: 'mi·do·ri·no·hi',           en: 'Greenery Day',            zh: '绿之日' },
+  こどもの日:   { kana: 'こどものひ',         romaji: 'ko·do·mo·no·hi',           en: "Children's Day",          zh: '儿童节' },
+  海の日:       { kana: 'うみのひ',           romaji: 'u·mi·no·hi',               en: 'Marine Day',              zh: '海之日' },
+  山の日:       { kana: 'やまのひ',           romaji: 'ya·ma·no·hi',              en: 'Mountain Day',            zh: '山之日' },
+  敬老の日:     { kana: 'けいろうのひ',       romaji: 'ke·i·ro·u·no·hi',          en: 'Respect for the Aged Day', zh: '老人节' },
+  秋分の日:     { kana: 'しゅうぶんのひ',     romaji: 'shu·u·bu·n·no·hi',         en: 'Autumnal Equinox Day',    zh: '秋分日' },
+  スポーツの日: { kana: 'すぽーつのひ',       romaji: 'su·po·o·tsu·no·hi',        en: 'Sports Day',              zh: '体育日' },
+  文化の日:     { kana: 'ぶんかのひ',         romaji: 'bu·n·ka·no·hi',            en: 'Culture Day',             zh: '文化节' },
+  勤労感謝の日: { kana: 'きんろうかんしゃのひ', romaji: 'ki·n·ro·u·ka·n·sha·no·hi', en: 'Labor Thanksgiving Day', zh: '劳动感谢节' },
+  振替休日:     { kana: 'ふりかえきゅうじつ', romaji: 'fu·ri·ka·e·kyu·u·ji·tsu', en: 'Substitute Holiday',      zh: '补休日' },
+  国民の休日:   { kana: 'こくみんのきゅうじつ', romaji: 'ko·ku·mi·n·no·kyu·u·ji·tsu', en: "Citizen's Holiday",  zh: '市民节假日' },
   // 年中行事
-  節分:       { kana: 'せつぶん',     romaji: 'se·tsu·bu·n',       en: 'Setsubun' },
-  'ひな祭り': { kana: 'ひなまつり',   romaji: 'hi·na·ma·tsu·ri',   en: "Hinamatsuri / Girls' Day" },
-  七夕:       { kana: 'たなばた',     romaji: 'ta·na·ba·ta',       en: 'Tanabata' },
-  お盆:       { kana: 'おぼん',       romaji: 'o·bo·n',            en: 'Obon' },
-  七五三:     { kana: 'しちごさん',   romaji: 'shi·chi·go·san',    en: 'Shichi-Go-San' },
-  大晦日:     { kana: 'おおみそか',   romaji: 'o·o·mi·so·ka',      en: "New Year's Eve" },
+  節分:         { kana: 'せつぶん',     romaji: 'se·tsu·bu·n',     en: 'Setsubun',                zh: '节分' },
+  'ひな祭り':   { kana: 'ひなまつり',   romaji: 'hi·na·ma·tsu·ri', en: "Hinamatsuri / Girls' Day", zh: '女儿节' },
+  七夕:         { kana: 'たなばた',     romaji: 'ta·na·ba·ta',     en: 'Tanabata',                zh: '七夕' },
+  お盆:         { kana: 'おぼん',       romaji: 'o·bo·n',          en: 'Obon',                    zh: '盂兰盆节' },
+  七五三:       { kana: 'しちごさん',   romaji: 'shi·chi·go·san',  en: 'Shichi-Go-San',           zh: '七五三' },
+  大晦日:       { kana: 'おおみそか',   romaji: 'o·o·mi·so·ka',   en: "New Year's Eve",          zh: '除夕' },
   // 世界行事
-  'バレンタインデー': { kana: 'ばれんたいんでー', romaji: 'ba·re·n·ta·i·n·de·e', en: "Valentine's Day" },
-  'ホワイトデー':     { kana: 'ほわいとでー',     romaji: 'ho·wa·i·to·de·e',     en: 'White Day' },
-  'ハロウィン':       { kana: 'はろうぃん',       romaji: 'ha·ro·u·i·n',         en: 'Halloween' },
-  'クリスマス':       { kana: 'くりすます',       romaji: 'ku·ri·su·ma·su',      en: 'Christmas' },
+  'バレンタインデー': { kana: 'ばれんたいんでー', romaji: 'ba·re·n·ta·i·n·de·e', en: "Valentine's Day", zh: '情人节' },
+  'ホワイトデー':     { kana: 'ほわいとでー',     romaji: 'ho·wa·i·to·de·e',     en: 'White Day',       zh: '白色情人节' },
+  'ハロウィン':       { kana: 'はろうぃん',       romaji: 'ha·ro·u·i·n',         en: 'Halloween',       zh: '万圣节' },
+  'クリスマス':       { kana: 'くりすます',       romaji: 'ku·ri·su·ma·su',      en: 'Christmas',       zh: '圣诞节' },
 };
 
 export const getHolidayMeta = (name: string): HolidayMeta => {
-  return HOLIDAY_METADATA[name] || { kana: 'しゅくじつ', romaji: 'shu·ku·ji·tsu', en: 'National Holiday' };
+  return HOLIDAY_METADATA[name] || { kana: 'しゅくじつ', romaji: 'shu·ku·ji·tsu', en: 'National Holiday', zh: '国定假日' };
 };
 
 // ─── 新增：完整学习数据 ───────────────────────────────────────────────────────

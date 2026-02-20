@@ -390,6 +390,18 @@
         "title": "相对时间"
       }
     },
+    "bento": {
+      "day_label": "第 {{day}} 日",
+      "year_label": "{{year}} 年",
+      "era_label": "日本年号",
+      "action_day": "日期学习",
+      "action_week": "星期学习",
+      "action_month": "月份学习",
+      "action_year": "年份学习",
+      "action_era": "年号学习",
+      "action_holiday": "节假日学习",
+      "action_relative": "相对时间"
+    },
     "level1": {
       "loading": "加载中...",
       "types": {

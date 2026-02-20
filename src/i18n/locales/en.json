@@ -381,6 +381,18 @@
         "title": "Relative Time"
       }
     },
+    "bento": {
+      "day_label": "Day {{day}}",
+      "year_label": "Year {{year}}",
+      "era_label": "Japanese Era",
+      "action_day": "Date Study",
+      "action_week": "Week Study",
+      "action_month": "Month Study",
+      "action_year": "Year Study",
+      "action_era": "Era Study",
+      "action_holiday": "Holiday Study",
+      "action_relative": "Relative Time"
+    },
     "level1": {
       "loading": "Loading...",
       "types": {

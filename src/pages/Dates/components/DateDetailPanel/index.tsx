@@ -1,6 +1,7 @@
 // src/pages/Dates/components/DateDetailPanel/index.tsx
 
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './DateDetailPanel.module.css';
 import { getYearData } from '../../Datas/YearData';
 import { datesData } from '../../Datas/DayData';
@@ -40,6 +41,8 @@ export const DateDetailPanel: React.FC<{
   onNavigate: (m: NavMode) => void;
 }> = ({ date, onNavigate }) => {
   const { speak } = useTTS();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language.startsWith('zh') ? 'zh' : 'en';
   const yearData = useMemo(() => getYearData(date.getFullYear()), [date]);
   const holidayName = getJapaneseHoliday(date) ?? getCustomHolidayName(date);
   const relative = getRelativeLabel(date);
@@ -52,12 +55,11 @@ export const DateDetailPanel: React.FC<{
     const dayItem = datesData.find((d) => d.id === date.getDate());
     list.push({
       id: 'day',
-      // kanji: `${date.getDate()}日`,
       kanji: dayItem?.kanji || `${toKanjiNum(date.getDate())}日`,
       kana: dayItem?.kana || '',
-      romaji: dayItem?.romaji || '', // 🟢 移除 toUpperCase，datesData 本身就是小写+点
-      translation: `Day ${date.getDate()}`,
-      action: '日期学习',
+      romaji: dayItem?.romaji || '',
+      translation: t('date_study.bento.day_label', { day: date.getDate() }),
+      action: t('date_study.bento.action_day'),
       mode: 'day',
     });
 
@@ -67,14 +69,15 @@ export const DateDetailPanel: React.FC<{
         kana: '...',
         romaji: '...',
         en: 'Relative Time',
+        zh: '相对时间',
       };
       list.push({
         id: 'rel',
         kanji: relative,
         kana: relData.kana,
         romaji: relData.romaji,
-        translation: relData.en,
-        action: '相对时间学习',
+        translation: relData[locale],
+        action: t('date_study.bento.action_relative'),
         mode: 'relative',
         theme: 'cyan',
       });
@@ -90,8 +93,8 @@ export const DateDetailPanel: React.FC<{
         kanji: holidayName,
         kana: holidayItem?.kana || holidayInfo.kana,
         romaji: holidayItem?.romaji || holidayInfo.romaji,
-        translation: holidayInfo.en,
-        action: '节假日学习',
+        translation: holidayInfo[locale],
+        action: t('date_study.bento.action_holiday'),
         mode: 'holiday',
         theme: 'red',
       });
@@ -105,8 +108,8 @@ export const DateDetailPanel: React.FC<{
       kanji: `${toKanjiNum(monthIdx + 1)}月`,
       kana: monthInfo.kana,
       romaji: monthInfo.romaji,
-      translation: monthInfo.en,
-      action: '月份学习',
+      translation: monthInfo[locale],
+      action: t('date_study.bento.action_month'),
       mode: 'month',
     });
 
@@ -117,8 +120,8 @@ export const DateDetailPanel: React.FC<{
       kanji: getJapaneseWeekday(date),
       kana: weekInfo.kana,
       romaji: weekInfo.romaji,
-      translation: weekInfo.en,
-      action: '星期学习',
+      translation: weekInfo[locale],
+      action: t('date_study.bento.action_week'),
       mode: 'week',
       theme:
         dayOfWeek === 0 || holidayName
@@ -135,9 +138,9 @@ export const DateDetailPanel: React.FC<{
       id: 'era',
       kanji: yearData.era.kanji,
       kana: eraInfo?.kana || yearData.era.romaji,
-      romaji: eraInfo?.romaji || yearData.era.romaji.toLowerCase(), // 🟢 优先使用带点的字典数据
-      translation: 'Japanese Era',
-      action: '年号学习',
+      romaji: eraInfo?.romaji || yearData.era.romaji.toLowerCase(),
+      translation: t('date_study.bento.era_label'),
+      action: t('date_study.bento.action_era'),
       mode: 'year',
     });
 
@@ -145,18 +148,16 @@ export const DateDetailPanel: React.FC<{
     const westernReading = getWesternYearReading(yearData.year);
     list.push({
       id: 'year',
-      // 汉字：二〇二六年（跟中文一样，逐字写）
       kanji: `${toKanjiNum(yearData.year)}年`,
-      // 发音：跟中文不一样，虽然逐字写，但还是按数字单位读（千、百、十）
       kana: westernReading.kana,
       romaji: westernReading.romaji,
-      translation: `Year ${yearData.year}`,
-      action: '年份学习',
+      translation: t('date_study.bento.year_label', { year: yearData.year }),
+      action: t('date_study.bento.action_year'),
       mode: 'year',
     });
 
     return list;
-  }, [date, yearData, holidayName, relative, dayOfWeek]);
+  }, [date, yearData, holidayName, relative, dayOfWeek, t, locale]);
 
   // 智能字号计算
   const getFontSize = (text: string) => {
