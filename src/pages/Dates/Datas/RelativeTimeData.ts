@@ -118,8 +118,239 @@ export const RELATIVE_TIME_DATA: RelativeTimeItem[] = [
   { granularity: 'year', offset: 2, kanji: '再来年', kana: 'さらいねん', romaji: 'sa·ra·i·nen', meaning: { zh: '后年', en: 'In two years' } },
 ];
 
-export const getRelativeItem = (granularity: Granularity, offset: number) =>
+export type PointItem = Omit<RelativeTimeItem, 'granularity' | 'offset'>;
+
+export const getRelativeItem = (granularity: Granularity, offset: number): PointItem | undefined =>
   RELATIVE_TIME_DATA.find((i) => i.granularity === granularity && i.offset === offset);
+
+// ── Timeline node types ───────────────────────────────────────────────────
+
+export interface TimelineNode {
+  type: 'major' | 'minor';
+  dayOffset: number;
+  unitOffset?: number; // major unit offset (week/month/year offset)
+}
+
+// ── Day reading tables ────────────────────────────────────────────────────
+
+const DAY_READINGS: Record<number, { kana: string; romaji: string; irregular: boolean }> = {
+  1:  { kana: 'いちにち',     romaji: 'i·chi·ni·chi',       irregular: false },
+  2:  { kana: 'ふつか',       romaji: 'fu·tsu·ka',           irregular: true  },
+  3:  { kana: 'みっか',       romaji: 'mi·k·ka',             irregular: true  },
+  4:  { kana: 'よっか',       romaji: 'yo·k·ka',             irregular: true  },
+  5:  { kana: 'いつか',       romaji: 'i·tsu·ka',            irregular: true  },
+  6:  { kana: 'むいか',       romaji: 'mu·i·ka',             irregular: true  },
+  7:  { kana: 'なのか',       romaji: 'na·no·ka',            irregular: true  },
+  8:  { kana: 'ようか',       romaji: 'yo·u·ka',             irregular: true  },
+  9:  { kana: 'ここのか',     romaji: 'ko·ko·no·ka',         irregular: true  },
+  10: { kana: 'とおか',       romaji: 'to·o·ka',             irregular: true  },
+  11: { kana: 'じゅういちにち', romaji: 'ju·u·i·chi·ni·chi', irregular: false },
+  12: { kana: 'じゅうににち',   romaji: 'ju·u·ni·ni·chi',    irregular: false },
+  13: { kana: 'じゅうさんにち', romaji: 'ju·u·sa·n·ni·chi',  irregular: false },
+  14: { kana: 'じゅうよっか',   romaji: 'ju·u·yo·k·ka',      irregular: true  },
+};
+
+const DAY_KANJI: Record<number, string> = {
+  1: '一', 2: '二', 3: '三', 4: '四', 5: '五',
+  6: '六', 7: '七', 8: '八', 9: '九', 10: '十',
+  11: '十一', 12: '十二', 13: '十三', 14: '十四',
+};
+
+const WEEK_KANJI  = ['', '一', '二', '三', '四'];
+const WEEK_KANA   = ['', 'いっ', 'に', 'さん', 'よん'];
+const MONTH_KANJI = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
+const MONTH_KANA  = ['', 'いっ', 'に', 'さん', 'よん', 'ご', 'ろっ', 'なな', 'はち', 'きゅう', 'じゅう', 'じゅういち', 'じゅうに'];
+
+/** Build a PointItem for a minor timeline tick in any granularity. */
+export function getMinorNodeItem(dayOffset: number, granularity: Granularity = 'week'): PointItem {
+  const isPast = dayOffset < 0;
+  const dirKana   = isPast ? 'まえ' : 'ご';
+  const dirRomaji = isPast ? '·ma·e' : '·go';
+  const dirKanji  = isPast ? '前' : '後';
+
+  if (granularity === 'week') {
+    const n = Math.abs(dayOffset);
+    const r = DAY_READINGS[n] ?? { kana: `${n}にち`, romaji: `${n}·ni·chi`, irregular: false };
+    const kj = DAY_KANJI[n] ?? String(n);
+    return {
+      kanji: `${kj}日${dirKanji}`,
+      kana: `${r.kana}${dirKana}`,
+      romaji: `${r.romaji}${dirRomaji}`,
+      meaning: {
+        zh: isPast ? `${n}天前` : `${n}天后`,
+        en: isPast ? `${n} day${n !== 1 ? 's' : ''} ago` : `In ${n} day${n !== 1 ? 's' : ''}`,
+      },
+      trap: r.irregular,
+      note: r.irregular ? {
+        zh: `${n}日使用不规则读音「${r.kana}」，须直接记忆`,
+        en: `${n} days uses the irregular reading ${r.kana} — must be memorized`,
+      } : undefined,
+    };
+  }
+
+  if (granularity === 'month') {
+    const weeks = Math.max(1, Math.round(Math.abs(dayOffset) / 7));
+    const wk = WEEK_KANJI[weeks] ?? String(weeks);
+    const wn = WEEK_KANA[weeks] ?? String(weeks);
+    return {
+      kanji: `${wk}週間${dirKanji}`,
+      kana: `${wn}しゅうかん${dirKana}`,
+      romaji: `${wn}·shu·u·ka·n${dirRomaji}`,
+      meaning: {
+        zh: isPast ? `约${weeks}周前` : `约${weeks}周后`,
+        en: isPast ? `~${weeks} week${weeks !== 1 ? 's' : ''} ago` : `In ~${weeks} week${weeks !== 1 ? 's' : ''}`,
+      },
+    };
+  }
+
+  // year granularity
+  const months = Math.max(1, Math.round(Math.abs(dayOffset) / 30));
+  const mk = MONTH_KANJI[months] ?? String(months);
+  const mn = MONTH_KANA[months] ?? String(months);
+  return {
+    kanji: `${mk}ヶ月${dirKanji}`,
+    kana: `${mn}かげつ${dirKana}`,
+    romaji: `${mn}·ka·ge·tsu${dirRomaji}`,
+    meaning: {
+      zh: isPast ? `约${months}个月前` : `约${months}个月后`,
+      en: isPast ? `~${months} month${months !== 1 ? 's' : ''} ago` : `In ~${months} month${months !== 1 ? 's' : ''}`,
+    },
+  };
+}
+
+// ── Timeline node generation ──────────────────────────────────────────────
+
+export const generateTimelineNodes = (granularity: Granularity): TimelineNode[] => {
+  if (granularity === 'day') {
+    return [-2, -1, 0, 1, 2].map((o) => ({ type: 'major' as const, dayOffset: o, unitOffset: o }));
+  }
+
+  if (granularity === 'week') {
+    const majorDayOffsets = [-14, -7, 0, 7, 14];
+    const nodes: TimelineNode[] = [];
+    majorDayOffsets.forEach((wday, i) => {
+      nodes.push({ type: 'major', dayOffset: wday, unitOffset: i - 2 });
+      if (i < 4) {
+        for (let d = 1; d <= 6; d++) {
+          nodes.push({ type: 'minor', dayOffset: wday + d });
+        }
+      }
+    });
+    return nodes; // 29 nodes
+  }
+
+  if (granularity === 'month') {
+    const majorDayOffsets = [-60, -30, 0, 30, 60];
+    const nodes: TimelineNode[] = [];
+    majorDayOffsets.forEach((mday, i) => {
+      nodes.push({ type: 'major', dayOffset: mday, unitOffset: i - 2 });
+      if (i < 4) {
+        const step = 30 / 4; // 7.5 days per minor step
+        for (let j = 1; j <= 3; j++) {
+          nodes.push({ type: 'minor', dayOffset: Math.round(mday + step * j) });
+        }
+      }
+    });
+    return nodes; // 17 nodes
+  }
+
+  // year
+  const majorDayOffsets = [-730, -365, 0, 365, 730];
+  const nodes: TimelineNode[] = [];
+  majorDayOffsets.forEach((yday, i) => {
+    nodes.push({ type: 'major', dayOffset: yday, unitOffset: i - 2 });
+    if (i < 4) {
+      const step = 365 / 4; // ~91 days per minor step
+      for (let j = 1; j <= 3; j++) {
+        nodes.push({ type: 'minor', dayOffset: Math.round(yday + step * j) });
+      }
+    }
+  });
+  return nodes; // 17 nodes
+};
+
+// ── Duration data ─────────────────────────────────────────────────────────
+
+export interface DurationItem {
+  unit: 'day' | 'week' | 'month' | 'year';
+  count: number;
+  kanji: string;
+  kana: string;
+  romaji: string;
+  meaning: { zh: string; en: string };
+  note?: { zh: string; en: string };
+}
+
+export const DURATION_DATA: DurationItem[] = [
+  // 日間
+  { unit: 'day', count: 1,  kanji: '一日間',   kana: 'いちにちかん',    romaji: 'i·chi·ni·chi·ka·n',  meaning: { zh: '1天',  en: '1 day'    } },
+  { unit: 'day', count: 2,  kanji: '二日間',   kana: 'ふつかかん',      romaji: 'fu·tsu·ka·ka·n',     meaning: { zh: '2天',  en: '2 days'   }, note: { zh: '使用不规则读音「ふつか」', en: 'Uses irregular reading ふつか' } },
+  { unit: 'day', count: 3,  kanji: '三日間',   kana: 'みっかかん',      romaji: 'mi·k·ka·ka·n',       meaning: { zh: '3天',  en: '3 days'   }, note: { zh: '使用不规则读音「みっか」', en: 'Uses irregular reading みっか' } },
+  { unit: 'day', count: 4,  kanji: '四日間',   kana: 'よっかかん',      romaji: 'yo·k·ka·ka·n',       meaning: { zh: '4天',  en: '4 days'   }, note: { zh: '使用不规则读音「よっか」', en: 'Uses irregular reading よっか' } },
+  { unit: 'day', count: 5,  kanji: '五日間',   kana: 'いつかかん',      romaji: 'i·tsu·ka·ka·n',      meaning: { zh: '5天',  en: '5 days'   }, note: { zh: '使用不规则读音「いつか」', en: 'Uses irregular reading いつか' } },
+  { unit: 'day', count: 6,  kanji: '六日間',   kana: 'むいかかん',      romaji: 'mu·i·ka·ka·n',       meaning: { zh: '6天',  en: '6 days'   }, note: { zh: '使用不规则读音「むいか」', en: 'Uses irregular reading むいか' } },
+  { unit: 'day', count: 7,  kanji: '七日間',   kana: 'なのかかん',      romaji: 'na·no·ka·ka·n',      meaning: { zh: '7天',  en: '7 days'   }, note: { zh: '等于一週間；使用不规则读音「なのか」', en: 'Equal to 一週間; irregular reading なのか' } },
+  { unit: 'day', count: 8,  kanji: '八日間',   kana: 'ようかかん',      romaji: 'yo·u·ka·ka·n',       meaning: { zh: '8天',  en: '8 days'   }, note: { zh: '使用不规则读音「ようか」', en: 'Uses irregular reading ようか' } },
+  { unit: 'day', count: 9,  kanji: '九日間',   kana: 'ここのかかん',    romaji: 'ko·ko·no·ka·ka·n',   meaning: { zh: '9天',  en: '9 days'   }, note: { zh: '使用不规则读音「ここのか」', en: 'Uses irregular reading ここのか' } },
+  { unit: 'day', count: 10, kanji: '十日間',   kana: 'とおかかん',      romaji: 'to·o·ka·ka·n',       meaning: { zh: '10天', en: '10 days'  }, note: { zh: '使用不规则读音「とおか」', en: 'Uses irregular reading とおか' } },
+  { unit: 'day', count: 14, kanji: '十四日間', kana: 'じゅうよっかかん', romaji: 'ju·u·yo·k·ka·ka·n', meaning: { zh: '14天', en: '14 days'  }, note: { zh: '使用不规则读音「じゅうよっか」', en: 'Uses irregular reading じゅうよっか' } },
+  // 週間
+  { unit: 'week', count: 1, kanji: '一週間', kana: 'いっしゅうかん', romaji: 'i·s·shu·u·ka·n',  meaning: { zh: '1周', en: '1 week'   } },
+  { unit: 'week', count: 2, kanji: '二週間', kana: 'にしゅうかん',   romaji: 'ni·shu·u·ka·n',   meaning: { zh: '2周', en: '2 weeks'  } },
+  { unit: 'week', count: 3, kanji: '三週間', kana: 'さんしゅうかん', romaji: 'sa·n·shu·u·ka·n', meaning: { zh: '3周', en: '3 weeks'  } },
+  { unit: 'week', count: 4, kanji: '四週間', kana: 'よんしゅうかん', romaji: 'yo·n·shu·u·ka·n', meaning: { zh: '4周', en: '4 weeks'  } },
+  // ヶ月
+  { unit: 'month', count: 1, kanji: '一ヶ月', kana: 'いっかげつ',   romaji: 'i·k·ka·ge·tsu',  meaning: { zh: '1个月', en: '1 month'   } },
+  { unit: 'month', count: 2, kanji: '二ヶ月', kana: 'にかげつ',     romaji: 'ni·ka·ge·tsu',   meaning: { zh: '2个月', en: '2 months'  } },
+  { unit: 'month', count: 3, kanji: '三ヶ月', kana: 'さんかげつ',   romaji: 'sa·n·ka·ge·tsu', meaning: { zh: '3个月', en: '3 months'  } },
+  { unit: 'month', count: 4, kanji: '四ヶ月', kana: 'よんかげつ',   romaji: 'yo·n·ka·ge·tsu', meaning: { zh: '4个月', en: '4 months'  } },
+  { unit: 'month', count: 5, kanji: '五ヶ月', kana: 'ごかげつ',     romaji: 'go·ka·ge·tsu',   meaning: { zh: '5个月', en: '5 months'  } },
+  { unit: 'month', count: 6, kanji: '六ヶ月', kana: 'ろっかげつ',   romaji: 'ro·k·ka·ge·tsu', meaning: { zh: '6个月', en: '6 months'  } },
+  // 年間
+  { unit: 'year', count: 1, kanji: '一年間', kana: 'いちねんかん', romaji: 'i·chi·nen·ka·n', meaning: { zh: '1年', en: '1 year'   } },
+  { unit: 'year', count: 2, kanji: '二年間', kana: 'にねんかん',   romaji: 'ni·nen·ka·n',    meaning: { zh: '2年', en: '2 years'  } },
+  { unit: 'year', count: 3, kanji: '三年間', kana: 'さんねんかん', romaji: 'sa·n·nen·ka·n',  meaning: { zh: '3年', en: '3 years'  } },
+  { unit: 'year', count: 4, kanji: '四年間', kana: 'よねんかん',   romaji: 'yo·nen·ka·n',    meaning: { zh: '4年', en: '4 years'  } },
+];
+
+const findDuration = (unit: DurationItem['unit'], count: number) =>
+  DURATION_DATA.find((d) => d.unit === unit && d.count === count);
+
+export function getDurationExpression(
+  granularity: Granularity,
+  anchorDayOffset: number,
+  focusDayOffset: number,
+): DurationItem | undefined {
+  const spanDays = Math.abs(focusDayOffset - anchorDayOffset);
+  if (spanDays === 0) return undefined;
+
+  if (granularity === 'week') {
+    const weeks = spanDays / 7;
+    if (Number.isInteger(weeks) && weeks >= 1 && weeks <= 4) return findDuration('week', weeks);
+    if (spanDays <= 14) return findDuration('day', spanDays);
+    return findDuration('week', Math.round(spanDays / 7));
+  }
+
+  if (granularity === 'month') {
+    const months = Math.round(spanDays / 30);
+    if (months >= 1 && months <= 6) return findDuration('month', months);
+    const weeks = Math.round(spanDays / 7);
+    if (weeks >= 1 && weeks <= 4) return findDuration('week', weeks);
+    return findDuration('month', 1);
+  }
+
+  if (granularity === 'year') {
+    const years = Math.round(spanDays / 365);
+    if (years >= 1 && years <= 4) return findDuration('year', years);
+    const months = Math.round(spanDays / 30);
+    if (months >= 1 && months <= 6) return findDuration('month', months);
+    return findDuration('year', 1);
+  }
+
+  // day granularity
+  if (spanDays <= 14) return findDuration('day', spanDays);
+  return findDuration('day', 7);
+}
 
 // ── Date label utilities ─────────────────────────────────────────────────
 

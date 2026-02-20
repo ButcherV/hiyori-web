@@ -430,7 +430,8 @@
     },
     "relative": {
       "trap_badge": "特殊读法",
-      "alt_badge": "另读"
+      "alt_badge": "另读",
+      "duration_badge": "时间段"
     },
     "granularity": {
       "day": "天",

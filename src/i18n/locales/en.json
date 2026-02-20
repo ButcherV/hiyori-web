@@ -421,7 +421,8 @@
     },
     "relative": {
       "trap_badge": "TRAP",
-      "alt_badge": "ALT."
+      "alt_badge": "ALT.",
+      "duration_badge": "DURATION"
     },
     "granularity": {
       "day": "Day",

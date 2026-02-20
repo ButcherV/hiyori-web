@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   padding: 12px 16px 24px;
+  padding-top: 0;
   box-sizing: border-box;
   gap: 12px;
   overflow-y: auto;
@@ -20,6 +21,8 @@
   width: 100%;
   height: 76px;
   flex-shrink: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Axis line running through all dots */
@@ -51,12 +54,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Kanji label — sits above the dot */
+/* Kanji label — sits above the dot, centered on the dot and free to overflow */
 .nodeKanji {
   position: absolute;
   top: 6px;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   text-align: center;
   font-size: 14px;
   font-weight: 800;
@@ -77,22 +81,19 @@
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Date label — sits below the dot */
+/* Date label — sits below the dot, centered on the dot and free to overflow */
 .nodeDate {
   position: absolute;
   bottom: 4px;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   text-align: center;
   font-size: 12px;
   font-family: 'SF Mono', 'Fira Code', monospace;
   color: #94a3b8;
   line-height: 1;
   transition: color 0.18s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 2px;
 }
 
 /* Amber dot — trap indicator (inline superscript in nodeKanji) */
@@ -123,8 +124,8 @@
 .nodeSelected .nodeDot {
   border-color: #0369a1;
   background: #0369a1;
-  width: 20px;
-  height: 20px;
+  /* width: 20px;
+  height: 20px; */
   box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.15);
 }
 
@@ -140,6 +141,66 @@
 
 .node:active .nodeDot {
   transform: scale(0.85);
+}
+
+/* Major vs minor node sizing */
+.nodeMajor {
+  flex: 2;
+}
+
+.nodeMinor {
+  flex: 1;
+}
+
+.nodeMinor .nodeDot {
+  width: 7px;
+  height: 7px;
+  border-width: 1.5px;
+}
+
+/* Major nodes share a unified accent color (dot + kanji + date all match) */
+.nodeMajor .nodeDot {
+  border-color: #94a3b8;
+}
+
+.nodeMajor .nodeKanji {
+  color: #475569;
+}
+
+.nodeMajor .nodeDate {
+  color: #475569;
+}
+
+/* In-range (between anchor and focus) */
+.nodeInRange .nodeDot {
+  border-color: #7dd3fc;
+  background: #e0f2fe;
+}
+
+/* Range highlight bar on the axis */
+.rangeHighlight {
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  transform: translateY(-50%);
+  background: #7dd3fc;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Duration badge */
+.durationBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #dcfce7;
+  color: #15803d;
+  letter-spacing: 0.05em;
+  align-self: flex-start;
+  margin-top: 10px;
+  white-space: nowrap;
 }
 
 /* ── Detail card ───────────────────────────────────────────────────────── */
