@@ -384,6 +384,10 @@
       "holiday": {
         "label": "节日",
         "title": "节日特训"
+      },
+      "relative": {
+        "label": "相对",
+        "title": "相对时间"
       }
     },
     "level1": {
@@ -416,6 +420,23 @@
         "0": "太阳", "1": "月亮", "2": "火",
         "3": "水",  "4": "木",   "5": "金", "6": "土"
       }
+    },
+    "era": {
+      "badge": "年号",
+      "section_start_year": "开始年",
+      "section_duration": "期间",
+      "ongoing": "进行中",
+      "char_meaning_divider": "字义与由来"
+    },
+    "relative": {
+      "trap_badge": "特殊读法",
+      "alt_badge": "另读"
+    },
+    "granularity": {
+      "day": "天",
+      "week": "周",
+      "month": "月",
+      "year": "年"
     },
     "month": {
       "old_name": "古称",

@@ -375,6 +375,10 @@
       "holiday": {
         "label": "Holiday",
         "title": "Holiday Intensive"
+      },
+      "relative": {
+        "label": "Relative",
+        "title": "Relative Time"
       }
     },
     "level1": {
@@ -407,6 +411,23 @@
         "0": "Sun",  "1": "Moon", "2": "Fire",
         "3": "Water","4": "Wood", "5": "Gold","6": "Earth"
       }
+    },
+    "era": {
+      "badge": "Era",
+      "section_start_year": "Start Year",
+      "section_duration": "Duration",
+      "ongoing": "Ongoing",
+      "char_meaning_divider": "Meaning & Origin"
+    },
+    "relative": {
+      "trap_badge": "TRAP",
+      "alt_badge": "ALT."
+    },
+    "granularity": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
     },
     "month": {
       "old_name": "Classical",

@@ -1,0 +1,362 @@
+/* src/pages/Dates/components/YearLearning/EraCard.module.css */
+
+/* ── Card shell ── */
+.card {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  background: var(--card-bg);
+  padding: 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 16px -4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Background symbol ── */
+.bgSymbol {
+  position: absolute;
+  top: 8px;
+  right: 24px;
+  font-family: 'HengShanSosho', serif;
+  font-size: 160px;
+  font-weight: normal;
+  color: var(--card-accent);
+  opacity: 0.05;
+  line-height: 1;
+  /* letter-spacing: 0.05em; */
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  font-weight: 900;
+}
+
+/* ── Top meta row ── */
+.topRow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--card-accent);
+  color: #fff;
+}
+
+/* ── Hero section ── */
+.heroSection {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.heroKanji {
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--card-accent);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.kanaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kana {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--card-accent);
+  opacity: 0.75;
+  margin: 0;
+}
+
+.romaji {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.38;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* ── Section label (shared) ── */
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--card-accent);
+  opacity: 0.45;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+/* ── Gannen block ── */
+.gannenBlock {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  padding: 10px 12px;
+  z-index: 1;
+}
+
+.gannenTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.gannenLeft {
+  flex: 1;
+  min-width: 0;
+}
+
+.gannenKanji {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--card-accent);
+  margin: 0 0 3px;
+  line-height: 1.2;
+}
+
+.gannenKana {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--card-sub);
+  margin: 0 0 2px;
+  opacity: 0.8;
+}
+
+.gannenRomaji {
+  font-size: 11px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.35;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+/* ── Period block ── */
+.periodBlock {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.periodTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.periodLeft {
+  flex: 1;
+  min-width: 0;
+}
+
+.dateRange {
+  font-size: 10px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.45;
+  margin: 0 0 4px;
+  letter-spacing: 0.03em;
+}
+
+.periodKanji {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--card-accent);
+  margin: 0 0 3px;
+  line-height: 1.3;
+}
+
+.periodKana {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--card-sub);
+  opacity: 0.75;
+  margin: 0 0 2px;
+}
+
+.periodRomaji {
+  font-size: 10px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--card-accent);
+  opacity: 0.3;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.periodMeta {
+  flex-shrink: 0;
+}
+
+.durationBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-accent);
+  color: var(--card-accent);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.durationCurrent {
+  background: var(--card-accent);
+  color: #fff;
+  opacity: 0.8;
+  border: none;
+}
+
+/* ── Shared audio button ── */
+.audioBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--card-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.18s,
+    transform 0.13s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audioBtn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.audioBtn:active {
+  transform: scale(0.88);
+}
+
+.audioBtnGannen,
+.audioBtnPeriod {
+  align-self: center;
+}
+
+/* ── Divider row ── */
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 10px;
+}
+
+.dividerLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--card-accent);
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--card-divider);
+}
+
+/* ── Character meaning ── */
+.charMeaningBlock {
+  margin: 0 0 10px;
+}
+
+.charMeaning {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--card-sub);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ── Source block ── */
+.sourceBlock {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.sourceTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 5px;
+}
+
+.sourceTitle {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--card-accent);
+}
+
+.sourceTitleKana {
+  font-size: 11px;
+  color: var(--card-sub);
+  opacity: 0.7;
+}
+
+.sourceDesc {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--card-sub);
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ── Cultural note ── */
+.culturalNote {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--card-sub);
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* ── Compact layout (iPhone SE etc.) ── */
+@media (max-height: 700px) {
+  .card {
+    padding: 14px 16px 18px;
+  }
+  .heroKanji {
+    font-size: 40px;
+  }
+  .kana {
+    font-size: 16px;
+  }
+  .bgSymbol {
+    font-size: 80px;
+  }
+  .culturalNote,
+  .charMeaning,
+  .sourceDesc {
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+}

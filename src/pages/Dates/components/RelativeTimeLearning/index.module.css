@@ -1,0 +1,311 @@
+/* src/pages/Dates/components/RelativeTimeLearning/index.module.css */
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px 24px;
+  box-sizing: border-box;
+  gap: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Timeline ─────────────────────────────────────────────────────────── */
+
+.timeline {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+/* Axis line running through all dots */
+.timelineAxis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #cbd5e1 8%,
+    #cbd5e1 92%,
+    transparent
+  );
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ── Node ── */
+.node {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Kanji label — sits above the dot */
+.nodeKanji {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #64748b;
+  line-height: 1;
+  transition: color 0.18s;
+}
+
+/* Circle dot ON the axis */
+.nodeDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  background: white;
+  z-index: 1;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Date label — sits below the dot */
+.nodeDate {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: #94a3b8;
+  line-height: 1;
+  transition: color 0.18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+}
+
+/* Amber dot — trap indicator (inline superscript in nodeKanji) */
+.trapDot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f59e0b;
+  vertical-align: super;
+  margin-left: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Node states ── */
+
+/* Today/current (offset=0) */
+.nodeCurrent .nodeDot {
+  border-color: #0ea5e9;
+  background: #e0f2fe;
+}
+
+.nodeCurrent .nodeKanji {
+  color: #0369a1;
+}
+
+/* Selected */
+.nodeSelected .nodeDot {
+  border-color: #0369a1;
+  background: #0369a1;
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.15);
+}
+
+.nodeSelected .nodeKanji {
+  color: #0369a1;
+  font-weight: 900;
+}
+
+.nodeSelected .nodeDate {
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.node:active .nodeDot {
+  transform: scale(0.85);
+}
+
+/* ── Detail card ───────────────────────────────────────────────────────── */
+
+.detail {
+  flex: 1;
+  background: #f0f9ff;
+  border-radius: 20px;
+  padding: 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* Hero */
+.heroRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.heroKanji {
+  font-size: 52px;
+  font-weight: 900;
+  color: #0369a1;
+  line-height: 1;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.trapBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #fef3c7;
+  color: #b45309;
+  letter-spacing: 0.05em;
+  align-self: flex-start;
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+/* Translation meaning */
+.meaning {
+  font-size: 17px;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 12px;
+}
+
+/* Kana + audio */
+.kanaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.kana {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0369a1;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* Romaji */
+.romaji {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: #0369a1;
+  opacity: 0.38;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px;
+}
+
+/* Alt reading row */
+.altRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.altBadge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #bae6fd;
+  color: #0369a1;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.altKanji {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e3a5f;
+}
+
+.altKana {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.altRomaji {
+  font-size: 10.5px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: #94a3b8;
+  flex: 1;
+  letter-spacing: 0.03em;
+}
+
+/* Note */
+.note {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #475569;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ── Audio button ─────────────────────────────────────────────────────── */
+
+.audioBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.8);
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.18s,
+    transform 0.13s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audioBtn:active {
+  transform: scale(0.88);
+}
+
+/* ── Compact layout ───────────────────────────────────────────────────── */
+
+@media (max-height: 700px) {
+  .heroKanji {
+    font-size: 40px;
+  }
+  .kana {
+    font-size: 16px;
+  }
+  .timeline {
+    height: 64px;
+  }
+}

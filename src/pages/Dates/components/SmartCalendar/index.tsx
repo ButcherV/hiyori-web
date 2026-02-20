@@ -9,6 +9,9 @@ import { CalendarHeader } from './CalendarHeader';
 import { WeekRow } from './WeekRow';
 import { CalendarGrid } from './CalendarGrid';
 import { MonthCanvas } from '../MonthLearning/MonthCanvas';
+import { EraCanvas } from '../YearLearning/EraCanvas';
+import { GranularityCanvas } from '../RelativeTimeLearning/GranularityCanvas';
+import { type Granularity } from '../../Datas/RelativeTimeData';
 
 interface SmartCalendarProps {
   date: Date;
@@ -16,6 +19,10 @@ interface SmartCalendarProps {
   onDateSelect: (date: Date) => void;
   activeMonth?: number;
   onMonthSelect?: (m: number) => void;
+  activeEraKey?: string;
+  onEraSelect?: (key: string) => void;
+  activeGranularity?: Granularity;
+  onGranularitySelect?: (g: Granularity) => void;
   onMonthChange: (offset: number) => void;
   slideDirection: number;
   // 🟢 新增 Props
@@ -45,6 +52,10 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   onDateSelect,
   activeMonth = 1,
   onMonthSelect = () => {},
+  activeEraKey = 'reiwa',
+  onEraSelect = () => {},
+  activeGranularity = 'day',
+  onGranularitySelect = () => {},
   onMonthChange,
   slideDirection,
   // 🟢 解构
@@ -55,14 +66,17 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   const isDayMode = activeMode === 'day';
   const isWeekMode = activeMode === 'week';
   const isMonthMode = activeMode === 'month';
+  const isYearMode = activeMode === 'year';
   const isHolidayMode = activeMode === 'holiday';
-  const isFocusMode = isDayMode || isWeekMode || isMonthMode;
+  const isRelativeMode = activeMode === 'relative';
+  const isFocusMode = isDayMode || isWeekMode || isMonthMode || isYearMode || isRelativeMode;
 
-  const [focusType, setFocusType] = useState<'day' | 'week' | 'month' | null>(
+  const [focusType, setFocusType] = useState<'day' | 'week' | 'month' | 'year' | 'relative' | null>(
     () => {
       if (isDayMode) return 'day';
       if (isWeekMode) return 'week';
       if (isMonthMode) return 'month';
+      if (isYearMode) return 'year';
       return null;
     }
   );
@@ -71,7 +85,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
   const [weekSectionCollapsed, setWeekSectionCollapsed] = useState(false);
   const [gridSectionCollapsed, setGridSectionCollapsed] = useState(false);
   const [headerContentVisible, setHeaderContentVisible] = useState(true);
-  const [headerMode, setHeaderMode] = useState<'calendar' | 'month'>(
+  const [headerMode, setHeaderMode] = useState<'calendar' | 'month' | 'year' | 'relative'>(
     'calendar'
   );
   const [showLearningContent, setShowLearningContent] = useState(false);
@@ -104,6 +118,16 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         setWeekSectionCollapsed(true);
         setGridSectionCollapsed(true);
         setHeaderMode('month');
+      } else if (isYearMode) {
+        setFocusType('year');
+        setWeekSectionCollapsed(true);
+        setGridSectionCollapsed(true);
+        setHeaderMode('year');
+      } else if (isRelativeMode) {
+        setFocusType('relative');
+        setWeekSectionCollapsed(true);
+        setGridSectionCollapsed(true);
+        setHeaderMode('relative');
       }
       return;
     }
@@ -114,6 +138,10 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
 
     const isEnteringMonth = isMonthMode && prevMode === 'overview';
     const isExitingMonth = !isMonthMode && prevMode === 'month';
+    const isEnteringYear = isYearMode && prevMode === 'overview';
+    const isExitingYear = !isYearMode && prevMode === 'year';
+    const isEnteringRelative = isRelativeMode && prevMode === 'overview';
+    const isExitingRelative = !isRelativeMode && prevMode === 'relative';
     const isEnteringDayOrWeek =
       (isDayMode || isWeekMode) && prevMode === 'overview';
     const isExitingDayOrWeek =
@@ -133,6 +161,50 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
         }, 300);
       }, 300);
     } else if (isExitingMonth) {
+      setHeaderContentVisible(false);
+      t1 = window.setTimeout(() => {
+        setHeaderMode('calendar');
+        setHeaderContentVisible(true);
+        t2 = window.setTimeout(() => {
+          setWeekSectionCollapsed(false);
+          setGridSectionCollapsed(false);
+          setFocusType(null);
+        }, 300);
+      }, 300);
+    } else if (isEnteringYear) {
+      setFocusType('year');
+      setWeekSectionCollapsed(true);
+      setGridSectionCollapsed(true);
+      t1 = window.setTimeout(() => {
+        setHeaderContentVisible(false);
+        t2 = window.setTimeout(() => {
+          setHeaderMode('year');
+          setHeaderContentVisible(true);
+        }, 300);
+      }, 300);
+    } else if (isExitingYear) {
+      setHeaderContentVisible(false);
+      t1 = window.setTimeout(() => {
+        setHeaderMode('calendar');
+        setHeaderContentVisible(true);
+        t2 = window.setTimeout(() => {
+          setWeekSectionCollapsed(false);
+          setGridSectionCollapsed(false);
+          setFocusType(null);
+        }, 300);
+      }, 300);
+    } else if (isEnteringRelative) {
+      setFocusType('relative');
+      setWeekSectionCollapsed(true);
+      setGridSectionCollapsed(true);
+      t1 = window.setTimeout(() => {
+        setHeaderContentVisible(false);
+        t2 = window.setTimeout(() => {
+          setHeaderMode('relative');
+          setHeaderContentVisible(true);
+        }, 300);
+      }, 300);
+    } else if (isExitingRelative) {
       setHeaderContentVisible(false);
       t1 = window.setTimeout(() => {
         setHeaderMode('calendar');
@@ -178,7 +250,7 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, [activeMode, isDayMode, isWeekMode, isMonthMode, isFocusMode]);
+  }, [activeMode, isDayMode, isWeekMode, isMonthMode, isYearMode, isRelativeMode, isFocusMode]);
 
   const renderHeaderContent = () => {
     return (
@@ -190,6 +262,16 @@ export const SmartCalendar: React.FC<SmartCalendarProps> = ({
           <MonthCanvas
             activeMonth={activeMonth}
             onMonthSelect={onMonthSelect}
+          />
+        ) : headerMode === 'year' ? (
+          <EraCanvas
+            activeEraKey={activeEraKey}
+            onEraSelect={onEraSelect}
+          />
+        ) : headerMode === 'relative' ? (
+          <GranularityCanvas
+            active={activeGranularity}
+            onSelect={onGranularitySelect}
           />
         ) : (
           <CalendarHeader

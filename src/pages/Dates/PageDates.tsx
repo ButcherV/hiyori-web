@@ -20,12 +20,16 @@ import { WeekCanvas } from './components/WeekLearning/WeekCanvas';
 import { WeekLearning } from './components/WeekLearning';
 import { MonthLearning } from './components/MonthLearning';
 import { HolidayLearning } from './components/HolidayLearning';
+import { YearLearning } from './components/YearLearning';
+import { RelativeTimeLearning } from './components/RelativeTimeLearning';
+import { type Granularity } from './Datas/RelativeTimeData';
 import { DayHelpContent } from './components/DateHelp/DayHelpContent';
 import { MonthHelpContent } from './components/DateHelp/MonthHelpContent';
 import { HolidayHelpContent } from './components/DateHelp/HolidayHelpContent';
 import BottomSheet from '../../components/BottomSheet';
 import { type DateType } from './Datas/DayData';
 import { findFirstHolidayInMonth } from '../../utils/dateHelper';
+import { getYearData } from './Datas/YearData';
 
 export type NavMode =
   | 'overview'
@@ -49,6 +53,10 @@ export const PageDates = () => {
   const [activeMode, setActiveMode] = useState<NavMode>('overview');
   const [filterType, setFilterType] = useState<DateType | null>(null);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [activeEraKey, setActiveEraKey] = useState(
+    () => getYearData(new Date().getFullYear()).era.key
+  );
+  const [activeGranularity, setActiveGranularity] = useState<Granularity>('day');
 
   const HELP_MODES: NavMode[] = ['day', 'month', 'holiday'];
   const hasHelp = HELP_MODES.includes(activeMode);
@@ -69,6 +77,7 @@ export const PageDates = () => {
     month: t('date_study.levels.months.title'),
     year: t('date_study.levels.years.title'),
     holiday: t('date_study.levels.holiday.title'),
+    relative: t('date_study.levels.relative.title'),
   };
   const pageTitle = pageTitleMap[activeMode] ?? t('date_study.title');
   const isFocusMode = activeMode !== 'overview';
@@ -79,6 +88,9 @@ export const PageDates = () => {
     }
     if (activeMode === 'month') {
       setActiveMonth(selectedDate.getMonth() + 1);
+    }
+    if (activeMode === 'year') {
+      setActiveEraKey(getYearData(selectedDate.getFullYear()).era.key);
     }
   }, [activeMode, selectedDate]);
 
@@ -205,6 +217,17 @@ export const PageDates = () => {
         );
       case 'holiday':
         return <HolidayLearning selectedDate={selectedDate} />;
+      case 'year':
+        return (
+          <YearLearning
+            activeEraKey={activeEraKey}
+            onEraSelect={setActiveEraKey}
+          />
+        );
+      case 'relative':
+        return (
+          <RelativeTimeLearning granularity={activeGranularity} />
+        );
       default:
         return <div className={styles.debugBox}>WIP: {activeMode}</div>;
     }
@@ -251,6 +274,10 @@ export const PageDates = () => {
             slideDirection={slideDirection}
             activeMonth={activeMonth}
             onMonthSelect={setActiveMonth}
+            activeEraKey={activeEraKey}
+            onEraSelect={setActiveEraKey}
+            activeGranularity={activeGranularity}
+            onGranularitySelect={setActiveGranularity}
             // 🟢 3. 传入边界状态
             canPrevMonth={canPrevMonth}
             canNextMonth={canNextMonth}

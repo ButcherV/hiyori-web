@@ -5,6 +5,7 @@
   flex-direction: column;
   gap: 24px;
   color: var(--color-Gray9);
+  padding-bottom: 40px;
 }
 
 /* ── Section ── */
@@ -64,10 +65,20 @@
   flex-shrink: 0;
 }
 
-.badge_rune    { background: var(--color-type-rune-bg);   }
-.badge_mutant  { background: var(--color-type-mutant-bg); color: white; }
-.badge_trap    { background: var(--color-type-trap-bg);   color: var(--color-type-trap-text); }
-.badge_regular { background: #9ca3af; }
+.badge_rune {
+  background: var(--color-type-rune-bg);
+}
+.badge_mutant {
+  background: var(--color-type-mutant-bg);
+  color: white;
+}
+.badge_trap {
+  background: var(--color-type-trap-bg);
+  color: var(--color-type-trap-text);
+}
+.badge_regular {
+  background: #9ca3af;
+}
 
 .typeName {
   font-size: 13px;
