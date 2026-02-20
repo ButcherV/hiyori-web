@@ -129,6 +129,7 @@ export interface TimelineNode {
   type: 'major' | 'minor';
   dayOffset: number;
   unitOffset?: number; // major unit offset (week/month/year offset)
+  flex?: number;       // override CSS flex value (default: major=2, minor=1)
 }
 
 // ── Day reading tables ────────────────────────────────────────────────────
@@ -240,33 +241,36 @@ export const generateTimelineNodes = (granularity: Granularity): TimelineNode[] 
   }
 
   if (granularity === 'month') {
+    // 3 minor nodes per gap = 3 inter-week dividers within a month (4 weeks).
+    // flex:2 on each minor → total flex = 5×2 + 12×2 = 34, same as week view.
     const majorDayOffsets = [-60, -30, 0, 30, 60];
     const nodes: TimelineNode[] = [];
     majorDayOffsets.forEach((mday, i) => {
       nodes.push({ type: 'major', dayOffset: mday, unitOffset: i - 2 });
       if (i < 4) {
-        const step = 30 / 4; // 7.5 days per minor step
+        const step = 30 / 4; // 7.5 days per minor step (quarter-month)
         for (let j = 1; j <= 3; j++) {
-          nodes.push({ type: 'minor', dayOffset: Math.round(mday + step * j) });
+          nodes.push({ type: 'minor', dayOffset: Math.round(mday + step * j), flex: 2 });
         }
       }
     });
-    return nodes; // 17 nodes
+    return nodes; // 17 nodes, flex total = 34
   }
 
-  // year
+  // year — 3 minor nodes per gap = quarters (Q1/Q2/Q3 dividers).
+  // flex:2 on each minor → total flex = 5×2 + 12×2 = 34, same as week view.
   const majorDayOffsets = [-730, -365, 0, 365, 730];
   const nodes: TimelineNode[] = [];
   majorDayOffsets.forEach((yday, i) => {
     nodes.push({ type: 'major', dayOffset: yday, unitOffset: i - 2 });
     if (i < 4) {
-      const step = 365 / 4; // ~91 days per minor step
+      const step = 365 / 4; // ~91 days per minor step (quarter-year)
       for (let j = 1; j <= 3; j++) {
-        nodes.push({ type: 'minor', dayOffset: Math.round(yday + step * j) });
+        nodes.push({ type: 'minor', dayOffset: Math.round(yday + step * j), flex: 2 });
       }
     }
   });
-  return nodes; // 17 nodes
+  return nodes; // 17 nodes, flex total = 34
 };
 
 // ── Duration data ─────────────────────────────────────────────────────────

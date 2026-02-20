@@ -13,7 +13,7 @@ import {
   getRelativeItem,
   getMinorNodeItem,
   getDurationExpression,
-  getDateLabel,
+  // getDateLabel,
 } from '../../Datas/RelativeTimeData';
 import styles from './index.module.css';
 
@@ -32,7 +32,10 @@ function getTodayIdx(nodes: TimelineNode[]): number {
 }
 
 /** Date label for any node — compact format for dense views. */
-function getNodeDateLabel(granularity: Granularity, node: TimelineNode): string {
+function getNodeDateLabel(
+  granularity: Granularity,
+  node: TimelineNode
+): string {
   const today = new Date();
 
   if (node.type === 'minor' || granularity === 'day') {
@@ -74,24 +77,38 @@ const PointCard: React.FC<{ item: PointItem }> = ({ item }) => {
       <div className={styles.heroRow}>
         <p className={`${styles.heroKanji} jaFont`}>{item.kanji}</p>
         {item.trap && (
-          <span className={styles.trapBadge}>{t('date_study.relative.trap_badge')}</span>
+          <span className={styles.trapBadge}>
+            {t('date_study.relative.trap_badge')}
+          </span>
         )}
       </div>
       <p className={styles.meaning}>{item.meaning[locale]}</p>
       <div className={styles.kanaRow}>
         <p className={`${styles.kana} jaFont`}>{item.kana}</p>
-        <button className={styles.audioBtn} onClick={() => speak(item.kana)} aria-label={`Play ${item.kana}`}>
+        <button
+          className={styles.audioBtn}
+          onClick={() => speak(item.kana)}
+          aria-label={`Play ${item.kana}`}
+        >
           <Volume2 size={15} />
         </button>
       </div>
       <p className={styles.romaji}>{item.romaji}</p>
       {item.altKana && (
         <div className={styles.altRow}>
-          <span className={styles.altBadge}>{t('date_study.relative.alt_badge')}</span>
-          {item.altKanji && <span className={`${styles.altKanji} jaFont`}>{item.altKanji}</span>}
+          <span className={styles.altBadge}>
+            {t('date_study.relative.alt_badge')}
+          </span>
+          {item.altKanji && (
+            <span className={`${styles.altKanji} jaFont`}>{item.altKanji}</span>
+          )}
           <span className={`${styles.altKana} jaFont`}>{item.altKana}</span>
           <span className={styles.altRomaji}>{item.altRomaji}</span>
-          <button className={styles.audioBtn} onClick={() => speak(item.altKana!)} aria-label={`Play ${item.altKana}`}>
+          <button
+            className={styles.audioBtn}
+            onClick={() => speak(item.altKana!)}
+            aria-label={`Play ${item.altKana}`}
+          >
             <Volume2 size={13} />
           </button>
         </div>
@@ -111,12 +128,18 @@ const DurationCard: React.FC<{ item: DurationItem }> = ({ item }) => {
     <div className={styles.detail}>
       <div className={styles.heroRow}>
         <p className={`${styles.heroKanji} jaFont`}>{item.kanji}</p>
-        <span className={styles.durationBadge}>{t('date_study.relative.duration_badge')}</span>
+        <span className={styles.durationBadge}>
+          {t('date_study.relative.duration_badge')}
+        </span>
       </div>
       <p className={styles.meaning}>{item.meaning[locale]}</p>
       <div className={styles.kanaRow}>
         <p className={`${styles.kana} jaFont`}>{item.kana}</p>
-        <button className={styles.audioBtn} onClick={() => speak(item.kana)} aria-label={`Play ${item.kana}`}>
+        <button
+          className={styles.audioBtn}
+          onClick={() => speak(item.kana)}
+          aria-label={`Play ${item.kana}`}
+        >
           <Volume2 size={15} />
         </button>
       </div>
@@ -128,8 +151,12 @@ const DurationCard: React.FC<{ item: DurationItem }> = ({ item }) => {
 
 // ── Main component ────────────────────────────────────────────────────────
 
-export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ granularity }) => {
-  const [nodes, setNodes] = useState<TimelineNode[]>(() => generateTimelineNodes(granularity));
+export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({
+  granularity,
+}) => {
+  const [nodes, setNodes] = useState<TimelineNode[]>(() =>
+    generateTimelineNodes(granularity)
+  );
 
   // Auto-select "today" on first load
   const [selection, setSelection] = useState<Selection>(() => {
@@ -162,14 +189,19 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
         if (!ref) return;
         const { left, width } = ref.getBoundingClientRect();
         const dist = Math.abs(clientX - (left + width / 2));
-        if (dist < bestDist) { bestDist = dist; best = i; }
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
       });
       return best;
     };
 
     // Mutable drag state — lives inside this effect closure
     let phase: 'idle' | 'pending' | 'horizontal' | 'vertical' = 'idle';
-    let startX = 0, startY = 0, anchor = 0;
+    let startX = 0,
+      startY = 0,
+      anchor = 0;
 
     const onStart = (e: TouchEvent) => {
       const t = e.touches[0];
@@ -205,7 +237,9 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
       setSelection({ anchor, focus: focusIdx });
     };
 
-    const onEnd = () => { phase = 'idle'; };
+    const onEnd = () => {
+      phase = 'idle';
+    };
 
     // touchstart can be passive (no preventDefault needed there)
     el.addEventListener('touchstart', onStart, { passive: true });
@@ -223,8 +257,8 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
   // ── Derived state ──────────────────────────────────────────────────────
 
   const isRange = selection.anchor !== selection.focus;
-  const minIdx  = Math.min(selection.anchor, selection.focus);
-  const maxIdx  = Math.max(selection.anchor, selection.focus);
+  const minIdx = Math.min(selection.anchor, selection.focus);
+  const maxIdx = Math.max(selection.anchor, selection.focus);
 
   const pointItem: PointItem | undefined = (() => {
     if (isRange) return undefined;
@@ -245,19 +279,25 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
 
   // Range highlight bar geometry — measured from actual node DOM positions
   // so that padding on the timeline doesn't throw off the bar's placement.
-  const [rangeBar, setRangeBar] = useState<{ left: string; right: string } | null>(null);
+  const [rangeBar, setRangeBar] = useState<{
+    left: string;
+    right: string;
+  } | null>(null);
 
   useEffect(() => {
-    if (!isRange) { setRangeBar(null); return; }
+    if (!isRange) {
+      setRangeBar(null);
+      return;
+    }
     const tlEl = timelineRef.current;
     const minEl = nodeRefs.current[minIdx];
     const maxEl = nodeRefs.current[maxIdx];
     if (!tlEl || !minEl || !maxEl) return;
-    const tlRect  = tlEl.getBoundingClientRect();
+    const tlRect = tlEl.getBoundingClientRect();
     const minRect = minEl.getBoundingClientRect();
     const maxRect = maxEl.getBoundingClientRect();
-    const leftPx  = (minRect.left + minRect.width  / 2) - tlRect.left;
-    const rightPx = tlRect.right  - (maxRect.left  + maxRect.width / 2);
+    const leftPx = minRect.left + minRect.width / 2 - tlRect.left;
+    const rightPx = tlRect.right - (maxRect.left + maxRect.width / 2);
     setRangeBar({ left: `${leftPx}px`, right: `${rightPx}px` });
   }, [isRange, minIdx, maxIdx]);
 
@@ -268,7 +308,6 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
 
   return (
     <div className={styles.container}>
-
       {/* ── Timeline ── */}
       <div ref={timelineRef} className={styles.timeline}>
         <div className={styles.timelineAxis} />
@@ -279,16 +318,21 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
         )}
 
         {nodes.map((node, idx) => {
-          const isMajor   = node.type === 'major';
-          const isEndpoint = idx === selection.anchor || idx === selection.focus;
-          const inRange    = isRange && idx > minIdx && idx < maxIdx;
-          const isCurrent  = node.dayOffset === 0;
-          const nodeItem   = isMajor ? getRelativeItem(granularity, node.unitOffset!) : null;
+          const isMajor = node.type === 'major';
+          const isEndpoint =
+            idx === selection.anchor || idx === selection.focus;
+          const inRange = isRange && idx > minIdx && idx < maxIdx;
+          const isCurrent = node.dayOffset === 0;
+          const nodeItem = isMajor
+            ? getRelativeItem(granularity, node.unitOffset!)
+            : null;
 
           return (
             <div
               key={idx}
-              ref={(el) => { nodeRefs.current[idx] = el; }}
+              ref={(el) => {
+                nodeRefs.current[idx] = el;
+              }}
               className={[
                 styles.node,
                 isMajor ? styles.nodeMajor : styles.nodeMinor,
@@ -296,6 +340,7 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
                 isCurrent && !isEndpoint ? styles.nodeCurrent : '',
                 inRange ? styles.nodeInRange : '',
               ].join(' ')}
+              style={node.flex !== undefined ? { flex: node.flex } : undefined}
             >
               {isMajor && (
                 <>
@@ -304,7 +349,9 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
                     {nodeItem?.trap && <span className={styles.trapDot} />}
                   </span>
                   <div className={styles.nodeDot} />
-                  <span className={styles.nodeDate}>{getNodeDateLabel(granularity, node)}</span>
+                  <span className={styles.nodeDate}>
+                    {getNodeDateLabel(granularity, node)}
+                  </span>
                 </>
               )}
               {!isMajor && <div className={styles.nodeDot} />}
@@ -315,8 +362,9 @@ export const RelativeTimeLearning: React.FC<RelativeTimeLearningProps> = ({ gran
 
       {/* ── Card ── */}
       {!isRange && pointItem && <PointCard key={cardKey} item={pointItem} />}
-      {isRange && durationItem && <DurationCard key={cardKey} item={durationItem} />}
-
+      {isRange && durationItem && (
+        <DurationCard key={cardKey} item={durationItem} />
+      )}
     </div>
   );
 };
