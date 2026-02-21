@@ -112,6 +112,8 @@
   color: #8e8e93;
   font-family: monospace;
   letter-spacing: 0.5px;
+  display: flex;
+  gap: 12px;
 }
 
 /* 状态样式 */

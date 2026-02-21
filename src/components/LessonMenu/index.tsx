@@ -136,9 +136,8 @@ const LessonMenu: React.FC<LessonMenuProps> = ({ script, onSelect }) => {
               item={item}
               status={status}
               onClick={() => {
-                const targetChars = item.preview.split(' ');
                 if (onSelect) {
-                  onSelect(item.id, targetChars);
+                  onSelect(item.id, item.preview);
                 }
               }}
             />

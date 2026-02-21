@@ -85,16 +85,17 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
           </>
         );
       }
-      if (data.wordEmoji) {
-        return (
-          <>
-            <div className={`${styles.furigana} ${commonStyles.jaFont}`}>
-              {data.wordKana}
-            </div>
+      return (
+        <>
+          <div className={`${styles.furigana} ${commonStyles.jaFont}`}>
+            {data.wordKana}
+          </div>
+          {!!data.wordEmoji && (
             <div className={styles.emoji}>{data.wordEmoji}</div>
-          </>
-        );
-      }
+          )}
+        </>
+      );
+
       return null;
     };
 
@@ -126,7 +127,11 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
   }
 
   // 2. 片假名情况 (k-seion, k-dakuon, k-yoon)
-  if (data.kind === 'k-seion' || data.kind === 'k-dakuon' || data.kind === 'k-yoon') {
+  if (
+    data.kind === 'k-seion' ||
+    data.kind === 'k-dakuon' ||
+    data.kind === 'k-yoon'
+  ) {
     const badge = data.wordOrigin ? getOriginBadge(data.wordOrigin) : null;
 
     return (

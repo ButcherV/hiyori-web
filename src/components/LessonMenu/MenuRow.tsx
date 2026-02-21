@@ -19,7 +19,14 @@ export const MenuRow: React.FC<MenuRowProps> = ({ item, status, onClick }) => {
     <div className={className} onClick={onClick}>
       <div className={styles.info}>
         <div className={styles.title}>{item.title}</div>
-        <div className={styles.subtitle}>{item.preview}</div>
+        <div className={styles.subtitle}>
+          {item.preview.map((kana, index) => (
+            <span key={index} className="jaFont">
+              {kana}
+              {index < item.preview.length - 1 && ' '}
+            </span>
+          ))}
+        </div>
       </div>
       <div className={styles.iconBox}>
         {status === 'mastered' && <Check size={18} strokeWidth={3} />}
