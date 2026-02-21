@@ -13,7 +13,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordRomaji: 'a·i',
     wordMeaning: { en: 'love', zh: '爱', zhHant: '愛' },
 
-    wordEmoji: '❤️', // 该单词尽可能是简单名词，有对应的 emoji
+    wordEmoji: '❤️', // 该单词尽可能是简单名词，有对应的 emoji。如果词合适，而没有 emoji，也不要强行匹配一个 emoji
     kanaDistractors: ['お', 'め', 'ぬ'], // 该假名的形近，三个以上
     romajiDistractors: ['o', 'ou', 'au', 'u'], // 该假名的音近，三个以上
     wordDistractors: ['いあ', 'あえ', 'めい', 'おい'], // 与 wordKana 的形似，三个以上

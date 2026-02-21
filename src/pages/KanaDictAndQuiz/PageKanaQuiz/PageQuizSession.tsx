@@ -320,7 +320,7 @@ export const PageQuizSession = () => {
 
     const isWordQuiz =
       currentItem.type === 'QUIZ' && currentItem.quizType === 'WORD';
-    const isKatakana = currentItem.data.kind === 'k-seion';
+    const isKatakana = currentItem.data.kind.startsWith('k-');
 
     if (isWordQuiz && isKatakana) {
       return {

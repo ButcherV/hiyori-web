@@ -30,7 +30,9 @@ export const KanaCard: React.FC<Props> = ({ data, onPlaySound }) => {
     data.kind === 'h-seion' ||
     data.kind === 'h-dakuon' ||
     data.kind === 'h-yoon' ||
-    data.kind === 'k-seion'
+    data.kind === 'k-seion' ||
+    data.kind === 'k-dakuon' ||
+    data.kind === 'k-yoon'
   ) {
     return (
       <div className={styles.container}>

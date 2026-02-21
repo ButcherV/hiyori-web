@@ -90,7 +90,9 @@ const createQuizGroup = (
       sub = data.wordMeaning;
       answer = data.wordKana;
       distractors = data.wordDistractors; // 这里是 ['あえ', 'うえ'...]
-    } else if (data.kind === 'k-seion') {
+    } else if (data.kind === 'k-seion' ||
+      data.kind === 'k-dakuon' ||
+      data.kind === 'k-yoon') {
       if (!data.wordDistractors) return [];
       // 🔵 片假名模式：答案是“写法” (显示 アイス)
       // 题目逻辑：用户看着意思，选写法
@@ -197,10 +199,10 @@ const generateHiraganaFlow = (
 };
 
 /**
- * 策略 B: 片假名清音排课逻辑
+ * 策略 B: 片假名清音、片假名浊音排课逻辑
  * 逻辑：认脸 -> 单词 -> 描红 -> 测验
  */
-const generateKatakanaSeionFlow = (
+const generateKatakanaFlow = (
   data: AnyKanaData
 ): {
   learn: LessonCard[];
@@ -298,6 +300,53 @@ const generateHiraganaYoonFlow = (
   return { learn, quizGroups };
 };
 
+/**
+ * 策略 D: 片假名拗音排课策略 (无描红)
+ * 逻辑：认脸 -> 单词 -> 测验
+ */
+const generateKatakanaYoonFlow = (
+  data: AnyKanaData
+): {
+  learn: LessonCard[];
+  quizGroups: LessonCard[][];
+} => {
+  const learn: LessonCard[] = [];
+  const quizGroups: LessonCard[][] = [];
+
+  // 1. 认脸
+  learn.push({
+    uniqueId: `learn-kana-${data.id}`,
+    type: 'KANA_LEARN',
+    data,
+    headerTitle: 'studyKana.session.newKana',
+    isOriginal: true,
+  });
+
+  // 2. 单词 (拗音通常都有单词)
+  if (data.word) {
+    learn.push({
+      uniqueId: `learn-word-${data.id}`,
+      type: 'WORD_LEARN',
+      data,
+      headerTitle: 'studyKana.session.wordContext',
+      isOriginal: true,
+    });
+  }
+
+  // ❌ 3. 描红：跳过！
+  // 因为 KanjiSVG 没有对应的数据
+
+  // 4. 测验
+  quizGroups.push(createQuizGroup(data, 'ROMAJI', true));
+  quizGroups.push(createQuizGroup(data, 'KANA', true));
+
+  if (data.word) {
+    quizGroups.push(createQuizGroup(data, 'WORD', true));
+  }
+
+  return { learn, quizGroups };
+};
+
 // ==========================================
 // 4. 主流程生成器
 // ==========================================
@@ -338,8 +387,15 @@ export const generateWaveSequence = (targetChars: string[]): LessonCard[] => {
         allQuizGroups.push(...quizGroups);
         break;
       }
-      case 'k-seion': {
-        const { learn, quizGroups } = generateKatakanaSeionFlow(data);
+      case 'k-seion':
+      case 'k-dakuon':  {
+        const { learn, quizGroups } = generateKatakanaFlow(data);
+        allLearn.push(...learn);
+        allQuizGroups.push(...quizGroups);
+        break;
+      }
+      case 'k-yoon': {
+        const { learn, quizGroups } = generateKatakanaYoonFlow(data);
         allLearn.push(...learn);
         allQuizGroups.push(...quizGroups);
         break;

@@ -66,6 +66,7 @@
   padding-bottom: 20px;
   /* 🔥 给一个最小高度，防止切换瞬间高度坍塌 */
   min-height: 200px;
+  max-height: 440px;
   overflow-anchor: none;
   background-color: white;
 }

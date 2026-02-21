@@ -38,8 +38,18 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         return { icon: '🇳🇱', label: 'Dutch' };
       case 'sv':
         return { icon: '🇸🇪', label: 'Sweden' };
+      case 'ru':
+        return { icon: '🇷🇺', label: 'Russia' };
+      case 'it':
+        return { icon: '🇮🇹', label: 'Italian' };
+      case 'zh':
+        return { icon: '🇨🇳', label: 'Chinese' };
       case 'ja':
         return { icon: '🇯🇵', label: 'Japan Origin' };
+      case 'es':
+        return { icon: '🇪🇸', label: 'Spanish' };
+      case 'ko':
+        return { icon: '🇰🇷', label: 'Korean' };
       default:
         return null;
     }
@@ -115,8 +125,8 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
     );
   }
 
-  // 2. 片假名情况
-  if (data.kind === 'k-seion') {
+  // 2. 片假名情况 (k-seion, k-dakuon, k-yoon)
+  if (data.kind === 'k-seion' || data.kind === 'k-dakuon' || data.kind === 'k-yoon') {
     const badge = data.wordOrigin ? getOriginBadge(data.wordOrigin) : null;
 
     return (

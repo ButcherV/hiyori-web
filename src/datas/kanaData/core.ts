@@ -14,12 +14,16 @@ export interface WordOrigin {
     | 'en-US'
     | 'en-GB'
     | 'de'
+    | 'ru'
     | 'fr'
     | 'pt'
     | 'nl'
     | 'it'
+    | 'zh'
     | 'ja'
     | 'sv'
+    | 'es'
+    | 'ko'
     | 'other'; // 语言代码
   word: string; // 原词写法 (例如 "Arbeit", "Pão")
   desc?: string; // 备注 (可选，例如 "和制英语", "拟声词")
@@ -83,6 +87,29 @@ export interface KatakanaSeion {
   wordNoteKey?: string;
 }
 
+// --- 片假名浊音 (Dakuon) ---
+export interface KatakanaDakuon {
+  kind: 'k-dakuon';
+  id: string;
+  kana: string;
+  romaji: string;
+  kanaKanjiOrigin: string;
+
+  kanaDistractors: readonly string[];
+  romajiDistractors: readonly string[];
+
+  word?: string;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordOrigin?: WordOrigin;
+  wordKana?: string;
+  wordDistractors?: readonly string[];
+
+  noteKey?: string;
+  wordNoteKey?: string;
+}
+
 // --- 平假名浊音 (Dakuon) ---
 export interface HiraganaDakuon {
   kind: 'h-dakuon'; // 唯一标识
@@ -124,11 +151,35 @@ export interface HiraganaYoon {
   wordNoteKey?: string;
 }
 
+// --- 片假名拗音 (Yoon) ---
+export interface KatakanaYoon {
+  kind: 'k-yoon'; // 唯一标识
+  id: string;
+  kana: string; // 例如 "キャ"
+  romaji: string; // 例如 "kya"
+  kanaKanjiOrigin: string; // 例如 "From キ + small ャ"
+  kanaDistractors: readonly string[];
+  romajiDistractors: readonly string[];
+
+  word?: string;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordOrigin?: WordOrigin;
+  wordKana?: string;
+  wordDistractors?: readonly string[];
+
+  noteKey?: string;
+  wordNoteKey?: string;
+}
+
 export type AnyKanaData =
   | HiraganaSeion
   | KatakanaSeion
   | HiraganaDakuon
-  | HiraganaYoon;
+  | KatakanaDakuon
+  | HiraganaYoon
+  | KatakanaYoon;
 
 // ==========================================
 // 3. 构造工厂
@@ -276,6 +327,80 @@ export const defineHYoon = <
 }): HiraganaYoon => {
   return {
     kind: 'h-yoon',
+    ...data,
+    kanaDistractors: data.kanaDistractors as unknown as readonly string[],
+    romajiDistractors: data.romajiDistractors as unknown as readonly string[],
+    wordDistractors: data.wordDistractors as unknown as readonly string[],
+  };
+};
+
+export const defineKDakuon = <
+  K extends string,
+  R extends string,
+  W extends string | undefined = undefined,
+  WK extends string | undefined = undefined,
+  KD extends readonly string[] = [],
+  RD extends readonly string[] = [],
+  WD extends readonly string[] = [],
+>(data: {
+  id: string;
+  kana: K;
+  kanaKanjiOrigin: string;
+  kanaDistractors: PreciseValidator<KD, K>;
+  romaji: R;
+  romajiDistractors: PreciseValidator<RD, R>;
+  word?: W;
+  wordOrigin?: WordOrigin;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordKana?: WK;
+  wordDistractors?: W extends string
+    ? PreciseValidator<WD, W>
+    : readonly string[];
+  noteKey?: string;
+  wordNoteKey?: string;
+}): KatakanaDakuon => {
+  return {
+    kind: 'k-dakuon',
+    ...data,
+    kanaDistractors: data.kanaDistractors as unknown as readonly string[],
+    romajiDistractors: data.romajiDistractors as unknown as readonly string[],
+    wordDistractors: data.wordDistractors as unknown as readonly string[],
+  };
+};
+
+export const defineKYoon = <
+  K extends string,
+  R extends string,
+  W extends string | undefined = undefined,
+  WK extends string | undefined = undefined,
+  KD extends readonly string[] = [],
+  RD extends readonly string[] = [],
+  WD extends readonly string[] = [],
+>(data: {
+  id: string;
+  kana: K;
+  kanaKanjiOrigin: string;
+  kanaDistractors: PreciseValidator<KD, K>;
+  romaji: R;
+  romajiDistractors: PreciseValidator<RD, R>;
+  word?: W;
+  wordOrigin?: WordOrigin;
+  wordRomaji?: string;
+  wordMeaning?: LocalizedText;
+  wordEmoji?: string;
+  wordKana?: WK;
+  // 校验目标是 W (word/写法)
+  // 片假名拗音：如果有单词(W)，则校验干扰项(WD)不能包含正确单词(W)
+  wordDistractors?: W extends string
+    ? PreciseValidator<WD, W>
+    : readonly string[];
+  noteKey?: string;
+  wordNoteKey?: string;
+}): KatakanaYoon => {
+  return {
+    kind: 'k-yoon',
     ...data,
     kanaDistractors: data.kanaDistractors as unknown as readonly string[],
     romajiDistractors: data.romajiDistractors as unknown as readonly string[],

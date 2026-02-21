@@ -185,7 +185,7 @@ export const TestStudySession = () => {
 
     const isWordQuiz =
       currentItem.type === 'QUIZ' && currentItem.quizType === 'WORD';
-    const isKatakana = currentItem.data.kind === 'k-seion';
+    const isKatakana = currentItem.data.kind.startsWith('k-');
 
     // 如果是单词测试，并且 (无汉字背景 OR 是片假名)
     if (isWordQuiz && (!kanjiBackground || isKatakana)) {
