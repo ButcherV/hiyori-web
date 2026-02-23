@@ -45,6 +45,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Rescue', zh: '救援', zhHant: '救援' },
     wordEmoji: '🚁',
     wordDistractors: ['レスキユー', 'レスギュー', 'レスキュ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   キョ: defineKYoon({
@@ -65,6 +66,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Tokyo', zh: '东京', zhHant: '東京' },
     wordEmoji: '🗼',
     wordDistractors: ['トーキヨー', 'トーギョー', 'トキョー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================
@@ -88,6 +90,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Shower', zh: '淋浴', zhHant: '淋浴' },
     wordEmoji: '🚿',
     wordDistractors: ['シヤワー', 'ジャワー', 'シャーワ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   シュ: defineKYoon({
@@ -108,6 +111,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Sugar', zh: '糖', zhHant: '糖' },
     wordEmoji: '🍬',
     wordDistractors: ['シユガー', 'ジュガー', 'シュガ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ショ: defineKYoon({
@@ -128,6 +132,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Show', zh: '表演', zhHant: '表演' },
     wordEmoji: '🎭',
     wordDistractors: ['シヨー', 'ジョー', 'ショ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================
@@ -171,6 +176,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Tulip', zh: '郁金香', zhHant: '鬱金香' },
     wordEmoji: '🌷',
     wordDistractors: ['チユーリップ', 'チューリプ', 'ツーリップ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   チョ: defineKYoon({
@@ -234,6 +240,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'News', zh: '新闻', zhHant: '新聞' },
     wordEmoji: '📰',
     wordDistractors: ['ニユース', 'ニュス', 'ヌース'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ニョ: defineKYoon({
@@ -243,17 +250,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ニ (ni) + ョ (yo)',
     kanaDistractors: ['ニヨ', 'ノ', 'ニャ', 'ミョ'],
     romajiDistractors: ['niyo', 'no', 'nya', 'myo'],
-
-    word: 'ニョッキ',
-    wordRomaji: 'nyo·k·ki',
-    wordOrigin: {
-      lang: 'it',
-      word: 'Gnocchi',
-      desc: '',
-    },
-    wordMeaning: { en: 'Gnocchi', zh: '意式土豆团', zhHant: '意式土豆團' },
-    wordEmoji: '🥟',
-    wordDistractors: ['ニヨッキ', 'ニョキ', 'ノッキ'],
+    wordDistractors: ['ニヨニヨ', 'ノニョ', 'ニャニョ'],
   }),
 
   // ==========================================
@@ -277,6 +274,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: '100 Percent', zh: '百分之百', zhHant: '百分之百' },
     wordEmoji: '💯',
     wordDistractors: ['ヒヤクパーセント', 'ヒャクパセント', 'ハクパーセント'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヒュ: defineKYoon({
@@ -297,6 +295,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Human', zh: '人类', zhHant: '人類' },
     wordEmoji: '👤',
     wordDistractors: ['ヒユーマン', 'ヒューマヌ', 'フーマン'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヒョ: defineKYoon({
@@ -317,6 +316,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Leopard', zh: '豹', zhHant: '豹' },
     wordEmoji: '🐆',
     wordDistractors: ['ヒヨウ', 'ビョウ', 'ホウ'],
+    wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
   // ==========================================
@@ -339,6 +339,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     },
     wordMeaning: { en: 'Myanmar', zh: '缅甸', zhHant: '緬甸' },
     wordDistractors: ['ミヤンマー', 'ミャマー', 'ミャンマ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ミュ: defineKYoon({
@@ -359,6 +360,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Music', zh: '音乐', zhHant: '音樂' },
     wordEmoji: '🎵',
     wordDistractors: ['ミユージック', 'ミュジック', 'ムージック'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ミョ: defineKYoon({
@@ -368,16 +370,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ミ (mi) + ョ (yo)',
     kanaDistractors: ['ミヨ', 'モ', 'ミャ', 'ニョ'],
     romajiDistractors: ['miyo', 'mo', 'mya', 'nyo'],
-
-    word: 'ミョウガ',
-    wordRomaji: 'myo·u·ga',
-    wordOrigin: {
-      lang: 'ja',
-      word: '茗荷',
-      desc: '',
-    },
-    wordMeaning: { en: 'Myoga Ginger', zh: '茗荷', zhHant: '茗荷' },
-    wordDistractors: ['ミヨウガ', 'ミョガ', 'モウガ'],
+    wordDistractors: ['ミヨミヨ', 'モミョ', 'ミャミョ'],
   }),
 
   // ==========================================
@@ -390,17 +383,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'リ (ri) + ャ (ya)',
     kanaDistractors: ['リヤ', 'ラ', 'リュ', 'ギャ'],
     romajiDistractors: ['riya', 'ra', 'ryu', 'gya'],
-
-    word: 'リャマ',
-    wordRomaji: 'rya·ma',
-    wordOrigin: {
-      lang: 'es',
-      word: 'Llama',
-      desc: '',
-    },
-    wordMeaning: { en: 'Llama', zh: '羊驼', zhHant: '羊駝' },
-    wordEmoji: '🦙',
-    wordDistractors: ['リヤマ', 'ラマ', 'リャア'],
+    wordDistractors: ['リヤリヤ', 'ラリャ', 'リュリャ'],
   }),
 
   リュ: defineKYoon({
@@ -421,6 +404,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Backpack', zh: '背包', zhHant: '背包' },
     wordEmoji: '🎒',
     wordDistractors: ['リユック', 'ルック', 'リュク'],
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   リョ: defineKYoon({
@@ -430,17 +414,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'リ (ri) + ョ (yo)',
     kanaDistractors: ['リヨ', 'ロ', 'リャ', 'ギョ'],
     romajiDistractors: ['riyo', 'ro', 'rya', 'gyo'],
-
-    word: 'リョコウ',
-    wordRomaji: 'ryo·ko·u',
-    wordOrigin: {
-      lang: 'ja',
-      word: '旅行',
-      desc: '',
-    },
-    wordMeaning: { en: 'Travel', zh: '旅行', zhHant: '旅行' },
-    wordEmoji: '✈️',
-    wordDistractors: ['リヨコウ', 'ロコウ', 'リョウコ'],
+    wordDistractors: ['リヨリヨ', 'ロリョ', 'リャリョ'],
   }),
 
   // ==========================================
@@ -472,17 +446,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ギ (gi) + ュ (yu)',
     kanaDistractors: ['ギユ', 'グ', 'ギョ', 'キュ'],
     romajiDistractors: ['giyu', 'gu', 'gyo', 'kyu'],
-
-    word: 'ギュウニュウ',
-    wordRomaji: 'gyu·u·nyu·u',
-    wordOrigin: {
-      lang: 'ja',
-      word: '牛乳',
-      desc: '',
-    },
-    wordMeaning: { en: 'Milk', zh: '牛奶', zhHant: '牛奶' },
-    wordEmoji: '🥛',
-    wordDistractors: ['ギユウニュウ', 'グウニュウ', 'ギュニュ'],
+    wordDistractors: ['ギユギユ', 'グギュ', 'ギョギュ'],
   }),
 
   ギョ: defineKYoon({
@@ -492,17 +456,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ギ (gi) + ョ (yo)',
     kanaDistractors: ['ギヨ', 'ゴ', 'ギャ', 'キョ'],
     romajiDistractors: ['giyo', 'go', 'gya', 'kyo'],
-
-    word: 'ギョウザ',
-    wordRomaji: 'gyo·u·za',
-    wordOrigin: {
-      lang: 'zh',
-      word: '饺子',
-      desc: '',
-    },
-    wordMeaning: { en: 'Dumpling', zh: '饺子', zhHant: '餃子' },
-    wordEmoji: '🥟',
-    wordDistractors: ['ギヨウザ', 'ゴウザ', 'ギョザ'],
+    wordDistractors: ['ギヨギヨ', 'ゴギョ', 'ギャギョ'],
   }),
 
   // ==========================================
@@ -546,6 +500,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Juice', zh: '果汁', zhHant: '果汁' },
     wordEmoji: '🧃',
     wordDistractors: ['ジユース', 'ズース', 'ジュス'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ジョ: defineKYoon({
@@ -578,16 +533,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ビ (bi) + ャ (ya)',
     kanaDistractors: ['ビヤ', 'ピャ', 'バ', 'ビュ'],
     romajiDistractors: ['biya', 'pya', 'ba', 'byu'],
-
-    word: 'ビャクヤ',
-    wordRomaji: 'bya·ku·ya',
-    wordOrigin: {
-      lang: 'ja',
-      word: '白夜',
-      desc: '',
-    },
-    wordMeaning: { en: 'White Night', zh: '白夜', zhHant: '白夜' },
-    wordDistractors: ['ビヤクヤ', 'ピャクヤ', 'ビャクア'],
+    wordDistractors: ['ビヤビヤ', 'ピャビャ', 'バビャ'],
   }),
 
   ビュ: defineKYoon({
@@ -608,6 +554,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Buffet', zh: '自助餐', zhHant: '自助餐' },
     wordEmoji: '🍽️',
     wordDistractors: ['ビユッフェ', 'ブッフェ', 'ビュフェ'],
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   ビョ: defineKYoon({
@@ -617,17 +564,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ビ (bi) + ョ (yo)',
     kanaDistractors: ['ビヨ', 'ボ', 'ビャ', 'ピョ'],
     romajiDistractors: ['biyo', 'bo', 'bya', 'pyo'],
-
-    word: 'ビョウイン',
-    wordRomaji: 'byo·u·i·n',
-    wordOrigin: {
-      lang: 'ja',
-      word: '病院',
-      desc: '',
-    },
-    wordMeaning: { en: 'Hospital', zh: '医院', zhHant: '醫院' },
-    wordEmoji: '🏥',
-    wordDistractors: ['ビヨウイン', 'ボウイン', 'ビョイン'],
+    wordDistractors: ['ビヨビヨ', 'ボビョ', 'ビャビョ'],
   }),
 
   // ==========================================
@@ -640,16 +577,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ピ (pi) + ャ (ya)',
     kanaDistractors: ['ピヤ', 'ビャ', 'パ', 'ピュ'],
     romajiDistractors: ['piya', 'bya', 'pa', 'pyu'],
-
-    word: 'ピャノ',
-    wordRomaji: 'pya·no',
-    wordOrigin: {
-      lang: 'it',
-      word: 'Piano',
-      desc: '罕用拼写',
-    },
-    wordMeaning: { en: 'Piano (rare)', zh: '钢琴(罕用)', zhHant: '鋼琴(罕用)' },
-    wordDistractors: ['ピヤノ', 'ビャノ', 'ピアノ'],
+    wordDistractors: ['ピヤピヤ', 'ビャピャ', 'パピャ'],
   }),
 
   ピュ: defineKYoon({
@@ -670,6 +598,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Computer', zh: '电脑', zhHant: '電腦' },
     wordEmoji: '💻',
     wordDistractors: ['コンピユータ', 'コンプータ', 'コンピュタ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ピョ: defineKYoon({
@@ -683,7 +612,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     word: 'ピョンヤン',
     wordRomaji: 'pyo·n·ya·n',
     wordOrigin: {
-      lang: 'ko',
+      lang: 'ko-KP',
       word: '평양',
       desc: '',
     },

@@ -24,6 +24,7 @@ export interface WordOrigin {
     | 'sv'
     | 'es'
     | 'ko'
+    | 'ko-KP' // 朝鲜（北朝鲜）
     | 'other'; // 语言代码
   word: string; // 原词写法 (例如 "Arbeit", "Pão")
   desc?: string; // 备注 (可选，例如 "和制英语", "拟声词")

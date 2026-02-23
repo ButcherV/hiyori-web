@@ -188,8 +188,25 @@
     "katakanaKanjiOrigin": "Origin from「{{char}}」",
     "hiraganaKanjiOrigin": "Origin from「{{char}}」",
     "notes": {
+      "hshi": "Note: Romaji is \"shi\" (instead of \"si\").",
       "hchi": "Note: Romaji is \"chi\" (instead of \"ti\").",
-      "hwo": "Note: This is an object marker particle and is rarely used in common words."
+      "htsu": "Note: Romaji is \"tsu\" (instead of \"tu\").",
+      "hfu": "Note: Romaji is \"fu\" (instead of \"hu\").",
+      "hhe": "Note: Pronounced \"he\" in words, but \"e\" when used as a direction particle.",
+      "hha": "Note: Pronounced \"ha\" in words, but \"wa\" when used as a subject particle.",
+      "hwo": "Note: This is an object marker particle and is rarely used in common words.",
+      "hdi": "Note: ぢ sounds the same as じ (ji). Most words use じ instead.",
+      "hdu": "Note: づ sounds the same as ず (zu). Most words use ず instead.",
+      "hji": "Note: Romaji is \"ji\" (instead of \"zi\").",
+      "kdi": "Note: ヂ sounds the same as ジ (ji). Most words use ジ instead.",
+      "kdu": "Note: ヅ sounds the same as ズ (zu). Most words use ズ instead."
+    },
+    "wordNotes": {
+      "hza": "Note: \"っ\" is a sokuon (geminate consonant), doubling the next consonant sound.",
+      "hhyo": "Note: \"う\" here represents a long vowel, extending the \"o\" sound by one beat.",
+      "ku": "Note: \"ー\" is a long vowel mark in katakana, extending the previous vowel by one beat.",
+      "kLongVowel": "Note: \"ー\" is a long vowel mark in katakana, extending the previous vowel by one beat.",
+      "kSokuon": "Note: \"ッ\" is a sokuon (geminate consonant), creating a brief pause before the next consonant."
     },
     "session": {
       "newKana": "New Kana",

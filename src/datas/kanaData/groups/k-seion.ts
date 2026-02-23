@@ -1,91 +1,3 @@
-// 《常见片假名单词示例》 -----------------------
-
-// 片假名，90% 是外来语，但剩下的 10% 可能是强调、拟声、物种名或品牌名。
-
-// Guguru Toiletto Kitto Katto Dizunilando
-
-// マクドナルド  - 麦当劳 - 英语音译 - 舶来词
-// コカ・コーラ - 可口可乐 - 英语音译 - 舶来词
-// アマゾン - 亚马逊
-
-// ワンワン - wanwan - 狗叫
-// ニャー - Nya - 猫叫
-
-// キラキラ - 闪闪发光
-// キラキラ - pikapika
-// ドキドキ - Dokidoki 心跳加速
-
-// ドーン！ -  (Don! - 爆炸声) - 漫画音效
-// ガシャ -  (Gasha - 撞击声) - 漫画音效
-
-// パリ - 巴黎 - Pa-ri 法语音译
-// ミュンヘン - 慕尼黑 - 德语 München
-// ローマ - Rome 意大利语音译
-// アメリカ - 美国
-// タイ - 泰国
-// インド - 印度
-
-// ジョン - John
-// スミス - smith
-
-// | 顺序 | 片假名 (Kana) | 罗马音 (Romaji) | 英语原词 (Origin) | 中文含义 (Meaning) |
-// | :--- | :--- | :--- | :--- | :--- |
-// | 1 | **マクドナルド** | Makudonarudo | McDonald's | 麦当劳 |
-// | 2 | **グーグル** | Guuguru | Google | 谷歌 |
-// | 3 | **トイレット** | Toiretto | Toilet | 厕所 |
-// | 4 | **キットカット** | Kitto Katto | KitKat | 奇巧巧克力 |
-// | 5 | **ディズニーランド** | Dizuniirando | Disneyland | 迪士尼乐园 |
-// | 6 | **タクシー** | Takushii | Taxi | 出租车 |
-// | 7 | **ゴー** | Goo | Go | 去/走 |
-// | 8 | **ホテル** | Hoteru | Hotel | 酒店 |
-// | 9 | **セブンイレブン** | Sebun Irebun | 7-Eleven | 7-11 便利店 |
-// | 10 | **ミルク** | Miruku | Milk | 牛奶 |
-// | 11 | **バス** | Basu | Bus | 巴士/公交车 |
-// | 12 | **ビール** | Biiru | Beer | 啤酒 |
-// | 13 | **スターバックス** | Sutaabakkusu | Starbucks | 星巴克 |
-// | 14 | **サラダ** | Sarada | Salad | 沙拉 |
-// | 15 | **ハンバーガー** | Hanbaagaa | Hamburger | 汉堡包 |
-// | 16 | **サンドイッチ** | Sandoicchi | Sandwich | 三明治 |
-// | 17 | **ソーセージ** | Sooseeji | Sausage | 香肠 |
-// | 18 | **コーヒー** | Koohii | Coffee | 咖啡 |
-// | 19 | **ケーキ** | Keeki | Cake | 蛋糕 |
-// | 20 | **アイスクリーム** | Aisu Kuriimu | Ice Cream | 冰淇淋 |
-// | 21 | **コンビニ** | Konbini | Convenience Store | 便利店 |
-// | 22 | **フライドポテト** | Furaido Poteto | Fried Potato | 薯条 |
-// | 23 | **エスカレーター** | Esukareetaa | Escalator | 自动扶梯 |
-// | 24 | **アルコール** | Arukooru | Alcohol | 酒精/酒类 |
-// | 25 | **バレーボール** | Bareebooru | Volleyball | 排球 |
-// | 26 | **ベースボール** | Beesubooru | Baseball | 棒球 |
-// | 27 | **バスケットボール** | Basukettobooru | Basketball | 篮球 |
-// | 28 | **ゴルフ** | Gorufu | Golf | 高尔夫 |
-
-// 片假名 (Kana)	罗马音 (Romaji)	日语含义 (Meaning)	源语言 (Origin Lang)	源词 (Origin Word)	英语对应词 (English/Mistake)
-// パン	Pan	面包	🇵🇹 葡萄牙语	Pão	Bread
-// ボタン	Botan	纽扣	🇵🇹 葡萄牙语	Botão	Button
-// タバコ	Tabako	香烟/烟草	🇵🇹 葡萄牙语	Tabaco	Tobacco / Cigarette
-// カッパ	Kappa	雨衣(披风式)	🇵🇹 葡萄牙语	Capa	Raincoat
-// コップ	Koppu	杯子(无把手)	🇳🇱 荷兰语	Kop	Glass / Tumbler (Cup通常指有把手的)
-// ゴム	Gomu	橡胶/橡皮	🇳🇱 荷兰语	Gom	Rubber
-// ガラス	Garasu	玻璃(材质)	🇳🇱 荷兰语	Glas	Glass
-// ランドセル	Randoseru	小学生书包	🇳🇱 荷兰语	Ransel	Schoolbag
-// ビール	Biiru	啤酒	🇳🇱 荷兰语	Bier	Beer (发音不同)
-// アルバイト	Arubaito	打工/兼职	🇩🇪 德语	Arbeit	Part-time job (不可说 Work)
-// カルテ	Karute	病历卡	🇩🇪 德语	Karte	Medical chart
-// エネルギー	Enerugii	能量/能源	🇩🇪 德语	Energie	Energy (发音硬朗，非 Enerujii)
-// ワクチン	Wakuchin	疫苗	🇩🇪 德语	Vakzin	Vaccine
-// リュック	Ryukku	背包	🇩🇪 德语	Rucksack	Backpack
-// ゲレンデ	Gerende	滑雪场	🇩🇪 德语	Gelände	Ski slope
-// アンケート	Ankēto	问卷调查	🇫🇷 法语	Enquête	Questionnaire / Survey
-// ピーマン	Pīman	青椒	🇫🇷 法语	Piment	Green pepper
-// マロン	Maron	栗子(甜点用)	🇫🇷 法语	Marron	Chestnut (栗子原称 Kuri)
-// シュークリーム	Shūkurīmu	泡芙	🇫🇷 法语	Chou à la crème	Cream puff (说 Shoe cream 会变成鞋油)
-// ズボン	Zubon	裤子	🇫🇷 法语	Jupon	Trousers / Pants
-// マンション	Manshon	公寓(钢混)	🇬🇧 英语/🇫🇷 法语	Mansion	Condominium (Mansion在英语指豪宅)
-// イクラ	Ikura	三文鱼籽	🇷🇺 俄语	Ikra	Salmon roe
-// ノルマ	Noruma	定额/任务指标	🇷🇺 俄语	Norma	Quota
-
-// 常见片假名单词示例 -----------------------
-
 import { defineKSeion, type KatakanaSeion } from '../core';
 
 export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
@@ -140,8 +52,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '宇', // 来自“宇”的宝盖头
 
-    kanaDistractors: ['ワ', 'ク', 'フ'], // ワ(wa)极度形似
-    romajiDistractors: ['wa', 'ku', 'fu'],
+    kanaDistractors: ['ワ', 'ク', 'ア'], // ワ(wa)极度形似
+    romajiDistractors: ['wa', 'ku', 'o'],
 
     word: 'ウール', // Wool (羊毛)。常见的衣服材质标签。
     wordRomaji: 'u·u·ru', // 长音
@@ -151,7 +63,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
       desc: '',
     },
     wordMeaning: { en: 'Wool', zh: '羊毛', zhHant: '羊毛' },
-    wordDistractors: ['ワール', 'クール', 'ウーソ'], // 用形近字ワ、ク混淆，或把ル改成ソ(so)
+    wordDistractors: ['ワール', 'クール', 'ウーヌ'], // 用形近字ワ、ク混淆，或把ル改成ソ(so)
     wordNoteKey: 'studyKana.wordNotes.ku',
   }),
 
@@ -165,15 +77,15 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ユ', 'ロ', 'コ'],
     romajiDistractors: ['yi', 'i', 'ye'],
 
-    word: 'エアコン', // 空调 (Air Conditioner 的缩写)。
-    wordRomaji: 'e·a·ko·n',
+    word: 'エスカレーター',
+    wordRomaji: 'e·su·ka·re·e·ta·a',
     wordOrigin: {
-      lang: 'en-US', // 和制英语 (Wasei-Eigo)
-      word: 'Air Conditioner',
-      // desc: 'Wasei-Eigo (缩略语)',
+      lang: 'en-US',
+      word: 'Escalator',
+      desc: '',
     },
-    wordMeaning: { en: 'Air Conditioner', zh: '空调', zhHant: '冷氣' },
-    wordDistractors: ['イアコン', 'エコアン', 'エケコン'],
+    wordMeaning: { en: 'Escalator', zh: '自动扶梯', zhHant: '自動扶梯' },
+    wordDistractors: ['エスカレータ', 'エスガレーター', 'イスカレーター'],
   }),
 
   オ: defineKSeion({
@@ -336,19 +248,20 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '之',
 
-    kanaDistractors: ['ジ', 'ツ', 'ミ'],
-    romajiDistractors: ['ji', 'su', 'chi'],
+    kanaDistractors: ['ツ', 'ミ', 'ン'],
+    romajiDistractors: ['tsu', 'su', 'chi'],
 
-    word: 'シュークリーム',
-    wordRomaji: 'shu·u·ku·ri·i·mu',
+    word: 'タクシー',
+    wordRomaji: 'ta·ku·shi·i',
     wordOrigin: {
-      lang: 'fr',
-      word: 'Chou à la crème',
+      lang: 'en-US',
+      word: 'Taxi',
       desc: '',
     },
-    wordMeaning: { en: 'Cream Puff', zh: '泡芙', zhHant: '泡芙' },
-    wordDistractors: ['ジュークリーム', 'シュクリーム', 'シュークリム'],
-    wordEmoji: '🍰',
+    wordMeaning: { en: 'Taxi', zh: '出租车', zhHant: '計程車' },
+    wordEmoji: '🚕',
+    wordDistractors: ['タクツー', 'タクシ', 'タグシー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ス: defineKSeion({
@@ -358,18 +271,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '須',
 
-    kanaDistractors: ['ズ', 'ヌ', 'ラ'],
-    romajiDistractors: ['zu', 'shi', 'se'],
+    kanaDistractors: ['ヌ', 'ラ', 'ン'],
+    romajiDistractors: ['nu', 'shi', 'se'],
 
-    word: 'ガラス',
-    wordRomaji: 'ga·ra·su',
+    word: 'スイカ',
+    wordRomaji: 'su·i·ka',
     wordOrigin: {
-      lang: 'nl',
-      word: 'Glas',
+      lang: 'ja',
+      word: '西瓜',
       desc: '',
     },
-    wordMeaning: { en: 'Glass', zh: '玻璃', zhHant: '玻璃' },
-    wordDistractors: ['ガラズ', 'ガヌス', 'ガラヌ'],
+    wordMeaning: { en: 'Watermelon', zh: '西瓜', zhHant: '西瓜' },
+    wordEmoji: '🍉',
+    wordDistractors: ['スエカ', 'スイガ', 'スカイ'],
   }),
 
   セ: defineKSeion({
@@ -489,18 +403,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '天',
 
-    kanaDistractors: ['デ', 'ナ', 'ラ'],
-    romajiDistractors: ['de', 'chi', 'to'],
+    kanaDistractors: ['ナ', 'ラ', 'ア'],
+    romajiDistractors: ['na', 'chi', 'to'],
 
-    word: 'アルバイト',
-    wordRomaji: 'a·ru·ba·i·to',
+    word: 'テスト',
+    wordRomaji: 'te·su·to',
     wordOrigin: {
-      lang: 'de',
-      word: 'Arbeit',
+      lang: 'en-US',
+      word: 'Test',
       desc: '',
     },
-    wordMeaning: { en: 'Part-time Job', zh: '打工', zhHant: '打工' },
-    wordDistractors: ['アルバイド', 'アヌバイト', 'アルパイト'],
+    wordMeaning: { en: 'Test', zh: '测试', zhHant: '測試' },
+    wordEmoji: '📝',
+    wordDistractors: ['テスド', 'テヌト', 'テトス'],
   }),
 
   ト: defineKSeion({
@@ -510,18 +425,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '止',
 
-    kanaDistractors: ['ド', 'イ', 'ヒ'],
-    romajiDistractors: ['do', 'ta', 'te'],
+    kanaDistractors: ['イ', 'ヒ', 'ナ'],
+    romajiDistractors: ['i', 'ta', 'te'],
 
-    word: 'ボタン',
-    wordRomaji: 'bo·ta·n',
+    word: 'トマト',
+    wordRomaji: 'to·ma·to',
     wordOrigin: {
-      lang: 'pt',
-      word: 'Botão',
+      lang: 'en-US',
+      word: 'Tomato',
       desc: '',
     },
-    wordMeaning: { en: 'Button', zh: '纽扣', zhHant: '鈕扣' },
-    wordDistractors: ['ポタン', 'ボダン', 'ボタヌ'],
+    wordMeaning: { en: 'Tomato', zh: '番茄', zhHant: '番茄' },
+    wordEmoji: '🍅',
+    wordDistractors: ['トマド', 'トアト', 'トマタ'],
   }),
 
   // --- ナ 行 (片假名) ---
@@ -598,19 +514,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '祢',
 
-    kanaDistractors: ['ヰ', 'ホ', 'ヌ'],
-    romajiDistractors: ['me', 'ni', 'no'],
+    kanaDistractors: ['ホ', 'ヌ', 'メ'],
+    romajiDistractors: ['ho', 'ni', 'no'],
 
-    word: 'エネルギー',
-    wordRomaji: 'e·ne·ru·gi·i',
+    word: 'ネクタイ',
+    wordRomaji: 'ne·ku·ta·i',
     wordOrigin: {
-      lang: 'de',
-      word: 'Energie',
+      lang: 'en-US',
+      word: 'Necktie',
       desc: '',
     },
-    wordMeaning: { en: 'Energy', zh: '能量', zhHant: '能量' },
-    wordDistractors: ['エメルギー', 'エネヌギー', 'エネルゲー'],
-    wordEmoji: '⚡',
+    wordMeaning: { en: 'Necktie', zh: '领带', zhHant: '領帶' },
+    wordEmoji: '👔',
+    wordDistractors: ['ネグタイ', 'ネクダイ', 'メクタイ'],
   }),
 
   ノ: defineKSeion({
@@ -664,19 +580,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '比',
 
-    kanaDistractors: ['ビ', 'ピ', 'セ'],
-    romajiDistractors: ['bi', 'pi', 'he'],
+    kanaDistractors: ['セ', 'ト', 'ニ'],
+    romajiDistractors: ['se', 'he', 'ho'],
 
-    word: 'ビール',
-    wordRomaji: 'bi·i·ru',
+    word: 'コーヒー',
+    wordRomaji: 'ko·o·hi·i',
     wordOrigin: {
-      lang: 'nl',
-      word: 'Bier',
+      lang: 'en-US',
+      word: 'Coffee',
       desc: '',
     },
-    wordMeaning: { en: 'Beer', zh: '啤酒', zhHant: '啤酒' },
-    wordDistractors: ['ピール', 'ビーヌ', 'ビル'],
-    wordEmoji: '🍺',
+    wordMeaning: { en: 'Coffee', zh: '咖啡', zhHant: '咖啡' },
+    wordEmoji: '☕',
+    wordDistractors: ['コーセー', 'コヒー', 'ゴーヒー'],
   }),
 
   フ: defineKSeion({
@@ -730,18 +646,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '保',
 
-    kanaDistractors: ['ボ', 'ポ', 'オ'],
-    romajiDistractors: ['bo', 'po', 'he'],
+    kanaDistractors: ['オ', 'ネ', 'ヒ'],
+    romajiDistractors: ['o', 'he', 'ha'],
 
-    word: 'ゴム',
-    wordRomaji: 'go·mu',
+    word: 'ホテル',
+    wordRomaji: 'ho·te·ru',
     wordOrigin: {
-      lang: 'nl',
-      word: 'Gom',
+      lang: 'en-US',
+      word: 'Hotel',
       desc: '',
     },
-    wordMeaning: { en: 'Rubber/Eraser', zh: '橡胶', zhHant: '橡膠' },
-    wordDistractors: ['ゴヌ', 'ゴホ', 'コム'],
+    wordMeaning: { en: 'Hotel', zh: '酒店', zhHant: '酒店' },
+    wordEmoji: '🏨',
+    wordDistractors: ['ホテヌ', 'オテル', 'ホデル'],
   }),
 
   // --- マ 行 (片假名) ---
@@ -777,16 +694,16 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['シ', 'ニ', 'ツ'],
     romajiDistractors: ['shi', 'ni', 'mu'],
 
-    word: 'ゴミ',
-    wordRomaji: 'go·mi',
+    word: 'ミルク',
+    wordRomaji: 'mi·ru·ku',
     wordOrigin: {
-      lang: 'ja',
-      word: 'ゴミ',
-      desc: '日语词汇',
+      lang: 'en-US',
+      word: 'Milk',
+      desc: '',
     },
-    wordMeaning: { en: 'Trash/Garbage', zh: '垃圾', zhHant: '垃圾' },
-    wordDistractors: ['ゴシ', 'ゴニ', 'コミ'],
-    wordEmoji: '🗑️',
+    wordMeaning: { en: 'Milk', zh: '牛奶', zhHant: '牛奶' },
+    wordDistractors: ['ミヌク', 'シルク', 'ミルグ'],
+    wordEmoji: '🥛',
   }),
 
   ム: defineKSeion({
@@ -931,15 +848,16 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ヲ', 'ス', 'ク'],
     romajiDistractors: ['wo', 'ru', 'ri'],
 
-    word: 'カッパ',
-    wordRomaji: 'ka·p·pa',
+    word: 'カメラ',
+    wordRomaji: 'ka·me·ra',
     wordOrigin: {
-      lang: 'pt',
-      word: 'Capa',
+      lang: 'en-US',
+      word: 'Camera',
       desc: '',
     },
-    wordMeaning: { en: 'Raincoat', zh: '雨衣', zhHant: '雨衣' },
-    wordDistractors: ['カッバ', 'ガッパ', 'カパパ'],
+    wordMeaning: { en: 'Camera', zh: '相机', zhHant: '相機' },
+    wordEmoji: '📷',
+    wordDistractors: ['カメヲ', 'カエラ', 'カメア'],
   }),
 
   リ: defineKSeion({
@@ -973,16 +891,16 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['レ', 'ヌ', 'ワ'],
     romajiDistractors: ['re', 'nu', 'ra'],
 
-    word: 'ワクチン',
-    wordRomaji: 'wa·ku·chi·n',
+    word: 'ルール',
+    wordRomaji: 'ru·u·ru',
     wordOrigin: {
-      lang: 'de',
-      word: 'Vakzin',
+      lang: 'en-US',
+      word: 'Rule',
       desc: '',
     },
-    wordMeaning: { en: 'Vaccine', zh: '疫苗', zhHant: '疫苗' },
-    wordDistractors: ['ワグチン', 'ワクテン', 'ワクチヌ'],
-    wordEmoji: '💉',
+    wordMeaning: { en: 'Rule', zh: '规则', zhHant: '規則' },
+    wordEmoji: '📏',
+    wordDistractors: ['レール', 'ルーヌ', 'ルル'],
   }),
 
   レ: defineKSeion({

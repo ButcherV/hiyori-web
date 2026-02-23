@@ -16,7 +16,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordRomaji: 'ga·ku·se·i',
     wordMeaning: { en: 'student', zh: '学生', zhHant: '學生' },
     wordEmoji: '🎓',
-    wordDistractors: ['かくせい', 'がくぜい', 'かせい'],
+    wordDistractors: ['かくせい', 'がくぜい', 'かせくい'],
   }),
 
   ぎ: defineHDakuon({
@@ -25,13 +25,13 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'gi',
     kanaKanjiOrigin: '幾',
     kanaDistractors: ['き', 'さ', 'ざ'],
-    romajiDistractors: ['ki', 'sa', 'ji'],
+    romajiDistractors: ['ki', 'sa', 'ji', 'giu'],
     word: '銀行',
     wordKana: 'ぎんこう',
     wordRomaji: 'gi·n·ko·u',
     wordMeaning: { en: 'bank', zh: '银行', zhHant: '銀行' },
     wordEmoji: '🏦',
-    wordDistractors: ['きんこう', 'ぎんごう', 'きんごう'],
+    wordDistractors: ['ぎこんう', 'きんこう', 'ぎんごう', 'きんごう'],
   }),
 
   ぐ: defineHDakuon({
@@ -46,7 +46,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordRomaji: 'ka·gu',
     wordMeaning: { en: 'furniture', zh: '家具', zhHant: '家具' },
     wordEmoji: '🛋️',
-    wordDistractors: ['かく', 'がぐ', 'かぐう'],
+    wordDistractors: ['かく', 'がぐ', 'ぐか'],
   }),
 
   げ: defineHDakuon({
@@ -74,7 +74,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'go',
     kanaKanjiOrigin: '己',
     kanaDistractors: ['こ', 'に', 'ど'],
-    romajiDistractors: ['ko', 'ni', 'do'],
+    romajiDistractors: ['ko', 'no', 'dou'],
     word: 'ご飯',
     wordKana: 'ごはん',
     wordRomaji: 'go·ha·n',
@@ -124,7 +124,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'zu',
     kanaKanjiOrigin: '寸',
     kanaDistractors: ['す', 'づ', 'む'],
-    romajiDistractors: ['su', 'du', 'mu'],
+    romajiDistractors: ['su', 'du', 'zi'],
     word: '地図',
     wordKana: 'ちず',
     wordRomaji: 'chi·zu',
@@ -161,6 +161,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'elephant', zh: '大象', zhHant: '大象' },
     wordEmoji: '🐘',
     wordDistractors: ['そう', 'ざう', 'ぜう'],
+    wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
   // ==========================================
@@ -237,6 +238,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'road; way', zh: '道路', zhHant: '道路' },
     wordEmoji: '🛣️',
     wordDistractors: ['とう', 'こう', 'ごう'],
+    wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
   // ==========================================
@@ -315,6 +317,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'hat', zh: '帽子', zhHant: '帽子' },
     wordEmoji: '👒',
     wordDistractors: ['ほうし', 'ぽうし', 'ぼし'],
+    wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
   // 半浊音 - 没有单词
@@ -325,12 +328,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '波',
     kanaDistractors: ['ば', 'は', 'ぬ'],
     romajiDistractors: ['ba', 'ha', 'nu'],
-    // word: null,
-    // wordKana: null,
-    // wordRomaji: null,
-    // wordMeaning: null,
-    // wordEmoji: null,
-    // wordDistractors: [],
+    wordDistractors: ['ばあ', 'はあ', 'ぬあ'],
   }),
 
   ぴ: defineHDakuon({
@@ -340,12 +338,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '比',
     kanaDistractors: ['び', 'ひ', 'ら'],
     romajiDistractors: ['bi', 'hi', 'ra'],
-    // word: null,
-    // wordKana: null,
-    // wordRomaji: null,
-    // wordMeaning: null,
-    // wordEmoji: null,
-    // wordDistractors: [],
+    wordDistractors: ['びい', 'ひい', 'らい'],
   }),
 
   ぷ: defineHDakuon({
@@ -355,12 +348,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '不',
     kanaDistractors: ['ぶ', 'ふ', 'よ'],
     romajiDistractors: ['bu', 'fu', 'yo'],
-    // word: null,
-    // wordKana: null,
-    // wordRomaji: null,
-    // wordMeaning: null,
-    // wordEmoji: null,
-    // wordDistractors: [],
+    wordDistractors: ['ぶう', 'ふう', 'よう'],
   }),
 
   ぺ: defineHDakuon({
@@ -370,12 +358,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '部',
     kanaDistractors: ['べ', 'へ', 'く'],
     romajiDistractors: ['be', 'he', 'ku'],
-    // word: null,
-    // wordKana: null,
-    // wordRomaji: null,
-    // wordMeaning: null,
-    // wordEmoji: null,
-    // wordDistractors: [],
+    wordDistractors: ['べえ', 'へえ', 'くえ'],
   }),
 
   ぽ: defineHDakuon({
@@ -385,11 +368,6 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '保',
     kanaDistractors: ['ぼ', 'ほ', 'ま'],
     romajiDistractors: ['bo', 'ho', 'ma'],
-    // word: null,
-    // wordKana: null,
-    // wordRomaji: null,
-    // wordMeaning: null,
-    // wordEmoji: null,
-    // wordDistractors: [],
+    wordDistractors: ['ぼお', 'ほお', 'まお'],
   }),
 };

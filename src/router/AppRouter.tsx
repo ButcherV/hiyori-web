@@ -5,13 +5,13 @@ import { AnimatePresence } from 'framer-motion';
 // 动画组件 - 路由层直接使用，不懒加载
 import { PageTransition } from '../components/PageTransition';
 
-// 页面组件 - 全部懒加载，只在用户导航到对应路由时才解析
-const HomePage = lazy(() =>
-  import('../pages/HomePage/HomePage').then(m => ({ default: m.HomePage }))
-);
+import { HomePage } from '../pages/HomePage/HomePage';
+
+// 页面组件 - 懒加载，只在用户导航到对应路由时才解析
 const TestStudySession = lazy(() =>
   import('../pages/TestStudySession/TestStudySession').then(m => ({ default: m.TestStudySession }))
 );
+
 const KanaDictionaryPage = lazy(() =>
   import('../pages/KanaDictAndQuiz/PageKanaDictionary/KanaDictionaryPage').then(m => ({
     default: m.KanaDictionaryPage,

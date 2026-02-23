@@ -157,7 +157,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     kanaKanjiOrigin: 'に (ni) + ゃ (ya)',
     kanaDistractors: ['にや', 'ぬ', 'な', 'にゅ'],
     romajiDistractors: ['niya', 'na', 'nu', 'nyo'],
-    word: 'こんにゃく',
+    word: '蒟蒻',
     wordKana: 'こんにゃく',
     wordRomaji: 'ko·n·nya·ku',
     wordMeaning: { en: 'konjac', zh: '魔芋', zhHant: '魔芋' },
@@ -241,7 +241,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'leopard', zh: '豹', zhHant: '豹' },
     wordEmoji: '🐆',
     wordDistractors: ['ひよう', 'ほお', 'ひよ'],
-    noteKey: 'studyKana.notes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
   // ==========================================
@@ -352,7 +352,11 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     word: '逆',
     wordKana: 'ぎゃく',
     wordRomaji: 'gya·ku',
-    wordMeaning: { en: 'reverse; opposite', zh: '逆；相反', zhHant: '逆；相反' },
+    wordMeaning: {
+      en: 'reverse; opposite',
+      zh: '逆；相反',
+      zhHant: '逆；相反',
+    },
     wordEmoji: '🔄',
     wordDistractors: ['ぎやく', 'がく', 'きゃく'],
   }),

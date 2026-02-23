@@ -1,5 +1,3 @@
-// src/pages/Dates/PageDates.tsx
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -56,17 +54,22 @@ export const PageDates = () => {
   const [activeEraKey, setActiveEraKey] = useState(
     () => getYearData(new Date().getFullYear()).era.key
   );
-  const [activeGranularity, setActiveGranularity] = useState<Granularity>('day');
+  const [activeGranularity, setActiveGranularity] =
+    useState<Granularity>('day');
 
   const HELP_MODES: NavMode[] = ['day', 'month', 'holiday'];
   const hasHelp = HELP_MODES.includes(activeMode);
 
   const renderHelpContent = () => {
     switch (activeMode) {
-      case 'day':     return <DayHelpContent />;
-      case 'month':   return <MonthHelpContent />;
-      case 'holiday': return <HolidayHelpContent />;
-      default:        return null;
+      case 'day':
+        return <DayHelpContent />;
+      case 'month':
+        return <MonthHelpContent />;
+      case 'holiday':
+        return <HolidayHelpContent />;
+      default:
+        return null;
     }
   };
 
@@ -225,9 +228,7 @@ export const PageDates = () => {
           />
         );
       case 'relative':
-        return (
-          <RelativeTimeLearning granularity={activeGranularity} />
-        );
+        return <RelativeTimeLearning granularity={activeGranularity} />;
       default:
         return <div className={styles.debugBox}>WIP: {activeMode}</div>;
     }

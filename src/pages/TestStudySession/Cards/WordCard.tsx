@@ -7,6 +7,27 @@ import type { WordOrigin } from '../../../datas/kanaData/core';
 import styles from './WordCard.module.css';
 import commonStyles from '../TestStudySession.module.css';
 
+/**
+ * 根据字数返回对应的字体大小类名
+ * @param text - 要显示的文本
+ * @returns CSS 类名
+ */
+const getWordSizeClass = (text: string): string => {
+  const length = text.length;
+  
+  if (length <= 3) {
+    return styles.wordSizeXL; // 1-3字：超大
+  } else if (length <= 5) {
+    return styles.wordSizeLarge; // 4-5字：大
+  } else if (length <= 7) {
+    return styles.wordSizeMedium; // 6-7字：中
+  } else if (length <= 10) {
+    return styles.wordSizeSmall; // 8-10字：小
+  } else {
+    return styles.wordSizeXS; // 11字以上：超小
+  }
+};
+
 interface Props {
   data: AnyKanaData;
   onPlaySound: (char: string) => void;
@@ -50,6 +71,8 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
         return { icon: '🇪🇸', label: 'Spanish' };
       case 'ko':
         return { icon: '🇰🇷', label: 'Korean' };
+      case 'ko-KP':
+        return { icon: '🇰🇵', label: 'North Korean' };
       default:
         return null;
     }
@@ -158,7 +181,7 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
             </div>
           )}
           <div className={styles.romajiBottom}>{data.wordRomaji}</div>
-          <div className={`${styles.kanjiMainSmall} ${commonStyles.jaFont}`}>
+          <div className={`${styles.kanjiMainSmall} ${getWordSizeClass(data.word)} ${commonStyles.jaFont}`}>
             {data.word}
           </div>
           {data.wordEmoji && (
