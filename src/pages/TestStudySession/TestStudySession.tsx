@@ -158,7 +158,7 @@ export const TestStudySession = () => {
         timer = setTimeout(() => {
           const textToRead =
             currentItem.type === 'WORD_LEARN'
-              ? currentItem.data.word || currentItem.data.kana
+              ? currentItem.data.wordKana || currentItem.data.kana
               : currentItem.data.kana;
 
           speak(textToRead);

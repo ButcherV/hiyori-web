@@ -6,7 +6,7 @@ import { useProgress } from '../../context/ProgressContext';
 import { useSettings } from '../../context/SettingsContext';
 import type { ScriptType } from '../../components/LessonMenu';
 
-import { Lock, CheckCircle2, PlayCircle, Hourglass } from 'lucide-react';
+import { Sparkles, CheckCircle2, PlayCircle, Hourglass } from 'lucide-react';
 
 interface HeroScrollProps {
   onCourseClick: (script: ScriptType) => void;
@@ -37,28 +37,13 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
   const katakanaProgress = getProgressNum('katakana');
 
   const heroCourses = useMemo(() => {
-    const getStatus = (progress: number, isLocked: boolean) => {
-      if (isLocked)
-        return { type: 'LOCKED', label: t('status.locked'), icon: Lock };
+    const getStatus = (progress: number) => {
       if (progress === 100)
-        return {
-          type: 'COMPLETED',
-          label: t('status.completed'),
-          icon: CheckCircle2,
-        };
+        return { type: 'COMPLETED', label: t('status.completed'), icon: CheckCircle2 };
       if (progress > 0)
-        return {
-          type: 'IN_PROGRESS',
-          label: t('status.in_progress'),
-          icon: Hourglass,
-        };
+        return { type: 'IN_PROGRESS', label: t('status.in_progress'), icon: Hourglass };
       return { type: 'START', label: t('status.start'), icon: PlayCircle };
     };
-
-    const KANA_MASTERY_THRESHOLD = 80;
-    const isKanjiLocked =
-      hiraganaProgress < KANA_MASTERY_THRESHOLD ||
-      katakanaProgress < KANA_MASTERY_THRESHOLD;
 
     return [
       {
@@ -68,7 +53,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         progressVal: hiraganaProgress,
         title: t('home.hero.hiragana.title'),
         subTitle: t('home.hero.hiragana.subtitle'),
-        status: getStatus(hiraganaProgress, false),
+        status: getStatus(hiraganaProgress),
       },
       {
         id: 'katakana',
@@ -77,7 +62,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         progressVal: katakanaProgress,
         title: t('home.hero.katakana.title'),
         subTitle: t('home.hero.katakana.subtitle'),
-        status: getStatus(katakanaProgress, false),
+        status: getStatus(katakanaProgress),
       },
       {
         id: 'kanji',
@@ -86,7 +71,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
         progressVal: 0,
         title: t('home.hero.kanji.title'),
         subTitle: t('home.hero.kanji.subtitle'),
-        status: getStatus(0, isKanjiLocked),
+        status: { type: 'COMING_SOON', label: t('status.coming_soon'), icon: Sparkles },
       },
     ];
   }, [hiraganaProgress, katakanaProgress, t]);
@@ -176,7 +161,7 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
     >
       {heroCourses.map((course, index) => {
         const isActive = index === activeHeroIndex;
-        const isLocked = course.status.type === 'LOCKED';
+        const isComingSoon = course.status.type === 'COMING_SOON';
         const StatusIcon = course.status.icon;
 
         return (
@@ -190,10 +175,10 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
             className={`
               ${styles.heroCard} 
               ${styles[course.colorClass]} 
-              ${!isActive ? styles.heroCardInactive : ''} 
-              ${isLocked ? styles.heroCardLocked : ''}
+              ${!isActive ? styles.heroCardInactive : ''}
+              ${isComingSoon ? styles.heroCardLocked : ''}
             `}
-            onClick={() => handleHeroClick(course.id, index, isLocked)}
+            onClick={() => handleHeroClick(course.id, index, isComingSoon)}
           >
             <div className={styles.heroDecor}>{course.char}</div>
 
@@ -210,10 +195,10 @@ export const HeroScroll = ({ onCourseClick }: HeroScrollProps) => {
               className={styles.heroBottom}
               style={{ opacity: isActive ? 1 : 0.6 }}
             >
-              {isLocked ? (
+              {isComingSoon ? (
                 <div className={styles.lockedText}>
-                  <Lock size={14} />
-                  <span>Finish Kana to unlock</span>
+                  <Sparkles size={14} />
+                  <span>{t('home.hero.kanji.coming_soon_desc')}</span>
                 </div>
               ) : (
                 <>

@@ -41,7 +41,7 @@ export const MistakeRowCard: React.FC<Props> = ({
   };
 
   const handlePlay = (item: MistakeItem) => {
-    const text = item.word || item.wordKana || item.char;
+    const text = item.wordKana || item.word || item.char;
     onPlaySound(text);
   };
 

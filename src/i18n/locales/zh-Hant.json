@@ -1,4 +1,18 @@
 {
+  "status": {
+    "completed": "已完成",
+    "locked": "已鎖定",
+    "in_progress": "進行中",
+    "start": "開始",
+    "coming_soon": "即將推出"
+  },
+  "home": {
+    "hero": {
+      "kanji": {
+        "coming_soon_desc": "敬請期待"
+      }
+    }
+  },
   "onboarding": {
     "step2_title": "Kanji：日文中的漢字",
     "step2_desc": "日文漢字與中文漢字系出同源。結合 Kanji 學習假名，可以提升記憶效率。",

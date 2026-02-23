@@ -25,7 +25,7 @@ export const ReviewCard: React.FC<Props> = ({ items, onPlaySound }) => {
   };
 
   const handlePlayClick = (item: ReviewItem) => {
-    const text = item.word || item.wordKana || item.char;
+    const text = item.wordKana || item.word || item.char;
     onPlaySound(text);
   };
 

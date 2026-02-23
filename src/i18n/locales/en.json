@@ -34,7 +34,8 @@
       },
       "kanji": {
         "title": "Kanji",
-        "subtitle": "Semantic Primer"
+        "subtitle": "Semantic Primer",
+        "coming_soon_desc": "Coming Soon"
       }
     },
     "drills": {
@@ -236,7 +237,8 @@
     "completed": "COMPLETED",
     "locked": "LOCKED",
     "in_progress": "IN PROGRESS",
-    "start": "START"
+    "start": "START",
+    "coming_soon": "COMING SOON"
   },
   "quiz_result": {
     "title": {

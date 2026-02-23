@@ -8,10 +8,11 @@
     "history": "历史"
   },
   "status": {
-    "completed": "COMPLETED",
-    "locked": "LOCKED",
-    "in_progress": "IN PROGRESS",
-    "start": "START"
+    "completed": "已完成",
+    "locked": "已锁定",
+    "in_progress": "进行中",
+    "start": "开始",
+    "coming_soon": "即将推出"
   },
   "home": {
     "greeting": {
@@ -38,7 +39,8 @@
       },
       "kanji": {
         "title": "汉字",
-        "subtitle": "语义启蒙"
+        "subtitle": "语义启蒙",
+        "coming_soon_desc": "敬请期待"
       }
     },
 

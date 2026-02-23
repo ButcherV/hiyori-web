@@ -40,7 +40,8 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onPlaySound(data.word!);
+    // 优先传 wordKana（纯假名），避免传汉字让 TTS 自己猜读音（如 '上' 可能被读成 'かみ' 而非 'うえ'）
+    onPlaySound(data.wordKana || data.word!);
   };
 
   const getOriginBadge = (origin: WordOrigin) => {

@@ -188,7 +188,7 @@ export const PageQuizSession = () => {
         timer = setTimeout(() => {
           const textToRead =
             currentItem.type === 'WORD_LEARN'
-              ? currentItem.data.word || currentItem.data.kana
+              ? currentItem.data.wordKana || currentItem.data.kana
               : currentItem.data.kana;
           speak(textToRead);
         }, 400); // 稍微延迟，等卡片动画飞到位
