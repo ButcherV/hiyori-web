@@ -32,6 +32,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'ambulance', zh: '救护车', zhHant: '救護車' },
     wordEmoji: '🚑',
     wordDistractors: ['きゆきゆしゃ', 'きゅきゅしゃ', 'くうくうしゃ'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   きょ: defineHYoon({
@@ -47,6 +48,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'study; studying', zh: '学习', zhHant: '學習' },
     wordEmoji: '📝',
     wordDistractors: ['べんきよう', 'べんきょ', 'へんきょう'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -128,6 +130,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'caution', zh: '注意', zhHant: '注意' },
     wordEmoji: '⚠️',
     wordDistractors: ['ちゆい', 'つうい', 'ちょい'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   ちょ: defineHYoon({
@@ -143,6 +146,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'butterfly', zh: '蝴蝶', zhHant: '蝴蝶' },
     wordEmoji: '🦋',
     wordDistractors: ['ちよちよ', 'ちょちょ', 'ちゅうちゅう'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -170,6 +174,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'school enrollment', zh: '入学', zhHant: '入學' },
     wordEmoji: '🎒',
     wordDistractors: ['にゆうがく', 'にゅがく', 'にゅうかく'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   にょ: defineHYoon({
@@ -282,6 +287,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'surname', zh: '姓氏', zhHant: '姓氏' },
     wordEmoji: '📛',
     wordDistractors: ['みようじ', 'もじ', 'みょじ'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -314,6 +320,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'dragon', zh: '龙', zhHant: '龍' },
     wordEmoji: '🐉',
     wordDistractors: ['りゆう', 'るう', 'りょ'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   りょ: defineHYoon({
@@ -329,6 +336,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'cooking', zh: '料理', zhHant: '料理' },
     wordEmoji: '🍳',
     wordDistractors: ['りより', 'ろり', 'りょり'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -366,6 +374,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'beef bowl', zh: '牛肉盖饭', zhHant: '牛肉蓋飯' },
     wordEmoji: '🥩',
     wordDistractors: ['ぎゆうどん', 'ぐどん', 'ぎゅどん'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   ぎょ: defineHYoon({
@@ -414,6 +423,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'address', zh: '地址', zhHant: '地址' },
     wordEmoji: '🏠',
     wordDistractors: ['じゆうしょ', 'ずしょ', 'じゅしょ'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   じょ: defineHYoon({
@@ -429,6 +439,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'skillful', zh: '擅长', zhHant: '擅長' },
     wordEmoji: '👍',
     wordDistractors: ['じようず', 'ぞうず', 'じょず'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -481,6 +492,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'hospital', zh: '医院', zhHant: '醫院' },
     wordEmoji: '🏥',
     wordDistractors: ['びよいん', 'ぼういん', 'びょいん'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -498,6 +510,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordRomaji: 'ha·ppya·ku',
     wordMeaning: { en: 'eight hundred', zh: '八百', zhHant: '八百' },
     wordDistractors: ['はっぴやく', 'はっぱく', 'はっぴょく'],
+    wordNoteKey: 'studyKana.wordNotes.hSokuon',
   }),
 
   ぴゅ: defineHYoon({
@@ -533,5 +546,6 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'presentation', zh: '发表', zhHant: '發表' },
     wordEmoji: '📢',
     wordDistractors: ['はっぴよ', 'はっぴょ', 'はっぼう'],
+    wordNoteKey: 'studyKana.wordNotes.hSokuon',
   }),
 };
