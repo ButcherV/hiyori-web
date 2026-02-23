@@ -9,9 +9,14 @@ export default function App() {
   // 从设置中获取是否完成引导的状态
   const { hasFinishedOnboarding } = useSettings();
 
-  // React 首次渲染完成后隐藏 SplashScreen
+  // 等浏览器真正完成首帧绘制后再隐藏 SplashScreen
+  // 两层 rAF：第一层在 commit 后的下一帧开始，第二层确保像素已上屏
   useEffect(() => {
-    SplashScreen.hide({ fadeOutDuration: 300 });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        SplashScreen.hide({ fadeOutDuration: 300 });
+      });
+    });
   }, []);
 
   return (

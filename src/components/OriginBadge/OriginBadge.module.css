@@ -9,21 +9,21 @@
   position: relative;
   width: 56px;
   height: 56px;
-  background-color: rgba(0, 122, 255, 0.02);
-  border: 1px solid rgba(0, 122, 255, 0.45);
+  background-color: rgba(29, 52, 97, 0.03);
+  border: 1px solid rgba(29, 52, 97, 0.35);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 
-  /* 🔥 核心修改：用背景实现田字格虚线 */
+  /* 田字格虚线 */
   background-image:
-    linear-gradient(to bottom, rgba(0, 122, 255, 0.2) 50%, transparent 50%),
-    linear-gradient(to right, rgba(0, 122, 255, 0.2) 50%, transparent 50%);
+    linear-gradient(to bottom, rgba(29, 52, 97, 0.07) 50%, transparent 50%),
+    linear-gradient(to right, rgba(29, 52, 97, 0.07) 50%, transparent 50%);
   background-size:
     1px 10px,
-    10px 1px; /* 虚线密度 */
+    10px 1px;
   background-position: center;
   background-repeat: repeat-y, repeat-x;
 }
@@ -32,16 +32,17 @@
 .originCharBox::before {
   content: attr(data-char);
   position: absolute;
-  top: 46%;
+  top: 49%;
   left: 50%;
   transform: translate(-50%, -50%);
 
-  /* 使用标准、好认的日文字体 */
-  font-family: 'Noto Serif JP', sans-serif;
+  /* 优先用 iOS 系统自带日文衬线字体，零下载，无延迟 */
+  font-family:
+    'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Noto Serif JP', serif;
   font-size: 56px;
   font-weight: 900;
-  /* 颜色要极其淡，作为草书的“影子” */
-  color: rgba(0, 122, 255, 0.1);
+  /* 颜色要极其淡，作为草书的”影子” */
+  color: rgba(29, 52, 97, 0.07);
   z-index: 1;
   pointer-events: none;
 }
@@ -51,7 +52,7 @@
   position: relative;
   z-index: 2; /* 确保草书在底纹之上 */
   font-size: 56px;
-  color: var(--color-Blue);
+  color: #1D3461;
   /* 使用你下载并引用的衡山草书 */
   font-family: 'HengShanSosho', 'Yuji Syuku', 'Klee One', serif;
   font-weight: 900;
@@ -78,7 +79,7 @@
 }
 
 :global(.kana-radical) path {
-  stroke: var(--color-Blue) !important;
+  stroke: #1D3461 !important;
   stroke-width: 8 !important;
   stroke-linecap: round;
 }

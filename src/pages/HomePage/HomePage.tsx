@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './HomePage.module.css';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,11 @@ import { useProgress } from '../../context/ProgressContext';
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  // 预加载学习页 chunk，消除首次进入时的延迟
+  useEffect(() => {
+    import('../TestStudySession/TestStudySession');
+  }, []);
 
   // --- 状态管理 ---
   // 假名选择弹窗

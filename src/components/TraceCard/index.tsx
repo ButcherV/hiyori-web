@@ -40,6 +40,12 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     lastY: 0,
   });
 
+  // 缓存当前笔画的碰撞检测对象，每次笔画开始时准备一次，draw 过程中复用
+  const hitTestRef = useRef<{
+    ctx: CanvasRenderingContext2D;
+    path: Path2D;
+  } | null>(null);
+
   const paths = KANA_PATHS[char] || [];
   const isFinished = strokeIndex >= paths.length;
 
@@ -147,7 +153,8 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
       }
     }
 
-    // C. 准备开始
+    // C. 准备开始：缓存本次笔画的碰撞检测路径，draw 过程中直接复用
+    hitTestRef.current = prepareHitTestPath(currentPathData);
     setIsDrawing(true);
     statsRef.current = { totalPoints: 0, hitPoints: 0, lastX: x, lastY: y };
 
@@ -173,20 +180,15 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     }
 
     // --- 逻辑检测 (采样) ---
-    // 我们不需要每个像素都算，手指移动事件本身的频率就足够做采样了
-    const rect = containerRef.current!.getBoundingClientRect();
-    const scale = 109 / rect.width;
-    const logicX = x * scale;
-    const logicY = y * scale;
-
-    // 准备检测环境
-    const currentPathData = paths[strokeIndex];
-    const logicCheck = prepareHitTestPath(currentPathData);
-
+    // 复用 startDrawing 时已缓存好的碰撞路径，不在每帧重建
+    const logicCheck = hitTestRef.current;
     if (logicCheck) {
+      const rect = containerRef.current!.getBoundingClientRect();
+      const scale = 109 / rect.width;
+      const logicX = x * scale;
+      const logicY = y * scale;
+
       statsRef.current.totalPoints++;
-      // 🔥 核心 API: isPointInStroke
-      // 问：这个点 (logicX, logicY) 是否落在加粗后的路径里？
       if (logicCheck.ctx.isPointInStroke(logicCheck.path, logicX, logicY)) {
         statsRef.current.hitPoints++;
       }
@@ -297,13 +299,21 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{
-                  duration: 1.5,
-                  ease: 'easeInOut',
-                  repeat: Infinity,
-                  repeatDelay: 0.3,
-                }}
+                animate={
+                  isDrawing
+                    ? { pathLength: 1, opacity: 0.3 }
+                    : { pathLength: 1, opacity: 1 }
+                }
+                transition={
+                  isDrawing
+                    ? { duration: 0 }
+                    : {
+                        duration: 1.5,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                        repeatDelay: 0.3,
+                      }
+                }
               />
             </svg>
           )}
@@ -324,7 +334,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
 
       <div className={styles.controls}>
         <button
-          className={styles.btn}
+          className={`${styles.btn} btn-base btn-primary`}
           onClick={() => {
             setStrokeIndex(0);
             clearCanvas();

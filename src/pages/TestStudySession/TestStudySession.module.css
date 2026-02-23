@@ -87,7 +87,6 @@
   position: relative;
   padding: 8px 32px 64px;
   max-height: 640px;
-  perspective: 1000px;
 }
 
 .cardArea {
@@ -108,7 +107,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
 }
 
 .cardContent {
@@ -133,26 +134,20 @@
 }
 
 /* --- 动画与状态 --- */
-/* 卡片模糊/清晰动画 */
-@keyframes unblur {
-  from {
-    filter: blur(8px);
-    opacity: 0.8;
-  }
-  to {
-    filter: blur(0);
-    opacity: 1;
-  }
+.cardContent {
+  transition:
+    filter 0.3s ease-out,
+    opacity 0.3s ease-out;
 }
 
 .backgroundCard {
-  filter: blur(8px);
-  opacity: 0.2;
-  transition: transform 0.3s;
+  /* filter: brightness(0.55) saturate(0.2); */
+  opacity: 0.01;
 }
 
 .activeCard {
-  animation: unblur 0.4s ease-out forwards;
+  /* filter: brightness(1) saturate(1); */
+  opacity: 1;
 }
 
 /* 错误抖动动画 */

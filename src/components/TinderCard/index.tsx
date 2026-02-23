@@ -1,6 +1,6 @@
 // src/components/TinderCard/TinderCard.tsx
 
-import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, useEffect, useCallback } from 'react';
 import {
   motion,
   useMotionValue,
@@ -44,15 +44,24 @@ export const TinderCard = forwardRef<TinderCardRef, TinderCardProps>(
     const likeOpacity = useTransform(x, [10, 150], [0, 1]);
     const nopeOpacity = useTransform(x, [-10, -150], [0, 1]);
 
-    // 入场动画
+    // 入场动画：只有顶卡用 spring，背景卡直接到位，避免多卡同时跑动画
     useEffect(() => {
-      controls.start({
-        scale: 1 - index * 0.05,
-        y: index * 15,
-        opacity: 1,
-        x: 0,
-        transition: { type: 'spring', stiffness: 300, damping: 20 },
-      });
+      if (index === 0) {
+        controls.start({
+          scale: 1,
+          y: 0,
+          opacity: 1,
+          x: 0,
+          transition: { type: 'spring', stiffness: 300, damping: 20 },
+        });
+      } else {
+        controls.set({
+          scale: 1 - index * 0.05,
+          y: index * 15,
+          opacity: 1,
+          x: 0,
+        });
+      }
     }, [index, controls]);
 
     // 暴露给父组件的方法 (遥控器)
@@ -77,7 +86,7 @@ export const TinderCard = forwardRef<TinderCardRef, TinderCardProps>(
     }));
 
     // 处理拖拽结束
-    const handleDragEnd = async (_: any, info: PanInfo) => {
+    const handleDragEnd = useCallback(async (_: any, info: PanInfo) => {
       const threshold = 100;
       const offset = info.offset.x;
       const velocity = info.velocity.x;
@@ -120,7 +129,7 @@ export const TinderCard = forwardRef<TinderCardRef, TinderCardProps>(
           transition: { type: 'spring', stiffness: 500, damping: 30 },
         });
       }
-    };
+    }, [controls, preventSwipe, onSwipe]);
 
     const canDrag = index === 0 && touchEnabled;
 
@@ -137,7 +146,7 @@ export const TinderCard = forwardRef<TinderCardRef, TinderCardProps>(
         initial={{ scale: 0.9, y: 50, opacity: 0, x: 0 }}
         // 拖拽属性
         drag={canDrag ? 'x' : false}
-        dragElastic={0.7}
+        dragElastic={0.15}
         onDragEnd={handleDragEnd}
       >
         {/* 🔥 关键点：直接渲染 children，不调用任何 renderContent 方法 */}
