@@ -40,8 +40,13 @@ export const WordCard: React.FC<Props> = ({ data, onPlaySound }) => {
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // 优先传 wordKana（纯假名），避免传汉字让 TTS 自己猜读音（如 '上' 可能被读成 'かみ' 而非 'うえ'）
-    onPlaySound(data.wordKana || data.word!);
+    // 平假名：播放 wordKana（假名读音）
+    // 片假名：播放 word（本身就是假名）
+    const textToPlay =
+      data.kind === 'h-seion' || data.kind === 'h-dakuon' || data.kind === 'h-yoon'
+        ? data.wordKana || data.word!
+        : data.word!;
+    onPlaySound(textToPlay);
   };
 
   const getOriginBadge = (origin: WordOrigin) => {

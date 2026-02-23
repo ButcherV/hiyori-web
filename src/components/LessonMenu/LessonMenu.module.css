@@ -108,8 +108,8 @@
 }
 
 .subtitle {
-  font-size: 14px;
-  color: #8e8e93;
+  font-size: 16px;
+  color: var(--color-Gray6);
   font-family: monospace;
   letter-spacing: 0.5px;
   display: flex;
@@ -118,23 +118,23 @@
 
 /* 状态样式 */
 .rowItem.mastered {
-  background-color: #f2fcf5;
-  border-color: transparent;
+  background-color: var(--color-mastered-bg);
+  border-color: var(--color-mastered-border);
 }
 .mastered .title {
-  color: #2e7d32;
+  color: var(--color-mastered-text);
 }
-.mastered .subtitle {
+/* .mastered .subtitle {
   color: #81c784;
-}
+} */
 
 .rowItem.current {
-  background-color: #fff;
-  border-color: #007aff;
+  background-color: white;
+  border-color: var(--color-Blue);
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
 }
 .current .title {
-  color: #007aff;
+  color: var(--color-Blue);
 }
 
 .rowItem.new {
@@ -157,7 +157,7 @@
 
 .mastered .iconBox {
   background-color: rgba(46, 125, 50, 0.1);
-  color: #2e7d32;
+  color: var(--color-Green);
 }
 
 .current .iconBox {

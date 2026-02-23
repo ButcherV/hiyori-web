@@ -156,10 +156,22 @@ export const TestStudySession = () => {
       if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
         // 稍微延迟一点，体验更好
         timer = setTimeout(() => {
-          const textToRead =
-            currentItem.type === 'WORD_LEARN'
+          let textToRead: string;
+          
+          if (currentItem.type === 'WORD_LEARN') {
+            // 平假名：播放 wordKana（假名读音）
+            // 片假名：播放 word（本身就是假名）
+            const isHiragana = 
+              currentItem.data.kind === 'h-seion' || 
+              currentItem.data.kind === 'h-dakuon' || 
+              currentItem.data.kind === 'h-yoon';
+            
+            textToRead = isHiragana
               ? currentItem.data.wordKana || currentItem.data.kana
-              : currentItem.data.kana;
+              : currentItem.data.word || currentItem.data.kana;
+          } else {
+            textToRead = currentItem.data.kana;
+          }
 
           speak(textToRead);
         }, 400);

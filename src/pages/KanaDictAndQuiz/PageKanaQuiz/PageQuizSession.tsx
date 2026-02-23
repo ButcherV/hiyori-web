@@ -186,10 +186,23 @@ export const PageQuizSession = () => {
       // 只有 学习卡/更正卡 才自动播放，Quiz卡通常不读题
       if (['KANA_LEARN', 'WORD_LEARN'].includes(currentItem.type)) {
         timer = setTimeout(() => {
-          const textToRead =
-            currentItem.type === 'WORD_LEARN'
+          let textToRead: string;
+          
+          if (currentItem.type === 'WORD_LEARN') {
+            // 平假名：播放 wordKana（假名读音）
+            // 片假名：播放 word（本身就是假名）
+            const isHiragana = 
+              currentItem.data.kind === 'h-seion' || 
+              currentItem.data.kind === 'h-dakuon' || 
+              currentItem.data.kind === 'h-yoon';
+            
+            textToRead = isHiragana
               ? currentItem.data.wordKana || currentItem.data.kana
-              : currentItem.data.kana;
+              : currentItem.data.word || currentItem.data.kana;
+          } else {
+            textToRead = currentItem.data.kana;
+          }
+          
           speak(textToRead);
         }, 400); // 稍微延迟，等卡片动画飞到位
       }
