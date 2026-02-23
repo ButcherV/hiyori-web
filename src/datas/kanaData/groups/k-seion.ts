@@ -9,8 +9,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '阿', // 片假名汉字来源
 
-    kanaDistractors: ['イ', 'マ', 'ヤ'], // 该假名的形近，请做到尽可能的迷惑性。至少三个
-    romajiDistractors: ['i', 'ma', 'ya'], // 该假名的音近，请做到尽可能的迷惑性。少三个
+    kanaDistractors: ['マ', 'ヤ', 'ナ'], // 该假名的形近，请做到尽可能的迷惑性。至少三个
+    romajiDistractors: ['e', 'o', 'u'], // 该假名的音近，请做到尽可能的迷惑性。少三个
 
     word: 'アメリカ', // 包含该片假名的单词。要求是知名词汇，比如品牌名、人名、地名、国名、等等。必须是名词，尽可能知名，在保证知名的前提下，总发音尽量少、发音中未学假名的数量尽量少。总体需符合日语入门人群的水平。请优先从上方《常见片假名单词示例》中挑选。
     wordRomaji: 'a·me·ri·ka',
@@ -21,7 +21,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'America', zh: '美国', zhHant: '美國' },
     wordDistractors: ['アリメカ', 'アリカメ', 'アメリマ'], // word 的形似，请做到尽可能的迷惑性。至少三个。
-    wordEmoji: '', // 该单词尽可能是简单名词，对应的 emoji 或 image。没有合适的就置空。
+    wordEmoji: '🇺🇸', // 该单词尽可能是简单名词，对应的 emoji 或 image。没有合适的就置空。
   }),
 
   イ: defineKSeion({
@@ -31,8 +31,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '伊',
 
-    kanaDistractors: ['リ', 'ト', 'ア'],
-    romajiDistractors: ['e', 'li', 'y'],
+    kanaDistractors: ['リ', 'ソ', 'ン'],
+    romajiDistractors: ['e', 'a', 'u'],
 
     word: 'イケア', // IKEA (宜家)。
     wordRomaji: 'i·ke·a',
@@ -52,8 +52,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '宇', // 来自“宇”的宝盖头
 
-    kanaDistractors: ['ワ', 'ク', 'ア'], // ワ(wa)极度形似
-    romajiDistractors: ['wa', 'ku', 'o'],
+    kanaDistractors: ['ワ', 'ク', 'フ'], // ワ(wa)极度形似
+    romajiDistractors: ['o', 'a', 'i'],
 
     word: 'ウール', // Wool (羊毛)。常见的衣服材质标签。
     wordRomaji: 'u·u·ru', // 长音
@@ -75,17 +75,17 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '江',
 
     kanaDistractors: ['ユ', 'ロ', 'コ'],
-    romajiDistractors: ['yi', 'i', 'ye'],
+    romajiDistractors: ['i', 'a', 'o'],
 
-    word: 'エスカレーター',
-    wordRomaji: 'e·su·ka·re·e·ta·a',
+    word: 'エアコン',
+    wordRomaji: 'e·a·ko·n',
     wordOrigin: {
       lang: 'en-US',
-      word: 'Escalator',
+      word: 'Air Conditioner',
       desc: '',
     },
-    wordMeaning: { en: 'Escalator', zh: '自动扶梯', zhHant: '自動扶梯' },
-    wordDistractors: ['エスカレータ', 'エスガレーター', 'イスカレーター'],
+    wordMeaning: { en: 'Air Conditioner', zh: '空调', zhHant: '空調' },
+    wordDistractors: ['エアゴン', 'エアコヌ', 'アエコン', 'エコアン'],
   }),
 
   オ: defineKSeion({
@@ -95,8 +95,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '於',
 
-    kanaDistractors: ['ホ', 'ヌ', 'カ'],
-    romajiDistractors: ['ho', 'nu', 'ka'],
+    kanaDistractors: ['ホ', 'ネ', 'ヌ'],
+    romajiDistractors: ['u', 'a', 'e'],
 
     word: 'オランダ',
     wordRomaji: 'o·ra·n·da',
@@ -107,7 +107,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Netherlands', zh: '荷兰', zhHant: '荷蘭' },
     wordDistractors: ['ホランダ', 'オラダン', 'オンラダ'],
-    // wordEmoji: '🇳🇱',
+    wordEmoji: '🇳🇱',
   }),
 
   // --- カ 行 (片假名) ---
@@ -118,8 +118,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '加',
 
-    kanaDistractors: ['ガ', 'オ', 'タ'],
-    romajiDistractors: ['ga', 'o', 'ki'],
+    kanaDistractors: ['タ', 'ク', 'ヤ'],
+    romajiDistractors: ['ga', 'ki', 'ku'],
 
     word: 'カルテ',
     wordRomaji: 'ka·ru·te',
@@ -139,7 +139,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '幾',
 
-    kanaDistractors: ['ギ', 'サ', 'ヰ'],
+    kanaDistractors: ['サ', 'セ', 'ミ'],
     romajiDistractors: ['gi', 'ku', 'ke'],
 
     word: 'キット',
@@ -151,6 +151,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Kit', zh: '套装', zhHant: '套裝' },
     wordDistractors: ['ギット', 'キトト', 'キッド'],
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   ク: defineKSeion({
@@ -160,7 +161,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '久',
 
-    kanaDistractors: ['グ', 'ワ', 'ケ'],
+    kanaDistractors: ['ワ', 'ケ', 'タ'],
     romajiDistractors: ['gu', 'ki', 'ke'],
 
     word: 'クッキー',
@@ -173,6 +174,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Cookie', zh: '饼干', zhHant: '餅乾' },
     wordDistractors: ['グッキー', 'クキー', 'クッケー'],
     wordEmoji: '🍪',
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   ケ: defineKSeion({
@@ -182,7 +184,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '介',
 
-    kanaDistractors: ['ゲ', 'ユ', 'コ'],
+    kanaDistractors: ['ユ', 'コ', 'ク'],
     romajiDistractors: ['ge', 'ki', 'ko'],
 
     word: 'ケーキ',
@@ -195,6 +197,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Cake', zh: '蛋糕', zhHant: '蛋糕' },
     wordDistractors: ['ゲーキ', 'ケキー', 'ケーギ'],
     wordEmoji: '🍰',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   コ: defineKSeion({
@@ -204,7 +207,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '己',
 
-    kanaDistractors: ['ゴ', 'ユ', 'エ'],
+    kanaDistractors: ['ユ', 'エ', 'ロ'],
     romajiDistractors: ['go', 'ku', 'ki'],
 
     word: 'コップ',
@@ -216,6 +219,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Cup/Glass', zh: '杯子', zhHant: '杯子' },
     wordDistractors: ['ゴップ', 'コププ', 'コッブ'],
+    wordEmoji: '🥤',
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   // --- サ 行 (片假名) ---
@@ -226,7 +231,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '散',
 
-    kanaDistractors: ['ザ', 'セ', 'ヨ'],
+    kanaDistractors: ['セ', 'ヨ', 'キ'],
     romajiDistractors: ['za', 'shi', 'se'],
 
     word: 'サラダ',
@@ -272,7 +277,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '須',
 
     kanaDistractors: ['ヌ', 'ラ', 'ン'],
-    romajiDistractors: ['nu', 'shi', 'se'],
+    romajiDistractors: ['zu', 'shi', 'se'],
 
     word: 'スイカ',
     wordRomaji: 'su·i·ka',
@@ -293,7 +298,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '世',
 
-    kanaDistractors: ['ゼ', 'モ', 'ヒ'],
+    kanaDistractors: ['モ', 'ヒ', 'サ'],
     romajiDistractors: ['ze', 'sa', 'shi'],
 
     word: 'ランドセル',
@@ -315,7 +320,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '曽',
 
-    kanaDistractors: ['ゾ', 'ン', 'リ'],
+    kanaDistractors: ['ン', 'リ', 'ノ'],
     romajiDistractors: ['zo', 'su', 'shi'],
 
     word: 'ソーセージ',
@@ -327,6 +332,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Sausage', zh: '香肠', zhHant: '香腸' },
     wordDistractors: ['ゾーセージ', 'ソセージー', 'ソーセジ'],
+    wordEmoji: '🌭',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // --- タ 行 (片假名) ---
@@ -337,8 +344,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '多',
 
-    kanaDistractors: ['ダ', 'ク', 'ヌ'],
-    romajiDistractors: ['da', 'chi', 'to'],
+    kanaDistractors: ['ク', 'ヌ', 'カ'],
+    romajiDistractors: ['da', 'te', 'to'],
 
     word: 'タバコ',
     wordRomaji: 'ta·ba·ko',
@@ -359,8 +366,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '千',
 
-    kanaDistractors: ['ヂ', 'テ', 'ナ'],
-    romajiDistractors: ['ji', 'ti', 'ta'],
+    kanaDistractors: ['テ', 'ナ', 'キ'],
+    romajiDistractors: ['ji', 'tsu', 'shi'],
 
     word: 'チーズ',
     wordRomaji: 'chi·i·zu',
@@ -372,6 +379,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Cheese', zh: '奶酪', zhHant: '起司' },
     wordDistractors: ['ヂーズ', 'チズー', 'チース'],
     wordEmoji: '🧀',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ツ: defineKSeion({
@@ -381,7 +389,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '川',
 
-    kanaDistractors: ['ヅ', 'シ', 'ン'],
+    kanaDistractors: ['シ', 'ン', 'ソ'],
     romajiDistractors: ['zu', 'shi', 'chi'],
 
     word: 'ナッツ',
@@ -394,6 +402,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Nuts', zh: '坚果', zhHant: '堅果' },
     wordDistractors: ['ナッヅ', 'ナシツ', 'ナツツ'],
     wordEmoji: '🥜',
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   テ: defineKSeion({
@@ -403,8 +412,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '天',
 
-    kanaDistractors: ['ナ', 'ラ', 'ア'],
-    romajiDistractors: ['na', 'chi', 'to'],
+    kanaDistractors: ['ナ', 'ラ', 'チ'],
+    romajiDistractors: ['de', 'ta', 'to'],
 
     word: 'テスト',
     wordRomaji: 'te·su·to',
@@ -425,8 +434,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '止',
 
-    kanaDistractors: ['イ', 'ヒ', 'ナ'],
-    romajiDistractors: ['i', 'ta', 'te'],
+    kanaDistractors: ['イ', 'ヒ', 'リ'],
+    romajiDistractors: ['do', 'ta', 'te'],
 
     word: 'トマト',
     wordRomaji: 'to·ma·to',
@@ -449,7 +458,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '奈',
 
     kanaDistractors: ['メ', 'ヌ', 'チ'],
-    romajiDistractors: ['me', 'nu', 'ni'],
+    romajiDistractors: ['ma', 'nu', 'ni'],
 
     word: 'バナナ',
     wordRomaji: 'ba·na·na',
@@ -470,7 +479,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '二',
 
-    kanaDistractors: ['ミ', 'ー', 'ュ'],
+    kanaDistractors: ['ミ', 'サ', 'キ'],
     romajiDistractors: ['mi', 'na', 'nu'],
 
     word: 'ピーマン',
@@ -493,7 +502,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '奴',
 
     kanaDistractors: ['ス', 'ラ', 'フ'],
-    romajiDistractors: ['su', 'mu', 'ni'],
+    romajiDistractors: ['mu', 'na', 'ni'],
 
     word: 'カヌー',
     wordRomaji: 'ka·nu·u',
@@ -505,6 +514,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Canoe', zh: '独木舟', zhHant: '獨木舟' },
     wordDistractors: ['カスー', 'カヌヌ', 'ガヌー'],
     wordEmoji: '🛶',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ネ: defineKSeion({
@@ -515,7 +525,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '祢',
 
     kanaDistractors: ['ホ', 'ヌ', 'メ'],
-    romajiDistractors: ['ho', 'ni', 'no'],
+    romajiDistractors: ['me', 'ni', 'no'],
 
     word: 'ネクタイ',
     wordRomaji: 'ne·ku·ta·i',
@@ -536,8 +546,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '乃',
 
-    kanaDistractors: ['ソ', 'ン', 'メ'],
-    romajiDistractors: ['so', 'nu', 'ne'],
+    kanaDistractors: ['ソ', 'ン', 'リ'],
+    romajiDistractors: ['mo', 'nu', 'ne'],
 
     word: 'ノルマ',
     wordRomaji: 'no·ru·ma',
@@ -558,7 +568,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '八',
 
-    kanaDistractors: ['バ', 'パ', 'ホ'],
+    kanaDistractors: ['ホ', 'ヘ', 'ヒ'],
     romajiDistractors: ['ba', 'pa', 'ho'],
 
     word: 'ハンバーガー',
@@ -571,6 +581,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Hamburger', zh: '汉堡包', zhHant: '漢堡包' },
     wordDistractors: ['バンバーガー', 'パンバーガー', 'ハンパーガー'],
     wordEmoji: '🍔',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヒ: defineKSeion({
@@ -581,18 +592,19 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '比',
 
     kanaDistractors: ['セ', 'ト', 'ニ'],
-    romajiDistractors: ['se', 'he', 'ho'],
+    romajiDistractors: ['bi', 'ha', 'ho'],
 
     word: 'コーヒー',
     wordRomaji: 'ko·o·hi·i',
     wordOrigin: {
-      lang: 'en-US',
-      word: 'Coffee',
-      desc: '',
+      lang: 'nl',
+      word: 'Koffie',
+      desc: '☕',
     },
     wordMeaning: { en: 'Coffee', zh: '咖啡', zhHant: '咖啡' },
     wordEmoji: '☕',
     wordDistractors: ['コーセー', 'コヒー', 'ゴーヒー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   フ: defineKSeion({
@@ -602,7 +614,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '不',
 
-    kanaDistractors: ['ブ', 'プ', 'ワ'],
+    kanaDistractors: ['ワ', 'ウ', 'ク'],
     romajiDistractors: ['bu', 'pu', 'hu'],
 
     word: 'ナイフ',
@@ -624,7 +636,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '部',
 
-    kanaDistractors: ['ベ', 'ペ', 'ト'],
+    kanaDistractors: ['ト', 'レ', 'ノ'],
     romajiDistractors: ['be', 'pe', 'hi'],
 
     word: 'ゲレンデ',
@@ -647,7 +659,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '保',
 
     kanaDistractors: ['オ', 'ネ', 'ヒ'],
-    romajiDistractors: ['o', 'he', 'ha'],
+    romajiDistractors: ['bo', 'ha', 'hi'],
 
     word: 'ホテル',
     wordRomaji: 'ho·te·ru',
@@ -670,7 +682,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '末',
 
     kanaDistractors: ['ア', 'ヤ', 'ム'],
-    romajiDistractors: ['a', 'ya', 'mu'],
+    romajiDistractors: ['na', 'mi', 'mu'],
 
     word: 'マロン',
     wordRomaji: 'ma·ro·n',
@@ -692,7 +704,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '三',
 
     kanaDistractors: ['シ', 'ニ', 'ツ'],
-    romajiDistractors: ['shi', 'ni', 'mu'],
+    romajiDistractors: ['ni', 'ma', 'mu'],
 
     word: 'ミルク',
     wordRomaji: 'mi·ru·ku',
@@ -714,7 +726,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '牟',
 
     kanaDistractors: ['ヌ', 'ラ', 'ク'],
-    romajiDistractors: ['nu', 'ma', 'mi'],
+    romajiDistractors: ['nu', 'ma', 'mo'],
 
     word: 'アルバム',
     wordRomaji: 'a·ru·ba·mu',
@@ -736,7 +748,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '女',
 
     kanaDistractors: ['ヌ', 'ナ', 'ス'],
-    romajiDistractors: ['nu', 'ma', 'mi'],
+    romajiDistractors: ['ne', 'ma', 'mo'],
 
     word: 'ラーメン',
     wordRomaji: 'ra·a·me·n',
@@ -748,6 +760,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Ramen', zh: '拉面', zhHant: '拉麵' },
     wordDistractors: ['ラーヌン', 'ラーメヌ', 'ラメーン'],
     wordEmoji: '🍜',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   モ: defineKSeion({
@@ -757,8 +770,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '毛',
 
-    kanaDistractors: ['ヰ', 'ヨ', 'セ'],
-    romajiDistractors: ['yo', 'mu', 'me'],
+    kanaDistractors: ['ヨ', 'セ', 'ユ'],
+    romajiDistractors: ['no', 'mu', 'ma'],
 
     word: 'ローマ',
     wordRomaji: 'ro·o·ma',
@@ -769,6 +782,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Rome', zh: '罗马', zhHant: '羅馬' },
     wordDistractors: ['ローヨ', 'ロマー', 'ローア'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // --- ヤ 行 (片假名) ---
@@ -780,7 +794,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '也',
 
     kanaDistractors: ['ア', 'マ', 'セ'],
-    romajiDistractors: ['a', 'ma', 'yu'],
+    romajiDistractors: ['wa', 'yo', 'yu'],
 
     word: 'ダイヤ',
     wordRomaji: 'da·i·ya',
@@ -802,7 +816,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '由',
 
     kanaDistractors: ['コ', 'ヨ', 'エ'],
-    romajiDistractors: ['ko', 'yo', 'ya'],
+    romajiDistractors: ['yo', 'ya', 'wa'],
 
     word: 'ミュンヘン',
     wordRomaji: 'myu·n·he·n',
@@ -823,7 +837,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '与',
 
     kanaDistractors: ['コ', 'ユ', 'モ'],
-    romajiDistractors: ['ko', 'yu', 'mo'],
+    romajiDistractors: ['yu', 'ya', 'wa'],
 
     word: 'ヨット',
     wordRomaji: 'yo·t·to',
@@ -835,6 +849,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Yacht', zh: '游艇', zhHant: '遊艇' },
     wordDistractors: ['コット', 'ヨトト', 'ヨッド'],
     wordEmoji: '⛵',
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   // --- ラ 行 (片假名) ---
@@ -846,7 +861,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '良',
 
     kanaDistractors: ['ヲ', 'ス', 'ク'],
-    romajiDistractors: ['wo', 'ru', 'ri'],
+    romajiDistractors: ['wa', 'ru', 'ri'],
 
     word: 'カメラ',
     wordRomaji: 'ka·me·ra',
@@ -868,7 +883,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '利',
 
     kanaDistractors: ['イ', 'ソ', 'ン'],
-    romajiDistractors: ['i', 'ra', 'ru'],
+    romajiDistractors: ['ni', 'ra', 'ru'],
 
     word: 'パリ',
     wordRomaji: 'pa·ri',
@@ -889,7 +904,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '流',
 
     kanaDistractors: ['レ', 'ヌ', 'ワ'],
-    romajiDistractors: ['re', 'nu', 'ra'],
+    romajiDistractors: ['re', 'mu', 'ra'],
 
     word: 'ルール',
     wordRomaji: 'ru·u·ru',
@@ -901,6 +916,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Rule', zh: '规则', zhHant: '規則' },
     wordEmoji: '📏',
     wordDistractors: ['レール', 'ルーヌ', 'ルル'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   レ: defineKSeion({
@@ -910,8 +926,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
 
     kanaKanjiOrigin: '礼',
 
-    kanaDistractors: ['ヒ', 'ル', 'ワ'],
-    romajiDistractors: ['hi', 'ru', 'ri'],
+    kanaDistractors: ['ヒ', 'ル', 'ヘ'],
+    romajiDistractors: ['ne', 'ru', 'ra'],
 
     word: 'アンケート',
     wordRomaji: 'a·n·ke·e·to',
@@ -932,7 +948,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '呂',
 
     kanaDistractors: ['コ', 'エ', 'ユ'],
-    romajiDistractors: ['ko', 'ru', 're'],
+    romajiDistractors: ['no', 'ra', 're'],
 
     word: 'アルコール',
     wordRomaji: 'a·ru·ko·o·ru',
@@ -943,6 +959,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Alcohol', zh: '酒精', zhHant: '酒精' },
     wordDistractors: ['アルゴール', 'アヌコール', 'アルコル'],
+    wordEmoji: '🍶',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // --- ワ 行 (片假名) ---
@@ -954,7 +972,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '和',
 
     kanaDistractors: ['ウ', 'ク', 'フ'],
-    romajiDistractors: ['u', 'ku', 'ra'],
+    romajiDistractors: ['ra', 'ya', 'o'],
 
     word: 'ワイン',
     wordRomaji: 'wa·i·n',
@@ -997,7 +1015,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaKanjiOrigin: '尓',
 
     kanaDistractors: ['ソ', 'ノ', 'シ'],
-    romajiDistractors: ['so', 'no', 'shi'],
+    romajiDistractors: ['m', 'nu', 'mu'],
 
     word: 'パン',
     wordRomaji: 'pa·n',
