@@ -192,7 +192,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🪨',
     kanaDistractors: ['つ', 'も', 'ン'],
     romajiDistractors: ['si', 'chi', 'hi'],
-    wordDistractors: ['いつ', 'いも', 'いじ'],
+    wordDistractors: ['いお', 'いむ', 'いん', 'しい'],
     noteKey: 'studyKana.notes.hshi',
   }),
 
@@ -223,7 +223,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🌍',
     kanaDistractors: ['サ', 'や', 'ち'],
     romajiDistractors: ['she', 'ce', 'ze'],
-    wordDistractors: ['サかい', 'やかい', 'ぜかい'],
+    wordDistractors: ['サかい', 'やかい', 'きかい', 'せいか'],
   }),
 
   そ: defineHSeion({
@@ -238,7 +238,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🤥',
     kanaDistractors: ['ろ', 'る', 'ん'],
     romajiDistractors: ['sa', 'su', 'zo'],
-    wordDistractors: ['うろ', 'うる', 'うぞ'],
+    wordDistractors: ['うろ', 'うる', 'うレ'],
   }),
 
   // た行 (T-Column)
@@ -254,7 +254,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🎵',
     kanaDistractors: ['に', 'な', 'ち'],
     romajiDistractors: ['da', 'to', 'ka'],
-    wordDistractors: ['うに', 'うな', 'うだ'],
+    wordDistractors: ['うに', 'たう', 'うな', 'うち'],
   }),
 
   ち: defineHSeion({
@@ -268,7 +268,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'father', zh: '父亲', zhHant: '父親' },
     wordEmoji: '👨‍👦',
     kanaDistractors: ['ら', 'さ', 'き', 'テ'],
-    romajiDistractors: ['ti', 'shi', 'ji'],
+    romajiDistractors: ['ti', 'shi', 'ji', 'qi','xi'],
     wordDistractors: ['さち', 'らち', 'きち', 'ちさ'],
     noteKey: 'studyKana.notes.hchi',
   }),
@@ -285,7 +285,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🌙',
     kanaDistractors: ['う', 'し', 'っ'],
     romajiDistractors: ['tu', 'su', 'zu'],
-    wordDistractors: ['うき', 'つえ', 'づき', 'きつ'],
+    wordDistractors: ['うき', 'つえ', 'っき', 'きつ'],
     noteKey: 'studyKana.notes.htsu',
   }),
 
@@ -301,7 +301,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '✋',
     kanaDistractors: ['と', 'く', 'ア'],
     romajiDistractors: ['de', 'ta', 'he'],
-    wordDistractors: ['と', 'く', 'で'],
+    wordDistractors: ['と', 'く', 'ア'],
   }),
 
   と: defineHSeion({
@@ -427,7 +427,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '👂',
     kanaDistractors: ['ゐ', 'ぬ', 'ね'],
     romajiDistractors: ['ni', 'me', 'mu'],
-    wordDistractors: ['ゐゐ', 'ぬぬ', 'ねね'],
+    wordDistractors: ['ゐゐ', 'ぬぬ', 'ねね', 'みね','みぬ',],
   }),
 
   む: defineHSeion({
@@ -510,7 +510,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '👤',
     kanaDistractors: ['て', 'い', 'び'],
     romajiDistractors: ['he', 'bi', 'pi'],
-    wordDistractors: ['てと', 'いと', 'びと'],
+    wordDistractors: ['てと', 'いと', 'びと', 'こと'],
   }),
 
   ふ: defineHSeion({
@@ -525,7 +525,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🚢',
     kanaDistractors: ['や', 'ウ', 'や'],
     romajiDistractors: ['hu', 'bu', 'pu'],
-    wordDistractors: ['ぶね', 'ぷね', 'やね'],
+    wordDistractors: ['ワね','ねふ', 'ワね', 'やね'],
     noteKey: 'studyKana.notes.hfu',
   }),
 
@@ -541,7 +541,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '🚪',
     kanaDistractors: ['く', 'て', 'ア'],
     romajiDistractors: ['be', 'pe', 'fe'],
-    wordDistractors: ['くや', 'てや', 'べや'],
+    wordDistractors: ['くや', 'てや', 'アや'],
     noteKey: 'studyKana.notes.hhe',
   }),
 
@@ -557,7 +557,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordEmoji: '⭐',
     kanaDistractors: ['は', 'ま', 'け'],
     romajiDistractors: ['ha', 'bo', 'po'],
-    wordDistractors: ['はし', 'まし', 'ぼし'],
+    wordDistractors: ['はし', 'まし', 'けし', 'しほ'],
   }),
 
   // や行 (Y-Column)
@@ -633,7 +633,7 @@ export const HIRAGANA_SEION: Record<string, HiraganaSeion> = {
     wordMeaning: { en: 'bird', zh: '鸟', zhHant: '鳥' },
     wordEmoji: '🐦',
     kanaDistractors: ['い', 'け', 'こ'],
-    romajiDistractors: ['li', 'ry', 'i'],
+    romajiDistractors: ['li', 'yi', 'i'],
     wordDistractors: ['とい', 'とけ', 'とこ'],
   }),
 
