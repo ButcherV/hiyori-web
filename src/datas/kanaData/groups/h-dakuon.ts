@@ -248,15 +248,15 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     id: 'h-ba',
     kana: 'ば',
     romaji: 'ba',
-    kanaKanjiOrigin: '波', // 源自“波”
+    kanaKanjiOrigin: '波',
     kanaDistractors: ['は', 'ぱ', 'ほ'],
     romajiDistractors: ['ha', 'pa', 'ho'],
-    word: '馬',
-    wordKana: 'うま',
-    wordRomaji: 'u·ma',
-    wordMeaning: { en: 'horse', zh: '马', zhHant: '馬' },
-    wordEmoji: '🐴',
-    wordDistractors: ['うは', 'うな', 'ばな'],
+    word: '鞄',
+    wordKana: 'かばん',
+    wordRomaji: 'ka·ba·n',
+    wordMeaning: { en: 'bag', zh: '包', zhHant: '包' },
+    wordEmoji: '👜',
+    wordDistractors: ['かはん', 'かぱん', 'がばん'],
   }),
 
   び: defineHDakuon({
@@ -320,7 +320,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordNoteKey: 'studyKana.wordNotes.hhyo',
   }),
 
-  // 半浊音 - 没有单词
+  // 半浊音
   ぱ: defineHDakuon({
     id: 'h-pa',
     kana: 'ぱ',
@@ -328,7 +328,12 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '波',
     kanaDistractors: ['ば', 'は', 'ぬ'],
     romajiDistractors: ['ba', 'ha', 'nu'],
-    wordDistractors: ['ばあ', 'はあ', 'ぬあ'],
+    word: '散歩',
+    wordKana: 'さんぽ',
+    wordRomaji: 'sa·n·po',
+    wordMeaning: { en: 'walk; stroll', zh: '散步', zhHant: '散步' },
+    wordEmoji: '🚶',
+    wordDistractors: ['さんぼ', 'さんほ', 'たんぽ'],
   }),
 
   ぴ: defineHDakuon({
@@ -338,7 +343,13 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '比',
     kanaDistractors: ['び', 'ひ', 'ら'],
     romajiDistractors: ['bi', 'hi', 'ra'],
-    wordDistractors: ['びい', 'ひい', 'らい'],
+    word: '一匹',
+    wordKana: 'いっぴき',
+    wordRomaji: 'i·ppi·ki',
+    wordMeaning: { en: 'one small animal', zh: '一只（小动物）', zhHant: '一隻（小動物）' },
+    wordEmoji: '🐟',
+    wordDistractors: ['いっびき', 'いっひき', 'いっぽき'],
+    wordNoteKey: 'studyKana.wordNotes.hza',
   }),
 
   ぷ: defineHDakuon({
@@ -348,7 +359,12 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '不',
     kanaDistractors: ['ぶ', 'ふ', 'よ'],
     romajiDistractors: ['bu', 'fu', 'yo'],
-    wordDistractors: ['ぶう', 'ふう', 'よう'],
+    word: '天ぷら',
+    wordKana: 'てんぷら',
+    wordRomaji: 'te·n·pu·ra',
+    wordMeaning: { en: 'tempura', zh: '天妇罗', zhHant: '天婦羅' },
+    wordEmoji: '🍤',
+    wordDistractors: ['てんぶら', 'てんふら', 'てんくら'],
   }),
 
   ぺ: defineHDakuon({
@@ -358,7 +374,6 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '部',
     kanaDistractors: ['べ', 'へ', 'く'],
     romajiDistractors: ['be', 'he', 'ku'],
-    wordDistractors: ['べえ', 'へえ', 'くえ'],
   }),
 
   ぽ: defineHDakuon({
@@ -368,6 +383,12 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     kanaKanjiOrigin: '保',
     kanaDistractors: ['ぼ', 'ほ', 'ま'],
     romajiDistractors: ['bo', 'ho', 'ma'],
-    wordDistractors: ['ぼお', 'ほお', 'まお'],
+    word: '一歩',
+    wordKana: 'いっぽ',
+    wordRomaji: 'i·ppo',
+    wordMeaning: { en: 'one step', zh: '一步', zhHant: '一步' },
+    wordEmoji: '👣',
+    wordDistractors: ['いっぼ', 'いっほ', 'いぽ'],
+    wordNoteKey: 'studyKana.wordNotes.hza',
   }),
 };
