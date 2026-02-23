@@ -64,7 +64,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Wool', zh: '羊毛', zhHant: '羊毛' },
     wordDistractors: ['ワール', 'クール', 'ウーヌ'], // 用形近字ワ、ク混淆，或把ル改成ソ(so)
-    wordNoteKey: 'studyKana.wordNotes.ku',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   エ: defineKSeion({

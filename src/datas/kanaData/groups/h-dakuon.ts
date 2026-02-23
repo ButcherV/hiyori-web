@@ -97,9 +97,9 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordKana: 'ざっし',
     wordRomaji: 'za·sshi',
     wordMeaning: { en: 'magazine', zh: '杂志', zhHant: '雜誌' },
-    wordEmoji: '📰',
+    wordEmoji: '📕',
     wordDistractors: ['さっし', 'ざし', 'さし'],
-    wordNoteKey: 'studyKana.wordNotes.hza',
+    wordNoteKey: 'studyKana.wordNotes.hSokuon',
   }),
 
   じ: defineHDakuon({
@@ -161,7 +161,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'elephant', zh: '大象', zhHant: '大象' },
     wordEmoji: '🐘',
     wordDistractors: ['そう', 'ざう', 'ぜう'],
-    wordNoteKey: 'studyKana.wordNotes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -238,7 +238,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'road; way', zh: '道路', zhHant: '道路' },
     wordEmoji: '🛣️',
     wordDistractors: ['とう', 'こう', 'ごう'],
-    wordNoteKey: 'studyKana.wordNotes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================
@@ -270,7 +270,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordKana: 'びん',
     wordRomaji: 'bi·n',
     wordMeaning: { en: 'bottle', zh: '瓶子', zhHant: '瓶子' },
-    wordEmoji: '🍾',
+    wordEmoji: '🍶',
     wordDistractors: ['ひん', 'ぴん', 'べん'],
   }),
 
@@ -317,7 +317,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'hat', zh: '帽子', zhHant: '帽子' },
     wordEmoji: '👒',
     wordDistractors: ['ほうし', 'ぽうし', 'ぼし'],
-    wordNoteKey: 'studyKana.wordNotes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // 半浊音
@@ -388,6 +388,6 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'one step', zh: '一步', zhHant: '一步' },
     wordEmoji: '👣',
     wordDistractors: ['いっぼ', 'いっほ', 'いぽ'],
-    wordNoteKey: 'studyKana.wordNotes.hza',
+    wordNoteKey: 'studyKana.wordNotes.hSokuon',
   }),
 };

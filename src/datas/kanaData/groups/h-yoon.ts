@@ -241,7 +241,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordMeaning: { en: 'leopard', zh: '豹', zhHant: '豹' },
     wordEmoji: '🐆',
     wordDistractors: ['ひよう', 'ほお', 'ひよ'],
-    wordNoteKey: 'studyKana.wordNotes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================

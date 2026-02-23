@@ -316,7 +316,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     wordMeaning: { en: 'Leopard', zh: '豹', zhHant: '豹' },
     wordEmoji: '🐆',
     wordDistractors: ['ヒヨウ', 'ビョウ', 'ホウ'],
-    wordNoteKey: 'studyKana.wordNotes.hhyo',
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   // ==========================================

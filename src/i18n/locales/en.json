@@ -203,11 +203,10 @@
       "kdu": "Note: ヅ sounds the same as ズ (zu). Most words use ズ instead."
     },
     "wordNotes": {
-      "hza": "Note: \"っ\" is a sokuon (geminate consonant), doubling the next consonant sound.",
-      "hhyo": "Note: \"う\" here represents a long vowel, extending the \"o\" sound by one beat.",
-      "ku": "Note: \"ー\" is a long vowel mark in katakana, extending the previous vowel by one beat.",
-      "kLongVowel": "Note: \"ー\" is a long vowel mark in katakana, extending the previous vowel by one beat.",
-      "kSokuon": "Note: \"ッ\" is a sokuon (geminate consonant), creating a brief pause before the next consonant."
+      "hSokuon": "Note: \"っ\" is a sokuon (geminate consonant), doubling the next consonant sound.",
+      "hLongVowel": "Note: \"う\" here represents a long vowel, extending the \"o\" sound by one beat.",
+      "kSokuon": "Note: \"ッ\" is a sokuon (geminate consonant), creating a brief pause before the next consonant.",
+      "kLongVowel": "Note: \"ー\" is a long vowel mark in katakana, extending the previous vowel by one beat."
     },
     "session": {
       "newKana": "New Kana",
