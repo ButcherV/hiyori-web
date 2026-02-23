@@ -32,6 +32,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     wordMeaning: { en: 'bank', zh: '银行', zhHant: '銀行' },
     wordEmoji: '🏦',
     wordDistractors: ['ぎこんう', 'きんこう', 'ぎんごう', 'きんごう'],
+    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
   ぐ: defineHDakuon({
@@ -74,7 +75,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'go',
     kanaKanjiOrigin: '己',
     kanaDistractors: ['こ', 'に', 'ど'],
-    romajiDistractors: ['ko', 'no', 'dou'],
+    romajiDistractors: ['ko', 'no', 'do', 'gu'],
     word: 'ご飯',
     wordKana: 'ごはん',
     wordRomaji: 'go·ha·n',
@@ -265,7 +266,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'bi',
     kanaKanjiOrigin: '比', // 源自“比”
     kanaDistractors: ['ひ', 'ぴ', 'い'],
-    romajiDistractors: ['hi', 'pi', 'i'],
+    romajiDistractors: ['hi', 'pi', 'mi'],
     word: '瓶',
     wordKana: 'びん',
     wordRomaji: 'bi·n',
@@ -327,7 +328,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'pa',
     kanaKanjiOrigin: '波',
     kanaDistractors: ['ば', 'は', 'ぬ'],
-    romajiDistractors: ['ba', 'ha', 'nu'],
+    romajiDistractors: ['ba', 'ha', 'na', 'ta'],
     word: '散歩',
     wordKana: 'さんぽ',
     wordRomaji: 'sa·n·po',
@@ -357,7 +358,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'pu',
     kanaKanjiOrigin: '不',
     kanaDistractors: ['ぶ', 'ふ', 'よ'],
-    romajiDistractors: ['bu', 'fu', 'yo'],
+    romajiDistractors: ['bu', 'fu', 'mu'],
     word: '天ぷら',
     wordKana: 'てんぷら',
     wordRomaji: 'te·n·pu·ra',
@@ -372,7 +373,7 @@ export const HIRAGANA_DAKUON: Record<string, HiraganaDakuon> = {
     romaji: 'pe',
     kanaKanjiOrigin: '部',
     kanaDistractors: ['べ', 'へ', 'く'],
-    romajiDistractors: ['be', 'he', 'ku'],
+    romajiDistractors: ['be', 'he', 'ke'],
   }),
 
   ぽ: defineHDakuon({
