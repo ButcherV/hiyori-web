@@ -1,5 +1,3 @@
-// src/pages/TestStudySession/kana-data/hiragana-yoon.ts
-
 import { defineHYoon, type HiraganaYoon } from '../core';
 
 export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
@@ -157,12 +155,6 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     kanaKanjiOrigin: 'に (ni) + ゃ (ya)',
     kanaDistractors: ['にや', 'ぬ', 'な', 'にゅ'],
     romajiDistractors: ['niya', 'na', 'nu', 'nyo'],
-    word: '蒟蒻',
-    wordKana: 'こんにゃく',
-    wordRomaji: 'ko·n·nya·ku',
-    wordMeaning: { en: 'konjac', zh: '魔芋', zhHant: '魔芋' },
-    wordEmoji: '🍢',
-    wordDistractors: ['こんにやく', 'こんなく', 'こんやく'],
   }),
 
   にゅ: defineHYoon({
