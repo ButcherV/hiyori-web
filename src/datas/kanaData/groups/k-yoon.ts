@@ -305,18 +305,7 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaKanjiOrigin: 'ヒ (hi) + ョ (yo)',
     kanaDistractors: ['ヒヨ', 'ビョ', 'ピョ', 'ホ'],
     romajiDistractors: ['hiyo', 'byo', 'pyo', 'ho'],
-
-    word: '',
-    wordRomaji: '',
-    wordOrigin: {
-      lang: 'en-US',
-      word: 'Leopard',
-      desc: '',
-    },
-    wordMeaning: { en: '', zh: '', zhHant: '' },
-    wordEmoji: '',
     wordDistractors: ['ヒヨウ', 'ビョウ', 'ホウ'],
-    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================

@@ -3,7 +3,7 @@
 <g id="kvg:StrokePaths_066fe" style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;">
 <g id="kvg:066fe" kvg:element="曾">
 	<g id="kvg:066fe-g1" kvg:position="top">
-		<g id="kvg:066fe-g2" kvg:element="八" kvg:radical="nelson">
+		<g id="kvg:066fe-g2" kvg:element="八" kvg:radical="nelson" class="kana-radical">
 			<g id="kvg:066fe-g3" kvg:position="left">
 				<path id="kvg:066fe-s1" kvg:type="㇒" d="M41.48,12.24c0,1.01-0.42,2.33-1.05,3.09C36.25,20.38,28,28.38,17.75,34.25"/>
 			</g>

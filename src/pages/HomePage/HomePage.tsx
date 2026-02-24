@@ -10,6 +10,8 @@ import { StatsHeatmap } from '../../components/StatsHeatmap';
 import { GreetingHeader } from './GreetingHeader';
 
 import { HeroScroll } from './HeroScroll';
+// import { HiraganaOriginChecker } from './HiraganaOriginChecker';
+// import { KatakanaOriginAnnotator } from './KatakanaOriginAnnotator';
 
 import type { ScriptType } from '../../components/LessonMenu';
 
@@ -154,6 +156,8 @@ export function HomePage() {
 
   return (
     <div className={styles.container}>
+      {/* <HiraganaOriginChecker />
+      <KatakanaOriginAnnotator /> */}
       <header className={styles.header}>
         <GreetingHeader />
         <div className={styles.headerActions}>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="109" height="109" viewBox="0 0 109 109" class="kana-origin-char">
 <g id="kvg:StrokePaths_05343" style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;">
-<g id="kvg:05343" kvg:element="千">
-	<g id="kvg:05343-g1" kvg:element="丿" kvg:position="top" kvg:radical="nelson">
+<g id="kvg:05343" kvg:element="千" class="kana-radical">
+	<g id="kvg:05343-g1" kvg:element="丿" kvg:position="top" kvg:radical="nelson" >
 		<path id="kvg:05343-s1" kvg:type="㇒" d="M70.38,10.17c-0.13,1.58-0.83,2.64-2.17,3.67c-5.71,4.41-21.46,11.91-41.57,16.82"/>
 	</g>
 	<g id="kvg:05343-g2" kvg:element="十" kvg:position="bottom" kvg:radical="tradit">

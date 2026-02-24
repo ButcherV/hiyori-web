@@ -71,17 +71,21 @@
   letter-spacing: 0.1px;
 }
 
-/* 片假名 */
-:global(.kana-origin-char) path {
+/* 片假名 - 所有笔画默认灰色 */
+.originCharBox :global(.kana-origin-char) path {
   stroke: var(--color-Gray5) !important;
-  stroke-width: 8;
+  stroke-width: 8 !important;
   transition: stroke 0.3s ease;
 }
 
-:global(.kana-radical) path {
+/* 高亮部首/偏旁 - 支持 class 在 <g> 或 <path> 上 */
+.originCharBox :global(g.kana-radical) > path,
+.originCharBox :global(g.kana-radical) path,
+.originCharBox :global(path.kana-radical) {
   stroke: #1D3461 !important;
   stroke-width: 8 !important;
-  stroke-linecap: round;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
 }
 
 /* 容器样式（配合 OriginBadge 组件） */

@@ -189,7 +189,7 @@
   },
   "studyKana": {
     "hiraganaKanjiOrigin": "源自汉字「{{char}}」的草书",
-    "katakanaKanjiOrigin": "源自汉字「{{char}}」的偏旁",
+    "katakanaKanjiOrigin": "源自汉字「{{char}}」",
     "notes": {
       "hshi": "注意：罗马音为 \"shi\" 而非 \"si\"。",
       "hchi": "注意：罗马音为 \"chi\" 而非 \"ti\"。",

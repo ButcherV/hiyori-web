@@ -6,7 +6,7 @@
 		<path id="kvg:04ec1-s1" kvg:type="㇒" d="M32.26,15.75c0.36,1.62,0.19,3.35-0.48,5.24C27.5,33.05,21.32,45.87,11.5,60.54"/>
 		<path id="kvg:04ec1-s2" kvg:type="㇑" d="M24.28,44.25c0.8,0.8,1.26,2.22,1.26,3.48c0,12.15,0.14,30.73,0.01,41.77c-0.03,2.58-0.05,4.73-0.05,6.25"/>
 	</g>
-	<g id="kvg:04ec1-g2" kvg:element="二" kvg:position="right" kvg:phon="二">
+	<g id="kvg:04ec1-g2" kvg:element="二" kvg:position="right" kvg:phon="二" class="kana-radical">
 		<g id="kvg:04ec1-g3" kvg:position="top">
 			<path id="kvg:04ec1-s3" kvg:type="㇐" d="M49,36c1.88,0.5,3.97,0.52,5.62,0.34c6.32-0.67,19.78-1.91,27.12-2.55c1.93-0.17,4.13-0.1,6.01,0.36"/>
 		</g>
