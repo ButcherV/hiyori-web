@@ -16,7 +16,12 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordRomaji: 'o·kya·ku·sa·n',
     wordMeaning: { en: 'guest', zh: '客人', zhHant: '客人' },
     wordEmoji: '👥',
-    wordDistractors: ['おきやくさん', 'おぎゃくさん', 'おきゅくさん', 'おキャくさん'],
+    wordDistractors: [
+      'おきやくさん',
+      'おぎゃくさん',
+      'おきゅくさん',
+      'おキャくさん',
+    ],
   }),
 
   きゅ: defineHYoon({
@@ -31,7 +36,12 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordRomaji: 'kyu·u·kyu·u·sha',
     wordMeaning: { en: 'ambulance', zh: '救护车', zhHant: '救護車' },
     wordEmoji: '🚑',
-    wordDistractors: ['きゆうきゆうしゃ', 'きゅきゅうしゃ', 'くうくうしゃ', 'キュウきゅうしゃ'],
+    wordDistractors: [
+      'きゆうきゆうしゃ',
+      'きゅきゅうしゃ',
+      'くうくうしゃ',
+      'キュウきゅうしゃ',
+    ],
     wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
@@ -81,7 +91,7 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordRomaji: 'shu·mi',
     wordMeaning: { en: 'hobby', zh: '爱好', zhHant: '愛好' },
     wordEmoji: '🎨',
-    wordDistractors: ['しゆみ', 'じゅみ', 'しゅミ', 'すみ'],
+    wordDistractors: ['しゆみ', 'じゅみ', 'しゅミ', 'しゅす'],
   }),
 
   しょ: defineHYoon({
@@ -145,7 +155,12 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     wordRomaji: 'cho·u·cho·u',
     wordMeaning: { en: 'butterfly', zh: '蝴蝶', zhHant: '蝴蝶' },
     wordEmoji: '🦋',
-    wordDistractors: ['ちようちよう', 'ちょうちょ', 'ちゅうちょう', 'ちょうチョウ'],
+    wordDistractors: [
+      'ちようちよう',
+      'ちょうちょ',
+      'ちゅうちょう',
+      'ちょうチョウ',
+    ],
     wordNoteKey: 'studyKana.wordNotes.hLongVowel',
   }),
 
@@ -384,12 +399,12 @@ export const HIRAGANA_YOON: Record<string, HiraganaYoon> = {
     kanaKanjiOrigin: 'ぎ (gi) + ょ (yo)',
     kanaDistractors: ['ぎよ', 'ご', 'ぎゃ', 'ぎゅ'],
     romajiDistractors: ['giyo', 'gio', 'kyo', 'go', 'gya'],
-    word: '金魚',
-    wordKana: 'きんぎょ',
-    wordRomaji: 'ki·n·gyo',
-    wordMeaning: { en: 'goldfish', zh: '金鱼', zhHant: '金魚' },
-    wordEmoji: '🐟',
-    wordDistractors: ['きんぎよ', 'きんきょ', 'きんぎゃ', 'きんギョ'],
+    word: '餃子',
+    wordKana: 'ぎょうざ',
+    wordRomaji: 'gyo·u·za',
+    wordMeaning: { en: 'Gyoza (Dumpling)', zh: '饺子', zhHant: '餃子' },
+    wordEmoji: '🥟',
+    wordDistractors: ['ぎょうさ', 'きょうざ', 'ぎゃうざ', 'ぎょざ'],
   }),
 
   // ==========================================

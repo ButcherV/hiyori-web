@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { App as CapApp } from '@capacitor/app';
 
 // 动画组件 - 路由层直接使用，不懒加载
 import { PageTransition } from '../components/PageTransition';
@@ -70,8 +71,12 @@ const getRouteDepth = (pathname: string): number => {
   return 100;
 };
 
+const BG_KEY = 'hiyori_bg_time';
+const BG_TIMEOUT_MS = 3 * 60 * 1000; // 后台超过 3 分钟，回来时跳回首页
+
 export const AppRouter = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentDepth = getRouteDepth(location.pathname);
   const prevDepthRef = useRef<number>(currentDepth);
 
@@ -81,6 +86,24 @@ export const AppRouter = () => {
   useEffect(() => {
     prevDepthRef.current = currentDepth;
   }, [currentDepth]);
+
+  useEffect(() => {
+    const listenerPromise = CapApp.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) {
+        localStorage.setItem(BG_KEY, String(Date.now()));
+      } else {
+        const stored = localStorage.getItem(BG_KEY);
+        if (stored && Date.now() - Number(stored) > BG_TIMEOUT_MS) {
+          navigate('/', { replace: true });
+        }
+        localStorage.removeItem(BG_KEY);
+      }
+    });
+
+    return () => {
+      listenerPromise.then((h) => h.remove());
+    };
+  }, [navigate]);
 
   return (
     // Suspense 包裹整个路由区域，懒加载期间显示空白（本地文件极快，几乎不可见）

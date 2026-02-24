@@ -306,17 +306,17 @@ export const KATAKANA_YOON: Record<string, KatakanaYoon> = {
     kanaDistractors: ['ヒヨ', 'ビョ', 'ピョ', 'ホ'],
     romajiDistractors: ['hiyo', 'byo', 'pyo', 'ho'],
 
-    word: 'ヒョウ',
-    wordRomaji: 'hyo·u',
+    word: '',
+    wordRomaji: '',
     wordOrigin: {
       lang: 'en-US',
       word: 'Leopard',
       desc: '',
     },
-    wordMeaning: { en: 'Leopard', zh: '豹', zhHant: '豹' },
-    wordEmoji: '🐆',
+    wordMeaning: { en: '', zh: '', zhHant: '' },
+    wordEmoji: '',
     wordDistractors: ['ヒヨウ', 'ビョウ', 'ホウ'],
-    wordNoteKey: 'studyKana.wordNotes.hLongVowel',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================
