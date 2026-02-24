@@ -125,7 +125,7 @@ body {
   padding: 8px 16px;
 
   background-color: rgba(255, 59, 48, 0.08);
-  border-radius: 20px;
+  border-radius: 12px;
 
   font-size: 13px;
   color: var(--color-error);

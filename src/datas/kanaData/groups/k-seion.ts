@@ -21,7 +21,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'America', zh: '美国', zhHant: '美國' },
     wordDistractors: ['アリメカ', 'アリカメ', 'アメリマ'], // word 的形似，请做到尽可能的迷惑性。至少三个。
-    wordEmoji: '🇺🇸', // 该单词尽可能是简单名词，对应的 emoji 或 image。没有合适的就置空。
+    // wordEmoji: '🇺🇸', // 该单词尽可能是简单名词，对应的 emoji 或 image。没有合适的就置空。
   }),
 
   イ: defineKSeion({
@@ -107,7 +107,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Netherlands', zh: '荷兰', zhHant: '荷蘭' },
     wordDistractors: ['ホランダ', 'オラダン', 'オンラダ'],
-    wordEmoji: '🇳🇱',
+    // wordEmoji: '🇳🇱',
   }),
 
   // --- カ 行 (片假名) ---
@@ -279,16 +279,16 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ヌ', 'ラ', 'ン'],
     romajiDistractors: ['zu', 'shi', 'se'],
 
-    word: 'スイカ',
-    wordRomaji: 'su·i·ka',
+    word: 'スーツ',
+    wordRomaji: 'su·u·tsu',
     wordOrigin: {
-      lang: 'ja',
-      word: '西瓜',
+      lang: 'en-US',
+      word: 'Suit',
       desc: '',
     },
-    wordMeaning: { en: 'Watermelon', zh: '西瓜', zhHant: '西瓜' },
-    wordEmoji: '🍉',
-    wordDistractors: ['スエカ', 'スイガ', 'スカイ'],
+    wordMeaning: { en: 'Suit', zh: '西装', zhHant: '西裝' },
+    wordDistractors: ['スーヌ', 'スツー', 'ヌーツ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   セ: defineKSeion({
@@ -915,7 +915,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     },
     wordMeaning: { en: 'Rule', zh: '规则', zhHant: '規則' },
     wordEmoji: '📏',
-    wordDistractors: ['レール', 'ルーヌ', 'ルル'],
+    wordDistractors: ['レール', 'ルーヌ', 'ルルー'],
     wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
@@ -936,7 +936,11 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
       word: 'Enquête',
       desc: '',
     },
-    wordMeaning: { en: 'Survey/Questionnaire', zh: '问卷调查', zhHant: '問卷調查' },
+    wordMeaning: {
+      en: 'Questionnaire',
+      zh: '问卷调查',
+      zhHant: '問卷調查',
+    },
     wordDistractors: ['アンゲート', 'アンケード', 'アヌケート'],
   }),
 

@@ -23,7 +23,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: 'Chewing Gum', zh: '口香糖', zhHant: '口香糖' },
-    wordDistractors: ['カム', 'ガヌ', 'ガモ'],
+    wordDistractors: ['タム', 'ガヌ', 'ガモ', 'ムガ'],
   }),
 
   ギ: defineKDakuon({
@@ -43,7 +43,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Guitar', zh: '吉他', zhHant: '吉他' },
     wordEmoji: '🎸',
-    wordDistractors: ['キター', 'ギダー', 'ギタア'],
+    wordDistractors: ['ミター', 'ギタア', 'ギクー', 'ターギ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   グ: defineKDakuon({
@@ -62,7 +63,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: 'Google', zh: '谷歌', zhHant: '谷歌' },
-    wordDistractors: ['クーグル', 'グーグヌ', 'グーグロ'],
+    wordDistractors: ['ワーグル', 'グーグヌ', 'グーケル', 'グルーグ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ゲ: defineKDakuon({
@@ -82,7 +84,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Game', zh: '游戏', zhHant: '遊戲' },
     wordEmoji: '🎮',
-    wordDistractors: ['ケーム', 'ゲーヌ', 'ゲム'],
+    wordDistractors: ['ユーム', 'ゲーヌ', 'ゲム', 'ムゲー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ゴ: defineKDakuon({
@@ -102,7 +105,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Goal', zh: '终点', zhHant: '終點' },
     wordEmoji: '🏁',
-    wordDistractors: ['コール', 'ゴーヌ', 'ゴル'],
+    wordDistractors: ['ヨール', 'ゴーヌ', 'ゴル', 'ルゴー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================
@@ -125,7 +129,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Pizza', zh: '披萨', zhHant: '披薩' },
     wordEmoji: '🍕',
-    wordDistractors: ['ピサ', 'ビザ', 'ピザー'],
+    wordDistractors: ['ピセ', 'ピザー', 'ピヌ', 'ザピ'],
   }),
 
   ジ: defineKDakuon({
@@ -145,7 +149,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Orange', zh: '橙子', zhHant: '橙子' },
     wordEmoji: '🍊',
-    wordDistractors: ['オレンシ', 'オレンヂ', 'オレジン'],
+    wordDistractors: ['オレンツ', 'オレンヂ', 'オレジン', 'オンレジ'],
   }),
 
   ズ: defineKDakuon({
@@ -163,9 +167,9 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       word: 'Jupon',
       desc: '',
     },
-    wordMeaning: { en: 'Trousers/Pants', zh: '裤子', zhHant: '褲子' },
+    wordMeaning: { en: 'Pants', zh: '裤子', zhHant: '褲子' },
     wordEmoji: '👖',
-    wordDistractors: ['スボン', 'ズポン', 'ズボヌ'],
+    wordDistractors: ['ヌボン', 'ズホン', 'ズボヌ', 'ボズン'],
   }),
 
   ゼ: defineKDakuon({
@@ -185,7 +189,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Zero', zh: '零', zhHant: '零' },
     wordEmoji: '0️⃣',
-    wordDistractors: ['セロ', 'ゼヌ', 'ゼロー'],
+    wordDistractors: ['モロ', 'ゼヌ', 'ゼロー', 'ロゼ'],
   }),
 
   ゾ: defineKDakuon({
@@ -204,7 +208,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: 'Amazon', zh: '亚马逊', zhHant: '亞馬遜' },
-    wordDistractors: ['アマソン', 'アマゾヌ', 'アマンゾ'],
+    wordDistractors: ['アマツン', 'アマゾヌ', 'アマンゾ', 'アゾマン'],
   }),
 
   // ==========================================
@@ -227,7 +231,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Soda', zh: '苏打水', zhHant: '蘇打水' },
     wordEmoji: '🥤',
-    wordDistractors: ['ソータ', 'ソーダー', 'ゾーダ'],
+    wordDistractors: ['ソーナ', 'ソーダー', 'ソダー', 'ダーソ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヂ: defineKDakuon({
@@ -287,7 +292,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Video', zh: '视频', zhHant: '視頻' },
     wordEmoji: '📹',
-    wordDistractors: ['ビテオ', 'ビデヨ', 'ピデオ'],
+    wordDistractors: ['ビナオ', 'ビデヨ', 'ビオデ', 'デビオ'],
   }),
 
   ド: defineKDakuon({
@@ -306,8 +311,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: "McDonald's", zh: '麦当劳', zhHant: '麥當勞' },
-    wordEmoji: '🍔',
-    wordDistractors: ['マクトナルド', 'マグドナルド', 'マクドナルト'],
+    wordEmoji: '🍟',
+    wordDistractors: ['マクドナロド', 'マクナドルド', 'マドクナルド'],
   }),
 
   // ==========================================
@@ -330,7 +335,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Bus', zh: '公交车', zhHant: '公車' },
     wordEmoji: '🚌',
-    wordDistractors: ['パス', 'ハス', 'バヌ'],
+    wordDistractors: ['マス', 'バヌ', 'バソ', 'スバ'],
   }),
 
   ビ: defineKDakuon({
@@ -339,7 +344,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     romaji: 'bi',
     kanaKanjiOrigin: '比',
     kanaDistractors: ['ヒ', 'ピ', 'シ'],
-    romajiDistractors: ['hi', 'pi', 'shi'],
+    romajiDistractors: ['hi', 'pi', 'si'],
 
     word: 'コンビニ',
     wordRomaji: 'ko·n·bi·ni',
@@ -350,7 +355,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Convenience Store', zh: '便利店', zhHant: '便利店' },
     wordEmoji: '🏪',
-    wordDistractors: ['コンピニ', 'コンヒニ', 'コビニ'],
+    wordDistractors: ['コンミニ', 'コビニ', 'コンビヌ', 'ニンビコ'],
   }),
 
   ブ: defineKDakuon({
@@ -369,7 +374,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: 'Brand', zh: '品牌', zhHant: '品牌' },
-    wordDistractors: ['プランド', 'フランド', 'ブラント'],
+    wordDistractors: ['ブランヌ', 'ブラドン', 'ランブド', 'ブンラド'],
   }),
 
   ベ: defineKDakuon({
@@ -388,7 +393,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
       desc: '',
     },
     wordMeaning: { en: 'Berlin', zh: '柏林', zhHant: '柏林' },
-    wordDistractors: ['ペルリン', 'ベルイン', 'ベリン'],
+    wordDistractors: ['メルリン', 'ベルイン', 'ベリン', 'リンベル'],
   }),
 
   ボ: defineKDakuon({
@@ -408,7 +413,8 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     },
     wordMeaning: { en: 'Volleyball', zh: '排球', zhHant: '排球' },
     wordEmoji: '🏐',
-    wordDistractors: ['バレーポール', 'バレーホール', 'パレーボール'],
+    wordDistractors: ['バレーモール', 'バレボール', 'ボレーバール', 'バーレボール'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   // ==========================================
@@ -472,6 +478,7 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     wordMeaning: { en: 'Swimming Pool', zh: '游泳池', zhHant: '游泳池' },
     wordEmoji: '🏊',
     wordDistractors: ['ブール', 'フール', 'プーヌ'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ペ: defineKDakuon({
