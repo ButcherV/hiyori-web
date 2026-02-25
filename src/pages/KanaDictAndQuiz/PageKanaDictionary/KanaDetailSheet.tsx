@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react';
-import { Volume2, Pen } from 'lucide-react';
+import { useMemo, useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { KANA_DB } from '../../../datas/kanaData';
 import { OriginBadge } from '../../../components/OriginBadge';
 import { useTTS } from '../../../hooks/useTTS';
 import type { AnyKanaData } from '../../../datas/kanaData/core';
-import { KanaTracingView } from './KanaTracingView';
 import styles from './KanaDetailSheet.module.css';
 
 const KANA_BY_ID: Record<string, AnyKanaData> = Object.fromEntries(
@@ -26,19 +25,15 @@ function isSeion(data: AnyKanaData | null): boolean {
   return data?.kind === 'h-seion' || data?.kind === 'k-seion';
 }
 
-type TracingTarget = { data: AnyKanaData; variant: 'hiragana' | 'katakana' };
-
 interface KanaSideProps {
   data: AnyKanaData | null;
   variant: 'hiragana' | 'katakana';
-  onTrace: (target: TracingTarget) => void;
 }
 
-function KanaSide({ data, variant, onTrace }: KanaSideProps) {
+function KanaSide({ data, variant }: KanaSideProps) {
   const { t } = useTranslation();
   const cardClass = variant === 'hiragana' ? styles.cardHiragana : styles.cardKatakana;
   const labelClass = variant === 'hiragana' ? styles.labelHiragana : styles.labelKatakana;
-  const accentColor = variant === 'hiragana' ? '#FF6B00' : '#007AFF';
   const label = t(`kana_dictionary.tabs.${variant}`);
 
   return (
@@ -52,15 +47,6 @@ function KanaSide({ data, variant, onTrace }: KanaSideProps) {
           kanjiOrigin={data.kanaKanjiOrigin}
         />
       )}
-      {data && (
-        <button
-          className={styles.traceBtn}
-          style={{ color: accentColor }}
-          onClick={() => onTrace({ data, variant })}
-        >
-          <Pen size={14} />
-        </button>
-      )}
     </div>
   );
 }
@@ -71,25 +57,21 @@ interface KanaDetailSheetProps {
 
 export function KanaDetailSheet({ romaji }: KanaDetailSheetProps) {
   const { speak } = useTTS();
-  const [tracingTarget, setTracingTarget] = useState<TracingTarget | null>(null);
 
   const hData = useMemo(() => findKana('h', romaji), [romaji]);
   const kData = useMemo(() => findKana('k', romaji), [romaji]);
 
   const kanaForTTS = hData?.kana ?? kData?.kana ?? romaji;
 
-  if (tracingTarget) {
-    return (
-      <KanaTracingView
-        data={tracingTarget.data}
-        variant={tracingTarget.variant}
-        onClose={() => setTracingTarget(null)}
-      />
-    );
-  }
+  // 弹窗展开后自动播音，稍作延迟等弹窗动画落定
+  useEffect(() => {
+    const timer = setTimeout(() => speak(kanaForTTS), 250);
+    return () => clearTimeout(timer);
+  }, [kanaForTTS, speak]);
 
   return (
     <div className={styles.container}>
+      {/* 罗马音 + 播放按钮 */}
       <div className={styles.romajiRow}>
         <span className={styles.romaji}>
           {romaji}
@@ -99,9 +81,10 @@ export function KanaDetailSheet({ romaji }: KanaDetailSheetProps) {
         </span>
       </div>
 
+      {/* 平 / 片 两列卡片 */}
       <div className={styles.cards}>
-        <KanaSide data={hData} variant="hiragana" onTrace={setTracingTarget} />
-        <KanaSide data={kData} variant="katakana" onTrace={setTracingTarget} />
+        <KanaSide data={hData} variant="hiragana" />
+        <KanaSide data={kData} variant="katakana" />
       </div>
     </div>
   );
