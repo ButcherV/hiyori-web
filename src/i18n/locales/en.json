@@ -38,6 +38,10 @@
         "coming_soon_desc": "Coming Soon"
       }
     },
+    "writing_intro": {
+      "title": "Japanese Writing",
+      "origin_title": "Kanji Origins"
+    },
     "drills": {
       "title": "Quick Drills",
       "numbers": "Numbers",

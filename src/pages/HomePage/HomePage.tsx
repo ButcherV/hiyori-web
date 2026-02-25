@@ -10,6 +10,7 @@ import { StatsHeatmap } from '../../components/StatsHeatmap';
 import { GreetingHeader } from './GreetingHeader';
 
 import { HeroScroll } from './HeroScroll';
+import { JapaneseWritingIntro } from './JapaneseWritingIntro';
 // import { HiraganaOriginChecker } from './HiraganaOriginChecker';
 // import { KatakanaOriginAnnotator } from './KatakanaOriginAnnotator';
 
@@ -294,6 +295,8 @@ export function HomePage() {
           </div>
         ))}
       </div>
+
+      <JapaneseWritingIntro />
 
       {/* --- BottomSheets --- */}
       <BottomSheet

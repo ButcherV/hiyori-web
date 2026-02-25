@@ -44,6 +44,10 @@
       }
     },
 
+    "writing_intro": {
+      "title": "日语文字体系",
+      "origin_title": "汉字演变"
+    },
     "drills": {
       "title": "快速练习",
       "numbers": "数字",

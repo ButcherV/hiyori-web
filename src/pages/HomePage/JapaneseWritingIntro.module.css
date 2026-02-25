@@ -1,0 +1,138 @@
+.card {
+  margin: 8px 16px 40px;
+  background: #1c1c1e;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* ── 文字体系区域 ── */
+.systems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.systemRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.systemLeft {
+  display: flex;
+  flex-direction: column;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.systemScript {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.systemSample {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 1px;
+}
+
+.systemRight {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.barTrack {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.systemCount {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  width: 38px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── 分隔线 ── */
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── 字源示例 ── */
+.originTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.originRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.originItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.originKanji {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.originArrow {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.originKana {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+.originHira {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FF6B00;
+  line-height: 1.2;
+}
+
+.originKata {
+  font-size: 15px;
+  font-weight: 700;
+  color: #007AFF;
+  line-height: 1.2;
+}

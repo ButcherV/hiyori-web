@@ -7,6 +7,10 @@
     "coming_soon": "即將推出"
   },
   "home": {
+    "writing_intro": {
+      "title": "日語文字體系",
+      "origin_title": "漢字演變"
+    },
     "hero": {
       "kanji": {
         "coming_soon_desc": "敬請期待"
