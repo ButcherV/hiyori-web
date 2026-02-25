@@ -30,6 +30,18 @@ export interface WordOrigin {
   desc?: string; // 备注 (可选，例如 "和制英语", "拟声词")
 }
 
+// 新增：验证 word 必须包含 kana 的类型（允许空字符串）
+export type WordContainsKana<
+  W extends string | undefined,
+  K extends string,
+> = W extends string
+  ? W extends ''
+    ? W // 允许空字符串（罕用假名）
+    : W extends `${string}${K}${string}`
+      ? W
+      : `❌ 错误：单词 "${W}" 必须包含假名 "${K}"`
+  : W;
+
 export type PreciseValidator<
   Distractors extends readonly string[],
   Answer extends string,
@@ -201,7 +213,7 @@ export const defineHSeion = <
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
   word?: W;
-  wordKana?: WK;
+  wordKana?: WordContainsKana<WK, K>; // 平假名约束：wordKana 必须包含 kana
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
   wordEmoji?: string;
@@ -238,7 +250,7 @@ export const defineKSeion = <
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
 
-  word?: W;
+  word?: WordContainsKana<W, K>; // 新增约束：word 必须包含 kana
   wordOrigin?: WordOrigin;
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
@@ -280,7 +292,7 @@ export const defineHDakuon = <
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
   word?: W;
-  wordKana?: WK;
+  wordKana?: WordContainsKana<WK, K>; // 平假名约束：wordKana 必须包含 kana
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
   wordEmoji?: string;
@@ -315,7 +327,7 @@ export const defineHYoon = <
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
   word?: W;
-  wordKana?: WK;
+  wordKana?: WordContainsKana<WK, K>; // 平假名约束：wordKana 必须包含 kana
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
   wordEmoji?: string;
@@ -350,7 +362,7 @@ export const defineKDakuon = <
   kanaDistractors: PreciseValidator<KD, K>;
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
-  word?: W;
+  word?: WordContainsKana<W, K>; // 新增约束：word 必须包含 kana
   wordOrigin?: WordOrigin;
   wordRomaji?: string;
   wordMeaning?: LocalizedText;
@@ -386,7 +398,7 @@ export const defineKYoon = <
   kanaDistractors: PreciseValidator<KD, K>;
   romaji: R;
   romajiDistractors: PreciseValidator<RD, R>;
-  word?: W;
+  word?: WordContainsKana<W, K>; // 新增约束：word 必须包含 kana
   wordOrigin?: WordOrigin;
   wordRomaji?: string;
   wordMeaning?: LocalizedText;

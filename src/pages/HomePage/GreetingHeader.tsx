@@ -92,8 +92,9 @@ export function GreetingHeader() {
       // --- 🇨🇳/🇺🇸 本地模式 ---
       const h = now.getHours();
       let timeKey = 'morning';
-      if (h >= 12) timeKey = 'afternoon';
-      if (h >= 18) timeKey = 'evening';
+      if (h >= 5 && h < 12) timeKey = 'morning';
+      else if (h >= 12 && h < 18) timeKey = 'afternoon';
+      else timeKey = 'evening';
 
       const greeting = t(`home.greeting.${timeKey}`);
 

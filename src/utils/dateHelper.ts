@@ -6,8 +6,8 @@ import { getCustomHolidayName } from '../pages/Dates/Datas/holidayData';
  */
 export const getJapaneseGreeting = (date: Date = new Date()): string => {
   const hour = date.getHours();
-  if (hour >= 5 && hour < 11) return 'おはよう';
-  if (hour >= 11 && hour < 18) return 'こんにちは';
+  if (hour >= 5 && hour < 12) return 'おはよう';
+  if (hour >= 12 && hour < 18) return 'こんにちは';
   return 'こんばんは';
 };
 

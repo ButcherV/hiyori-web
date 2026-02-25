@@ -482,17 +482,15 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ミ', 'サ', 'キ'],
     romajiDistractors: ['mi', 'na', 'nu'],
 
-    word: 'ピーマン',
-    wordRomaji: 'pi·i·ma·n',
+    word: 'アニメ',
+    wordRomaji: 'a·ni·me',
     wordOrigin: {
-      lang: 'fr',
-      word: 'piment',
-      desc: '',
+      lang: 'ja',
+      word: 'アニメーション',
+      desc: '日语缩略词',
     },
-    wordMeaning: { en: 'green pepper', zh: '青椒', zhHant: '青椒' },
-    wordDistractors: ['ピーマヌ', 'ビーマン', 'ピマーン'],
-    wordEmoji: '🫑',
-    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
+    wordMeaning: { en: 'anime', zh: '动画', zhHant: '動畫' },
+    wordDistractors: ['アミメ', 'アニエ', 'アヌメ'],
   }),
 
   ヌ: defineKSeion({
