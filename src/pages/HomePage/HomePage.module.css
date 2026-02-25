@@ -291,6 +291,8 @@
     /* 弹性动画 */ box-shadow 0.3s;
   cursor: pointer;
   overflow: hidden;
+  /* 修复 iOS Safari overflow:hidden + border-radius + transform 裁剪失效的 bug */
+  will-change: transform;
 }
 
 .drillCard:active {
@@ -301,9 +303,8 @@
 /* 背景大图标 */
 .cardBgIcon {
   position: absolute;
-  right: -15px;
-  bottom: -15px;
-  /* 增强大图标的存在感，并给一点模糊，制造景深 */
+  right: -10px;
+  bottom: -10px;
   opacity: 0.12;
   transform: rotate(-15deg) scale(1.2);
   filter: blur(1px);
@@ -313,9 +314,9 @@
   transition: transform 0.4s ease;
 }
 
-/* 悬停/按下时的微互动：大图标稍微动一下 */
+/* 按下时的微互动：大图标稍微动一下，不额外 scale 避免溢出 */
 .drillCard:active .cardBgIcon {
-  transform: rotate(-5deg) scale(1.3);
+  transform: rotate(-5deg) scale(1.2);
 }
 
 .cardTop,
@@ -383,23 +384,3 @@
   letter-spacing: 0.1px;
 }
 
-/* 新增：卡片背景大图标纹理 */
-.cardBgIcon {
-  position: absolute;
-  right: -10px; /* 稍微溢出一点，制造张力 */
-  bottom: -10px;
-  opacity: 0.1; /* 很淡的透明度，若隐若现 */
-  transform: rotate(-15deg); /* 经典的倾斜角度 */
-  pointer-events: none; /* 确保不挡住点击 */
-
-  /* 关键：使用卡片自己的主题色 */
-  color: var(--drill-color);
-  z-index: 0;
-}
-
-/* 确保原有的内容浮在背景图标之上 */
-.cardTop,
-.cardContent {
-  position: relative;
-  z-index: 1;
-}

@@ -19,10 +19,10 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     wordRomaji: 'ga·mu',
     wordOrigin: {
       lang: 'en-US',
-      word: 'Gum',
+      word: 'gum',
       desc: '',
     },
-    wordMeaning: { en: 'Chewing Gum', zh: '口香糖', zhHant: '口香糖' },
+    wordMeaning: { en: 'chewing gum', zh: '口香糖', zhHant: '口香糖' },
     wordDistractors: ['タム', 'ガヌ', 'ガモ', 'ムガ'],
   }),
 
@@ -38,10 +38,10 @@ export const KATAKANA_DAKUON: Record<string, KatakanaDakuon> = {
     wordRomaji: 'gi·ta·a',
     wordOrigin: {
       lang: 'en-US',
-      word: 'Guitar',
+      word: 'guitar',
       desc: '',
     },
-    wordMeaning: { en: 'Guitar', zh: '吉他', zhHant: '吉他' },
+    wordMeaning: { en: 'guitar', zh: '吉他', zhHant: '吉他' },
     wordEmoji: '🎸',
     wordDistractors: ['ミター', 'ギタア', 'ギクー', 'ターギ'],
     wordNoteKey: 'studyKana.wordNotes.kLongVowel',

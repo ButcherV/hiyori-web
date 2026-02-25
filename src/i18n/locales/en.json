@@ -66,6 +66,9 @@
       "select_katakana": "Select Katakana Row"
     }
   },
+  "tracing": {
+    "clear": "Clear"
+  },
   "kana_dictionary": {
     "title": "Kana Table",
     "romaji_label": "Romaji",

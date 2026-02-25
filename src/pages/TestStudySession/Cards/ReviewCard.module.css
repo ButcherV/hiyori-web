@@ -13,7 +13,7 @@
   /* 🔥 核心布局： [假名固定宽] [自动填充单词区域] [喇叭固定宽] */
   grid-template-columns: 68px 1fr 40px;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 
   padding: 6px;
   background-color: #fff;

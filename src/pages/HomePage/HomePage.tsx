@@ -156,8 +156,8 @@ export function HomePage() {
 
   return (
     <div className={styles.container}>
-      {/* <HiraganaOriginChecker />
-      <KatakanaOriginAnnotator /> */}
+      {/* <HiraganaOriginChecker /> */}
+      {/* <KatakanaOriginAnnotator /> */}
       <header className={styles.header}>
         <GreetingHeader />
         <div className={styles.headerActions}>

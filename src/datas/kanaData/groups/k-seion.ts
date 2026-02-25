@@ -477,7 +477,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kana: 'ニ',
     romaji: 'ni',
 
-    kanaKanjiOrigin: '二',
+    kanaKanjiOrigin: '仁',
 
     kanaDistractors: ['ミ', 'サ', 'キ'],
     romajiDistractors: ['mi', 'na', 'nu'],
@@ -492,6 +492,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordMeaning: { en: 'Green Pepper', zh: '青椒', zhHant: '青椒' },
     wordDistractors: ['ピーマヌ', 'ビーマン', 'ピマーン'],
     wordEmoji: '🫑',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヌ: defineKSeion({
@@ -553,7 +554,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordRomaji: 'no·ru·ma',
     wordOrigin: {
       lang: 'ru',
-      word: 'Norma',
+      word: 'Норма',
       desc: '',
     },
     wordMeaning: { en: 'Quota', zh: '定额', zhHant: '定額' },
@@ -777,7 +778,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     wordRomaji: 'ro·o·ma',
     wordOrigin: {
       lang: 'it',
-      word: 'Roma',
+      word: 'Római',
       desc: '',
     },
     wordMeaning: { en: 'Rome', zh: '罗马', zhHant: '羅馬' },
@@ -834,7 +835,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kana: 'ヨ',
     romaji: 'yo',
 
-    kanaKanjiOrigin: '与',
+    kanaKanjiOrigin: '與',
 
     kanaDistractors: ['コ', 'ユ', 'モ'],
     romajiDistractors: ['yu', 'ya', 'wa'],
@@ -942,6 +943,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
       zhHant: '問卷調查',
     },
     wordDistractors: ['アンゲート', 'アンケード', 'アヌケート'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ロ: defineKSeion({
@@ -1021,15 +1023,15 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ソ', 'ノ', 'シ'],
     romajiDistractors: ['m', 'nu', 'mu'],
 
-    word: 'パン',
-    wordRomaji: 'pa·n',
+    word: 'レモン',
+    wordRomaji: 're·mo·n',
     wordOrigin: {
-      lang: 'pt',
-      word: 'Pão',
+      lang: 'en-US',
+      word: 'Lemon',
       desc: '',
     },
-    wordMeaning: { en: 'Bread', zh: '面包', zhHant: '麵包' },
-    wordDistractors: ['パソ', 'パノ', 'バン'],
-    wordEmoji: '🍞',
+    wordMeaning: { en: 'Lemon', zh: '柠檬', zhHant: '檸檬' },
+    wordDistractors: ['レソン', 'レモヌ', 'レノン'],
+    wordEmoji: '🍋',
   }),
 };

@@ -105,7 +105,10 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
         <div className={styles.sectionsWrapper}>
           {/* Section 1: 清音 */}
           <section>
-            <h2 className={styles.sectionHeader}>{seionTitle}</h2>
+            <h2 className={styles.sectionHeader}>
+              {/* {seionTitle} */}
+              <span className="highlight-text">{seionTitle}</span>
+            </h2>
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}
@@ -123,7 +126,9 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
 
           {/* Section 2: 浊音 */}
           <section>
-            <h2 className={styles.sectionHeader}>{dakuonTitle}</h2>
+            <h2 className={styles.sectionHeader}>
+              <span className="highlight-text">{dakuonTitle}</span>
+            </h2>
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}
@@ -141,7 +146,10 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
 
           {/* Section 3: 拗音 */}
           <section>
-            <h2 className={styles.sectionHeader}>{yoonTitle}</h2>
+            <h2 className={styles.sectionHeader}>
+              {/* {yoonTitle} */}
+              <span className="highlight-text">{yoonTitle}</span>
+            </h2>
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}

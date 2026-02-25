@@ -54,5 +54,8 @@
       "reviewKana": "假名回顧",
       "correctAnswer": "正確答案"
     }
+  },
+  "tracing": {
+    "clear": "清除筆跡"
   }
 }
