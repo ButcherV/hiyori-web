@@ -124,20 +124,47 @@
   display: inline-block;
 }
 
+/* romaji 用 grid 0fr→1fr 实现双向平滑布局动画 */
+.romajiWrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.romajiWrapperHidden {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .romaji {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-Blue);
-  max-height: 20px;
-  overflow: hidden;
-  transition:
-    opacity 0.2s ease,
-    max-height 0.2s ease;
+  overflow: hidden; /* grid 0fr 技巧必须有 overflow: hidden */
 }
 
-.romajiHidden {
+/* subChar 同理，用 inline-grid + 列方向 0fr→1fr */
+.subCharWrapper {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  opacity: 1;
+  margin-left: 2px;
+  vertical-align: middle;
+  transition:
+    grid-template-columns 0.2s ease,
+    opacity 0.2s ease,
+    margin-left 0.2s ease;
+}
+
+.subCharWrapperHidden {
+  grid-template-columns: 0fr;
   opacity: 0;
-  max-height: 0;
+  margin-left: 0;
   pointer-events: none;
 }
 
@@ -145,22 +172,7 @@
   font-size: 14px;
   font-weight: 800;
   color: var(--color-Gray5);
-  display: inline-block;
-  max-width: 24px;
-  margin-left: 2px;
-  overflow: hidden;
-  vertical-align: middle;
-  transition:
-    opacity 0.2s ease,
-    max-width 0.2s ease,
-    margin-left 0.2s ease;
-}
-
-.subCharHidden {
-  opacity: 0;
-  max-width: 0;
-  margin-left: 0;
-  pointer-events: none;
+  overflow: hidden; /* grid 0fr 技巧必须有 overflow: hidden */
 }
 
 .row3Col {

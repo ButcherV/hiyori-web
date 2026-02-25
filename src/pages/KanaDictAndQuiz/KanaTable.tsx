@@ -110,18 +110,17 @@ export const KanaTable: React.FC<Props> = ({
       >
         <div>
           <span className={`${styles.mainChar} jaFont`}>{data.kana}</span>
-          {/* 始终渲染，用 CSS 过渡控制可见性，避免 DOM 增删导致的瞬间跳变 */}
           {crossData && !isSelectionMode && (
             <span
-              className={`${styles.subChar} jaFont ${!showCompanion ? styles.subCharHidden : ''}`}
+              className={`${styles.subCharWrapper} ${!showCompanion ? styles.subCharWrapperHidden : ''}`}
             >
-              {crossData.kana}
+              <span className={`${styles.subChar} jaFont`}>{crossData.kana}</span>
             </span>
           )}
         </div>
 
-        <div className={`${styles.romaji} ${!showRomaji ? styles.romajiHidden : ''}`}>
-          {data.romaji}
+        <div className={`${styles.romajiWrapper} ${!showRomaji ? styles.romajiWrapperHidden : ''}`}>
+          <div className={styles.romaji}>{data.romaji}</div>
         </div>
       </div>
     );
