@@ -128,6 +128,17 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--color-Blue);
+  max-height: 20px;
+  overflow: hidden;
+  transition:
+    opacity 0.2s ease,
+    max-height 0.2s ease;
+}
+
+.romajiHidden {
+  opacity: 0;
+  max-height: 0;
+  pointer-events: none;
 }
 
 .subChar {
@@ -135,7 +146,21 @@
   font-weight: 800;
   color: var(--color-Gray5);
   display: inline-block;
+  max-width: 24px;
   margin-left: 2px;
+  overflow: hidden;
+  vertical-align: middle;
+  transition:
+    opacity 0.2s ease,
+    max-width 0.2s ease,
+    margin-left 0.2s ease;
+}
+
+.subCharHidden {
+  opacity: 0;
+  max-width: 0;
+  margin-left: 0;
+  pointer-events: none;
 }
 
 .row3Col {

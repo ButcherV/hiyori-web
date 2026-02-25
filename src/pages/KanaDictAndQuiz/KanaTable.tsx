@@ -6,6 +6,7 @@ import { type ProficiencyStatus } from './PageKanaQuiz/quizLogic';
 interface Props {
   activeScript: 'hiragana' | 'katakana';
   showRomaji: boolean;
+  showCompanion?: boolean;
   onItemClick?: (data: any) => void;
   rows: (string | null)[][];
   rowHeaders: string[];
@@ -21,6 +22,7 @@ interface Props {
 export const KanaTable: React.FC<Props> = ({
   activeScript,
   showRomaji,
+  showCompanion = true,
   onItemClick,
   rows,
   rowHeaders,
@@ -108,13 +110,19 @@ export const KanaTable: React.FC<Props> = ({
       >
         <div>
           <span className={`${styles.mainChar} jaFont`}>{data.kana}</span>
-          {/* 只有在【非选择模式】(即字典模式) 下，才显示对照用的副标题字符 */}
+          {/* 始终渲染，用 CSS 过渡控制可见性，避免 DOM 增删导致的瞬间跳变 */}
           {crossData && !isSelectionMode && (
-            <span className={`${styles.subChar} jaFont`}>{crossData.kana}</span>
+            <span
+              className={`${styles.subChar} jaFont ${!showCompanion ? styles.subCharHidden : ''}`}
+            >
+              {crossData.kana}
+            </span>
           )}
         </div>
 
-        {showRomaji && <div className={styles.romaji}>{data.romaji}</div>}
+        <div className={`${styles.romaji} ${!showRomaji ? styles.romajiHidden : ''}`}>
+          {data.romaji}
+        </div>
       </div>
     );
   };

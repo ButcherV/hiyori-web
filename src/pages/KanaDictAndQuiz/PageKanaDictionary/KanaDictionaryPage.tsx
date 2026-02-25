@@ -12,6 +12,7 @@ export const KanaDictionaryPage = () => {
 
   const [activeTab, setActiveTab] = useState<'hiragana' | 'katakana'>('hiragana');
   const [showRomaji, setShowRomaji] = useState(true);
+  const [showCompanion, setShowCompanion] = useState(true);
   const [selectedRomaji, setSelectedRomaji] = useState<string | null>(null);
 
   const tabOptions = useMemo(
@@ -31,6 +32,7 @@ export const KanaDictionaryPage = () => {
       <KanaBoard
         activeTab={activeTab}
         showRomaji={showRomaji}
+        showCompanion={showCompanion}
         tabOptions={tabOptions}
         title={t('kana_dictionary.title')}
         seionTitle={t('kana_dictionary.sections.seion')}
@@ -39,6 +41,7 @@ export const KanaDictionaryPage = () => {
         onBackClick={() => navigate('/')}
         onTabChange={setActiveTab}
         onToggleRomaji={() => setShowRomaji(!showRomaji)}
+        onToggleCompanion={() => setShowCompanion(!showCompanion)}
         onItemClick={handleItemClick}
       />
 

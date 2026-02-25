@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, BookA } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { KanaTable } from './KanaTable';
 // import { Switch } from '../../components/Switch';
 import { CategoryTabs } from '../../components/CategoryTabs';
@@ -20,6 +20,7 @@ interface KanaBoardProps {
   // ... (Props 保持不变)
   activeTab: 'hiragana' | 'katakana';
   showRomaji: boolean;
+  showCompanion?: boolean;
   tabOptions: { id: string; label: string | React.ReactNode }[];
   title: string;
   // romajiLabel?: string;
@@ -29,6 +30,7 @@ interface KanaBoardProps {
   onBackClick: () => void;
   onTabChange: (id: 'hiragana' | 'katakana') => void;
   onToggleRomaji?: () => void;
+  onToggleCompanion?: () => void;
   onItemClick: (data: any) => void;
   isSelectionMode?: boolean;
   selectedIds?: Set<string>;
@@ -42,6 +44,7 @@ interface KanaBoardProps {
 export const KanaBoard: React.FC<KanaBoardProps> = ({
   activeTab,
   showRomaji,
+  showCompanion = true,
   tabOptions,
   title,
   // romajiLabel,
@@ -51,6 +54,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
   onBackClick,
   onTabChange,
   onToggleRomaji,
+  onToggleCompanion,
   onItemClick,
   isSelectionMode,
   selectedIds,
@@ -79,12 +83,21 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <div className={styles.headerRight}>{headerRight}</div>
           ) : (
             <div className={styles.headerRight}>
-              {/* <span className={styles.romajiLabel}>{romajiLabel}</span>
-              {onToggleRomaji && (
-                <Switch checked={showRomaji} onChange={onToggleRomaji} />
-              )} */}
-              <div onClick={onToggleRomaji}>
-                <BookA size={24} color="white" />
+              {onToggleCompanion && (
+                <div
+                  className={`${styles.headerIconBtn} ${showCompanion ? styles.headerIconBtnActive : ''}`}
+                  onClick={onToggleCompanion}
+                >
+                  <span className={`${styles.headerBtnText} jaFont`}>
+                    {activeTab === 'hiragana' ? 'あア' : 'アあ'}
+                  </span>
+                </div>
+              )}
+              <div
+                className={`${styles.headerIconBtn} ${showRomaji ? styles.headerIconBtnActive : ''}`}
+                onClick={onToggleRomaji}
+              >
+                <span className={styles.headerBtnText}>abc</span>
               </div>
             </div>
           )}
@@ -112,6 +125,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}
+              showCompanion={showCompanion}
               onItemClick={onItemClick}
               rows={SEION_ROWS}
               rowHeaders={SEION_ROW_HEADERS}
@@ -132,6 +146,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}
+              showCompanion={showCompanion}
               onItemClick={onItemClick}
               rows={DAKUON_ROWS}
               rowHeaders={DAKUON_ROW_HEADERS}
@@ -153,6 +168,7 @@ export const KanaBoard: React.FC<KanaBoardProps> = ({
             <KanaTable
               activeScript={activeTab}
               showRomaji={showRomaji}
+              showCompanion={showCompanion}
               onItemClick={onItemClick}
               rows={YOON_ROWS}
               rowHeaders={YOON_ROW_HEADERS}

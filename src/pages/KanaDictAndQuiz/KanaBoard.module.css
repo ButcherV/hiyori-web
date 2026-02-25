@@ -73,6 +73,31 @@
   font-weight: 800;
 }
 
+.headerIconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.headerIconBtnActive {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.headerBtnText {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
 /* Tab 区域背景需还原为白色/浅色，衔接下方的列表 */
 .tabRow {
   background-color: var(--color-bg);
