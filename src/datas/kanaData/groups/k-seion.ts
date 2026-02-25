@@ -485,8 +485,8 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     word: 'アニメ',
     wordRomaji: 'a·ni·me',
     wordOrigin: {
-      lang: 'ja',
-      word: 'アニメーション',
+      lang: 'en-GB',
+      word: 'animation',
       desc: '日语缩略词',
     },
     wordMeaning: { en: 'anime', zh: '动画', zhHant: '動畫' },
@@ -638,16 +638,17 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ト', 'レ', 'ノ'],
     romajiDistractors: ['be', 'pe', 'hi'],
 
-    word: 'ゲレンデ',
-    wordRomaji: 'ge·re·n·de',
+    word: 'ヘリコプター',
+    wordRomaji: 'he·ri·ko·pu·ta·a',
     wordOrigin: {
-      lang: 'de',
-      word: 'gelände',
+      lang: 'en-US',
+      word: 'helicopter',
       desc: '',
     },
-    wordMeaning: { en: 'ski slope', zh: '滑雪场', zhHant: '滑雪場' },
-    wordDistractors: ['ゲレンベ', 'ゲレンペ', 'ゲレデン'],
-    wordEmoji: '⛷️',
+    wordMeaning: { en: 'helicopter', zh: '直升机', zhHant: '直升機' },
+    wordDistractors: ['ベリコプター', 'ヘリゴプター', 'ヘリコプタ'],
+    wordEmoji: '🚁',
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ホ: defineKSeion({
@@ -772,16 +773,15 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ヨ', 'セ', 'ユ'],
     romajiDistractors: ['no', 'mu', 'ma'],
 
-    word: 'ローマ',
-    wordRomaji: 'ro·o·ma',
+    word: 'モデル',
+    wordRomaji: 'mo·de·ru',
     wordOrigin: {
-      lang: 'it',
-      word: 'Roma',
+      lang: 'en-US',
+      word: 'model',
       desc: '',
     },
-    wordMeaning: { en: 'Rome', zh: '罗马', zhHant: '羅馬' },
-    wordDistractors: ['ローヨ', 'ロマー', 'ローア'],
-    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
+    wordMeaning: { en: 'model', zh: '模特', zhHant: '模特兒' },
+    wordDistractors: ['ヨデル', 'モデヌ', 'モテル'],
   }),
 
   // --- ヤ 行 (片假名) ---
@@ -817,15 +817,16 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['コ', 'ヨ', 'エ'],
     romajiDistractors: ['yo', 'ya', 'wa'],
 
-    word: 'ミュンヘン',
-    wordRomaji: 'myu·n·he·n',
+    word: 'ユーザー',
+    wordRomaji: 'yu·u·za·a',
     wordOrigin: {
-      lang: 'de',
-      word: 'München',
+      lang: 'en-US',
+      word: 'user',
       desc: '',
     },
-    wordMeaning: { en: 'Munich', zh: '慕尼黑', zhHant: '慕尼黑' },
-    wordDistractors: ['ミコンヘン', 'ミュヘンン', 'ミョンヘン'],
+    wordMeaning: { en: 'user', zh: '用户', zhHant: '用戶' },
+    wordDistractors: ['コーザー', 'ーユザー', 'ユーサー'],
+    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
   }),
 
   ヨ: defineKSeion({
@@ -928,20 +929,20 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['ヒ', 'ル', 'ヘ'],
     romajiDistractors: ['ne', 'ru', 'ra'],
 
-    word: 'アンケート',
-    wordRomaji: 'a·n·ke·e·to',
+    word: 'レストラン',
+    wordRomaji: 're·su·to·ra·n',
     wordOrigin: {
       lang: 'fr',
-      word: 'enquête',
+      word: 'restaurant',
       desc: '',
     },
     wordMeaning: {
-      en: 'questionnaire',
-      zh: '问卷调查',
-      zhHant: '問卷調查',
+      en: 'restaurant',
+      zh: '餐厅',
+      zhHant: '餐廳',
     },
-    wordDistractors: ['アンゲート', 'アンケード', 'アヌケート'],
-    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
+    wordDistractors: ['レストヌン', 'ヒストラン', 'レスドラン'],
+    wordEmoji: '🍽️',
   }),
 
   ロ: defineKSeion({
@@ -954,17 +955,17 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
     kanaDistractors: ['コ', 'エ', 'ユ'],
     romajiDistractors: ['no', 'ra', 're'],
 
-    word: 'アルコール',
-    wordRomaji: 'a·ru·ko·o·ru',
+    word: 'ロボット',
+    wordRomaji: 'ro·bo·t·to',
     wordOrigin: {
-      lang: 'nl',
-      word: 'alcohol',
+      lang: 'en-US',
+      word: 'robot',
       desc: '',
     },
-    wordMeaning: { en: 'alcohol', zh: '酒精', zhHant: '酒精' },
-    wordDistractors: ['アルゴール', 'アヌコール', 'アルコル'],
-    wordEmoji: '🍶',
-    wordNoteKey: 'studyKana.wordNotes.kLongVowel',
+    wordMeaning: { en: 'robot', zh: '机器人', zhHant: '機器人' },
+    wordDistractors: ['ロドッボ', 'ロボッド', 'ロポット'],
+    wordEmoji: '🤖',
+    wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),
 
   // --- ワ 行 (片假名) ---
