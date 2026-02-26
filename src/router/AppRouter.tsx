@@ -39,6 +39,9 @@ const DicePage = lazy(() =>
 const MagicClock = lazy(() =>
   import('../pages/Clock/Clock').then(m => ({ default: m.MagicClock }))
 );
+const TimeDrumPicker = lazy(() =>
+  import('../pages/Clock/TimeDrumPicker').then(m => ({ default: m.TimeDrumPicker }))
+);
 const PageNumbers = lazy(() =>
   import('../pages/Numbers/PageNumbers').then(m => ({ default: m.PageNumbers }))
 );
@@ -178,6 +181,7 @@ export const AppRouter = () => {
 
           <Route path="/dice" element={<DicePage />} />
           <Route path="/study/clock" element={<MagicClock />} />
+          <Route path="/study/clock/drum" element={<TimeDrumPicker />} />
 
           {/* Level 3 */}
           <Route

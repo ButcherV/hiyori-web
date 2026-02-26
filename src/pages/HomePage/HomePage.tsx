@@ -145,6 +145,8 @@ export function HomePage() {
       navigate('/study/dates');
     } else if (id === 'numbers') {
       navigate('/study/numbers');
+    } else if (id === 'times') {
+      navigate('/study/clock/drum');
     }
   };
 
