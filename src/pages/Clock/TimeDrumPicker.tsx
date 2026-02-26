@@ -7,7 +7,7 @@ import styles from './TimeDrumPicker.module.css';
 export function TimeDrumPicker() {
   const [hour, setHour] = useState(9);
   const [minute, setMinute] = useState(30);
-  const [is24h, setIs24h] = useState(false);
+  const [is24h, setIs24h] = useState(true);
 
   const hourIdx12 = hour % 12;
 
@@ -31,6 +31,7 @@ export function TimeDrumPicker() {
       <TimeFormatToggle is24h={is24h} onChange={setIs24h} />
 
       <div className={styles.drums}>
+        <div className={styles.selectionBox} />
         {is24h ? (
           <Drum
             key="h24"

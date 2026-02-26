@@ -83,8 +83,7 @@ export function Drum({
     if (!containerRef.current) return;
 
     const measure = () => {
-      const { width, height } =
-        containerRef.current!.getBoundingClientRect();
+      const { width, height } = containerRef.current!.getBoundingClientRect();
       // 圆半径 = 高度的一半；两圆圆心各在屏幕横向中心两侧 R 处
       if (width > 0) setDims({ R: height / 2, H: height, W: width });
     };
@@ -271,7 +270,7 @@ export function Drum({
     // 右鼓：圆心在 (R,   H/2)，弧面在左侧，x = R - innerR*cosT
     const x = side === 'left' ? W - R + innerR * cosT : R - innerR * cosT;
     const y = H / 2 + innerR * sinT;
-    const fontSize = 13 + 20 * opacity * opacity;
+    const fontSize = Math.round(15 + 23 * cosT * cosT);
 
     // 该槽距中心的偏移步数（归一化到 ±physCount/2）
     let offsetFromCenter = phys - centerPhysIdx;
@@ -298,12 +297,12 @@ export function Drum({
           fontSize: `${fontSize}px`,
           fontWeight: isCenter ? 700 : 400,
           color: isCenter
-            ? 'var(--color-primary, #1a1a1a)'
-            : 'var(--color-Gray7, #5a6779)',
+            ? 'var(--color-primary, #111827)'
+            : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
           fontFamily:
             '-apple-system, "SF Pro Display", "Helvetica Neue", sans-serif',
-          letterSpacing: '-0.01em',
+          letterSpacing: isCenter ? '-0.025em' : '-0.01em',
           lineHeight: 1,
           userSelect: 'none',
           pointerEvents: 'none',

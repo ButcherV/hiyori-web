@@ -10,4 +10,25 @@
   align-self: stretch;
   flex-shrink: 0;
   height: 62dvh;
+  position: relative;
+  gap: 3px;
+}
+
+/* ── 选中框 ───────────────────────────────────────────────
+   绝对定位于 .drums 正中央，跨越两个鼓，
+   在视觉上把左右两个选中数字框在一起。
+   z-index 高于两个 .drum（它们无显式 z-index），
+   DOM 顺序也排在前面，但 absolute 元素堆叠与 DOM 顺序有关。
+──────────────────────────────────────────────────────────── */
+.selectionBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 52px;
+  border: 1px solid var(--color-primary);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 10;
 }
