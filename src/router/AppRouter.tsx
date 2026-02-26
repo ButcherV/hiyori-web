@@ -177,7 +177,14 @@ export const AppRouter = () => {
           />
 
           <Route path="/dice" element={<DicePage />} />
-          <Route path="/study/clock/drum" element={<PageClock />} />
+          <Route
+            path="/study/clock/drum"
+            element={
+              <PageTransition preset="slide" depth={2} direction={direction}>
+                <PageClock />
+              </PageTransition>
+            }
+          />
 
           {/* Level 3 */}
           <Route
