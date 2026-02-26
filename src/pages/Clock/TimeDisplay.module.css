@@ -1,0 +1,64 @@
+.wrapper {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── 午前/午後 ── */
+.ampm {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.ampmKanji {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d2d2d);
+  font-family: var(--font-family-ja, sans-serif);
+}
+.ampmKana {
+  font-size: 0.9rem;
+  color: var(--color-text-sub, #6e6e6e);
+  font-family: var(--font-family-ja, sans-serif);
+}
+
+/* ── 日语文案区 ── */
+.display {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 24px;
+  animation: fadeUp 0.2s ease;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.mainText {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-text-main, #2d2d2d);
+  font-family: var(--font-family-ja, sans-serif);
+  line-height: 1.2;
+}
+.kanaText {
+  font-size: 1rem;
+  color: var(--color-text-sub, #6e6e6e);
+  font-family: var(--font-family-ja, sans-serif);
+  letter-spacing: 0.06em;
+}
+.noteText {
+  font-size: 0.78rem;
+  color: var(--color-Gray5, #b4beca);
+  letter-spacing: 0.04em;
+}

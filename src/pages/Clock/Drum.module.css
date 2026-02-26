@@ -1,0 +1,29 @@
+/* ── 单个轮盘 ──────────────────────────────────────────────
+   设计：两个大圆并排，圆心各在屏幕横向中心左右 R 处（通常在屏幕外）
+   R = 容器高度 / 2
+   左鼓：圆心在 (W-R, H/2)，clip-path circle(R at W-R 50%)
+   右鼓：圆心在 (R, H/2)，   clip-path circle(R at R 50%)
+   clip-path 由 JS 根据实测像素注入 inline style
+──────────────────────────────────────────────────────────── */
+.drum {
+  /* 父容器 .drums 已设 align-self:stretch + flex:1，
+     所以这里用百分比即可，不需要 vw/dvh */
+  width: 50%;
+  height: 100%;
+  position: relative;
+  background: #ffffff;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.07),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  cursor: grab;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.drum:active {
+  cursor: grabbing;
+}
+
+/* .left / .right 留给将来差异化样式 */
+.left {}
+.right {}

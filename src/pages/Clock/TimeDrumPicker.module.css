@@ -1,107 +1,13 @@
-/* ── 切换按钮 ── */
-.toggle {
-  display: flex;
-  background: var(--color-Gray3, #ebeff3);
-  border-radius: 99px;
-  padding: 3px;
-}
-.toggleBtn {
-  padding: 6px 22px;
-  border: none;
-  background: transparent;
-  border-radius: 99px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-Gray6, #8e9aa9);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.toggleBtn.active {
-  background: #fff;
-  color: var(--color-text-main, #2d2d2d);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-}
-
-/* ── 两鼓轮行 ── */
+/* ── 鼓轮容器 ─────────────────────────────────────────────
+   align-self: stretch  覆盖父级 align-items: center，
+                        使容器横向撑满 workspace（打破 width:50% 循环依赖）
+   flex-shrink: 0       固定高度，不参与 flex 空间分配
+   height: 62dvh        固定视口比例，与 TimeDisplay 内容无关，
+                        切换 12h/24h 时鼓尺寸不变
+──────────────────────────────────────────────────────────── */
 .drums {
   display: flex;
-  gap: 0;
-  align-items: center;
-}
-
-/* ── 单个轮盘 ──────────────────────────────────────────────
-   设计：两个大圆并排，圆心各在屏幕横向中心左右 R 处（通常在屏幕外）
-   R = 容器高度 / 2 = 35dvh
-   左鼓：容器 [0, 50vw]，圆心在 x = 50vw - R（容器右边缘外的左侧）
-         → clip-path circle(R at W-R 50%) 只保留右侧内弧
-   右鼓：容器 [50vw, 100vw]，圆心在 x = R（容器左边缘外的右侧）
-         → clip-path circle(R at R 50%) 只保留左侧内弧
-   clip-path 值由 JS 根据实测像素注入 style，见 Drum 组件
-─────────────────────────────────────────────────────────── */
-.drum {
-  /* 每个轮盘各占屏幕一半宽 */
-  /* 高度 = 70dvh 减去 systemHeader 实际高度（由 JS 注入 --sys-header-h） */
-  width: 50vw;
-  height: calc(70dvh - var(--sys-header-h, 64px));
-  position: relative;
-  background: #ffffff;
-  box-shadow:
-    0 2px 20px rgba(0, 0, 0, 0.07),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
-  cursor: grab;
-  overflow: hidden;
-  /* clip-path 由 JS 动态注入，保证圆心随容器尺寸精确定位 */
-}
-.drum:active { cursor: grabbing; }
-
-
-/* ── 午前/午後 ── */
-.ampm {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.ampmKanji {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text-main, #2d2d2d);
-  font-family: var(--font-family-ja, sans-serif);
-}
-.ampmKana {
-  font-size: 0.9rem;
-  color: var(--color-text-sub, #6e6e6e);
-  font-family: var(--font-family-ja, sans-serif);
-}
-
-/* ── 日语展示区 ── */
-.display {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 0 24px;
-  animation: fadeUp 0.2s ease;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.mainText {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--color-text-main, #2d2d2d);
-  font-family: var(--font-family-ja, sans-serif);
-  line-height: 1.2;
-}
-.kanaText {
-  font-size: 1rem;
-  color: var(--color-text-sub, #6e6e6e);
-  font-family: var(--font-family-ja, sans-serif);
-  letter-spacing: 0.06em;
-}
-.noteText {
-  font-size: 0.78rem;
-  color: var(--color-Gray5, #b4beca);
-  letter-spacing: 0.04em;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 62dvh;
 }
