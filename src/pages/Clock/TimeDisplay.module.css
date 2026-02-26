@@ -1,39 +1,21 @@
+/* ── 容器 ── */
 .wrapper {
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  padding: 16px 8px;
+  width: 100%;
 }
 
-/* ── 午前/午後 ── */
-.ampm {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.ampmKanji {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text-main, #2d2d2d);
-  font-family: var(--font-family-ja, sans-serif);
-}
-.ampmKana {
-  font-size: 0.9rem;
-  color: var(--color-text-sub, #6e6e6e);
-  font-family: var(--font-family-ja, sans-serif);
-}
-
-/* ── 日语文案区 ── */
-.display {
-  text-align: center;
+.animated {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 0 24px;
+  gap: 4px;
   animation: fadeUp 0.2s ease;
 }
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -44,21 +26,69 @@
     transform: translateY(0);
   }
 }
-.mainText {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--color-text-main, #2d2d2d);
-  font-family: var(--font-family-ja, sans-serif);
-  line-height: 1.2;
+
+/* ── 主行：汉字 + 假名 + 喇叭 ── */
+.timeRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
 }
-.kanaText {
-  font-size: 1rem;
+
+.segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.segKana {
+  font-size: 0.75rem;
   color: var(--color-text-sub, #6e6e6e);
   font-family: var(--font-family-ja, sans-serif);
-  letter-spacing: 0.06em;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
-.noteText {
-  font-size: 0.78rem;
-  color: var(--color-Gray5, #b4beca);
-  letter-spacing: 0.04em;
+
+.segKanji {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d2d2d);
+  font-family: var(--font-family-ja, sans-serif);
+  line-height: 1;
+}
+
+.speakerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--color-primary, #ff4500);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.3);
+}
+
+.speakerBtn:hover {
+  background: var(--color-primary-dark, #e63e00);
+  transform: scale(1.05);
+}
+
+.speakerBtn:active {
+  transform: scale(0.95);
+}
+
+/* ── 特殊提示 ── */
+.note {
+  font-size: 0.8rem;
+  color: var(--color-Gray7,);
+  text-align: center;
+  line-height: 1.4;
+  font-family: var(--font-family-ja, sans-serif);
+  letter-spacing: 0.02em;
 }

@@ -45,7 +45,7 @@ export function TimeDrumPicker() {
         ) : (
           <Drum
             key="h12"
-            physCount={12}
+            physCount={24}
             valueRange={12}
             selected={hourIdx12}
             formatLabel={fmt12h}
