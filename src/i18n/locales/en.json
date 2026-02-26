@@ -496,5 +496,8 @@
         "12": "Priests Running"
       }
     }
+  },
+  "clock_study": {
+    "title": "Time Reading"
   }
 }

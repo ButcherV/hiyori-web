@@ -61,5 +61,8 @@
   },
   "tracing": {
     "clear": "清除筆跡"
+  },
+  "clock_study": {
+    "title": "時刻讀法"
   }
 }

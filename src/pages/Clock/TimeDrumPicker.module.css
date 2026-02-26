@@ -1,16 +1,3 @@
-.page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
-  padding: 48px 0 56px;
-  min-height: 100dvh;
-  background: var(--color-bg, #f9f9f7);
-  /* 阻止页面被拖拽手势带走 */
-  touch-action: none;
-  overflow: hidden;
-}
-
 /* ── 切换按钮 ── */
 .toggle {
   display: flex;
@@ -38,37 +25,34 @@
 /* ── 两鼓轮行 ── */
 .drums {
   display: flex;
-  gap: 6px;
+  gap: 0;
   align-items: center;
 }
 
 /* ── 单个轮盘 ──────────────────────────────────────────────
-   宽度 = 圆的半径 R
-   高度 = 圆的直径 = 2R
-   这样 clip-path 的 ellipse(rx=100%, ry=50%) 是正圆截面：
-     rx = 100% of width  = R
-     ry = 50%  of height = R     ← 两者相等，正圆 ✓
-   左鼓：圆心在左边缘 (0%, 50%)  → 显示右半圆（D 形）
-   右鼓：圆心在右边缘 (100%, 50%) → 显示左半圆（反 D 形）
+   设计：两个大圆并排，圆心各在屏幕横向中心左右 R 处（通常在屏幕外）
+   R = 容器高度 / 2 = 35dvh
+   左鼓：容器 [0, 50vw]，圆心在 x = 50vw - R（容器右边缘外的左侧）
+         → clip-path circle(R at W-R 50%) 只保留右侧内弧
+   右鼓：容器 [50vw, 100vw]，圆心在 x = R（容器左边缘外的右侧）
+         → clip-path circle(R at R 50%) 只保留左侧内弧
+   clip-path 值由 JS 根据实测像素注入 style，见 Drum 组件
 ─────────────────────────────────────────────────────────── */
 .drum {
-  /* 每个轮盘宽度约为屏幕一半，上限 188px */
-  width: min(calc((100vw - 10px) / 2), 188px);
-  /* 高度精确为 2× 宽度 */
-  height: min(calc(100vw - 10px), 376px);
+  /* 每个轮盘各占屏幕一半宽 */
+  /* 高度 = 70dvh 减去 systemHeader 实际高度（由 JS 注入 --sys-header-h） */
+  width: 50vw;
+  height: calc(70dvh - var(--sys-header-h, 64px));
   position: relative;
   background: #ffffff;
   box-shadow:
     0 2px 20px rgba(0, 0, 0, 0.07),
     0 0 0 1px rgba(0, 0, 0, 0.04);
   cursor: grab;
-  /* clip-path 做圆弧裁剪，overflow 防滚动条 */
   overflow: hidden;
+  /* clip-path 由 JS 动态注入，保证圆心随容器尺寸精确定位 */
 }
 .drum:active { cursor: grabbing; }
-
-.drum.left  { clip-path: ellipse(100% 50% at 0%    50%); }
-.drum.right { clip-path: ellipse(100% 50% at 100%  50%); }
 
 
 /* ── 午前/午後 ── */

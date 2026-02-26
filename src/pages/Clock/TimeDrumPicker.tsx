@@ -9,7 +9,6 @@ import styles from './TimeDrumPicker.module.css';
 
 // ── 物理常数 ──────────────────────────────────────────────
 const TWO_PI = Math.PI * 2;
-const HALF_PI = Math.PI / 2;
 const DAMP_HALF_LIFE = 220;
 const MIN_VEL = 0.00006;
 const SNAP_EASE = 0.25;
@@ -178,7 +177,8 @@ function Drum({
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dims, setDims] = useState({ R: 185, H: 370 });
+  // R = 圆半径 = 容器高度的一半；W = 容器宽度（约 50vw）
+  const [dims, setDims] = useState({ R: 185, H: 370, W: 195 });
   // angle=0 → selected 在中心；吸附后重置为 0
   const [renderAngle, setRenderAngle] = useState(0);
 
@@ -210,7 +210,8 @@ function Drum({
   useLayoutEffect(() => {
     if (!containerRef.current) return;
     const { width, height } = containerRef.current.getBoundingClientRect();
-    if (width > 0) setDims({ R: width, H: height });
+    // 圆半径 = 高度的一半；两圆圆心各在屏幕横向中心两侧 R 处
+    if (width > 0) setDims({ R: height / 2, H: height, W: width });
   }, []);
 
   // 外部改变 selected 时（切换 12h/24h），重置角度
@@ -227,9 +228,17 @@ function Drum({
     (clientX: number, clientY: number) => {
       const rect = containerRef.current!.getBoundingClientRect();
       const cy = rect.top + rect.height / 2;
-      const cx = side === 'left' ? rect.left : rect.right;
-      const dx = side === 'left' ? clientX - cx : cx - clientX;
-      return Math.atan2(clientY - cy, dx);
+      const R = rect.height / 2;
+      // 左鼓：圆心在容器右边缘往左 R 处（= 屏幕横向中心，在容器外侧左边）
+      // 右鼓：圆心在容器左边缘往右 R 处（= 屏幕横向中心，在容器外侧右边）
+      // 两种情况下 dx 均为正值，atan2 输出在 (-π/2, π/2) 附近
+      if (side === 'left') {
+        const cx = rect.right - R; // 圆心 x（可能在屏幕左侧外）
+        return Math.atan2(clientY - cy, clientX - cx);
+      } else {
+        const cx = rect.left + R; // 圆心 x（可能在屏幕右侧外）
+        return Math.atan2(clientY - cy, cx - clientX);
+      }
     },
     [side]
   );
@@ -349,7 +358,15 @@ function Drum({
   }, [nearestSnap, startAnim]);
 
   // ── 渲染：每帧动态计算各槽标签 ────────────────────────
-  const { R, H } = dims;
+  const { R, H, W } = dims;
+
+  // 径向内缩：文字放在半径 (R - MARGIN) 的内圆上，到弧面距离恒为 MARGIN
+  const MARGIN = 8;
+  const innerR = R - MARGIN;
+  // 可见半角：cosθ ≥ (R-W)/innerR 的槽才在容器范围内
+  const cosThresh = (R - W) / innerR;
+  const halfAngle = Math.acos(Math.max(-1, Math.min(1, cosThresh)));
+
   const items: React.ReactNode[] = [];
 
   // 当前转了多少整步（保持浮点方向，用于 label 计算）
@@ -361,16 +378,14 @@ function Drum({
     let theta = phys * step + renderAngle;
     // 归一化到 (-π, π]
     theta = theta - TWO_PI * Math.floor((theta + Math.PI) / TWO_PI);
-    if (Math.abs(theta) > HALF_PI + 0.12) continue;
+    if (Math.abs(theta) > halfAngle) continue;
 
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
     const opacity = Math.max(0, cosT);
-    // 径向内缩：文字放在半径 (R - MARGIN) 的内圆上
-    // 这样到外弧的径向距离在所有角度下恒为 MARGIN
-    const MARGIN = 8;
-    const innerR = R - MARGIN;
-    const x = side === 'left' ? innerR * cosT : R - innerR * cosT;
+    // 左鼓：圆心在 (W-R, H/2)，弧面在右侧，x = (W-R) + innerR*cosT
+    // 右鼓：圆心在 (R,   H/2)，弧面在左侧，x = R - innerR*cosT
+    const x = side === 'left' ? W - R + innerR * cosT : R - innerR * cosT;
     const y = H / 2 + innerR * sinT;
     const fontSize = 13 + 20 * opacity * opacity;
 
@@ -416,10 +431,18 @@ function Drum({
     );
   }
 
+  // 左鼓：圆心在容器坐标 (W-R, H/2)，即右边缘往左 R px，可能为负（圆心在屏幕外）
+  // 右鼓：圆心在容器坐标 (R, H/2)，即左边缘往右 R px，可能超出容器右边界
+  const clipPath =
+    side === 'left'
+      ? `circle(${R}px at ${W - R}px 50%)`
+      : `circle(${R}px at ${R}px 50%)`;
+
   return (
     <div
       ref={containerRef}
       className={`${styles.drum} ${styles[side]}`}
+      style={{ clipPath }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -430,11 +453,21 @@ function Drum({
   );
 }
 
-// ── 主页面 ────────────────────────────────────────────────
+// ── TimeDrumPicker 组件（纯鼓轮功能） ────────────────────
 export function TimeDrumPicker() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const drumsContainerRef = useRef<HTMLDivElement>(null);
+
   const [hour, setHour] = useState(9);
   const [minute, setMinute] = useState(30);
   const [is24h, setIs24h] = useState(false);
+
+  // 测量 header 真实高度，注入 CSS 变量供鼓高度计算使用
+  useLayoutEffect(() => {
+    if (!headerRef.current || !drumsContainerRef.current) return;
+    const h = headerRef.current.getBoundingClientRect().height;
+    drumsContainerRef.current.style.setProperty('--sys-header-h', `${h}px`);
+  }, []);
 
   const hourIdx12 = hour % 12;
 
@@ -456,8 +489,8 @@ export function TimeDrumPicker() {
   );
 
   return (
-    <div className={styles.page}>
-      <div className={styles.toggle}>
+    <>
+      <div ref={headerRef} className={styles.toggle}>
         <button
           className={`${styles.toggleBtn} ${!is24h ? styles.active : ''}`}
           onClick={() => setIs24h(false)}
@@ -472,7 +505,7 @@ export function TimeDrumPicker() {
         </button>
       </div>
 
-      <div className={styles.drums}>
+      <div ref={drumsContainerRef} className={styles.drums}>
         {is24h ? (
           <Drum
             key="h24"
@@ -521,6 +554,6 @@ export function TimeDrumPicker() {
         <div className={styles.kanaText}>{display.kana}</div>
         {display.note && <div className={styles.noteText}>{display.note}</div>}
       </div>
-    </div>
+    </>
   );
 }

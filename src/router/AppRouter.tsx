@@ -36,11 +36,8 @@ const MistakeNotebook = lazy(() =>
 const DicePage = lazy(() =>
   import('../pages/DicePage').then(m => ({ default: m.DicePage }))
 );
-const MagicClock = lazy(() =>
-  import('../pages/Clock/Clock').then(m => ({ default: m.MagicClock }))
-);
-const TimeDrumPicker = lazy(() =>
-  import('../pages/Clock/TimeDrumPicker').then(m => ({ default: m.TimeDrumPicker }))
+const PageClock = lazy(() =>
+  import('../pages/Clock/PageClock').then(m => ({ default: m.PageClock }))
 );
 const PageNumbers = lazy(() =>
   import('../pages/Numbers/PageNumbers').then(m => ({ default: m.PageNumbers }))
@@ -67,7 +64,7 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname === '/dice') return 2;
   if (pathname === '/mistake-book') return 2;
   if (pathname === '/quiz/session') return 3;
-  if (pathname === '/study/clock') return 2;
+  if (pathname === '/study/clock/drum') return 2;
   if (pathname === '/study/numbers') return 2;
   if (pathname === '/study/numbers/translator') return 3;
 
@@ -180,8 +177,7 @@ export const AppRouter = () => {
           />
 
           <Route path="/dice" element={<DicePage />} />
-          <Route path="/study/clock" element={<MagicClock />} />
-          <Route path="/study/clock/drum" element={<TimeDrumPicker />} />
+          <Route path="/study/clock/drum" element={<PageClock />} />
 
           {/* Level 3 */}
           <Route
