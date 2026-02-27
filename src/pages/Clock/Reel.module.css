@@ -1,0 +1,58 @@
+.reel {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* background: #ffffff; */
+  cursor: grab;
+  touch-action: none;
+}
+
+.reel:active {
+  cursor: grabbing;
+}
+
+/* 固定的选中框背景，渲染在文字层之下 */
+/* left/right 由组件通过 inline style 按 side 注入 */
+.selectionWindow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 88px;   /* 匹配两位数字 + 左右 padding */
+  height: 60px;  /* 44px 字号 + 上下 padding + border */
+  border: 2px solid;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 滚动内容容器，渲染在选中框之上 */
+.scrollContent {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* 单个项目，justifyContent 由 inline style 按 side 注入 */
+.item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 标签 */
+.label {
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-family: Inter, -apple-system, sans-serif;
+}
+
+/* side-specific overrides reserved for future use */
+.left {}
+.right {}

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import styles from './TimeDisplay.module.css';
 
@@ -40,7 +40,6 @@ const MINUTE_KANA: Record<number, string> = {
   58: 'ごじゅうはっぷん', 59: 'ごじゅうきゅうふん',
 };
 
-// 读音不规则的时（需要提示）
 function getIrregularHourNote(hour: number, lang: string): string | null {
   const notes: Record<number, Record<string, string>> = {
     4: {
@@ -65,6 +64,17 @@ function getIrregularHourNote(hour: number, lang: string): string | null {
     },
   };
   return notes[hour]?.[lang] ?? notes[hour]?.['en'] ?? null;
+}
+
+function getIrregularMinuteNote(minute: number, lang: string): string | null {
+  const sokuonMinutes = [1, 3, 6, 8, 10, 11, 16, 18, 20, 21, 23, 26, 28, 30, 31, 33, 36, 38, 40, 41, 43, 46, 48, 50, 51, 53, 56, 58];
+  if (!sokuonMinutes.includes(minute)) return null;
+  const notes: Record<string, string> = {
+    zh: '注意：促音化，读作「ぷん」',
+    'zh-Hant': '注意：促音化，讀作「ぷん」',
+    en: 'Sokuon: っぷん — the small っ doubles the next consonant',
+  };
+  return notes[lang] ?? notes['en'];
 }
 
 function getHalfNote(hour: number, is24h: boolean, lang: string): string {
@@ -104,7 +114,6 @@ function getNoonNote(lang: string): string {
   return notes[lang] ?? notes['en'];
 }
 
-// ── 数据结构 ──────────────────────────────────────────────
 interface Segment {
   kanji: string;
   kana: string;
@@ -116,14 +125,12 @@ interface DisplayData {
   speakText: string;
 }
 
-// ── 构建展示数据 ──────────────────────────────────────────
 function buildDisplayData(
   hour: number,
   minute: number,
   is24h: boolean,
   lang: string
 ): DisplayData {
-  // 特殊：真夜中
   if (hour === 0 && minute === 0) {
     return {
       segments: [{ kanji: '真夜中', kana: 'まよなか' }],
@@ -131,7 +138,6 @@ function buildDisplayData(
       speakText: 'まよなか',
     };
   }
-  // 特殊：正午
   if (hour === 12 && minute === 0) {
     return {
       segments: [{ kanji: '正午', kana: 'しょうご' }],
@@ -146,7 +152,6 @@ function buildDisplayData(
   const h12 = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
   const isAM = hour < 12;
 
-  // 午前／午後（12h 模式）
   if (!is24h) {
     segments.push({
       kanji: isAM ? '午前' : '午後',
@@ -154,24 +159,22 @@ function buildDisplayData(
     });
   }
 
-  // 时
   const hourKey = is24h ? hour : h12;
   const hourKana = HOUR_KANA[hourKey] ?? `${hourKey}じ`;
   const hourKanji = is24h ? `${hour}時` : `${h12}時`;
   segments.push({ kanji: hourKanji, kana: hourKana });
-  
-  const irregularNote = getIrregularHourNote(hourKey, lang);
-  if (irregularNote) {
-    notes.push(irregularNote);
-  }
 
-  // 分
+  const irregularNote = getIrregularHourNote(hourKey, lang);
+  if (irregularNote) notes.push(irregularNote);
+
   if (minute > 0) {
     const minKana = MINUTE_KANA[minute] ?? `${minute}ふん`;
     segments.push({ kanji: `${minute}分`, kana: minKana });
-    if (minute === 30) {
-      notes.push(getHalfNote(hour, is24h, lang));
-    }
+
+    if (minute === 30) notes.push(getHalfNote(hour, is24h, lang));
+
+    const irregularMinNote = getIrregularMinuteNote(minute, lang);
+    if (irregularMinNote) notes.push(irregularMinNote);
   } else {
     notes.push(getExactHourNote(lang));
   }
@@ -180,7 +183,6 @@ function buildDisplayData(
   return { segments, notes, speakText };
 }
 
-// ── コンポーネント ────────────────────────────────────────
 interface TimeDisplayProps {
   hour: number;
   minute: number;
@@ -202,31 +204,30 @@ export function TimeDisplay({ hour, minute, is24h }: TimeDisplayProps) {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.animated} key={`${hour}-${minute}-${is24h}`}>
-        {/* ── 主行：汉字 + 假名 + 喇叭 ── */}
-        <div className={styles.timeRow}>
-          {data.segments.map((seg, i) => (
-            <div className={styles.segment} key={i}>
-              <span className={styles.segKana}>{seg.kana}</span>
-              <span className={styles.segKanji}>{seg.kanji}</span>
-            </div>
-          ))}
-          <button
-            className={styles.speakerBtn}
-            onClick={handleSpeak}
-            aria-label="読み上げ"
-          >
-            <Volume2 size={20} />
-          </button>
-        </div>
-
-        {/* ── 特殊提示 ── */}
-        {data.notes.map((note, i) => (
-          <div className={styles.note} key={i}>
-            {note}
+      {/* ── Furigana Row ── */}
+      <div className={styles.timeRow}>
+        {data.segments.map((seg, i) => (
+          <div className={styles.segment} key={i}>
+            <span className={styles.segKana}>{seg.kana}</span>
+            <span className={styles.segKanji}>{seg.kanji}</span>
           </div>
         ))}
+        <button
+          className={styles.speakerBtn}
+          onClick={handleSpeak}
+          aria-label="読み上げ"
+        >
+          <Volume2 size={20} />
+        </button>
       </div>
+
+      {/* ── Notes ── */}
+      {data.notes.map((note, i) => (
+        <div className={styles.note} key={i}>
+          <Info size={16} className={styles.noteIcon} />
+          <span className={styles.noteText}>{note}</span>
+        </div>
+      ))}
     </div>
   );
 }

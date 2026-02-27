@@ -498,6 +498,7 @@
     }
   },
   "clock_study": {
-    "title": "Time Reading"
+    "title": "Time Reading",
+    "now": "Now"
   }
 }

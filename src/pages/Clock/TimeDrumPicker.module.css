@@ -1,34 +1,36 @@
-/* ── 鼓轮容器 ─────────────────────────────────────────────
-   align-self: stretch  覆盖父级 align-items: center，
-                        使容器横向撑满 workspace（打破 width:50% 循环依赖）
-   flex-shrink: 0       固定高度，不参与 flex 空间分配
-   height: 62dvh        固定视口比例，与 TimeDisplay 内容无关，
-                        切换 12h/24h 时鼓尺寸不变
-──────────────────────────────────────────────────────────── */
-.drums {
+/* ── Picker Area ── */
+.pickerArea {
+  flex: 1; /* 恢复自适应，填充剩余空间 */
+  width: 100%;
   display: flex;
-  align-self: stretch;
-  flex-shrink: 0;
-  height: 62dvh;
-  position: relative;
-  gap: 3px;
+  flex-direction: column;
+  padding: 8px 0;
+  min-height: 0; /* 允许 flex 子元素收缩 */
 }
 
-/* ── 选中框 ───────────────────────────────────────────────
-   绝对定位于 .drums 正中央，跨越两个鼓，
-   在视觉上把左右两个选中数字框在一起。
-   z-index 高于两个 .drum（它们无显式 z-index），
-   DOM 顺序也排在前面，但 absolute 元素堆叠与 DOM 顺序有关。
-──────────────────────────────────────────────────────────── */
-.selectionBox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 140px;
-  height: 52px;
-  border: 1px solid var(--color-primary);
-  border-radius: 12px;
+/* ── Drums row ── */
+.drums {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  /* box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06), 0 4px 24px rgba(0, 0, 0, 0.04); */
+  position: relative; /* 为选中框提供定位上下文 */
+}
+
+/* ── Colon separator — inline flex item ── */
+.colon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  font-size: 40px;
+  font-weight: 300;
+  color: #d4d4d8;
+  /* background: #ffffff; */
   pointer-events: none;
-  z-index: 10;
+  user-select: none;
+  line-height: 1;
+  z-index: 10; /* 确保在选中框之上 */
 }

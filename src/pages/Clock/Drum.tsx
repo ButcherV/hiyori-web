@@ -37,6 +37,7 @@ export interface DrumProps {
   formatLabel: (v: number) => string;
   onSelect: (v: number) => void;
   side: 'left' | 'right';
+  specialValues?: number[]; // 特殊值（需要高亮标记）
 }
 
 export function Drum({
@@ -46,6 +47,7 @@ export function Drum({
   formatLabel,
   onSelect,
   side,
+  specialValues = [],
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -283,6 +285,7 @@ export function Drum({
       valueRange;
     const label = formatLabel(slotValue);
     const isCenter = phys === centerPhysIdx;
+    const isSpecial = specialValues.includes(slotValue);
 
     items.push(
       <span
@@ -296,7 +299,9 @@ export function Drum({
           opacity,
           fontSize: `${fontSize}px`,
           fontWeight: isCenter ? 700 : 400,
-          color: isCenter
+          color: isSpecial && !isCenter
+            ? 'rgba(255, 69, 0, 0.6)'
+            : isCenter
             ? 'var(--color-primary, #111827)'
             : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
@@ -310,6 +315,19 @@ export function Drum({
         }}
       >
         {label}
+        {isSpecial && !isCenter && (
+          <span
+            style={{
+              position: 'absolute',
+              top: '-4px',
+              right: '-6px',
+              width: '4px',
+              height: '4px',
+              borderRadius: '50%',
+              background: 'var(--color-primary, #ff4500)',
+            }}
+          />
+        )}
       </span>
     );
   }

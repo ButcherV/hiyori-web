@@ -1,37 +1,25 @@
-/* ── 容器 ── */
+/* ── Bottom Section container ── */
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 8px;
+  flex-shrink: 0;
   width: 100%;
-}
-
-.animated {
+  height: 240px; /* 固定高度，防止因 notes 数量变化而跳跃 */
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  animation: fadeUp 0.2s ease;
+  gap: 16px;
+  padding: 24px 24px 12px;
+  box-sizing: border-box;
+  overflow-y: auto; /* 如果内容超出，允许滚动 */
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── 主行：汉字 + 假名 + 喇叭 ── */
+/* ── Furigana Row ── */
 .timeRow {
   display: flex;
   align-items: flex-end;
-  gap: 4px;
+  gap: 24px;
+  flex-shrink: 0; /* 防止被压缩 */
 }
 
 .segment {
@@ -42,53 +30,63 @@
 }
 
 .segKana {
-  font-size: 0.75rem;
-  color: var(--color-text-sub, #6e6e6e);
+  font-size: 12px;
+  font-weight: 500;
+  color: #a1a1aa;
   font-family: var(--font-family-ja, sans-serif);
   line-height: 1;
   letter-spacing: 0.02em;
 }
 
 .segKanji {
-  font-size: 2rem;
+  font-size: 36px;
   font-weight: 700;
-  color: var(--color-text-main, #2d2d2d);
+  color: #1a1a1a;
   font-family: var(--font-family-ja, sans-serif);
   line-height: 1;
 }
 
+/* ── Speaker Button ── */
 .speakerBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: none;
-  background: var(--color-primary, #ff4500);
-  color: white;
+  background: #c4553a;
+  color: #ffffff;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: 8px;
-  margin-bottom: 2px;
-  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.3);
-}
-
-.speakerBtn:hover {
-  background: var(--color-primary-dark, #e63e00);
-  transform: scale(1.05);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(196, 85, 58, 0.3);
+  transition: opacity 0.15s;
 }
 
 .speakerBtn:active {
-  transform: scale(0.95);
+  opacity: 0.7;
 }
 
-/* ── 特殊提示 ── */
+/* ── Note box ── */
 .note {
-  font-size: 0.8rem;
-  color: var(--color-Gray7,);
-  text-align: center;
-  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fef7f0;
+  border-radius: 14px;
+  padding: 10px 16px;
+  box-sizing: border-box;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  color: #c4553a;
+  margin-top: 1px;
+}
+
+.noteText {
+  font-size: 13px;
+  color: #8b7355;
   font-family: var(--font-family-ja, sans-serif);
-  letter-spacing: 0.02em;
+  line-height: 1.4;
 }
