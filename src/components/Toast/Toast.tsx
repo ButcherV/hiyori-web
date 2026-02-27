@@ -6,7 +6,7 @@ import styles from './Toast.module.css';
 
 interface ToastProps {
   isVisible: boolean;
-  message: string;
+  message: string | ReactNode;
   description?: string | ReactNode;
 }
 

@@ -45,6 +45,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
     <>
       <QuickActions
         is24h={is24h}
+        currentHour={hour}
         onToggleFormat={handleToggleFormat}
         onJumpToNow={handleResetToNow}
         onJumpTo={handleJumpTo}

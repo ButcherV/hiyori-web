@@ -48,7 +48,7 @@ const SOKUON_MINUTES = new Set([
   51, 53, 56, 58,
 ]);
 
-const IRREGULAR_HOURS = new Set([4, 9, 14, 19]);
+const IRREGULAR_HOURS = new Set([4, 7, 9, 14, 17, 19]);
 
 // ── データ構造 ────────────────────────────────────────────
 interface Segment {
