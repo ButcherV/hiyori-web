@@ -7,32 +7,32 @@ const getReelConfig = () => {
   if (height <= 700) {
     // 小屏幕 (iPhone SE 等)
     return {
-      CELL_HEIGHT: 40,
+      CELL_HEIGHT: 44,
       VISIBLE_AROUND: 5,
       ITEM_STYLES: [
-        { fontSize: 36, fontWeight: 700, opacity: 1,    color: 'inherit' },
-        { fontSize: 30, fontWeight: 600, opacity: 0.8,  color: '#71717A' },
-        { fontSize: 24, fontWeight: 500, opacity: 0.6,  color: '#71717A' },
-        { fontSize: 18, fontWeight: 400, opacity: 0.4,  color: '#A1A1AA' },
-        { fontSize: 14, fontWeight: 400, opacity: 0.25, color: '#D4D4D8' },
-        { fontSize: 12, fontWeight: 400, opacity: 0.15, color: '#E4E4E7' },
+        { fontSize: 48, fontWeight: 700, opacity: 1,    color: 'inherit' },      // 中心：大
+        { fontSize: 34, fontWeight: 600, opacity: 0.75, color: '#71717A' },      // ±1
+        { fontSize: 26, fontWeight: 500, opacity: 0.55, color: '#A1A1AA' },      // ±2
+        { fontSize: 20, fontWeight: 400, opacity: 0.4,  color: '#A1A1AA' },      // ±3
+        { fontSize: 16, fontWeight: 400, opacity: 0.28, color: '#D4D4D8' },      // ±4
+        { fontSize: 14, fontWeight: 400, opacity: 0.18, color: '#E4E4E7' },      // ±5
       ],
     };
   }
   // 正常屏幕
   return {
-    CELL_HEIGHT: 48,
+    CELL_HEIGHT: 52,
     VISIBLE_AROUND: 8,
     ITEM_STYLES: [
-      { fontSize: 44, fontWeight: 700, opacity: 1,    color: 'inherit' },
-      { fontSize: 36, fontWeight: 600, opacity: 0.8,  color: '#71717A' },
-      { fontSize: 28, fontWeight: 500, opacity: 0.6,  color: '#71717A' },
-      { fontSize: 22, fontWeight: 400, opacity: 0.45, color: '#A1A1AA' },
-      { fontSize: 18, fontWeight: 400, opacity: 0.3,  color: '#D4D4D8' },
-      { fontSize: 16, fontWeight: 400, opacity: 0.2,  color: '#D4D4D8' },
-      { fontSize: 14, fontWeight: 400, opacity: 0.15, color: '#E4E4E7' },
-      { fontSize: 12, fontWeight: 400, opacity: 0.1,  color: '#E4E4E7' },
-      { fontSize: 12, fontWeight: 400, opacity: 0.05, color: '#F4F4F5' },
+      { fontSize: 56, fontWeight: 700, opacity: 1,    color: 'inherit' },      // 中心：超大
+      { fontSize: 40, fontWeight: 600, opacity: 0.75, color: '#71717A' },      // ±1：明显小
+      { fontSize: 30, fontWeight: 500, opacity: 0.55, color: '#A1A1AA' },      // ±2：更小
+      { fontSize: 24, fontWeight: 400, opacity: 0.4,  color: '#A1A1AA' },      // ±3
+      { fontSize: 20, fontWeight: 400, opacity: 0.28, color: '#D4D4D8' },      // ±4
+      { fontSize: 18, fontWeight: 400, opacity: 0.2,  color: '#D4D4D8' },      // ±5
+      { fontSize: 16, fontWeight: 400, opacity: 0.14, color: '#E4E4E7' },      // ±6
+      { fontSize: 14, fontWeight: 400, opacity: 0.1,  color: '#E4E4E7' },      // ±7
+      { fontSize: 12, fontWeight: 400, opacity: 0.06, color: '#F4F4F5' },      // ±8
     ],
   };
 };
@@ -219,16 +219,18 @@ export function Reel({
     const isCenter = styleIdx === 0;
     const yOffset = distSigned * CELL_HEIGHT;
 
+    // 3D 圆柱体效果：计算透视变形
+    // 距离中心越远，scaleX 越小（模拟圆柱体弧度）
+    const normalizedDist = absDist / VISIBLE_AROUND; // 0 到 1
+    const scaleX = 1 - normalizedDist * 0.25; // 中心 1.0，边缘 0.75（增强横向压缩）
+    const scaleY = 1 - normalizedDist * 0.08; // 轻微纵向压缩
+
     items.push(
       <div
         key={j}
         className={styles.item}
         style={{
-          transform: `translateY(calc(-50% + ${yOffset}px))`,
-          // 数字靠向内侧（冒号方向），与 selectionWindow 对齐
-          justifyContent: side === 'left' ? 'flex-end' : 'flex-start',
-          paddingRight: side === 'left' ? 20 : 0,
-          paddingLeft: side === 'right' ? 20 : 0,
+          transform: `translateY(calc(-50% + ${yOffset}px)) scale(${scaleX}, ${scaleY})`,
         }}
       >
         <span
@@ -254,13 +256,14 @@ export function Reel({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {/* 选中框：固定在内侧（靠冒号），不随滚动移动 */}
+      {/* 选中框：与数字容器对齐 */}
       <div
         className={styles.selectionWindow}
         style={{
           borderColor: accentColor,
           background: accentBg,
-          // 左鼓靠右边缘（内侧），右鼓靠左边缘（内侧）
+          // 数字容器现在是 88px 宽，padding 9px，数字在容器内居中
+          // selectionWindow 也是 88px 宽，直接对齐到边缘即可
           ...(side === 'left' ? { right: 0 } : { left: 0 }),
         }}
       />

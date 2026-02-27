@@ -43,24 +43,24 @@ const MINUTE_KANA: Record<number, string> = {
 function getIrregularHourNote(hour: number, lang: string): string | null {
   const notes: Record<number, Record<string, string>> = {
     4: {
-      zh: '注意：读作「よじ」，不是「よんじ」',
-      'zh-Hant': '注意：讀作「よじ」，不是「よんじ」',
-      en: 'Note: Pronounced "yoji", not "yonji"',
+      zh: '注意：「4時」读作「よじ」，不是「よんじ」',
+      'zh-Hant': '注意：「4時」讀作「よじ」，不是「よんじ」',
+      en: 'Note: "4時" is pronounced "yoji", not "yonji"',
     },
     9: {
-      zh: '注意：读作「くじ」，不是「きゅうじ」',
-      'zh-Hant': '注意：讀作「くじ」，不是「きゅうじ」',
-      en: 'Note: Pronounced "kuji", not "kyūji"',
+      zh: '注意：「9時」读作「くじ」，不是「きゅうじ」',
+      'zh-Hant': '注意：「9時」讀作「くじ」，不是「きゅうじ」',
+      en: 'Note: "9時" is pronounced "kuji", not "kyūji"',
     },
     14: {
-      zh: '注意：读作「じゅうよじ」，不是「じゅうよんじ」',
-      'zh-Hant': '注意：讀作「じゅうよじ」，不是「じゅうよんじ」',
-      en: 'Note: Pronounced "jūyoji", not "jūyonji"',
+      zh: '注意：「14時」读作「じゅうよじ」，不是「じゅうよんじ」',
+      'zh-Hant': '注意：「14時」讀作「じゅうよじ」，不是「じゅうよんじ」',
+      en: 'Note: "14時" is pronounced "jūyoji", not "jūyonji"',
     },
     19: {
-      zh: '注意：读作「じゅうくじ」，不是「じゅうきゅうじ」',
-      'zh-Hant': '注意：讀作「じゅうくじ」，不是「じゅうきゅうじ」',
-      en: 'Note: Pronounced "jūkuji", not "jūkyūji"',
+      zh: '注意：「19時」读作「じゅうくじ」，不是「じゅうきゅうじ」',
+      'zh-Hant': '注意：「19時」讀作「じゅうくじ」，不是「じゅうきゅうじ」',
+      en: 'Note: "19時" is pronounced "jūkuji", not "jūkyūji"',
     },
   };
   return notes[hour]?.[lang] ?? notes[hour]?.['en'] ?? null;
@@ -70,9 +70,9 @@ function getIrregularMinuteNote(minute: number, lang: string): string | null {
   const sokuonMinutes = [1, 3, 6, 8, 10, 11, 16, 18, 20, 21, 23, 26, 28, 30, 31, 33, 36, 38, 40, 41, 43, 46, 48, 50, 51, 53, 56, 58];
   if (!sokuonMinutes.includes(minute)) return null;
   const notes: Record<string, string> = {
-    zh: '注意：促音化，读作「ぷん」',
-    'zh-Hant': '注意：促音化，讀作「ぷん」',
-    en: 'Sokuon: っぷん — the small っ doubles the next consonant',
+    zh: `注意：「${minute}分」促音化，读作「ぷん」`,
+    'zh-Hant': `注意：「${minute}分」促音化，讀作「ぷん」`,
+    en: `Sokuon: "${minute}分" → っぷん (the small っ doubles the next consonant)`,
   };
   return notes[lang] ?? notes['en'];
 }
@@ -171,10 +171,12 @@ function buildDisplayData(
     const minKana = MINUTE_KANA[minute] ?? `${minute}ふん`;
     segments.push({ kanji: `${minute}分`, kana: minKana });
 
-    if (minute === 30) notes.push(getHalfNote(hour, is24h, lang));
-
+    // 促音化提示排在第二位（在特殊时刻发音之后）
     const irregularMinNote = getIrregularMinuteNote(minute, lang);
     if (irregularMinNote) notes.push(irregularMinNote);
+
+    // "半"的提示排在促音化之后
+    if (minute === 30) notes.push(getHalfNote(hour, is24h, lang));
   } else {
     notes.push(getExactHourNote(lang));
   }
@@ -209,7 +211,7 @@ export function TimeDisplay({ hour, minute, is24h }: TimeDisplayProps) {
     <div className={styles.wrapper}>
       <div className={styles.content} key={contentKey}>
         {/* ── Furigana Row ── */}
-        <div className={styles.timeRow}>
+        <div className={`${styles.timeRow} jaFont`}>
           {data.segments.map((seg, i) => (
             <div className={styles.segment} key={i}>
               <span className={styles.segKana}>{seg.kana}</span>

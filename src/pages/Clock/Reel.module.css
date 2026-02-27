@@ -6,6 +6,8 @@
   /* background: #ffffff; */
   cursor: grab;
   touch-action: none;
+  perspective: 1000px;
+  perspective-origin: center center;
 }
 
 .reel:active {
@@ -13,17 +15,24 @@
 }
 
 /* 固定的选中框背景，渲染在文字层之下 */
-/* left/right 由组件通过 inline style 按 side 注入 */
 .selectionWindow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 88px;   /* 匹配两位数字 + 左右 padding */
-  height: 50px;  /* 44px 字号 + 上下 padding + border */
+  width: 88px; 
+  height: 60px;
   border: 2px solid;
   border-radius: 14px;
   pointer-events: none;
   z-index: 2;
+}
+
+/* 小屏幕适配 */
+@media (max-height: 700px) {
+  .selectionWindow {
+    width: 78px;
+    height: 54px;  /* 48px 字号 + padding */
+  }
 }
 
 /* 滚动内容容器，渲染在选中框之上 */
@@ -32,13 +41,12 @@
   inset: 0;
   pointer-events: none;
   z-index: 3;
+  transform-style: preserve-3d;
 }
 
-/* 单个项目，justifyContent 由 inline style 按 side 注入 */
+/* 单个项目 */
 .item {
   position: absolute;
-  left: 0;
-  right: 0;
   top: 50%;
   display: flex;
   align-items: center;
@@ -46,13 +54,51 @@
   user-select: none;
 }
 
+/* 左侧 reel：数字容器固定宽度，定位到右边缘（黑线） */
+.left .item {
+  right: 0;
+  left: auto;  /* 不占满宽度 */
+  width: 88px;  /* 增加宽度，与 selectionWindow 同宽 */
+  justify-content: flex-end;
+  padding-right: 9px;  /* 右侧留出空间，让数字在容器内居中 */
+}
+
+/* 右侧 reel：数字容器固定宽度，定位到左边缘（黑线） */
+.right .item {
+  left: 0;
+  right: auto;  /* 不占满宽度 */
+  width: 88px;  /* 增加宽度，与 selectionWindow 同宽 */
+  justify-content: flex-start;
+  padding-left: 9px;  /* 左侧留出空间，让数字在容器内居中 */
+}
+
+/* 小屏幕适配 */
+@media (max-height: 700px) {
+  .left .item {
+    width: 78px;
+    padding-right: 9px;
+  }
+  .right .item {
+    width: 78px;
+    padding-left: 9px;
+  }
+}
+
 /* 标签 */
 .label {
   line-height: 1;
   font-variant-numeric: tabular-nums;
   font-family: Inter, -apple-system, sans-serif;
+  display: inline-block;
+  width: 100%;  /* 占满父容器 */
 }
 
-/* side-specific overrides reserved for future use */
-.left {}
-.right {}
+/* 左侧数字：右对齐 */
+.left .label {
+  text-align: right;
+}
+
+/* 右侧数字：左对齐 */
+.right .label {
+  text-align: left;
+}

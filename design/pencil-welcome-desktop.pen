@@ -7106,7 +7106,8 @@
                   "fill": "#D4D4D8",
                   "content": "14",
                   "fontFamily": "Inter",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7116,7 +7117,8 @@
                   "fill": "#D4D4D8",
                   "content": "15",
                   "fontFamily": "Inter",
-                  "fontSize": 22
+                  "fontSize": 22,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7200,7 +7202,8 @@
                   "fill": "#A1A1AA",
                   "content": "21",
                   "fontFamily": "Inter",
-                  "fontSize": 22
+                  "fontSize": 22,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7210,7 +7213,8 @@
                   "fill": "#D4D4D8",
                   "content": "22",
                   "fontFamily": "Inter",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -7249,7 +7253,8 @@
                   "fill": "#D4D4D8",
                   "content": "37",
                   "fontFamily": "Inter",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7259,7 +7264,8 @@
                   "fill": "#D4D4D8",
                   "content": "38",
                   "fontFamily": "Inter",
-                  "fontSize": 22
+                  "fontSize": 22,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7342,7 +7348,8 @@
                   "fill": "#D4D4D8",
                   "content": "44",
                   "fontFamily": "Inter",
-                  "fontSize": 22
+                  "fontSize": 22,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7352,7 +7359,8 @@
                   "fill": "#D4D4D8",
                   "content": "45",
                   "fontFamily": "Inter",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -7525,7 +7533,8 @@
                   "width": "fill_container",
                   "content": "Sokuon: っぷん — the small っ doubles the next consonant",
                   "fontFamily": "Inter",
-                  "fontSize": 13
+                  "fontSize": 13,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -7547,6 +7556,1172 @@
               "id": "3J1mO",
               "name": "homeBar",
               "fill": "#1A1A1A",
+              "width": 134,
+              "height": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "VXqFR",
+      "x": 7975,
+      "y": -2871,
+      "name": "Date Learning - Redesign",
+      "clip": true,
+      "width": 393,
+      "height": 852,
+      "fill": "$--background",
+      "cornerRadius": 40,
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "4qWPS",
+          "name": "statusBar",
+          "width": "fill_container",
+          "height": 54,
+          "padding": [
+            14,
+            24,
+            0,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "wYpQQ",
+              "name": "statusTime",
+              "fill": "$--foreground",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "9h1ZK",
+              "name": "statusRight",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "HLBoJ",
+                  "name": "signal",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "signal_cellular_alt",
+                  "iconFontFamily": "Material Symbols Rounded",
+                  "fill": "$--foreground"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "h7b8C",
+                  "name": "wifi",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "wifi",
+                  "iconFontFamily": "Material Symbols Rounded",
+                  "fill": "$--foreground"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "AagMb",
+                  "name": "battery",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "battery_full",
+                  "iconFontFamily": "Material Symbols Rounded",
+                  "fill": "$--foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Bwao8",
+          "name": "navBar",
+          "width": "fill_container",
+          "height": 48,
+          "gap": 12,
+          "padding": [
+            0,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "wNOvD",
+              "name": "backIcon",
+              "width": 24,
+              "height": 24,
+              "iconFontName": "chevron-left",
+              "iconFontFamily": "lucide",
+              "fill": "$--foreground"
+            },
+            {
+              "type": "text",
+              "id": "wjFx0",
+              "name": "navTitle",
+              "fill": "$--foreground",
+              "content": "日期学习",
+              "fontFamily": "$--font-primary",
+              "fontSize": 18,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "T7lkF",
+              "name": "navSpacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "icon_font",
+              "id": "YfWWz",
+              "name": "calIcon",
+              "width": 22,
+              "height": 22,
+              "iconFontName": "calendar",
+              "iconFontFamily": "lucide",
+              "fill": "$--muted-foreground"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "x2uGs",
+          "name": "Month Header",
+          "width": "fill_container",
+          "padding": [
+            2,
+            20,
+            4,
+            20
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Tkuve",
+              "name": "monthLeft",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lNV6Q",
+                  "name": "monthText",
+                  "fill": "$--foreground",
+                  "content": "2026年3月",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "JIg28",
+                  "name": "monthSubtext",
+                  "fill": "$--muted-foreground",
+                  "content": "弥生・令和八年",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZaaQ8",
+              "name": "monthArrows",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "HVhRl",
+                  "name": "arrowL",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "chevron-left",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "mQoA7",
+                  "name": "arrowR",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WDzv2",
+          "name": "Week Strip",
+          "width": "fill_container",
+          "padding": [
+            2,
+            10
+          ],
+          "justifyContent": "space_around",
+          "children": [
+            {
+              "type": "frame",
+              "id": "7Ofc0",
+              "name": "day-sun",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "7aEcA",
+                  "name": "d1label",
+                  "fill": "$--destructive",
+                  "content": "日",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "to9aK",
+                  "name": "d1num",
+                  "fill": "$--foreground",
+                  "content": "1",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lw96Y",
+              "name": "day-mon",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zoIH5",
+                  "name": "d2label",
+                  "fill": "$--muted-foreground",
+                  "content": "月",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "4Nior",
+                  "name": "d2num",
+                  "fill": "$--foreground",
+                  "content": "2",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bdH6e",
+              "name": "day-tue-active",
+              "width": "fill_container",
+              "height": 68,
+              "fill": "$--primary",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rFuRq",
+                  "name": "d3label",
+                  "fill": "$--primary-foreground",
+                  "content": "火",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "zmMR1",
+                  "name": "d3num",
+                  "fill": "$--primary-foreground",
+                  "content": "3",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "ellipse",
+                  "id": "RmFSP",
+                  "name": "d3dot",
+                  "fill": "$--primary-foreground",
+                  "width": 5,
+                  "height": 5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5Zuj0",
+              "name": "day-wed",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "1CiU9",
+                  "name": "d4label",
+                  "fill": "$--muted-foreground",
+                  "content": "水",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "JvcqZ",
+                  "name": "d4num",
+                  "fill": "$--foreground",
+                  "content": "4",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zeC36",
+              "name": "day-thu",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CqJhu",
+                  "name": "d5label",
+                  "fill": "$--muted-foreground",
+                  "content": "木",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "P8TTZ",
+                  "name": "d5num",
+                  "fill": "$--foreground",
+                  "content": "5",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "fS167",
+              "name": "day-fri",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kkfp4",
+                  "name": "d6label",
+                  "fill": "$--muted-foreground",
+                  "content": "金",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "dGZbD",
+                  "name": "d6num",
+                  "fill": "$--foreground",
+                  "content": "6",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MWIu5",
+              "name": "day-sat",
+              "width": "fill_container",
+              "height": 68,
+              "layout": "vertical",
+              "gap": 4,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "0eGzU",
+                  "name": "d7label",
+                  "fill": "$--color-info-foreground",
+                  "content": "土",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "6owrF",
+                  "name": "d7num",
+                  "fill": "$--foreground",
+                  "content": "7",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 18,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "J2H1H",
+          "name": "Main Learning Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            8,
+            20,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "FUs0t",
+              "name": "Holiday Tag",
+              "fill": "$--color-warning",
+              "cornerRadius": "$--radius-pill",
+              "gap": 6,
+              "padding": [
+                6,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "XRSaJ",
+                  "name": "holidayIcon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "sparkles",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--color-warning-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "WJ8NG",
+                  "name": "holidayText",
+                  "fill": "$--color-warning-foreground",
+                  "content": "ひな祭り（女儿节）",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "iGW2v",
+              "name": "Main Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": 24,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#0000000A",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur": 12
+              },
+              "layout": "vertical",
+              "gap": 16,
+              "padding": [
+                24,
+                20
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "6q0QS",
+                  "name": "Date Display",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tadXL",
+                      "name": "furiganaRow",
+                      "gap": 4,
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ayfzK",
+                          "name": "furigana",
+                          "fill": "$--muted-foreground",
+                          "content": "さんがつ　みっか　かようび",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LabtA",
+                      "name": "speakerBtn",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "x91Gy",
+                          "name": "kanjiDate",
+                          "fill": "$--foreground",
+                          "content": "三月 三日 火曜日",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 28,
+                          "fontWeight": "700",
+                          "letterSpacing": 2
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Kj7lA",
+                          "name": "audioIcon",
+                          "width": 36,
+                          "height": 36,
+                          "fill": "$--primary",
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "C1swS",
+                              "name": "audioIconInner",
+                              "width": 18,
+                              "height": 18,
+                              "iconFontName": "volume-2",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--primary-foreground"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Lnuxm",
+                      "name": "romajiText",
+                      "fill": "$--muted-foreground",
+                      "content": "san-gatsu mik-ka ka-yō-bi",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 12,
+                      "fontWeight": "normal",
+                      "letterSpacing": 0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "qic7x",
+                      "name": "zhLine",
+                      "opacity": 0.6,
+                      "fill": "$--muted-foreground",
+                      "content": "2026年3月3日 星期二",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "line",
+                  "id": "yLGOV",
+                  "name": "divider",
+                  "width": "fill_container",
+                  "height": 0,
+                  "stroke": {
+                    "align": "center",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "ScJSa",
+                  "name": "Breakdown Grid",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "mmOZm",
+                      "name": "Col Year",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "2Q5RY",
+                          "name": "Year Card",
+                          "width": "fill_container",
+                          "fill": "$--background",
+                          "cornerRadius": 16,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            12,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "63GvJ",
+                              "name": "yearLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "年号",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "fGVS6",
+                              "name": "yearKana",
+                              "fill": "$--muted-foreground",
+                              "content": "れいわ",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "AF4hX",
+                              "name": "yearKanji",
+                              "fill": "$--foreground",
+                              "content": "令和八年",
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 18,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "08hU7",
+                          "name": "Month Card",
+                          "width": "fill_container",
+                          "fill": "$--background",
+                          "cornerRadius": 16,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            12,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "zUj89",
+                              "name": "monthLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "月份",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "xrSek",
+                              "name": "monthKana",
+                              "fill": "$--muted-foreground",
+                              "content": "さんがつ",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EEI2h",
+                              "name": "monthKanji",
+                              "fill": "$--foreground",
+                              "content": "三月",
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 18,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MbVge",
+                      "name": "Col Day",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "8Lrun",
+                          "name": "Day Card",
+                          "width": "fill_container",
+                          "fill": "$--background",
+                          "cornerRadius": 16,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            12,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "vlYjp",
+                              "name": "dayLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "日期",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "6ldgN",
+                              "name": "dayKana",
+                              "fill": "$--muted-foreground",
+                              "content": "みっか",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Ac49R",
+                              "name": "dayKanji",
+                              "fill": "$--foreground",
+                              "content": "三日",
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 18,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Fwwjj",
+                          "name": "Weekday Card",
+                          "width": "fill_container",
+                          "fill": "$--background",
+                          "cornerRadius": 16,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            12,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "hBSwk",
+                              "name": "weekdayLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "星期",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "fgyzm",
+                              "name": "weekdayKana",
+                              "fill": "$--muted-foreground",
+                              "content": "かようび",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "85goF",
+                              "name": "weekdayKanji",
+                              "fill": "$--foreground",
+                              "content": "火曜日",
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 18,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "9D34Z",
+              "name": "Learning Note",
+              "width": "fill_container",
+              "fill": "$--color-info",
+              "cornerRadius": 16,
+              "gap": 10,
+              "padding": [
+                12,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "YjiAc",
+                  "name": "noteIcon",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "lightbulb",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--color-info-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "6FXKw",
+                  "name": "noteText",
+                  "fill": "$--color-info-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "三日（みっか）是特殊读法，不是「さんにち」",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "aYSQN",
+              "name": "Category Section",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CaBcP",
+                  "name": "catLabel",
+                  "fill": "$--muted-foreground",
+                  "content": "深入学习",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "HPA0G",
+                  "name": "Category Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "B7f82",
+                      "name": "cat1",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--secondary",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "EPyD2",
+                          "name": "cat1icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "calendar-days",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--secondary-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "sSZbK",
+                          "name": "cat1text",
+                          "fill": "$--secondary-foreground",
+                          "content": "日期",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "4oKp8",
+                      "name": "cat2",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--secondary",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "HKdBv",
+                          "name": "cat2icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "calendar",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--secondary-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pavYw",
+                          "name": "cat2text",
+                          "fill": "$--secondary-foreground",
+                          "content": "月份",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UKpzR",
+                      "name": "cat3",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--secondary",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "WhPpS",
+                          "name": "cat3icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--secondary-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rzeO9",
+                          "name": "cat3text",
+                          "fill": "$--secondary-foreground",
+                          "content": "星期",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "009jy",
+                  "name": "Category Row 2",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "cqBLr",
+                      "name": "cat4",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--secondary",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "vFnLD",
+                          "name": "cat4icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "crown",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--secondary-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qtN0Z",
+                          "name": "cat4text",
+                          "fill": "$--secondary-foreground",
+                          "content": "年号",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CPO2Q",
+                      "name": "cat5",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--color-warning",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "2oc3u",
+                          "name": "cat5icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "gift",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--color-warning-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "k6Y9W",
+                          "name": "cat5text",
+                          "fill": "$--color-warning-foreground",
+                          "content": "节假日",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R4i2P",
+                      "name": "cat6",
+                      "width": "fill_container",
+                      "height": 40,
+                      "fill": "$--secondary",
+                      "cornerRadius": "$--radius-pill",
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "H4nFl",
+                          "name": "cat6icon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "repeat",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--secondary-foreground"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MozeX",
+                          "name": "cat6text",
+                          "fill": "$--secondary-foreground",
+                          "content": "相对",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "s6hxr",
+          "name": "Home Indicator Area",
+          "width": "fill_container",
+          "height": 20,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 3,
+              "id": "TVXY8",
+              "name": "homeIndicator",
+              "fill": "$--foreground",
               "width": 134,
               "height": 5
             }

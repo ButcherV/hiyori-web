@@ -71,7 +71,6 @@
   font-size: 12px;
   font-weight: 500;
   color: #a1a1aa;
-  font-family: var(--font-family-ja, sans-serif);
   line-height: 1;
   letter-spacing: 0.02em;
 }
@@ -86,7 +85,6 @@
   font-size: 36px;
   font-weight: 700;
   color: #1a1a1a;
-  font-family: var(--font-family-ja, sans-serif);
   line-height: 1;
 }
 
@@ -145,7 +143,6 @@
 .noteText {
   font-size: 13px;
   color: #8b7355;
-  font-family: var(--font-family-ja, sans-serif);
   line-height: 1.4;
 }
 
