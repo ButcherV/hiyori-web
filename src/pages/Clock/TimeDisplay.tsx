@@ -202,32 +202,37 @@ export function TimeDisplay({ hour, minute, is24h }: TimeDisplayProps) {
     window.speechSynthesis.speak(utt);
   }, [data.speakText]);
 
+  // 使用 hour-minute-is24h 作为 key，确保内容变化时触发动画
+  const contentKey = `${hour}-${minute}-${is24h}`;
+
   return (
     <div className={styles.wrapper}>
-      {/* ── Furigana Row ── */}
-      <div className={styles.timeRow}>
-        {data.segments.map((seg, i) => (
-          <div className={styles.segment} key={i}>
-            <span className={styles.segKana}>{seg.kana}</span>
-            <span className={styles.segKanji}>{seg.kanji}</span>
+      <div className={styles.content} key={contentKey}>
+        {/* ── Furigana Row ── */}
+        <div className={styles.timeRow}>
+          {data.segments.map((seg, i) => (
+            <div className={styles.segment} key={i}>
+              <span className={styles.segKana}>{seg.kana}</span>
+              <span className={styles.segKanji}>{seg.kanji}</span>
+            </div>
+          ))}
+          <button
+            className={styles.speakerBtn}
+            onClick={handleSpeak}
+            aria-label="読み上げ"
+          >
+            <Volume2 size={20} />
+          </button>
+        </div>
+
+        {/* ── Notes ── */}
+        {data.notes.map((note, i) => (
+          <div className={styles.note} key={i}>
+            <Info size={16} className={styles.noteIcon} />
+            <span className={styles.noteText}>{note}</span>
           </div>
         ))}
-        <button
-          className={styles.speakerBtn}
-          onClick={handleSpeak}
-          aria-label="読み上げ"
-        >
-          <Volume2 size={20} />
-        </button>
       </div>
-
-      {/* ── Notes ── */}
-      {data.notes.map((note, i) => (
-        <div className={styles.note} key={i}>
-          <Info size={16} className={styles.noteIcon} />
-          <span className={styles.noteText}>{note}</span>
-        </div>
-      ))}
     </div>
   );
 }

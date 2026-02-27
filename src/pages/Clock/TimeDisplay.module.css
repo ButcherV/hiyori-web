@@ -8,10 +8,48 @@
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
+  justify-content: center; /* 垂直居中内容 */
+  align-items: center; /* 水平居中内容 */
   gap: 16px;
-  padding: 24px 24px 12px;
+  padding: 24px; /* 上下对称的 padding */
   box-sizing: border-box;
   overflow-y: auto; /* 如果内容超出，允许滚动 */
+}
+
+/* 小屏幕适配 (iPhone SE 等，高度 <= 700px) */
+@media (max-height: 700px) {
+  .wrapper {
+    height: 180px; /* 减小高度 */
+    gap: 12px; /* 减小间距 */
+    padding: 16px; /* 减小内边距 */
+  }
+}
+
+/* ── 内容动画容器 ── */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@media (max-height: 700px) {
+  .content {
+    gap: 6px; /* 减小间距 */
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Furigana Row ── */
@@ -38,12 +76,24 @@
   letter-spacing: 0.02em;
 }
 
+@media (max-height: 700px) {
+  .segKana {
+    font-size: 10px; /* 小屏幕减小字号 */
+  }
+}
+
 .segKanji {
   font-size: 36px;
   font-weight: 700;
   color: #1a1a1a;
   font-family: var(--font-family-ja, sans-serif);
   line-height: 1;
+}
+
+@media (max-height: 700px) {
+  .segKanji {
+    font-size: 28px; /* 小屏幕减小字号 */
+  }
 }
 
 /* ── Speaker Button ── */
@@ -63,6 +113,13 @@
   transition: opacity 0.15s;
 }
 
+@media (max-height: 700px) {
+  .speakerBtn {
+    width: 32px; /* 小屏幕减小按钮 */
+    height: 32px;
+  }
+}
+
 .speakerBtn:active {
   opacity: 0.7;
 }
@@ -70,12 +127,13 @@
 /* ── Note box ── */
 .note {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   background: #fef7f0;
-  border-radius: 14px;
-  padding: 10px 16px;
+  border-radius: 12px;
+  padding: 8px;
   box-sizing: border-box;
+  flex-shrink: 0; /* 防止被压缩 */
 }
 
 .noteIcon {
@@ -89,4 +147,11 @@
   color: #8b7355;
   font-family: var(--font-family-ja, sans-serif);
   line-height: 1.4;
+}
+
+@media (max-height: 700px) {
+  .noteText {
+    font-size: 11px; /* 小屏幕减小字号 */
+    line-height: 1.3;
+  }
 }

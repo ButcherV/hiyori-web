@@ -19,7 +19,7 @@
   top: 50%;
   transform: translateY(-50%);
   width: 88px;   /* 匹配两位数字 + 左右 padding */
-  height: 60px;  /* 44px 字号 + 上下 padding + border */
+  height: 50px;  /* 44px 字号 + 上下 padding + border */
   border: 2px solid;
   border-radius: 14px;
   pointer-events: none;

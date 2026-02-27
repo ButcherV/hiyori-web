@@ -1,30 +1,45 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import styles from './Reel.module.css';
 
-const CELL_HEIGHT = 56;
-const VISIBLE_AROUND = 8; // 增加到8，确保快速滚动时也有足够的数字
+// 根据屏幕高度动态调整
+const getReelConfig = () => {
+  const height = window.innerHeight;
+  if (height <= 700) {
+    // 小屏幕 (iPhone SE 等)
+    return {
+      CELL_HEIGHT: 40,
+      VISIBLE_AROUND: 5,
+      ITEM_STYLES: [
+        { fontSize: 36, fontWeight: 700, opacity: 1,    color: 'inherit' },
+        { fontSize: 30, fontWeight: 600, opacity: 0.8,  color: '#71717A' },
+        { fontSize: 24, fontWeight: 500, opacity: 0.6,  color: '#71717A' },
+        { fontSize: 18, fontWeight: 400, opacity: 0.4,  color: '#A1A1AA' },
+        { fontSize: 14, fontWeight: 400, opacity: 0.25, color: '#D4D4D8' },
+        { fontSize: 12, fontWeight: 400, opacity: 0.15, color: '#E4E4E7' },
+      ],
+    };
+  }
+  // 正常屏幕
+  return {
+    CELL_HEIGHT: 48,
+    VISIBLE_AROUND: 8,
+    ITEM_STYLES: [
+      { fontSize: 44, fontWeight: 700, opacity: 1,    color: 'inherit' },
+      { fontSize: 36, fontWeight: 600, opacity: 0.8,  color: '#71717A' },
+      { fontSize: 28, fontWeight: 500, opacity: 0.6,  color: '#71717A' },
+      { fontSize: 22, fontWeight: 400, opacity: 0.45, color: '#A1A1AA' },
+      { fontSize: 18, fontWeight: 400, opacity: 0.3,  color: '#D4D4D8' },
+      { fontSize: 16, fontWeight: 400, opacity: 0.2,  color: '#D4D4D8' },
+      { fontSize: 14, fontWeight: 400, opacity: 0.15, color: '#E4E4E7' },
+      { fontSize: 12, fontWeight: 400, opacity: 0.1,  color: '#E4E4E7' },
+      { fontSize: 12, fontWeight: 400, opacity: 0.05, color: '#F4F4F5' },
+    ],
+  };
+};
+
 const SNAP_MS = 250;
 const MOMENTUM_FACTOR = 0.3;
 const MAX_MOMENTUM_INDICES = 3;
-
-interface ItemStyle {
-  fontSize: number;
-  fontWeight: number;
-  opacity: number;
-  color: string;
-}
-
-const ITEM_STYLES: ItemStyle[] = [
-  { fontSize: 44, fontWeight: 700, opacity: 1,    color: 'inherit' },
-  { fontSize: 36, fontWeight: 600, opacity: 0.8,  color: '#71717A' },
-  { fontSize: 28, fontWeight: 500, opacity: 0.6,  color: '#71717A' },
-  { fontSize: 22, fontWeight: 400, opacity: 0.45, color: '#A1A1AA' },
-  { fontSize: 18, fontWeight: 400, opacity: 0.3,  color: '#D4D4D8' },
-  { fontSize: 16, fontWeight: 400, opacity: 0.2,  color: '#D4D4D8' },
-  { fontSize: 14, fontWeight: 400, opacity: 0.15, color: '#E4E4E7' },
-  { fontSize: 12, fontWeight: 400, opacity: 0.1,  color: '#E4E4E7' },
-  { fontSize: 12, fontWeight: 400, opacity: 0.05, color: '#F4F4F5' },
-];
 
 export interface ReelProps {
   valueRange: number;
@@ -45,6 +60,10 @@ export function Reel({
   accentColor,
   accentBg,
 }: ReelProps) {
+  // 获取屏幕配置
+  const config = getReelConfig();
+  const { CELL_HEIGHT, VISIBLE_AROUND, ITEM_STYLES } = config;
+  
   const [offset, setOffset] = useState(0);
 
   const dragRef = useRef<{
