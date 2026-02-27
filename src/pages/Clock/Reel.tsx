@@ -207,10 +207,12 @@ export function Reel({
   const items: React.ReactNode[] = [];
 
   // 增加渲染范围，确保快速滚动时也有足够的数字
-  for (let j = -(VISIBLE_AROUND + 2); j <= VISIBLE_AROUND + 2; j++) {
+  // 从 +2 增加到 +5，确保快速滚动时不会出现空白
+  const renderBuffer = 5;
+  for (let j = -(VISIBLE_AROUND + renderBuffer); j <= VISIBLE_AROUND + renderBuffer; j++) {
     const distSigned = j - offset;
     const absDist = Math.abs(distSigned);
-    if (absDist > VISIBLE_AROUND + 1) continue;
+    if (absDist > VISIBLE_AROUND + renderBuffer - 1) continue;
 
     const value = wrap(selected + j);
     const label = formatLabel(value);

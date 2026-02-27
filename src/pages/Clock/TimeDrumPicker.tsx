@@ -14,17 +14,6 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   const [minute, setMinute] = useState(now.getMinutes());
   const [is24h, setIs24h] = useState(true);
 
-  const hourIdx12 = hour % 12;
-
-  const setHourFrom12 = useCallback(
-    (idx: number) => {
-      const h12 = idx === 0 ? 12 : idx;
-      const wasAM = hour < 12;
-      setHour(wasAM ? (h12 === 12 ? 0 : h12) : h12 === 12 ? 12 : h12 + 12);
-    },
-    [hour]
-  );
-
   const handleJumpTo = useCallback((targetHour: number, targetMinute: number) => {
     setHour(targetHour);
     setMinute(targetMinute);
@@ -45,10 +34,12 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   }));
 
   const fmtPad2 = useCallback((v: number) => String(v).padStart(2, '0'), []);
-  const fmt12h = useCallback(
-    (v: number) => (v === 0 ? '12' : String(v).padStart(2, '0')),
-    []
-  );
+  
+  // 12h 格式化：将 0-23 转换为 12h 显示
+  const fmt12h = useCallback((v: number) => {
+    const h12 = v % 12;
+    return (h12 === 0 ? 12 : h12).toString().padStart(2, '0');
+  }, []);
 
   return (
     <>
@@ -61,29 +52,17 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
 
       <div className={styles.pickerArea}>
         <div className={styles.drums}>
-          {is24h ? (
-            <Reel
-              key="h24"
-              valueRange={24}
-              selected={hour}
-              formatLabel={fmtPad2}
-              onSelect={setHour}
-              side="left"
-              accentColor="#C4553A"
-              accentBg="rgba(255, 248, 245, 0.85)"
-            />
-          ) : (
-            <Reel
-              key="h12"
-              valueRange={12}
-              selected={hourIdx12}
-              formatLabel={fmt12h}
-              onSelect={setHourFrom12}
-              side="left"
-              accentColor="#C4553A"
-              accentBg="rgba(255, 248, 245, 0.85)"
-            />
-          )}
+          {/* 12h 模式也使用 valueRange={24}，只在显示时格式化 */}
+          <Reel
+            key={is24h ? 'h24' : 'h12'}
+            valueRange={24}
+            selected={hour}
+            formatLabel={is24h ? fmtPad2 : fmt12h}
+            onSelect={setHour}
+            side="left"
+            accentColor="#C4553A"
+            accentBg="rgba(255, 248, 245, 0.85)"
+          />
 
           <span className={styles.colon}>:</span>
 
@@ -96,6 +75,13 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             accentColor="#4A6FA5"
             accentBg="rgba(245, 248, 255, 0.85)"
           />
+
+          {/* AM/PM 指示器 - 只在 12h 模式下显示，绝对定位 */}
+          {!is24h && (
+            <div className={styles.ampmIndicator} key={hour < 12 ? 'AM' : 'PM'}>
+              {hour < 12 ? 'AM' : 'PM'}
+            </div>
+          )}
         </div>
       </div>
 

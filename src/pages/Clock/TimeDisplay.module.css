@@ -52,12 +52,48 @@
   }
 }
 
-/* ── Furigana Row ── */
+/* ── 时刻行（横向排列所有内容）── */
 .timeRow {
   display: flex;
   align-items: flex-end;
-  gap: 24px;
-  flex-shrink: 0; /* 防止被压缩 */
+  gap: 12px;  /* 减小间距，更紧凑 */
+  flex-shrink: 0;
+  transition: all 0.3s ease-out;
+}
+
+/* 当没有 note 时，适当放大时刻显示 */
+.timeRowLarge {
+  gap: 14px;
+}
+
+.timeRowLarge .segKana {
+  font-size: 14px;
+}
+
+.timeRowLarge .segKanji {
+  font-size: 32px;
+}
+
+.timeRowLarge .speakerBtnSmall {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 6px;
+}
+
+@media (max-height: 700px) {
+  .timeRowLarge .segKana {
+    font-size: 12px;
+  }
+  
+  .timeRowLarge .segKanji {
+    font-size: 34px;
+  }
+  
+  .timeRowLarge .speakerBtnSmall {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 5px;
+  }
 }
 
 .segment {
@@ -94,61 +130,75 @@
   }
 }
 
-/* ── Speaker Button ── */
-.speakerBtn {
+/* ── Speaker Button（小尺寸，不喧宾夺主）── */
+.speakerBtnSmall {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   border: none;
   background: #c4553a;
   color: #ffffff;
   border-radius: 50%;
   cursor: pointer;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(196, 85, 58, 0.3);
+  box-shadow: 0 1px 4px rgba(196, 85, 58, 0.25);
   transition: opacity 0.15s;
+  margin-bottom: 4px;  /* 与文字底部对齐 */
 }
 
 @media (max-height: 700px) {
-  .speakerBtn {
-    width: 32px; /* 小屏幕减小按钮 */
-    height: 32px;
+  .speakerBtnSmall {
+    width: 24px;
+    height: 24px;
   }
 }
 
-.speakerBtn:active {
+.speakerBtnSmall:active {
   opacity: 0.7;
 }
 
-/* ── Note box ── */
+/* ── Note box（一个容器）── */
 .note {
   display: flex;
   align-items: center;
   gap: 8px;
   background: #fef7f0;
   border-radius: 12px;
-  padding: 8px;
+  padding: 4px 8px;
   box-sizing: border-box;
-  flex-shrink: 0; /* 防止被压缩 */
+  flex-shrink: 0;
 }
 
 .noteIcon {
   flex-shrink: 0;
   color: #c4553a;
-  margin-top: 1px;
+  margin-top: 2px;  /* 微调对齐 */
+}
+
+/* 内容容器（纵向排列多条）*/
+.noteContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;  /* 每条之间的间距 */
+  flex: 1;
 }
 
 .noteText {
   font-size: 13px;
   color: #8b7355;
   line-height: 1.4;
+  display: block;  /* 每条独占一行 */
 }
 
 @media (max-height: 700px) {
   .noteText {
-    font-size: 11px; /* 小屏幕减小字号 */
+    font-size: 11px;
     line-height: 1.3;
+  }
+  
+  .noteContent {
+    gap: 3px;
   }
 }

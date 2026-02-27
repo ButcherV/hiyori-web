@@ -30,8 +30,8 @@
 /* 小屏幕适配 */
 @media (max-height: 700px) {
   .selectionWindow {
-    width: 78px;
-    height: 54px;  /* 48px 字号 + padding */
+    width: 80px;
+    height: 50px;  /* 48px 字号 + padding */
   }
 }
 
@@ -88,7 +88,8 @@
 .label {
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  font-family: Inter, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  font-feature-settings: 'tnum' 1; /* 强制启用等宽数字 */
   display: inline-block;
   width: 100%;  /* 占满父容器 */
 }
