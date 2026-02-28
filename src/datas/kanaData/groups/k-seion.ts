@@ -847,7 +847,7 @@ export const KATAKANA_SEION: Record<string, KatakanaSeion> = {
       desc: '',
     },
     wordMeaning: { en: 'yacht', zh: '游艇', zhHant: '遊艇' },
-    wordDistractors: ['コット', 'ヨトト', 'ヨッド'],
+    wordDistractors: ['コット', 'ヨトッ', 'ヨッド', 'ヲット'],
     wordEmoji: '⛵',
     wordNoteKey: 'studyKana.wordNotes.kSokuon',
   }),

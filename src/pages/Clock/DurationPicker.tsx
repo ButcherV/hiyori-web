@@ -4,18 +4,23 @@ import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../hooks/useTTS';
 import styles from './DurationPicker.module.css';
 
-// 时间段快捷选项
-const DURATION_SHORTCUTS = [
-  { hours: 1, label: '1時間' },
-  { hours: 3, label: '3時間' },
-  { hours: 4, label: '4時間' },
-  { hours: 6, label: '6時間' },
-  { hours: 8, label: '8時間' },
-  { hours: 10, label: '10時間' },
-  { hours: 30, label: '30分', isMinutes: true },
+// 时间段词汇（按一天时序排列）
+const TIME_PERIODS = [
+  { name: '深夜', kana: 'しんや', start: 0, end: 4, description: '书面语，天气预报、新闻常用' },
+  { name: '未明', kana: 'みめい', start: 2, end: 5, description: '比深夜更书面，黎明前最暗的时段' },
+  { name: '夜明け', kana: 'よあけ', start: 4, end: 6, description: '「夜が明ける」的名词形，天开始亮' },
+  { name: '早朝', kana: 'そうちょう', start: 5, end: 7, description: '比「朝」更早，正式语感' },
+  { name: '朝', kana: 'あさ', start: 6, end: 10, description: '最日常的早晨表达' },
+  { name: '午前', kana: 'ごぜん', start: 0, end: 12, description: '注意：范围含深夜，不只是早上' },
+  { name: '昼', kana: 'ひる', start: 10, end: 14, description: '也指「午饭时间」' },
+  { name: '正午', kana: 'しょうご', start: 12, end: 12, description: '精确的正午，不是泛指中午' },
+  { name: '午後', kana: 'ごご', start: 12, end: 18, description: '' },
+  { name: '夕方', kana: 'ゆうがた', start: 16, end: 19, description: '专指黄昏傍晚，≠ 下午' },
+  { name: '夜', kana: 'よる', start: 19, end: 24, description: '' },
+  { name: '真夜中', kana: 'まよなか', start: 0, end: 0, description: '口语"半夜"，比深夜更有情感色彩' },
 ];
 
-// --- 优化点 3：将不依赖 state 的静态数据生成函数移到组件外部 ---
+// --- 静态数据生成函数移到组件外部，避免每次渲染重复定义 ---
 const generateTicks = () => {
   const ticks = [];
   for (let i = 0; i < 144; i++) {
@@ -60,10 +65,12 @@ export function DurationPicker() {
   const [startAngle, setStartAngle] = useState(270);
   const [endAngle, setEndAngle] = useState(360);
   const [isDragging, setIsDragging] = useState<'start' | 'end' | null>(null);
+  const [selectedPeriod, setSelectedPeriod] = useState<typeof TIME_PERIODS[0] | null>(null);
   
   const lastDragAngleRef = useRef(0);
   const svgRef = useRef<SVGSVGElement>(null);
 
+  // 获取鼠标/触摸位置相对于圆心的角度
   const getMouseAngle = (evt: MouseEvent | TouchEvent) => {
     if (!svgRef.current) return 0;
     let clientX = 0;
@@ -83,7 +90,7 @@ export function DurationPicker() {
     return (Math.atan2(y - 200, x - 200) * 180) / Math.PI;
   };
 
-  // --- 优化点 1：修复事件监听器的依赖问题 ---
+  // 处理拖拽逻辑
   useEffect(() => {
     if (!isDragging) return;
 
@@ -92,10 +99,11 @@ export function DurationPicker() {
       const currentAngle = getMouseAngle(evt);
       let delta = currentAngle - lastDragAngleRef.current;
 
+      // 处理从 180 度到 -180 度的跃迁
       if (delta > 180) delta -= 360;
       if (delta < -180) delta += 360;
 
-      // 使用函数式状态更新，避免依赖 startAngle 和 endAngle，不再导致频繁解绑/绑定
+      // 使用函数式状态更新，避免频繁解绑/绑定事件
       if (isDragging === 'start') {
         setStartAngle(prev => {
           let newAngle = (prev + delta) % 360;
@@ -123,7 +131,7 @@ export function DurationPicker() {
       document.removeEventListener('touchmove', handleMove);
       document.removeEventListener('touchend', handleEnd);
     };
-  }, [isDragging]); // 仅在 isDragging 状态变化时触发重新绑定
+  }, [isDragging]);
 
   const handleDragStart = (evt: React.MouseEvent | React.TouchEvent, handleType: 'start' | 'end') => {
     evt.preventDefault();
@@ -132,6 +140,7 @@ export function DurationPicker() {
     lastDragAngleRef.current = getMouseAngle(mouseEvt);
   };
 
+  // 计算时间差和格式化文本
   const getTimeInfo = () => {
     const s = Math.round(startAngle / 2.5) * 2.5;
     const e = Math.round(endAngle / 2.5) * 2.5;
@@ -149,6 +158,7 @@ export function DurationPicker() {
     return { hours: h, minutes: m, text, diff, snappedStart: s, snappedEnd: e };
   };
 
+  // 计算弧线路径
   const getArcPath = () => {
     const info = getTimeInfo();
     const diff = info.diff || 0;
@@ -175,32 +185,36 @@ export function DurationPicker() {
     };
   };
 
-  const setDurationShortcut = (hours: number, isMinutes = false) => {
-    if (isMinutes) {
-      setStartAngle(90);
-      setEndAngle(90 + 7.5);
-    } else {
-      setStartAngle(270);
-      setEndAngle((270 + hours * 15) % 360);
+  const setTimePeriod = (period: typeof TIME_PERIODS[0]) => {
+    // 将小时转换为角度 (270度 = 0时, 每小时15度)
+    const startAngle = (270 + period.start * 15) % 360;
+    let endAngle = (270 + period.end * 15) % 360;
+    
+    // 处理跨越午夜的情况
+    if (period.end === 0) {
+      endAngle = 270; // 0时 = 270度
     }
+    
+    setStartAngle(startAngle);
+    setEndAngle(endAngle);
+    setSelectedPeriod(period);
   };
 
-  const playDuration = () => {
-    const { hours, minutes } = getTimeInfo();
-    const text = minutes > 0 ? `${hours}時間${minutes}分` : `${hours}時間`;
-    speak(text);
+  const playPeriodName = () => {
+    if (selectedPeriod) {
+      speak(selectedPeriod.name);
+    }
   };
 
   const timeInfo = getTimeInfo();
   const arcData = getArcPath();
 
-  // --- 优化点 2：使用 useMemo 缓存 144 根刻度线和 24 个标签，阻断无意义的 React Diff 重渲染 ---
-  const staticBackground = useMemo(() => {
+  // --- 仅缓存刻度线和标签（作为覆盖层），不再包含底层灰色圆环 ---
+  const staticOverlay = useMemo(() => {
     const ticks = generateTicks();
     const labels = generateLabels();
     return (
       <g>
-        <circle cx="200" cy="200" r="150" fill="none" stroke="#f0f0f0" strokeWidth="50" />
         <g>
           {ticks.map((tick, i) => (
             <line key={`tick-${i}`} x1={tick.x1} y1={tick.y1} x2={tick.x2} y2={tick.y2} 
@@ -217,18 +231,19 @@ export function DurationPicker() {
         </g>
       </g>
     );
-  }, []); // 依赖为空，只在组件初次挂载时渲染一次
+  }, []);
 
   return (
     <div className={styles.container}>
-      <div className={styles.shortcuts}>
-        {DURATION_SHORTCUTS.map((shortcut) => (
+      <div className={styles.timePeriods}>
+        {TIME_PERIODS.map((period) => (
           <button
-            key={shortcut.label}
-            className={styles.shortcutBtn}
-            onClick={() => setDurationShortcut(shortcut.hours, shortcut.isMinutes)}
+            key={period.name}
+            className={`${styles.periodChip} ${selectedPeriod?.name === period.name ? styles.periodChipActive : ''}`}
+            onClick={() => setTimePeriod(period)}
+            title={period.description}
           >
-            {shortcut.label}
+            {period.name}
           </button>
         ))}
       </div>
@@ -241,18 +256,23 @@ export function DurationPicker() {
             </filter>
           </defs>
 
-          {/* 渲染缓存的静态底盘和刻度 */}
-          {staticBackground}
+          {/* 1. 基础灰色底盘 (最底层) */}
+          <circle cx="200" cy="200" r="150" fill="none" stroke="#f0f0f0" strokeWidth="50" />
 
-          {/* 绿色选中弧线 (动态部分) */}
+          {/* 2. 绿色选中弧线 (中间层，盖在灰色底盘上) */}
           <path d={arcData.path} fill="none" stroke="#a9e55b" strokeWidth="50" strokeLinecap="butt" />
 
-          {/* 中心时长文本 (动态部分) */}
-          <text x="200" y="215" textAnchor="middle" fontSize="44" fontWeight="500" fill="#222222">
-            {timeInfo.text}
-          </text>
+          {/* 3. 刻度和标签层 (静态覆盖层，渲染在绿色弧线之上) */}
+          {staticOverlay}
 
-          {/* 起始时间控制点 */}
+          {/* 4. 中心内容 - 仅在未选中时显示时长文本 */}
+          {!selectedPeriod && (
+            <text x="200" y="215" textAnchor="middle" fontSize="44" fontWeight="500" fill="#222222">
+              {timeInfo.text}
+            </text>
+          )}
+
+          {/* 5. 起始时间控制点 */}
           <g
             transform={`translate(${arcData.startPos.x}, ${arcData.startPos.y})`}
             className={styles.handle}
@@ -266,7 +286,7 @@ export function DurationPicker() {
             </g>
           </g>
 
-          {/* 结束时间控制点 */}
+          {/* 6. 结束时间控制点 */}
           <g
             transform={`translate(${arcData.endPos.x}, ${arcData.endPos.y})`}
             className={styles.handle}
@@ -281,16 +301,43 @@ export function DurationPicker() {
             </g>
           </g>
         </svg>
+
+        {/* HTML 覆盖层 - 显示时间段详细信息 */}
+        {selectedPeriod && (
+          <div className={styles.centerOverlay}>
+            <div className={styles.periodKana}>{selectedPeriod.kana}</div>
+            <div className={styles.periodKanji}>{selectedPeriod.name}</div>
+            <button className={styles.speakerBtn} onClick={playPeriodName}>
+              <Volume2 size={20} />
+            </button>
+            <div className={styles.periodTime}>
+              {selectedPeriod.start === selectedPeriod.end 
+                ? `${selectedPeriod.start}:00` 
+                : `${selectedPeriod.start}:00 - ${selectedPeriod.end}:00`}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={styles.timeDisplay}>
-        <div className={styles.timeBlock}>
-          <div className={styles.timeLabel}>じかんたい</div>
-          <div className={styles.timeValue}>{timeInfo.text}</div>
-        </div>
-        <button className={styles.speakBtn} onClick={playDuration}>
-          <Volume2 size={20} />
-        </button>
+        {selectedPeriod ? (
+          <>
+            <div className={styles.timeBlock}>
+              <div className={styles.timeLabel}>意思</div>
+              <div className={styles.timeValue}>{selectedPeriod.description || '—'}</div>
+            </div>
+            <button className={styles.speakBtn} onClick={playPeriodName}>
+              <Volume2 size={20} />
+            </button>
+          </>
+        ) : (
+          <>
+            <div className={styles.timeBlock}>
+              <div className={styles.timeLabel}>じかんたい</div>
+              <div className={styles.timeValue}>{timeInfo.text}</div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="notePill">

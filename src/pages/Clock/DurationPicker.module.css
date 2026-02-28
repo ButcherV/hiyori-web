@@ -4,52 +4,116 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px;
-  gap: 32px;
+  padding: 16px;
+  gap: 20px;
   overflow-y: auto;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
 }
 
-/* 快捷按钮区域 */
-.shortcuts {
+/* 时间段词汇区域 */
+.timePeriods {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
-.shortcutBtn {
+.periodChip {
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid #E5E5EA;
+  border: 1.5px solid #E5E5EA;
   background: white;
-  color: #007AFF;
-  font-size: 14px;
+  color: #1C1C1E;
+  font-size: 15px;
   font-weight: 600;
+  font-family: var(--font-family-ja);
   cursor: pointer;
   transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
 
-.shortcutBtn:active {
-  background: #007AFF;
-  color: white;
+.periodChip:active {
   transform: scale(0.95);
+}
+
+.periodChipActive {
+  background: #007AFF;
+  border-color: #007AFF;
+  color: white;
 }
 
 /* 圆形时钟容器 */
 .clockContainer {
   position: relative;
   width: 100%;
-  max-width: 350px;
+  max-width: 450px;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
+}
+
+/* HTML 覆盖层 - 圆环中心 */
+.centerOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.centerOverlay .periodKana {
+  font-size: 16px;
+  color: #888888;
+  font-family: var(--font-family-ja);
+  font-weight: 500;
+}
+
+.centerOverlay .periodKanji {
+  font-size: 48px;
+  font-weight: 700;
+  color: #222222;
+  font-family: var(--font-family-ja);
+  line-height: 1;
+}
+
+.centerOverlay .speakerBtn {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #FF6B6B;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  margin-top: 4px;
+}
+
+.centerOverlay .speakerBtn:active {
+  transform: scale(0.9);
+  background: #FF5252;
+}
+
+.centerOverlay .periodTime {
+  font-size: 14px;
+  color: #666666;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 .clockSvg {
@@ -99,10 +163,11 @@
 }
 
 .timeValue {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   color: #1C1C1E;
-  font-family: var(--font-family-ja);
+  text-align: center;
+  line-height: 1.4;
 }
 
 .speakBtn {
