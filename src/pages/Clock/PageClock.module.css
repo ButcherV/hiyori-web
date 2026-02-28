@@ -18,6 +18,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16px;
   padding-top: calc(env(safe-area-inset-top) + 24px);
   box-sizing: border-box;
@@ -32,7 +33,7 @@
 .headerTitle {
   font-size: 18px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: white;
   white-space: nowrap;
 }
 
@@ -43,13 +44,43 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #1a1a1a;
+  color: white;
   padding: 4px;
   transition: opacity 0.2s;
 }
 
 .iconBtn:active {
   opacity: 0.4;
+}
+
+/* 模式切换按钮 */
+.modeToggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 4px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.modeBtn {
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modeBtnActive {
+  background: white;
+  color: #6366f1;
 }
 
 /* ── Workspace ── */

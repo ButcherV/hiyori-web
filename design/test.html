@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Sleep Tracker Dial UI</title>
+    <style>
+      :root {
+        --track-color: #f0f0f0;
+        --active-color: #a9e55b;
+        --handle-color: #000000;
+        --bg-color: #ffffff;
+        --text-color: #222222;
+        --label-color: #888888;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: var(--bg-color);
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: none;
+      }
+
+      .dial-container {
+        position: relative;
+        width: 350px;
+        height: 350px;
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        filter: drop-shadow(0px 10px 30px rgba(0, 0, 0, 0.03));
+      }
+
+      .handle {
+        cursor: grab;
+        transition: transform 0.1s ease-out;
+      }
+
+      .handle:active {
+        cursor: grabbing;
+      }
+
+      #center-text {
+        font-size: 44px;
+        font-weight: 500;
+        fill: var(--text-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dial-container">
+      <svg viewBox="0 0 400 400" id="dial-svg">
+        <defs>
+          <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow
+              dx="0"
+              dy="2"
+              stdDeviation="3"
+              flood-color="#000"
+              flood-opacity="0.2"
+            />
+          </filter>
+        </defs>
+
+        <circle
+          cx="200"
+          cy="200"
+          r="150"
+          fill="none"
+          stroke="var(--track-color)"
+          stroke-width="50"
+        />
+
+        <path
+          id="active-arc"
+          fill="none"
+          stroke="var(--active-color)"
+          stroke-width="50"
+          stroke-linecap="butt"
+        />
+
+        <g id="ticks"></g>
+
+        <g id="labels"></g>
+
+        <text id="center-text" x="200" y="215" text-anchor="middle">6 h</text>
+
+        <g id="start-handle" class="handle" filter="url(#shadow)">
+          <circle cx="0" cy="0" r="23" fill="var(--handle-color)" />
+          <g transform="translate(-12, -12) scale(1)">
+            <path
+              d="M13 3L4 14h7l-2 8 9-11h-7l2-8z"
+              fill="var(--active-color)"
+            />
+          </g>
+        </g>
+
+        <g id="end-handle" class="handle" filter="url(#shadow)">
+          <circle cx="0" cy="0" r="23" fill="var(--handle-color)" />
+          <g transform="translate(-12, -12) scale(1)">
+            <path
+              d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+              fill="#ffffff"
+            />
+            <line
+              x1="3"
+              y1="3"
+              x2="21"
+              y2="21"
+              stroke="#ffffff"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <script>
+      const svg = document.getElementById('dial-svg');
+      const ticksGrp = document.getElementById('ticks');
+      const labelsGrp = document.getElementById('labels');
+
+      // 初始化时间，从顶部(12am)到右侧(6am)
+      // 角度映射：270度(-90度) = 0h (12am)， 0度 = 6h， 90度 = 12h (12pm)， 180度 = 18h
+      let startAngleVal = 270;
+      let endAngleVal = 360;
+
+      // --- 1. 绘制轨道上的刻度 (总共 24 * 6 = 144 个刻度，每 10 分钟一个) ---
+      for (let i = 0; i < 144; i++) {
+        const angle = i * (360 / 144) - 90;
+        const rad = (angle * Math.PI) / 180;
+        const isMajor = i % 6 === 0; // 整点大刻度
+        const r1 = 125; // 刻度从轨道内侧边界开始
+        const r2 = isMajor ? 139 : 132;
+
+        const line = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'line'
+        );
+        line.setAttribute('x1', 200 + r1 * Math.cos(rad));
+        line.setAttribute('y1', 200 + r1 * Math.sin(rad));
+        line.setAttribute('x2', 200 + r2 * Math.cos(rad));
+        line.setAttribute('y2', 200 + r2 * Math.sin(rad));
+        // 使用带透明度的黑色，这样在灰色背景上显得灰，在绿色背景上显得深绿
+        line.setAttribute('stroke', 'rgba(0, 0, 0, 0.15)');
+        line.setAttribute('stroke-width', isMajor ? '2' : '1.5');
+        line.setAttribute('stroke-linecap', 'round');
+        ticksGrp.appendChild(line);
+      }
+
+      // --- 2. 绘制内侧时间标签 ---
+      const labelTexts = [
+        '12am',
+        '',
+        '2',
+        '',
+        '4',
+        '',
+        '6',
+        '',
+        '8',
+        '',
+        '10',
+        '',
+        '12pm',
+        '',
+        '2',
+        '',
+        '4',
+        '',
+        '6',
+        '',
+        '8',
+        '',
+        '10',
+        '',
+      ];
+      for (let i = 0; i < 24; i++) {
+        if (!labelTexts[i]) continue;
+        const angle = i * 15 - 90;
+        const rad = (angle * Math.PI) / 180;
+        const r = 95; // 标签半径
+
+        const text = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'text'
+        );
+        text.setAttribute('x', 200 + r * Math.cos(rad));
+        text.setAttribute('y', 200 + r * Math.sin(rad));
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dominant-baseline', 'central');
+        text.setAttribute('fill', 'var(--label-color)');
+        text.setAttribute('font-size', '16');
+        text.setAttribute('font-weight', '500');
+        text.textContent = labelTexts[i];
+        labelsGrp.appendChild(text);
+      }
+
+      // --- 3. 核心UI更新方法 ---
+      function updateUI() {
+        // 设置 10 分钟步长吸附 (2.5 度)
+        let s = Math.round(startAngleVal / 2.5) * 2.5;
+        let e = Math.round(endAngleVal / 2.5) * 2.5;
+
+        let diff = e - s;
+        if (diff < 0) diff += 360;
+
+        // 计算并格式化中心时间文本
+        let diffHours = diff / 15;
+        let h = Math.floor(diffHours);
+        let m = Math.round((diffHours - h) * 60);
+        if (m === 60) {
+          h++;
+          m = 0;
+        }
+
+        const text = m > 0 ? `${h} h ${m} m` : `${h} h`;
+        document.getElementById('center-text').textContent = text;
+
+        // 绘制绿色环形进度条
+        let endDraw = s + diff;
+        if (diff === 0) endDraw = s + 0.1; // 防止重叠时绘制出错
+
+        const r = 150;
+        const startRad = (s * Math.PI) / 180;
+        const endRad = (endDraw * Math.PI) / 180;
+
+        const x1 = 200 + r * Math.cos(startRad);
+        const y1 = 200 + r * Math.sin(startRad);
+        const x2 = 200 + r * Math.cos(endRad);
+        const y2 = 200 + r * Math.sin(endRad);
+
+        const largeArcFlag = diff > 180 ? 1 : 0;
+
+        // SVG 绘制弧线路径公式
+        const pathData = `M ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2}`;
+        document.getElementById('active-arc').setAttribute('d', pathData);
+
+        // 更新把手位置
+        document
+          .getElementById('start-handle')
+          .setAttribute('transform', `translate(${x1}, ${y1})`);
+        document
+          .getElementById('end-handle')
+          .setAttribute('transform', `translate(${x2}, ${y2})`);
+      }
+
+      // --- 4. 交互：拖拽手柄逻辑 ---
+      let activeHandle = null;
+      let lastDragAngle = 0;
+
+      function getMouseAngle(evt) {
+        let clientX = evt.clientX;
+        let clientY = evt.clientY;
+        if (evt.touches && evt.touches.length > 0) {
+          clientX = evt.touches[0].clientX;
+          clientY = evt.touches[0].clientY;
+        }
+        const rect = svg.getBoundingClientRect();
+        // 映射到 viewBox 的 400x400 坐标系
+        const scaleX = 400 / rect.width;
+        const scaleY = 400 / rect.height;
+        const x = (clientX - rect.left) * scaleX;
+        const y = (clientY - rect.top) * scaleY;
+
+        // 获取基于圆心的角度 (-180 到 180)
+        return (Math.atan2(y - 200, x - 200) * 180) / Math.PI;
+      }
+
+      function onDragStart(evt, handleType) {
+        evt.preventDefault();
+        activeHandle = handleType;
+        lastDragAngle = getMouseAngle(evt);
+
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('mouseup', onDragEnd);
+        document.addEventListener('touchmove', onDragMove, { passive: false });
+        document.addEventListener('touchend', onDragEnd);
+      }
+
+      function onDragMove(evt) {
+        if (!activeHandle) return;
+        evt.preventDefault();
+
+        let currentAngle = getMouseAngle(evt);
+        let delta = currentAngle - lastDragAngle;
+
+        // 处理从 180 度到 -180 度的跃迁
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+
+        if (activeHandle === 'start') {
+          startAngleVal = (startAngleVal + delta) % 360;
+          if (startAngleVal < 0) startAngleVal += 360;
+        } else {
+          endAngleVal = (endAngleVal + delta) % 360;
+          if (endAngleVal < 0) endAngleVal += 360;
+        }
+
+        lastDragAngle = currentAngle;
+        updateUI();
+      }
+
+      function onDragEnd() {
+        activeHandle = null;
+        document.removeEventListener('mousemove', onDragMove);
+        document.removeEventListener('mouseup', onDragEnd);
+        document.removeEventListener('touchmove', onDragMove);
+        document.removeEventListener('touchend', onDragEnd);
+      }
+
+      // 绑定事件
+      document
+        .getElementById('start-handle')
+        .addEventListener('mousedown', (e) => onDragStart(e, 'start'));
+      document
+        .getElementById('start-handle')
+        .addEventListener('touchstart', (e) => onDragStart(e, 'start'), {
+          passive: false,
+        });
+
+      document
+        .getElementById('end-handle')
+        .addEventListener('mousedown', (e) => onDragStart(e, 'end'));
+      document
+        .getElementById('end-handle')
+        .addEventListener('touchstart', (e) => onDragStart(e, 'end'), {
+          passive: false,
+        });
+
+      // 初次渲染
+      updateUI();
+    </script>
+  </body>
+</html>

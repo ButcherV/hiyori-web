@@ -50,7 +50,7 @@ export function QuickActions({
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setToastConfig((prev) => ({ ...prev, isVisible: false }));
-    }, 8000); // 增加到 8 秒
+    }, 5800);
   };
 
   const specialHours = [

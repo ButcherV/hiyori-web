@@ -19,7 +19,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 94px; 
+  width: 88px;
   height: 60px;
   border: 2px solid;
   border-radius: 14px;
@@ -31,7 +31,7 @@
 @media (max-height: 700px) {
   .selectionWindow {
     width: 80px;
-    height: 50px;  /* 48px 字号 + padding */
+    height: 50px; /* 48px 字号 + padding */
   }
 }
 
@@ -57,19 +57,19 @@
 /* 左侧 reel：数字容器固定宽度，定位到右边缘（黑线） */
 .left .item {
   right: 0;
-  left: auto;  /* 不占满宽度 */
-  width: 88px;  /* 增加宽度，与 selectionWindow 同宽 */
+  left: auto; /* 不占满宽度 */
+  width: 88px; /* 增加宽度，与 selectionWindow 同宽 */
   justify-content: flex-end;
-  padding-right: 9px;  /* 右侧留出空间，让数字在容器内居中 */
+  padding-right: 9px; /* 右侧留出空间，让数字在容器内居中 */
 }
 
 /* 右侧 reel：数字容器固定宽度，定位到左边缘（黑线） */
 .right .item {
   left: 0;
-  right: auto;  /* 不占满宽度 */
-  width: 88px;  /* 增加宽度，与 selectionWindow 同宽 */
+  right: auto; /* 不占满宽度 */
+  width: 88px; /* 增加宽度，与 selectionWindow 同宽 */
   justify-content: flex-start;
-  padding-left: 9px;  /* 左侧留出空间，让数字在容器内居中 */
+  padding-left: 9px; /* 左侧留出空间，让数字在容器内居中 */
 }
 
 /* 小屏幕适配 */
@@ -88,10 +88,12 @@
 .label {
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui,
+    sans-serif;
   font-feature-settings: 'tnum' 1; /* 强制启用等宽数字 */
   display: inline-block;
-  width: 100%;  /* 占满父容器 */
+  width: 100%; /* 占满父容器 */
 }
 
 /* 左侧数字：右对齐 */

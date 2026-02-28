@@ -8,10 +8,18 @@ import { useTranslation } from 'react-i18next';
 const STANDARD_VIEWBOX = '0 0 109 109';
 // 判定宽容度：检测管道的粗细 (109坐标系下，20px 算很宽容了)
 const HIT_STROKE_WIDTH = 25;
-// 起点容错范围：手指落下点离标准起点多远算“瞄准了”？
+// 🔥 小笔画（如浊音圆圈）使用更宽容的判定
+const HIT_STROKE_WIDTH_SMALL = 35;
+// 起点容错范围：手指落下点离标准起点多远算"瞄准了"？
 const START_POINT_RADIUS = 20;
+// 🔥 小笔画的起点容错更大
+const START_POINT_RADIUS_SMALL = 30;
 // 准确率阈值：至少有多少比例的点落在路径内才算过？(0.6 = 60%)
 const PASS_ACCURACY = 0.6;
+// 🔥 小笔画的准确率阈值更低
+const PASS_ACCURACY_SMALL = 0.5;
+// 🔥 判断是否为小笔画的路径长度阈值
+const SMALL_STROKE_LENGTH = 50;
 
 interface TraceCardProps {
   char: string;
@@ -50,7 +58,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
   const isFinished = strokeIndex >= paths.length;
 
   // --- 初始化逻辑 Canvas ---
-  // 这个 Canvas 永远保持 109x109 的标准尺寸，专门用来做“碰撞检测”
+  // 这个 Canvas 永远保持 109x109 的标准尺寸，专门用来做"碰撞检测"
   useEffect(() => {
     if (!logicCanvasRef.current) {
       const c = document.createElement('canvas');
@@ -89,18 +97,35 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     clearCanvas();
   }, [char]);
 
-  // ---  helper: 准备当前笔画的“隐形检测通道” ---
+  // 🔥 新增：计算路径长度（粗略估算）
+  const getPathLength = (pathData: string): number => {
+    // 使用 SVG path 的近似长度计算
+    // 简单方法：统计路径中的坐标点数量
+    const coords = pathData.match(/[\d.]+/g);
+    return coords ? coords.length : 0;
+  };
+
+  // 🔥 新增：判断当前笔画是否为小笔画
+  const isSmallStroke = (pathData: string): boolean => {
+    const length = getPathLength(pathData);
+    return length < SMALL_STROKE_LENGTH;
+  };
+
+  // ---  helper: 准备当前笔画的"隐形检测通道" ---
   const prepareHitTestPath = (pathData: string) => {
     const logicCtx = logicCanvasRef.current?.getContext('2d');
     if (!logicCtx) return null;
 
     logicCtx.clearRect(0, 0, 109, 109);
-    logicCtx.lineWidth = HIT_STROKE_WIDTH;
+    
+    // 🔥 根据笔画大小选择不同的判定宽度
+    const isSmall = isSmallStroke(pathData);
+    logicCtx.lineWidth = isSmall ? HIT_STROKE_WIDTH_SMALL : HIT_STROKE_WIDTH;
     logicCtx.lineCap = 'round';
     logicCtx.lineJoin = 'round';
 
     const p = new Path2D(pathData);
-    logicCtx.stroke(p); // 在内存里把这条线“画”出来，供后续检测
+    logicCtx.stroke(p); // 在内存里把这条线"画"出来，供后续检测
     return { ctx: logicCtx, path: p };
   };
 
@@ -127,6 +152,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
 
   // 1. 开始绘画 (增加了起点检测)
   const startDrawing = (e: any) => {
+    e.preventDefault(); // 🔥 防止 iOS 触发默认行为（放大镜、文本选择等）
     e.stopPropagation();
     if (isFinished) return;
 
@@ -144,10 +170,14 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     // B. 起点检测：如果你离起点太远，根本不让你开始画 (防止倒着写)
     const startPt = getStartPoint(currentPathData);
     if (startPt) {
+      // 🔥 根据笔画大小选择不同的起点容错范围
+      const isSmall = isSmallStroke(currentPathData);
+      const radius = isSmall ? START_POINT_RADIUS_SMALL : START_POINT_RADIUS;
+      
       const dist = Math.sqrt(
         Math.pow(logicX - startPt.x, 2) + Math.pow(logicY - startPt.y, 2)
       );
-      if (dist > START_POINT_RADIUS) {
+      if (dist > radius) {
         console.log('离起点太远，忽略');
         return;
       }
@@ -167,6 +197,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
 
   // 2. 绘画中 (增加了命中率采样)
   const draw = (e: any) => {
+    e.preventDefault(); // 🔥 防止 iOS 触发默认行为
     e.stopPropagation();
     if (!isDrawing || isFinished) return;
 
@@ -197,6 +228,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
 
   // 3. 结束绘画 (增加了分数结算)
   const stopDrawing = (e: any) => {
+    e.preventDefault(); // 🔥 防止 iOS 触发默认行为
     e.stopPropagation();
     if (!isDrawing) return;
     setIsDrawing(false);
@@ -210,10 +242,15 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
     }
 
     // 🔥 算分：准确率 = 命中点 / 总点数
+    // 根据笔画大小选择不同的准确率阈值
+    const currentPathData = paths[strokeIndex];
+    const isSmall = isSmallStroke(currentPathData);
+    const threshold = isSmall ? PASS_ACCURACY_SMALL : PASS_ACCURACY;
+    
     const accuracy = hitPoints / totalPoints;
-    console.log(`准确率: ${(accuracy * 100).toFixed(1)}%`);
+    console.log(`准确率: ${(accuracy * 100).toFixed(1)}% (阈值: ${(threshold * 100).toFixed(0)}%, 小笔画: ${isSmall})`);
 
-    if (accuracy >= PASS_ACCURACY) {
+    if (accuracy >= threshold) {
       handleStrokeSuccess();
     } else {
       console.log('写歪了，重来');
@@ -329,6 +366,7 @@ export const TraceCard: React.FC<TraceCardProps> = ({ char, onComplete }) => {
           onTouchStart={startDrawing}
           onTouchMove={draw}
           onTouchEnd={stopDrawing}
+          onTouchCancel={stopDrawing}
         />
       </div>
 

@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { Volume2, Info } from 'lucide-react';
+import { Volume2, Lightbulb } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTTS } from '../../hooks/useTTS';
 import styles from './TimeDisplay.module.css';
 
 // ── 時読音データ ──────────────────────────────────────────
@@ -141,15 +142,13 @@ const jaSpan = <span className="jaFont" />;
 
 export function TimeDisplay({ hour, minute, is24h }: TimeDisplayProps) {
   useTranslation(); // subscribe to language changes
+  const { speak } = useTTS();
   const data = buildDisplayData(hour, minute, is24h);
 
   const handleSpeak = useCallback(() => {
-    if (!('speechSynthesis' in window) || !data.speakText) return;
-    const utt = new SpeechSynthesisUtterance(data.speakText);
-    utt.lang = 'ja-JP';
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utt);
-  }, [data.speakText]);
+    if (!data.speakText) return;
+    speak(data.speakText, { gender: 'female' });
+  }, [data.speakText, speak]);
 
   // 用于 AnimatePresence 的唯一 key
   const contentKey = `${hour}-${minute}-${is24h}`;
@@ -185,17 +184,15 @@ export function TimeDisplay({ hour, minute, is24h }: TimeDisplayProps) {
 
           {/* ── 注意事项 ── */}
           {data.notes.map((note, i) => (
-            <div className={styles.note} key={i}>
-              <Info size={16} className={styles.noteIcon} />
-              <div className={styles.noteContent}>
-                <span className={styles.noteText}>
-                  <Trans
-                    i18nKey={note.key}
-                    values={note.values}
-                    components={{ ja: jaSpan }}
-                  />
-                </span>
-              </div>
+            <div className="notePill" key={i}>
+              <Lightbulb size={14} className={`noteIcon`} />
+              <span>
+                <Trans
+                  i18nKey={note.key}
+                  values={note.values}
+                  components={{ ja: jaSpan }}
+                />
+              </span>
             </div>
           ))}
         </motion.div>

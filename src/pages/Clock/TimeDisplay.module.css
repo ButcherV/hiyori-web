@@ -3,7 +3,7 @@
   flex-shrink: 0;
   width: 100%;
   height: 240px; /* 固定高度，防止因 notes 数量变化而跳跃 */
-  background: #ffffff;
+  background: var(--color-bg);
   border-radius: 28px 28px 0 0;
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.06);
   display: flex;
@@ -56,7 +56,7 @@
 .timeRow {
   display: flex;
   align-items: flex-end;
-  gap: 12px;  /* 减小间距，更紧凑 */
+  gap: 12px; /* 减小间距，更紧凑 */
   flex-shrink: 0;
   transition: all 0.3s ease-out;
 }
@@ -84,11 +84,11 @@
   .timeRowLarge .segKana {
     font-size: 12px;
   }
-  
+
   .timeRowLarge .segKanji {
     font-size: 34px;
   }
-  
+
   .timeRowLarge .speakerBtnSmall {
     width: 28px;
     height: 28px;
@@ -145,7 +145,7 @@
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(196, 85, 58, 0.25);
   transition: opacity 0.15s;
-  margin-bottom: 4px;  /* 与文字底部对齐 */
+  margin-bottom: 4px; /* 与文字底部对齐 */
 }
 
 @media (max-height: 700px) {
@@ -157,48 +157,4 @@
 
 .speakerBtnSmall:active {
   opacity: 0.7;
-}
-
-/* ── Note box（一个容器）── */
-.note {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #fef7f0;
-  border-radius: 12px;
-  padding: 4px 8px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.noteIcon {
-  flex-shrink: 0;
-  color: #c4553a;
-  margin-top: 2px;  /* 微调对齐 */
-}
-
-/* 内容容器（纵向排列多条）*/
-.noteContent {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;  /* 每条之间的间距 */
-  flex: 1;
-}
-
-.noteText {
-  font-size: 13px;
-  color: #8b7355;
-  line-height: 1.4;
-  display: block;  /* 每条独占一行 */
-}
-
-@media (max-height: 700px) {
-  .noteText {
-    font-size: 11px;
-    line-height: 1.3;
-  }
-  
-  .noteContent {
-    gap: 3px;
-  }
 }
