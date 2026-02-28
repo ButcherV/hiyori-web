@@ -14,11 +14,6 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   const [minute, setMinute] = useState(now.getMinutes());
   const [is24h, setIs24h] = useState(true);
 
-  const handleJumpTo = useCallback((targetHour: number, targetMinute: number) => {
-    setHour(targetHour);
-    setMinute(targetMinute);
-  }, []);
-
   const handleResetToNow = useCallback(() => {
     const n = new Date();
     setHour(n.getHours());
@@ -45,10 +40,8 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
     <>
       <QuickActions
         is24h={is24h}
-        currentHour={hour}
         onToggleFormat={handleToggleFormat}
         onJumpToNow={handleResetToNow}
-        onJumpTo={handleJumpTo}
       />
 
       <div className={styles.pickerArea}>

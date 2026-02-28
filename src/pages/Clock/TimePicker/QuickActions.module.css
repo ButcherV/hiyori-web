@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   padding: 16px 16px 0;
   width: 100%;
   box-sizing: border-box;
@@ -10,15 +10,16 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap; /* 允许换行 */
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .chip {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 14px;
   border: none;
@@ -26,8 +27,9 @@
   white-space: nowrap;
   flex-shrink: 0;
   transition: opacity 0.15s;
-  height: 28px; /* 固定高度 */
+  height: 32px;
   box-sizing: border-box;
+  user-select: none;
 }
 
 /* 小屏幕适配 */

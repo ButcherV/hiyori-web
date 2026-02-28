@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Lightbulb } from 'lucide-react';
 import type { TimePeriod } from './types';
 import styles from './PeriodInfo.module.css';
 
@@ -13,34 +13,32 @@ export function PeriodInfo({ selectedPeriod, durationText, onPlayPeriod }: Perio
   const { t } = useTranslation();
 
   return (
-    <>
-      <div className={styles.timeDisplay}>
+    <div className={styles.wrapper}>
+      <div className={styles.timeRow}>
         {selectedPeriod ? (
           <>
-            <div className={styles.timeBlock}>
-              <div className={styles.timeLabel}>意思</div>
-              <div className={styles.timeValue}>{selectedPeriod.description || '—'}</div>
+            <div className={styles.segment}>
+              <span className={styles.segKana}>{selectedPeriod.kana}</span>
+              <span className={styles.segKanji}>{selectedPeriod.name}</span>
             </div>
-            <button className={styles.speakBtn} onClick={onPlayPeriod}>
-              <Volume2 size={20} />
+            <button className={styles.speakerBtnSmall} onClick={onPlayPeriod}>
+              <Volume2 size={14} />
             </button>
           </>
         ) : (
-          <>
-            <div className={styles.timeBlock}>
-              <div className={styles.timeLabel}>じかんたい</div>
-              <div className={styles.timeValue}>{durationText}</div>
-            </div>
-          </>
+          <div className={styles.segment}>
+            <span className={styles.segKana}>じかんたい</span>
+            <span className={styles.segKanji}>{durationText}</span>
+          </div>
         )}
       </div>
 
       <div className="notePill">
-        <span className="noteIcon">💡</span>
+        <Lightbulb size={14} className="noteIcon" />
         <span className="noteText">
-          {t('clock_study.duration_hint') || '拖动圆圈上的控制点来选择时间段'}
+          {selectedPeriod?.description || t('clock_study.duration_hint') || '拖动圆圈上的控制点来选择时间段'}
         </span>
       </div>
-    </>
+    </div>
   );
 }

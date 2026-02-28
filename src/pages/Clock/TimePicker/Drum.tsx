@@ -38,7 +38,6 @@ export interface DrumProps {
   accentColor: string;
   accentBg?: string;           // 接受但不强制使用，保持与 Reel 接口一致
   physCount?: number;          // 圆等分物理槽数，默认 24
-  specialValues?: number[];
 }
 
 export function Drum({
@@ -49,7 +48,6 @@ export function Drum({
   side,
   accentColor,
   physCount = 24,
-  specialValues = [],
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -287,8 +285,6 @@ export function Drum({
       (((selected + intSteps + offsetFromCenter) % valueRange) + valueRange) % valueRange;
     const label = formatLabel(slotValue);
     const isCenter = phys === centerPhysIdx;
-    const isSpecial = specialValues.includes(slotValue);
-
     items.push(
       <span
         key={phys}
@@ -300,11 +296,7 @@ export function Drum({
           opacity,
           fontSize: `${fontSize}px`,
           fontWeight: isCenter ? 700 : 400,
-          color: isCenter
-            ? accentColor
-            : isSpecial
-            ? 'rgba(255, 69, 0, 0.6)'
-            : 'var(--color-Gray6, #6b7280)',
+          color: isCenter ? accentColor : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
           fontFamily: 'Inter, -apple-system, sans-serif',
           letterSpacing: isCenter ? '-0.025em' : '-0.01em',
@@ -315,19 +307,6 @@ export function Drum({
         }}
       >
         {label}
-        {isSpecial && !isCenter && (
-          <span
-            style={{
-              position: 'absolute',
-              top: '-4px',
-              right: '-6px',
-              width: '4px',
-              height: '4px',
-              borderRadius: '50%',
-              background: accentColor,
-            }}
-          />
-        )}
       </span>
     );
   }

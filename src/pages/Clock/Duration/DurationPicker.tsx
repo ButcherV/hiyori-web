@@ -53,20 +53,22 @@ export function DurationPicker() {
 
   return (
     <div className={styles.container}>
-      <PeriodChips
-        periods={TIME_PERIODS}
-        selectedPeriod={selectedPeriod}
-        onSelectPeriod={setTimePeriod}
-      />
+      <div className={styles.scrollArea}>
+        <PeriodChips
+          periods={TIME_PERIODS}
+          selectedPeriod={selectedPeriod}
+          onSelectPeriod={setTimePeriod}
+        />
 
-      <CircularPicker
-        startAngle={startAngle}
-        endAngle={endAngle}
-        selectedPeriod={selectedPeriod}
-        onStartAngleChange={setStartAngle}
-        onEndAngleChange={setEndAngle}
-        onPlayPeriod={playPeriodName}
-      />
+        <CircularPicker
+          startAngle={startAngle}
+          endAngle={endAngle}
+          selectedPeriod={selectedPeriod}
+          onStartAngleChange={setStartAngle}
+          onEndAngleChange={setEndAngle}
+          onPlayPeriod={playPeriodName}
+        />
+      </div>
 
       <PeriodInfo
         selectedPeriod={selectedPeriod}
