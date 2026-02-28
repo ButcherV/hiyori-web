@@ -1,7 +1,7 @@
 import { useTranslation, Trans } from 'react-i18next';
 import { Clock } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { Toast } from '../../components/Toast/Toast';
+import { Toast } from '../../../components/Toast/Toast';
 import styles from './QuickActions.module.css';
 
 interface QuickActionsProps {

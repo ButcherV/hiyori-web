@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { TimeDrumPicker } from './TimeDrumPicker';
-import { DurationPicker } from './DurationPicker';
+import { TimeDrumPicker } from './TimePicker/TimeDrumPicker';
+import { DurationPicker } from './Duration/DurationPicker';
 import styles from './PageClock.module.css';
 
 type ClockMode = 'time' | 'duration';

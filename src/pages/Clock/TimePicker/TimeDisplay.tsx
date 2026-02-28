@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Volume2, Lightbulb } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTTS } from '../../hooks/useTTS';
+import { useTTS } from '../../../hooks/useTTS';
 import styles from './TimeDisplay.module.css';
 
 // ── 時読音データ ──────────────────────────────────────────
