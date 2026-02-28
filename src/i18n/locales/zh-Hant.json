@@ -67,6 +67,8 @@
     "now": "現在",
     "duration": "時間段",
     "time": "時刻",
+    "duration_length": "時長",
+    "duration_period": "時段",
     "duration_hint": "拖動圓圈上的控制點來選擇時間段",
     "toast": {
       "hour_4_title": "以 4 結尾的小時，數字 4 讀作「<ja>よ</ja>」",

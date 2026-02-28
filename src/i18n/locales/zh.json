@@ -518,6 +518,8 @@
     "now": "现在",
     "duration": "时间段",
     "time": "时刻",
+    "duration_length": "时长",
+    "duration_period": "时段",
     "duration_hint": "拖动圆圈上的控制点来选择时间段",
     "toast": {
       "hour_4_title": "以 4 结尾的小时，数字 4 读作「<ja>よ</ja>」",

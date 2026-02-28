@@ -502,6 +502,8 @@
     "now": "Now",
     "duration": "Duration",
     "time": "Time",
+    "duration_length": "Duration",
+    "duration_period": "Time Period",
     "duration_hint": "Drag the control points on the circle to select a time duration",
     "toast": {
       "hour_4_title": "Hours ending in 4: the digit 4 reads as <ja>よ</ja>",

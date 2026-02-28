@@ -1,33 +1,30 @@
-.page {
+.container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  touch-action: none;
-  background: var(
-    --gradient-header-3,
-    linear-gradient(135deg, #6366f1 0%, #a855f7 100%)
-  );
+  background: var(--gradient-header-1);
 }
 
-/* ── Nav Bar ── */
+/* === Layer 1: 系统栏 === */
 .systemHeader {
   flex-shrink: 0;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
   padding-top: calc(env(safe-area-inset-top) + 24px);
-  box-sizing: border-box;
+  z-index: 50;
 }
 
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .headerTitle {
@@ -35,6 +32,20 @@
   font-weight: 700;
   color: white;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: titleSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .iconBtn {
@@ -44,46 +55,15 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
-  padding: 4px;
-  transition: opacity 0.2s;
 }
 
-.iconBtn:active {
-  opacity: 0.4;
+/* === Layer 2: 关卡导航 === */
+.levelNavWrapper {
+  flex-shrink: 0;
+  padding: 0 0 16px 0;
 }
 
-/* 模式切换按钮 */
-.modeToggle {
-  display: flex;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 4px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.modeBtn {
-  padding: 6px 14px;
-  border-radius: 16px;
-  border: none;
-  background: transparent;
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.modeBtnActive {
-  background: white;
-  color: #6366f1;
-}
-
-/* ── Workspace ── */
+/* === Layer 3: 工作区 === */
 .workspace {
   flex: 1;
   width: 100%;
@@ -91,9 +71,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: white;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* 给面板加点头部阴影，更有层次感 */
+  background-color: var(--color-bg);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: var(--shadow-header);
 }
