@@ -8,7 +8,7 @@
 .drum {
   /* 父容器 .drums 已设 align-self:stretch + flex:1，
      所以这里用百分比即可，不需要 vw/dvh */
-  width: 50%;
+  flex: 1;
   height: 100%;
   position: relative;
   background: #ffffff;

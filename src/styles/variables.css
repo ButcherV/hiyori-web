@@ -110,6 +110,11 @@
     rgb(20, 136, 204),
     rgb(43, 50, 178)
   );
+  --gradient-header-4: linear-gradient(
+    to right,
+    rgb(142, 45, 226),
+    rgb(74, 0, 224)
+  );
   /* --gradient-header: linear-gradient(
     to right,
     rgb(20, 136, 204),

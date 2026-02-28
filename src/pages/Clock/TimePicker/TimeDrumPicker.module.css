@@ -69,6 +69,11 @@
 @media (max-height: 700px) {
   .ampmIndicator {
     font-size: 16px;
-    /* right: 12px; */
+  }
+
+  /* 鼓盘底部渐隐，数字自然消失，不与信息面板产生硬边冲突 */
+  .pickerArea {
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
   }
 }

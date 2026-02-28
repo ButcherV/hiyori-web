@@ -13,6 +13,8 @@ const DAMP_HALF_LIFE = 220;
 const MIN_VEL = 0.00006;
 const SNAP_EASE = 0.25;
 const SNAP_THRESH = 0.0008;
+// 外部跳转动画最大偏移槽数
+const MAX_JUMP_STEPS = 5;
 
 // ── 物理状态 ──────────────────────────────────────────────
 interface Phys {
@@ -27,33 +29,31 @@ interface Phys {
 }
 
 // ── Drum 组件 ─────────────────────────────────────────────
-// physCount: 圆等分的物理槽数（决定视觉密度）
-// valueRange: 实际取值范围（标签从 selected 出发动态计算）
-// renderAngle=0 始终对应 selected 在中心，吸附后重置为 0
 export interface DrumProps {
-  physCount: number;
   valueRange: number;
   selected: number;
   formatLabel: (v: number) => string;
   onSelect: (v: number) => void;
   side: 'left' | 'right';
-  specialValues?: number[]; // 特殊值（需要高亮标记）
+  accentColor: string;
+  accentBg?: string;           // 接受但不强制使用，保持与 Reel 接口一致
+  physCount?: number;          // 圆等分物理槽数，默认 24
+  specialValues?: number[];
 }
 
 export function Drum({
-  physCount,
   valueRange,
   selected,
   formatLabel,
   onSelect,
   side,
+  accentColor,
+  physCount = 24,
   specialValues = [],
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
-  // R = 圆半径 = 容器高度的一半；W = 容器宽度（约 50vw）
   const [dims, setDims] = useState({ R: 185, H: 370, W: 195 });
-  // angle=0 → selected 在中心；吸附后重置为 0
   const [renderAngle, setRenderAngle] = useState(0);
 
   const physRef = useRef<Phys>({
@@ -67,56 +67,35 @@ export function Drum({
     history: [],
   });
 
+  // 区分内部 snap 还是外部跳转
+  const isInternalRef = useRef(false);
+  const prevSelectedRef = useRef(selected);
+
   // 用 ref 持有最新值，避免 tick 闭包过时
   const selectedRef = useRef(selected);
   const stepRef = useRef(step);
   const valueRangeRef = useRef(valueRange);
-  useLayoutEffect(() => {
-    selectedRef.current = selected;
-  }, [selected]);
-  useLayoutEffect(() => {
-    stepRef.current = step;
-  }, [step]);
-  useLayoutEffect(() => {
-    valueRangeRef.current = valueRange;
-  }, [valueRange]);
+  useLayoutEffect(() => { selectedRef.current = selected; }, [selected]);
+  useLayoutEffect(() => { stepRef.current = step; }, [step]);
+  useLayoutEffect(() => { valueRangeRef.current = valueRange; }, [valueRange]);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
-
     const measure = () => {
       const { width, height } = containerRef.current!.getBoundingClientRect();
-      // 圆半径 = 高度的一半；两圆圆心各在屏幕横向中心两侧 R 处
       if (width > 0) setDims({ R: height / 2, H: height, W: width });
     };
-
-    measure(); // 首次测量
-
-    // 父容器高度随 is24h 切换而变（TimeDisplay 内 ampm 行出现/消失），
-    // 用 ResizeObserver 确保 dims 始终与实际像素一致
+    measure();
     const observer = new ResizeObserver(measure);
     observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
-
-  // 外部改变 selected 时（切换 12h/24h），重置角度
-  useEffect(() => {
-    const p = physRef.current;
-    if (p.phase === 'idle') {
-      p.angle = 0;
-      p.snapTarget = 0;
-      setRenderAngle(0);
-    }
-  }, [selected]);
 
   const getPA = useCallback(
     (clientX: number, clientY: number) => {
       const rect = containerRef.current!.getBoundingClientRect();
       const cy = rect.top + rect.height / 2;
       const R = rect.height / 2;
-      // 左鼓：圆心在容器右边缘往左 R 处（屏幕横向中心）
-      // 右鼓：圆心在容器左边缘往右 R 处（屏幕横向中心）
-      // 两种情况下 dx 均为正值，atan2 输出在 (-π/2, π/2) 附近
       if (side === 'left') {
         const cx = rect.right - R;
         return Math.atan2(clientY - cy, clientX - cx);
@@ -154,8 +133,7 @@ export function Drum({
         p.velocity *= Math.pow(0.5, dt / DAMP_HALF_LIFE);
         if (Math.abs(p.velocity) < MIN_VEL) {
           p.phase = 'snap';
-          p.snapTarget =
-            -Math.round(-p.angle / stepRef.current) * stepRef.current;
+          p.snapTarget = -Math.round(-p.angle / stepRef.current) * stepRef.current;
         }
       } else if (p.phase === 'snap') {
         const diff = p.snapTarget - p.angle;
@@ -164,15 +142,19 @@ export function Drum({
           p.angle = p.snapTarget;
           p.phase = 'idle';
           p.animId = null;
-          // 从原点出发转了多少物理步 → 计算新值
+
           const rawSteps = Math.round(-p.snapTarget / stepRef.current);
-          const vr = valueRangeRef.current;
-          const newValue = (((selectedRef.current + rawSteps) % vr) + vr) % vr;
-          // 吸附完成后重置角度，下次交互从 0 开始
           p.angle = 0;
           p.snapTarget = 0;
           setRenderAngle(0);
-          onSelect(newValue);
+
+          // rawSteps === 0：外部跳转动画完成，不需要回调
+          if (rawSteps !== 0) {
+            const vr = valueRangeRef.current;
+            const newValue = (((selectedRef.current + rawSteps) % vr) + vr) % vr;
+            isInternalRef.current = true;
+            onSelect(newValue);
+          }
           return;
         }
       }
@@ -184,6 +166,37 @@ export function Drum({
     p.animId = requestAnimationFrame(tick);
   }, [onSelect]);
 
+  // ── 外部跳转动画（chip / Now 按钮触发）────────────────
+  useEffect(() => {
+    const prev = prevSelectedRef.current;
+    prevSelectedRef.current = selected;
+
+    if (isInternalRef.current) {
+      isInternalRef.current = false;
+      return;
+    }
+    if (prev === selected) return;
+
+    // 最短圆形路径 delta
+    let delta = selected - prev;
+    const vr = valueRangeRef.current;
+    if (delta > vr / 2) delta -= vr;
+    if (delta < -vr / 2) delta += vr;
+
+    // 限制动画幅度，避免大跳
+    const animSteps = Math.sign(delta) * Math.min(Math.abs(delta), MAX_JUMP_STEPS);
+
+    const p = physRef.current;
+    cancelAnim();
+    p.angle = -animSteps * stepRef.current;
+    p.phase = 'snap';
+    p.snapTarget = 0;
+    setRenderAngle(p.angle);
+    startAnim();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
+  // ── Pointer handlers ─────────────────────────────────────
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault();
@@ -242,47 +255,36 @@ export function Drum({
     startAnim();
   }, [nearestSnap, startAnim]);
 
-  // ── 渲染：每帧动态计算各槽标签 ────────────────────────
+  // ── 渲染 ─────────────────────────────────────────────────
   const { R, H, W } = dims;
-
-  // 径向内缩：文字放在半径 (R - MARGIN) 的内圆上，到弧面距离恒为 MARGIN
   const MARGIN = 8;
   const innerR = R - MARGIN;
-  // 可见半角：cosθ ≥ (R-W)/innerR 的槽才在容器范围内
   const cosThresh = (R - W) / innerR;
   const halfAngle = Math.acos(Math.max(-1, Math.min(1, cosThresh)));
 
-  const items: React.ReactNode[] = [];
-
-  // 当前转了多少整步（保持浮点方向，用于 label 计算）
   const intSteps = Math.round(-renderAngle / step);
-  // 哪个物理槽在中心
   const centerPhysIdx = ((intSteps % physCount) + physCount) % physCount;
+
+  const items: React.ReactNode[] = [];
 
   for (let phys = 0; phys < physCount; phys++) {
     let theta = phys * step + renderAngle;
-    // 归一化到 (-π, π]
     theta = theta - TWO_PI * Math.floor((theta + Math.PI) / TWO_PI);
     if (Math.abs(theta) > halfAngle) continue;
 
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
     const opacity = Math.max(0, cosT);
-    // 左鼓：圆心在 (W-R, H/2)，弧面在右侧，x = (W-R) + innerR*cosT
-    // 右鼓：圆心在 (R,   H/2)，弧面在左侧，x = R - innerR*cosT
     const x = side === 'left' ? W - R + innerR * cosT : R - innerR * cosT;
     const y = H / 2 + innerR * sinT;
     const fontSize = Math.round(15 + 23 * cosT * cosT);
 
-    // 该槽距中心的偏移步数（归一化到 ±physCount/2）
     let offsetFromCenter = phys - centerPhysIdx;
     if (offsetFromCenter > physCount / 2) offsetFromCenter -= physCount;
     if (offsetFromCenter < -physCount / 2) offsetFromCenter += physCount;
 
-    // 该槽显示的值 = (selected + 总步数 + 偏移) mod valueRange
     const slotValue =
-      (((selected + intSteps + offsetFromCenter) % valueRange) + valueRange) %
-      valueRange;
+      (((selected + intSteps + offsetFromCenter) % valueRange) + valueRange) % valueRange;
     const label = formatLabel(slotValue);
     const isCenter = phys === centerPhysIdx;
     const isSpecial = specialValues.includes(slotValue);
@@ -294,19 +296,17 @@ export function Drum({
           position: 'absolute',
           left: `${x}px`,
           top: `${y}px`,
-          transform:
-            side === 'left' ? 'translate(-100%, -50%)' : 'translate(0, -50%)',
+          transform: side === 'left' ? 'translate(-100%, -50%)' : 'translate(0, -50%)',
           opacity,
           fontSize: `${fontSize}px`,
           fontWeight: isCenter ? 700 : 400,
-          color: isSpecial && !isCenter
+          color: isCenter
+            ? accentColor
+            : isSpecial
             ? 'rgba(255, 69, 0, 0.6)'
-            : isCenter
-            ? 'var(--color-primary, #111827)'
             : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
-          fontFamily:
-            '-apple-system, "SF Pro Display", "Helvetica Neue", sans-serif',
+          fontFamily: 'Inter, -apple-system, sans-serif',
           letterSpacing: isCenter ? '-0.025em' : '-0.01em',
           lineHeight: 1,
           userSelect: 'none',
@@ -324,7 +324,7 @@ export function Drum({
               width: '4px',
               height: '4px',
               borderRadius: '50%',
-              background: 'var(--color-primary, #ff4500)',
+              background: accentColor,
             }}
           />
         )}
@@ -332,8 +332,6 @@ export function Drum({
     );
   }
 
-  // 左鼓：圆心在 (W-R, H/2)，可能为负（圆心在屏幕外左侧）
-  // 右鼓：圆心在 (R, H/2)，可能超出容器右边界（圆心在屏幕外右侧）
   const clipPath =
     side === 'left'
       ? `circle(${R}px at ${W - R}px 50%)`

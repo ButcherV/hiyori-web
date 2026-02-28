@@ -5,7 +5,7 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  background: var(--gradient-header-1);
+  background: var(--gradient-header-4);
 }
 
 /* === Layer 1: 系统栏 === */

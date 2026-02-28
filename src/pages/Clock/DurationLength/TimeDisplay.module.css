@@ -67,11 +67,11 @@
 }
 
 .timeRowLarge .segKana {
-  font-size: 14px;
+  font-size: 10px;
 }
 
 .timeRowLarge .segKanji {
-  font-size: 32px;
+  font-size: 26px;
 }
 
 .timeRowLarge .speakerBtnSmall {
@@ -109,6 +109,7 @@
   color: #a1a1aa;
   line-height: 1;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 @media (max-height: 700px) {
@@ -122,6 +123,7 @@
   font-weight: 700;
   color: #1a1a1a;
   line-height: 1;
+  white-space: nowrap;
 }
 
 @media (max-height: 700px) {

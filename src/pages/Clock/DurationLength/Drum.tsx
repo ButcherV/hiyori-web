@@ -37,7 +37,8 @@ export interface DrumProps {
   formatLabel: (v: number) => string;
   onSelect: (v: number) => void;
   side: 'left' | 'right';
-  specialValues?: number[]; // 特殊值（需要高亮标记）
+  accentColor?: string;
+  specialValues?: number[];
 }
 
 export function Drum({
@@ -47,6 +48,7 @@ export function Drum({
   formatLabel,
   onSelect,
   side,
+  accentColor = '#111827',
   specialValues = [],
 }: DrumProps) {
   const step = TWO_PI / physCount;
@@ -299,10 +301,10 @@ export function Drum({
           opacity,
           fontSize: `${fontSize}px`,
           fontWeight: isCenter ? 700 : 400,
-          color: isSpecial && !isCenter
+          color: isCenter
+            ? accentColor
+            : isSpecial
             ? 'rgba(255, 69, 0, 0.6)'
-            : isCenter
-            ? 'var(--color-primary, #111827)'
             : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
           fontFamily:
@@ -324,7 +326,7 @@ export function Drum({
               width: '4px',
               height: '4px',
               borderRadius: '50%',
-              background: 'var(--color-primary, #ff4500)',
+              background: accentColor,
             }}
           />
         )}

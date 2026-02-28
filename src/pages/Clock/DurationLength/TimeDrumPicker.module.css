@@ -1,74 +1,38 @@
 /* ── Picker Area ── */
 .pickerArea {
-  flex: 1; /* 恢复自适应，填充剩余空间 */
+  flex: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 8px 0;
-  min-height: 0; /* 允许 flex 子元素收缩 */
+  min-height: 0;
 }
 
-/* ── Drums row ── */
-.drums {
+/* ── Reels row ── */
+.reels {
   flex: 1;
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  /* box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06), 0 4px 24px rgba(0, 0, 0, 0.04); */
-  position: relative; /* 为选中框提供定位上下文 */
+  position: relative;
 }
 
-/* ── Colon separator — inline flex item ── */
-.colon {
-  flex-shrink: 0;
+/* ── Individual reel wrapper ── */
+.reelWrapper {
+  flex: 1;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  font-size: 40px;
-  font-weight: 300;
-  color: #d4d4d8;
-  /* background: #ffffff; */
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-  z-index: 10; /* 确保在选中框之上 */
+  transition: opacity 0.25s ease;
 }
 
-/* ── AM/PM Indicator ── */
-.ampmIndicator {
-  position: absolute;
-  right: 48px;  /* 距离右边缘的距离 */
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: #3d3d3d;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-  letter-spacing: 0.5px;
+.reelDisabled {
+  opacity: 0.2;
   pointer-events: none;
-  user-select: none;
-  z-index: 10;
-  animation: ampmFadeIn 0.3s ease-out;
-}
-
-@keyframes ampmFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-  }
 }
 
 @media (max-height: 700px) {
-  .ampmIndicator {
-    font-size: 16px;
-    /* right: 12px; */
+  .pickerArea {
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
   }
 }

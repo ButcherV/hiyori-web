@@ -19,9 +19,17 @@
 /* 小屏幕适配 (iPhone SE 等，高度 <= 700px) */
 @media (max-height: 700px) {
   .wrapper {
-    height: 180px; /* 减小高度 */
-    gap: 12px; /* 减小间距 */
-    padding: 16px; /* 减小内边距 */
+    /* 脱离文档流，贴底浮在鼓盘之上，鼓盘高度不再受内容变化影响 */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    padding: 14px 20px 20px;
+    gap: 10px;
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.08);
+    border-radius: 24px 24px 0 0;
+    z-index: 10;
   }
 }
 

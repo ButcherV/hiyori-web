@@ -1,7 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
   padding: 16px 16px 0;
   width: 100%;
   box-sizing: border-box;
@@ -10,95 +9,37 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap; /* 允许换行 */
+  gap: 8px;
 }
 
 .chip {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
+  justify-content: center;
+  padding: 6px 24px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
   border: none;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: opacity 0.15s;
-  height: 28px; /* 固定高度 */
+  transition: background 0.2s, color 0.2s, opacity 0.15s;
+  height: 34px;
   box-sizing: border-box;
-}
-
-/* 小屏幕适配 */
-@media (max-width: 375px) {
-  .chip {
-    /* padding: 4px 7px;
-    font-size: 10.5px; */
-    gap: 3px;
-  }
-
-  .row {
-    gap: 4px; /* 减小间距 */
-  }
-
-  .divider {
-    margin: 0 1px; /* 减小分隔线边距 */
-  }
+  user-select: none;
 }
 
 .chip:active {
   opacity: 0.65;
 }
 
-/* 24h/12h chip — inactive */
-.chipMode {
-  background: #ebebeb;
-  color: #3d3d3d;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum' 1;
-  min-width: 48px;
-  justify-content: center;
-}
-
-/* 24h/12h chip — active (dark) */
-.chipModeActive {
+.chipActive {
   background: #1a1a1a;
   color: white;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum' 1;
-  min-width: 48px;
-  justify-content: center;
 }
 
-/* Now chip (bordered) */
-.chipNow {
-  background: white;
-  color: #3d3d3d;
-  border: 1px solid #e0e0dc;
-  font-weight: 500;
-}
-
-/* Hour chips (warm red) */
-.chipHour {
-  background: #fff5f0;
-  color: #c4553a;
-  font-weight: 500;
-}
-
-/* Minute chips (blue) */
-.chipMinute {
-  background: #f0f4ff;
-  color: #4a6fa5;
-  font-weight: 500;
-}
-
-.divider {
-  width: 1px;
-  height: 20px;
-  background: #d4d4d8;
-  flex-shrink: 0;
-  margin: 0 2px;
+.chipInactive {
+  background: #ebebeb;
+  color: #a0a0a8;
 }

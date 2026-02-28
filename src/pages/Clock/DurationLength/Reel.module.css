@@ -84,6 +84,20 @@
   }
 }
 
+/* 中间 reel：数字居中 */
+.center .item {
+  left: 0;
+  right: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-height: 700px) {
+  .center .item {
+    width: 100%;
+  }
+}
+
 /* 标签 */
 .label {
   line-height: 1;
@@ -104,4 +118,9 @@
 /* 右侧数字：左对齐 */
 .right .label {
   text-align: left;
+}
+
+/* 中间数字：居中 */
+.center .label {
+  text-align: center;
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
-import { Reel } from './Reel';
+import { Drum } from './Drum';
 import { TimeDisplay } from './TimeDisplay';
 import { QuickActions } from './QuickActions';
 import styles from './TimeDrumPicker.module.css';
@@ -54,7 +54,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
       <div className={styles.pickerArea}>
         <div className={styles.drums}>
           {/* 12h 模式也使用 valueRange={24}，只在显示时格式化 */}
-          <Reel
+          <Drum
             key={is24h ? 'h24' : 'h12'}
             valueRange={24}
             selected={hour}
@@ -62,19 +62,17 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             onSelect={setHour}
             side="left"
             accentColor="#C4553A"
-            accentBg="rgba(255, 248, 245, 0.85)"
           />
 
           <span className={styles.colon}>:</span>
 
-          <Reel
+          <Drum
             valueRange={60}
             selected={minute}
             formatLabel={fmtPad2}
             onSelect={setMinute}
             side="right"
             accentColor="#4A6FA5"
-            accentBg="rgba(245, 248, 255, 0.85)"
           />
 
           {/* AM/PM 指示器 - 只在 12h 模式下显示，绝对定位 */}

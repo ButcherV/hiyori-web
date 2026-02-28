@@ -46,7 +46,7 @@ export interface ReelProps {
   selected: number;
   formatLabel: (v: number) => string;
   onSelect: (v: number) => void;
-  side: 'left' | 'right';
+  side: 'left' | 'right' | 'center';
   accentColor: string;
   accentBg: string;
 }
@@ -266,7 +266,11 @@ export function Reel({
           background: accentBg,
           // 数字容器现在是 88px 宽，padding 9px，数字在容器内居中
           // selectionWindow 也是 88px 宽，直接对齐到边缘即可
-          ...(side === 'left' ? { right: 0 } : { left: 0 }),
+          ...(side === 'left'
+          ? { right: 0 }
+          : side === 'right'
+          ? { left: 0 }
+          : { left: '50%', transform: 'translateX(-50%) translateY(-50%)' }),
         }}
       />
 
