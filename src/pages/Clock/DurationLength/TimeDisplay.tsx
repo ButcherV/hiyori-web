@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Trans, useTranslation } from 'react-i18next';
 import { useTTS } from '../../../hooks/useTTS';
 import styles from './TimeDisplay.module.css';
 
@@ -61,14 +62,29 @@ function secondKana(n: number): string {
   return numToKana(n) + 'びょう';
 }
 
+// ── 特殊読音セット ────────────────────────────────────────
+const IRREGULAR_HOURS_DURATION = new Set([4, 9, 14, 19]);
+
+function isSokuonMinute(m: number): boolean {
+  if (m === 0) return false;
+  const ones = m % 10;
+  return ones === 1 || ones === 3 || ones === 6 || ones === 8 || ones === 0;
+}
+
 // ── 表示データ ────────────────────────────────────────────
 interface Segment {
   kanji: string;
   kana: string;
 }
 
+interface NoteData {
+  key: string;
+  values?: Record<string, string | number>;
+}
+
 interface DisplayData {
   segments: Segment[];
+  notes: NoteData[];
   speakText: string;
 }
 
@@ -79,12 +95,16 @@ function buildDisplayData(
   activeAxes: Set<Axis>
 ): DisplayData {
   const segments: Segment[] = [];
+  const notes: NoteData[] = [];
 
   if (activeAxes.has('hour')) {
     segments.push({
       kanji: `${hour}時間`,
       kana: HOUR_DURATION_KANA[hour] ?? `${numToKana(hour)}じかん`,
     });
+    if (IRREGULAR_HOURS_DURATION.has(hour)) {
+      notes.push({ key: `clock_study.duration_note.hour_${hour}` });
+    }
   }
 
   if (activeAxes.has('minute')) {
@@ -92,6 +112,9 @@ function buildDisplayData(
       kanji: `${minute}分`,
       kana: MINUTE_KANA[minute] ?? `${numToKana(minute)}ふん`,
     });
+    if (isSokuonMinute(minute)) {
+      notes.push({ key: 'clock_study.note.sokuon', values: { minute } });
+    }
   }
 
   if (activeAxes.has('second')) {
@@ -103,6 +126,7 @@ function buildDisplayData(
 
   return {
     segments,
+    notes,
     speakText: segments.map((s) => s.kana).join(''),
   };
 }
@@ -122,7 +146,10 @@ function calcFontSizes(totalKanjiLen: number): { kana: number; kanji: number } {
   return                         { kana: 10, kanji: 26 };
 }
 
+const jaSpan = <span className="jaFont" />;
+
 export function TimeDisplay({ hour, minute, second, activeAxes }: TimeDisplayProps) {
+  useTranslation(); // subscribe to language changes
   const { speak } = useTTS();
   const data = buildDisplayData(hour, minute, second, activeAxes);
 
@@ -165,6 +192,19 @@ export function TimeDisplay({ hour, minute, second, activeAxes }: TimeDisplayPro
               <Volume2 size={16} />
             </button>
           </div>
+
+          {data.notes.map((note, i) => (
+            <div className="notePill" key={i}>
+              <Lightbulb size={14} className="noteIcon" />
+              <span>
+                <Trans
+                  i18nKey={note.key}
+                  values={note.values}
+                  components={{ ja: jaSpan }}
+                />
+              </span>
+            </div>
+          ))}
         </motion.div>
       </AnimatePresence>
     </div>

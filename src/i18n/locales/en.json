@@ -536,6 +536,18 @@
       "exact_hour": "For exact hours, can also say <ja>ちょうど (chōdo)</ja>",
       "midnight": "Also: <ja>零時 (れいじ)</ja> or <ja>午前零時 (ごぜんれいじ)</ja>",
       "noon": "Also: <ja>十二時 (じゅうにじ)</ja> or <ja>午後零時 (ごごれいじ)</ja>"
+    },
+    "duration_toast": {
+      "hour_4_title": "Duration hours ending in 4: digit 4 reads as <ja>よ</ja>",
+      "hour_4_desc": "<ja>4時間（よじかん）、14時間（じゅうよじかん）</ja> - digit 4 is NOT <ja>よん</ja>",
+      "hour_9_title": "Duration hours ending in 9: digit 9 reads as <ja>く</ja>",
+      "hour_9_desc": "<ja>9時間（くじかん）、19時間（じゅうくじかん）</ja> - digit 9 is NOT <ja>きゅう</ja>"
+    },
+    "duration_note": {
+      "hour_4": "Note: <ja>4時間</ja> is read as <ja>よじかん</ja>, not <ja>よんじかん</ja>",
+      "hour_9": "Note: <ja>9時間</ja> is read as <ja>くじかん</ja>, not <ja>きゅうじかん</ja>",
+      "hour_14": "Note: <ja>14時間</ja> is read as <ja>じゅうよじかん</ja>, not <ja>じゅうよんじかん</ja>",
+      "hour_19": "Note: <ja>19時間</ja> is read as <ja>じゅうくじかん</ja>, not <ja>じゅうきゅうじかん</ja>"
     }
   }
 }

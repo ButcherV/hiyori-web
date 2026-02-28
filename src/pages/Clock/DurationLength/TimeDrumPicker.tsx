@@ -24,11 +24,21 @@ export function TimeDrumPicker() {
     });
   }, []);
 
+  const handleJumpTo = useCallback((axis: Axis, value: number) => {
+    setActiveAxes((prev) => {
+      if (prev.has(axis)) return prev;
+      return new Set([...prev, axis]);
+    });
+    if (axis === 'hour') setHour(value);
+    else if (axis === 'minute') setMinute(value);
+    else setSecond(value);
+  }, []);
+
   const fmtPad2 = useCallback((v: number) => String(v).padStart(2, '0'), []);
 
   return (
     <>
-      <QuickActions activeAxes={activeAxes} onToggleAxis={handleToggleAxis} />
+      <QuickActions activeAxes={activeAxes} onToggleAxis={handleToggleAxis} onJumpTo={handleJumpTo} />
 
       <div className={styles.pickerArea}>
         <div className={styles.reels}>
