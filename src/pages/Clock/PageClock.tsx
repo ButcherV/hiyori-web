@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TimeDrumPicker } from './TimePicker/TimeDrumPicker';
+import { TimeDrumPicker as DurationLengthPicker } from './DurationLength/TimeDrumPicker';
 import { DurationPicker } from './Duration/DurationPicker';
 import { LevelNav } from '../../components/LevelNav/LevelNav';
 import styles from './PageClock.module.css';
@@ -48,7 +49,7 @@ export function PageClock() {
 
       <div className={styles.workspace}>
         {mode === 'time' && <TimeDrumPicker />}
-        {mode === 'duration-length' && <div>时长组件待开发</div>}
+        {mode === 'duration-length' && <DurationLengthPicker />}
         {mode === 'duration-period' && <DurationPicker />}
       </div>
     </div>

@@ -1,0 +1,107 @@
+.reel {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* background: #ffffff; */
+  cursor: grab;
+  touch-action: none;
+  perspective: 1000px;
+  perspective-origin: center center;
+}
+
+.reel:active {
+  cursor: grabbing;
+}
+
+/* 固定的选中框背景，渲染在文字层之下 */
+.selectionWindow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 88px;
+  height: 60px;
+  border: 2px solid;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 小屏幕适配 */
+@media (max-height: 700px) {
+  .selectionWindow {
+    width: 80px;
+    height: 50px; /* 48px 字号 + padding */
+  }
+}
+
+/* 滚动内容容器，渲染在选中框之上 */
+.scrollContent {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  transform-style: preserve-3d;
+}
+
+/* 单个项目 */
+.item {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 左侧 reel：数字容器固定宽度，定位到右边缘（黑线） */
+.left .item {
+  right: 0;
+  left: auto; /* 不占满宽度 */
+  width: 88px; /* 增加宽度，与 selectionWindow 同宽 */
+  justify-content: flex-end;
+  padding-right: 9px; /* 右侧留出空间，让数字在容器内居中 */
+}
+
+/* 右侧 reel：数字容器固定宽度，定位到左边缘（黑线） */
+.right .item {
+  left: 0;
+  right: auto; /* 不占满宽度 */
+  width: 88px; /* 增加宽度，与 selectionWindow 同宽 */
+  justify-content: flex-start;
+  padding-left: 9px; /* 左侧留出空间，让数字在容器内居中 */
+}
+
+/* 小屏幕适配 */
+@media (max-height: 700px) {
+  .left .item {
+    width: 78px;
+    padding-right: 9px;
+  }
+  .right .item {
+    width: 78px;
+    padding-left: 9px;
+  }
+}
+
+/* 标签 */
+.label {
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui,
+    sans-serif;
+  font-feature-settings: 'tnum' 1; /* 强制启用等宽数字 */
+  display: inline-block;
+  width: 100%; /* 占满父容器 */
+}
+
+/* 左侧数字：右对齐 */
+.left .label {
+  text-align: right;
+}
+
+/* 右侧数字：左对齐 */
+.right .label {
+  text-align: left;
+}

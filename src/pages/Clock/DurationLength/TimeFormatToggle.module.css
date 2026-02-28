@@ -1,0 +1,25 @@
+.toggle {
+  flex-shrink: 0;
+  display: flex;
+  background: var(--color-Gray3, #ebeff3);
+  border-radius: 99px;
+  padding: 3px;
+}
+
+.btn {
+  padding: 6px 22px;
+  border: none;
+  background: transparent;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-Gray6, #8e9aa9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.active {
+  background: #fff;
+  color: var(--color-text-main, #2d2d2d);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
