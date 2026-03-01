@@ -3,7 +3,7 @@
   flex-shrink: 0;
   width: 100%;
   height: 240px; /* 固定高度，防止因 notes 数量变化而跳跃 */
-  background: var(--color-bg);
+  background: white;
   border-radius: 28px 28px 0 0;
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.06);
   display: flex;
@@ -119,11 +119,11 @@
   letter-spacing: 0.02em;
 }
 
-@media (max-height: 700px) {
+/* @media (max-height: 700px) {
   .segKana {
-    font-size: 10px; /* 小屏幕减小字号 */
+    font-size: 10px;
   }
-}
+} */
 
 .segKanji {
   font-size: 36px;

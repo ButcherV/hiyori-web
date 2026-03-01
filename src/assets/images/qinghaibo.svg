@@ -1,0 +1,23 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="80"
+  height="48"
+  viewBox="0 0 80 48"
+>
+  <defs>
+    <path
+      id="wave"
+      d="M 0,12 C 20,-12 60,-12 80,12"
+      fill="none"
+      stroke="#D1E9F9"
+      stroke-width="2"
+    />
+  </defs>
+
+  <use href="#wave" x="0" y="0" />
+  <use href="#wave" x="80" y="0" />
+
+  <use href="#wave" x="-40" y="24" />
+  <use href="#wave" x="40" y="24" />
+  <use href="#wave" x="120" y="24" />
+</svg>

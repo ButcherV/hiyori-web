@@ -530,6 +530,7 @@
       "hour_7": "Note: <ja>7時</ja> is read as <ja>しちじ</ja>, not <ja>ななじ</ja>",
       "hour_9": "Note: <ja>9時</ja> is read as <ja>くじ</ja>, not <ja>きゅうじ</ja>",
       "hour_14": "Note: <ja>14時</ja> is read as <ja>じゅうよじ</ja>, not <ja>じゅうよんじ</ja>",
+      "hour_17": "Note: <ja>17時</ja> is read as <ja>じゅうしちじ</ja>, not <ja>じゅうななじ</ja>",
       "hour_19": "Note: <ja>19時</ja> is read as <ja>じゅうくじ</ja>, not <ja>じゅうきゅうじ</ja>",
       "sokuon": "Sokuon: <ja>{{minute}}分</ja> → <ja>っぷん</ja> (っ doubles the consonant)",
       "half": "Can also say <ja>{{h}}時半 (han)</ja> for \"half past\"",
@@ -547,7 +548,22 @@
       "hour_4": "Note: <ja>4時間</ja> is read as <ja>よじかん</ja>, not <ja>よんじかん</ja>",
       "hour_9": "Note: <ja>9時間</ja> is read as <ja>くじかん</ja>, not <ja>きゅうじかん</ja>",
       "hour_14": "Note: <ja>14時間</ja> is read as <ja>じゅうよじかん</ja>, not <ja>じゅうよんじかん</ja>",
+      "hour_17": "Note: <ja>17時間</ja> is read as <ja>じゅうしちじかん</ja>, not <ja>じゅうななじかん</ja>",
       "hour_19": "Note: <ja>19時間</ja> is read as <ja>じゅうくじかん</ja>, not <ja>じゅうきゅうじかん</ja>"
+    },
+    "period": {
+      "shinnya":  "Formal; common in weather forecasts and news",
+      "mimei":    "More formal than 深夜; the darkest period before dawn",
+      "yoake":    "Noun form of 夜が明ける; when night gives way to light",
+      "souchou":  "Earlier and more formal than 朝",
+      "asa":      "The most everyday word for morning",
+      "gozen":    "Spans midnight to noon, not just morning",
+      "hiru":     "Also means lunchtime",
+      "shougo":   "Exactly noon, not a general midday",
+      "gogo":     "",
+      "yuugata":  "Specifically dusk and evening, not afternoon",
+      "yoru":     "",
+      "mayonaka": "Colloquial midnight; more emotive than 深夜"
     }
   }
 }

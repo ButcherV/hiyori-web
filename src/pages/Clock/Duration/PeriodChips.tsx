@@ -15,7 +15,7 @@ export function PeriodChips({ periods, selectedPeriod, onSelectPeriod }: PeriodC
           key={period.name}
           className={`${styles.periodChip} ${selectedPeriod?.name === period.name ? styles.periodChipActive : ''}`}
           onClick={() => onSelectPeriod(period)}
-          title={period.description}
+
         >
           {period.name}
         </button>

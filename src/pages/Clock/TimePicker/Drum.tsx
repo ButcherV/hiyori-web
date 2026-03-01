@@ -38,6 +38,7 @@ export interface DrumProps {
   accentColor: string;
   accentBg?: string;           // 接受但不强制使用，保持与 Reel 接口一致
   physCount?: number;          // 圆等分物理槽数，默认 24
+  onDoubleTap?: () => void;    // 双击鼓面回调
 }
 
 export function Drum({
@@ -48,6 +49,7 @@ export function Drum({
   side,
   accentColor,
   physCount = 24,
+  onDoubleTap,
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,6 +66,9 @@ export function Drum({
     dragLastPointerAngle: 0,
     history: [],
   });
+
+  // 双击检测
+  const lastTapRef = useRef<{ time: number; x: number; y: number } | null>(null);
 
   // 区分内部 snap 还是外部跳转
   const isInternalRef = useRef(false);
@@ -198,15 +203,31 @@ export function Drum({
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault();
+      const now = performance.now();
+      const { clientX, clientY } = e;
+
+      // 双击检测：350ms 内、25px 范围内的第二次按下
+      if (lastTapRef.current) {
+        const dt = now - lastTapRef.current.time;
+        const dx = Math.abs(clientX - lastTapRef.current.x);
+        const dy = Math.abs(clientY - lastTapRef.current.y);
+        if (dt < 350 && dx < 25 && dy < 25) {
+          lastTapRef.current = null;
+          onDoubleTap?.();
+          return;
+        }
+      }
+      lastTapRef.current = { time: now, x: clientX, y: clientY };
+
       cancelAnim();
-      const pa = getPA(e.clientX, e.clientY);
+      const pa = getPA(clientX, clientY);
       const p = physRef.current;
       p.phase = 'drag';
       p.dragLastPointerAngle = pa;
-      p.history = [{ pa, t: performance.now() }];
+      p.history = [{ pa, t: now }];
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [cancelAnim, getPA]
+    [cancelAnim, getPA, onDoubleTap]
   );
 
   const onPointerMove = useCallback(

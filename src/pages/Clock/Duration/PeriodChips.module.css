@@ -37,3 +37,14 @@
   background: #1a1a1a;
   color: white;
 }
+
+@media (max-height: 700px) {
+  .timePeriods {
+    gap: 6px;
+  }
+  .periodChip {
+    height: 26px;
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+}

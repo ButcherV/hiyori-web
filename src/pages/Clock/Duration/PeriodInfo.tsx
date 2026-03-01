@@ -5,11 +5,10 @@ import styles from './PeriodInfo.module.css';
 
 interface PeriodInfoProps {
   selectedPeriod: TimePeriod | null;
-  durationText: string;
   onPlayPeriod: () => void;
 }
 
-export function PeriodInfo({ selectedPeriod, durationText, onPlayPeriod }: PeriodInfoProps) {
+export function PeriodInfo({ selectedPeriod, onPlayPeriod }: PeriodInfoProps) {
   const { t } = useTranslation();
 
   return (
@@ -18,8 +17,8 @@ export function PeriodInfo({ selectedPeriod, durationText, onPlayPeriod }: Perio
         {selectedPeriod ? (
           <>
             <div className={styles.segment}>
-              <span className={styles.segKana}>{selectedPeriod.kana}</span>
-              <span className={styles.segKanji}>{selectedPeriod.name}</span>
+              <span className={`${styles.segKana} jaFont`}>{selectedPeriod.kana}</span>
+              <span className={`${styles.segKanji} jaFont`}>{selectedPeriod.name}</span>
             </div>
             <button className={styles.speakerBtnSmall} onClick={onPlayPeriod}>
               <Volume2 size={14} />
@@ -27,8 +26,8 @@ export function PeriodInfo({ selectedPeriod, durationText, onPlayPeriod }: Perio
           </>
         ) : (
           <div className={styles.segment}>
-            <span className={styles.segKana}>じかんたい</span>
-            <span className={styles.segKanji}>{durationText}</span>
+            <span className={`${styles.segKana} jaFont`}>じかんたい</span>
+            <span className={styles.segKanji}>—</span>
           </div>
         )}
       </div>
@@ -36,7 +35,8 @@ export function PeriodInfo({ selectedPeriod, durationText, onPlayPeriod }: Perio
       <div className="notePill">
         <Lightbulb size={14} className="noteIcon" />
         <span className="noteText">
-          {selectedPeriod?.description || t('clock_study.duration_hint') || '拖动圆圈上的控制点来选择时间段'}
+          {(selectedPeriod && t(`clock_study.period.${selectedPeriod.i18nKey}`, '')) ||
+            t('clock_study.duration_hint')}
         </span>
       </div>
     </div>

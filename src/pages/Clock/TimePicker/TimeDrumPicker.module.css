@@ -38,7 +38,7 @@
 /* ── AM/PM Indicator ── */
 .ampmIndicator {
   position: absolute;
-  right: 48px;  /* 距离右边缘的距离 */
+  right: 48px; /* 距离右边缘的距离 */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -47,7 +47,8 @@
   font-size: 18px;
   font-weight: 600;
   color: #3d3d3d;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   letter-spacing: 0.5px;
   pointer-events: none;
   user-select: none;
@@ -75,5 +76,6 @@
   .pickerArea {
     -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
     mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
+    transform: translateY(-46px);
   }
 }
