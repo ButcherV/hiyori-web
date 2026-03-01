@@ -48,22 +48,30 @@ export function TimeDrumPicker() {
   const handleHourDoubleTap = useCallback(() => {
     setHour((h) => findNearestSpecial(h, SPECIAL_HOURS, 24));
     // 双击后也播放
-    setTimeout(() => displayRef.current?.play(), 300);
+    setTimeout(() => displayRef.current?.playSegment('hour'), 300);
   }, []);
   const handleMinuteDoubleTap = useCallback(() => {
     setMinute((m) => findNearestSpecial(m, SPECIAL_MINUTES, 60));
     // 双击后也播放
-    setTimeout(() => displayRef.current?.play(), 300);
+    setTimeout(() => displayRef.current?.playSegment('minute'), 300);
   }, []);
   const handleSecondDoubleTap = useCallback(() => {
     setSecond((s) => findNearestSpecial(s, SPECIAL_SECONDS, 60));
     // 双击后也播放
-    setTimeout(() => displayRef.current?.play(), 300);
+    setTimeout(() => displayRef.current?.playSegment('second'), 300);
   }, []);
   
-  // 滚动完成后播放
-  const handleScrollComplete = useCallback(() => {
-    displayRef.current?.play();
+  // 滚动完成后播放单个轴的读音（传入 value 避免读取到 React 尚未提交的旧 props）
+  const handleHourScrollComplete = useCallback((value: number) => {
+    displayRef.current?.playSegment('hour', value);
+  }, []);
+
+  const handleMinuteScrollComplete = useCallback((value: number) => {
+    displayRef.current?.playSegment('minute', value);
+  }, []);
+
+  const handleSecondScrollComplete = useCallback((value: number) => {
+    displayRef.current?.playSegment('second', value);
   }, []);
 
   return (
@@ -87,7 +95,7 @@ export function TimeDrumPicker() {
               accentColor="#C4553A"
               accentBg="rgba(255, 248, 245, 0.85)"
               onDoubleTap={handleHourDoubleTap}
-              onScrollComplete={handleScrollComplete}
+              onScrollComplete={handleHourScrollComplete}
             />
           </div>
 
@@ -103,7 +111,7 @@ export function TimeDrumPicker() {
               accentColor="#4A6FA5"
               accentBg="rgba(245, 248, 255, 0.85)"
               onDoubleTap={handleMinuteDoubleTap}
-              onScrollComplete={handleScrollComplete}
+              onScrollComplete={handleMinuteScrollComplete}
             />
           </div>
 
@@ -119,7 +127,7 @@ export function TimeDrumPicker() {
               accentColor="#3D9970"
               accentBg="rgba(240, 255, 248, 0.85)"
               onDoubleTap={handleSecondDoubleTap}
-              onScrollComplete={handleScrollComplete}
+              onScrollComplete={handleSecondScrollComplete}
             />
           </div>
         </div>

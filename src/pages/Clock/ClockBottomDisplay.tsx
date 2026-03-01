@@ -235,7 +235,7 @@ function buildPeriodData(period: TimePeriod | null): DisplayData {
   return {
     segments: [{ kanji: period.name, kana: period.kana }],
     notes: [{ key: `clock_study.period.${period.i18nKey}` }],
-    speakText: period.name,
+    speakText: period.kana, // 传递假名而非汉字
     timeRange,
   };
 }
@@ -248,6 +248,7 @@ type ClockBottomDisplayProps =
 
 export interface ClockBottomDisplayRef {
   play: () => void;
+  playSegment: (axis: 'hour' | 'minute' | 'second', value?: number) => void;
 }
 
 // ── Component ─────────────────────────────────────────────
@@ -282,7 +283,36 @@ export const ClockBottomDisplay = forwardRef<ClockBottomDisplayRef, ClockBottomD
           speak(data.speakText, { gender: 'female' });
         }
       },
-    }), [data.speakText, speak]);
+      playSegment: (axis: 'hour' | 'minute' | 'second', value?: number) => {
+        // value 优先：调用方可直接传入新值，避免 React 异步 setState 导致 props 还是旧值
+        if (props.mode === 'time') {
+          if (axis === 'hour') {
+            const h = value ?? props.hour;
+            const hourKey = props.is24h ? h : (h % 12 === 0 ? 12 : h % 12);
+            const hourKana = HOUR_KANA[hourKey] ?? `${hourKey}じ`;
+            speak(hourKana, { gender: 'female' });
+          } else if (axis === 'minute') {
+            const m = value ?? props.minute;
+            const minuteKana = MINUTE_KANA[m] ?? `${m}ふん`;
+            speak(minuteKana, { gender: 'female' });
+          }
+        } else if (props.mode === 'duration-length') {
+          if (axis === 'hour') {
+            const h = value ?? props.hour;
+            const hourKana = HOUR_DURATION_KANA[h] ?? `${numToKana(h)}じかん`;
+            speak(hourKana, { gender: 'female' });
+          } else if (axis === 'minute') {
+            const m = value ?? props.minute;
+            const minuteKana = MINUTE_KANA[m] ?? `${numToKana(m)}ふん`;
+            speak(minuteKana, { gender: 'female' });
+          } else if (axis === 'second') {
+            const s = value ?? props.second;
+            const secKana = secondKana(s);
+            speak(secKana, { gender: 'female' });
+          }
+        }
+      },
+    }), [props, speak]);
 
     // Handler for speaking individual segments
     const handleSpeakSegment = useCallback((segmentKana: string) => {

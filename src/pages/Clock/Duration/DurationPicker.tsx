@@ -100,8 +100,8 @@ export function DurationPicker() {
     const { startAngle: targetStart, endAngle: targetEnd } = periodToAngles(period);
     animateAngleTo(startAngleRef.current, targetStart, setStartAngle, startAnimRef);
     animateAngleTo(endAngleRef.current, targetEnd, setEndAngle, endAnimRef, 380, () => {
-      // 所有滚动完成后都自动播音
-      speak(period.name, { gender: 'female' });
+      // 所有滚动完成后都自动播音（传递假名而非汉字）
+      speak(period.kana, { gender: 'female' });
     });
   };
 
@@ -142,7 +142,7 @@ export function DurationPicker() {
       <ClockBottomDisplay
         mode="duration-period"
         period={activePeriod}
-        onPlayPeriod={() => { if (activePeriod) speak(activePeriod.name); }}
+        onPlayPeriod={() => { if (activePeriod) speak(activePeriod.kana, { gender: 'female' }); }}
       />
     </div>
   );

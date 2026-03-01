@@ -58,17 +58,21 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   const handleHourDoubleTap = useCallback(() => {
     setHour((h) => findNearestSpecial(h, SPECIAL_HOURS, 24));
     // 双击后也播放
-    setTimeout(() => displayRef.current?.play(), 300);
+    setTimeout(() => displayRef.current?.playSegment('hour'), 300);
   }, []);
   const handleMinuteDoubleTap = useCallback(() => {
     setMinute((m) => findNearestSpecial(m, SPECIAL_MINUTES, 60));
     // 双击后也播放
-    setTimeout(() => displayRef.current?.play(), 300);
+    setTimeout(() => displayRef.current?.playSegment('minute'), 300);
   }, []);
   
-  // 滚动完成后播放
-  const handleScrollComplete = useCallback(() => {
-    displayRef.current?.play();
+  // 滚动完成后播放单个轴的读音（传入 value 避免读取到 React 尚未提交的旧 props）
+  const handleHourScrollComplete = useCallback((value: number) => {
+    displayRef.current?.playSegment('hour', value);
+  }, []);
+
+  const handleMinuteScrollComplete = useCallback((value: number) => {
+    displayRef.current?.playSegment('minute', value);
   }, []);
 
   return (
@@ -91,7 +95,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             side="left"
             accentColor="#C4553A"
             onDoubleTap={handleHourDoubleTap}
-            onScrollComplete={handleScrollComplete}
+            onScrollComplete={handleHourScrollComplete}
           />
 
           <span className={styles.colon}></span>
@@ -104,7 +108,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             side="right"
             accentColor="#4A6FA5"
             onDoubleTap={handleMinuteDoubleTap}
-            onScrollComplete={handleScrollComplete}
+            onScrollComplete={handleMinuteScrollComplete}
           />
 
           {/* AM/PM 指示器 - 只在 12h 模式下显示，绝对定位 */}
