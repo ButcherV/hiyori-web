@@ -39,7 +39,8 @@ function animateAngleTo(
   to: number,
   setter: React.Dispatch<React.SetStateAction<number>>,
   animRef: React.MutableRefObject<number | null>,
-  duration = 380
+  duration = 380,
+  onComplete?: () => void
 ) {
   if (animRef.current !== null) {
     cancelAnimationFrame(animRef.current);
@@ -48,7 +49,11 @@ function animateAngleTo(
   let delta = to - from;
   if (delta > 180) delta -= 360;
   if (delta < -180) delta += 360;
-  if (Math.abs(delta) < 0.5) { setter(((to % 360) + 360) % 360); return; }
+  if (Math.abs(delta) < 0.5) { 
+    setter(((to % 360) + 360) % 360); 
+    onComplete?.();
+    return; 
+  }
   const startTime = performance.now();
   const tick = (now: number) => {
     const t = Math.min(1, (now - startTime) / duration);
@@ -59,6 +64,7 @@ function animateAngleTo(
     } else {
       animRef.current = null;
       setter(((to % 360) + 360) % 360);
+      onComplete?.();
     }
   };
   animRef.current = requestAnimationFrame(tick);
@@ -93,7 +99,10 @@ export function DurationPicker() {
     setActivePeriod(period);
     const { startAngle: targetStart, endAngle: targetEnd } = periodToAngles(period);
     animateAngleTo(startAngleRef.current, targetStart, setStartAngle, startAnimRef);
-    animateAngleTo(endAngleRef.current, targetEnd, setEndAngle, endAnimRef);
+    animateAngleTo(endAngleRef.current, targetEnd, setEndAngle, endAnimRef, 380, () => {
+      // 所有滚动完成后都自动播音
+      speak(period.name, { gender: 'female' });
+    });
   };
 
   const goToCurrent = () => {

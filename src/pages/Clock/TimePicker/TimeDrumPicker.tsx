@@ -1,6 +1,6 @@
-import { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
+import { useState, useCallback, useImperativeHandle, forwardRef, useRef } from 'react';
 import { Drum } from './Drum';
-import { ClockBottomDisplay } from '../ClockBottomDisplay';
+import { ClockBottomDisplay, type ClockBottomDisplayRef } from '../ClockBottomDisplay';
 import { QuickActions } from './QuickActions';
 import styles from './TimeDrumPicker.module.css';
 
@@ -29,6 +29,8 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   const [hour, setHour] = useState(now.getHours());
   const [minute, setMinute] = useState(now.getMinutes());
   const [is24h, setIs24h] = useState(true);
+  
+  const displayRef = useRef<ClockBottomDisplayRef>(null);
 
   const handleResetToNow = useCallback(() => {
     const n = new Date();
@@ -55,9 +57,18 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
   // 双击：跳到最近的特殊发音值
   const handleHourDoubleTap = useCallback(() => {
     setHour((h) => findNearestSpecial(h, SPECIAL_HOURS, 24));
+    // 双击后也播放
+    setTimeout(() => displayRef.current?.play(), 300);
   }, []);
   const handleMinuteDoubleTap = useCallback(() => {
     setMinute((m) => findNearestSpecial(m, SPECIAL_MINUTES, 60));
+    // 双击后也播放
+    setTimeout(() => displayRef.current?.play(), 300);
+  }, []);
+  
+  // 滚动完成后播放
+  const handleScrollComplete = useCallback(() => {
+    displayRef.current?.play();
   }, []);
 
   return (
@@ -80,6 +91,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             side="left"
             accentColor="#C4553A"
             onDoubleTap={handleHourDoubleTap}
+            onScrollComplete={handleScrollComplete}
           />
 
           <span className={styles.colon}></span>
@@ -92,6 +104,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             side="right"
             accentColor="#4A6FA5"
             onDoubleTap={handleMinuteDoubleTap}
+            onScrollComplete={handleScrollComplete}
           />
 
           {/* AM/PM 指示器 - 只在 12h 模式下显示，绝对定位 */}
@@ -103,7 +116,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
         </div>
       </div>
 
-      <ClockBottomDisplay mode="time" hour={hour} minute={minute} is24h={is24h} />
+      <ClockBottomDisplay ref={displayRef} mode="time" hour={hour} minute={minute} is24h={is24h} />
     </>
   );
 });

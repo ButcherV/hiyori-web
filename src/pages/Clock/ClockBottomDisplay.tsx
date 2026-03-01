@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, forwardRef, useImperativeHandle } from 'react';
 import { Volume2, Lightbulb } from 'lucide-react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTTS } from '../../hooks/useTTS';
 import type { TimePeriod } from './Duration/types';
@@ -219,7 +219,7 @@ function buildDurationLengthData(
 }
 
 // ── 時段モード (duration-period) ──────────────────────────
-function buildPeriodData(period: TimePeriod | null, t: (key: string) => string): DisplayData {
+function buildPeriodData(period: TimePeriod | null): DisplayData {
   if (!period) {
     return {
       segments: [{ kanji: '—', kana: 'じかんたい' }],
@@ -246,35 +246,48 @@ type ClockBottomDisplayProps =
   | { mode: 'duration-length'; hour: number; minute: number; second: number; activeAxes: Set<Axis> }
   | { mode: 'duration-period'; period: TimePeriod | null; onPlayPeriod: () => void };
 
+export interface ClockBottomDisplayRef {
+  play: () => void;
+}
+
 // ── Component ─────────────────────────────────────────────
 const jaSpan = <span className="jaFont" />;
 
-export function ClockBottomDisplay(props: ClockBottomDisplayProps) {
-  const { t } = useTranslation();
-  const { speak } = useTTS();
+export const ClockBottomDisplay = forwardRef<ClockBottomDisplayRef, ClockBottomDisplayProps>(
+  function ClockBottomDisplay(props, ref) {
+    const { speak } = useTTS();
 
-  // Build display data based on mode
-  let data: DisplayData;
-  let contentKey: string;
+    // Build display data based on mode
+    let data: DisplayData;
+    let contentKey: string;
 
-  if (props.mode === 'time') {
-    data = buildTimeData(props.hour, props.minute, props.is24h);
-    contentKey = `time-${props.hour}-${props.minute}-${props.is24h}`;
-  } else if (props.mode === 'duration-length') {
-    data = buildDurationLengthData(props.hour, props.minute, props.second, props.activeAxes);
-    const activeAxesKey = (['hour', 'minute', 'second'] as Axis[])
-      .filter((a) => props.activeAxes.has(a))
-      .join('');
-    contentKey = `duration-length-${props.hour}-${props.minute}-${props.second}-${activeAxesKey}`;
-  } else {
-    data = buildPeriodData(props.period, t);
-    contentKey = `duration-period-${props.period?.i18nKey || 'empty'}`;
-  }
+    if (props.mode === 'time') {
+      data = buildTimeData(props.hour, props.minute, props.is24h);
+      contentKey = `time-${props.hour}-${props.minute}-${props.is24h}`;
+    } else if (props.mode === 'duration-length') {
+      data = buildDurationLengthData(props.hour, props.minute, props.second, props.activeAxes);
+      const activeAxesKey = (['hour', 'minute', 'second'] as Axis[])
+        .filter((a) => props.activeAxes.has(a))
+        .join('');
+      contentKey = `duration-length-${props.hour}-${props.minute}-${props.second}-${activeAxesKey}`;
+    } else {
+      data = buildPeriodData(props.period);
+      contentKey = `duration-period-${props.period?.i18nKey || 'empty'}`;
+    }
 
-  // Handler for speaking individual segments
-  const handleSpeakSegment = useCallback((segmentKana: string) => {
-    speak(segmentKana, { gender: 'female' });
-  }, [speak]);
+    // 暴露播放方法给父组件
+    useImperativeHandle(ref, () => ({
+      play: () => {
+        if (data.speakText) {
+          speak(data.speakText, { gender: 'female' });
+        }
+      },
+    }), [data.speakText, speak]);
+
+    // Handler for speaking individual segments
+    const handleSpeakSegment = useCallback((segmentKana: string) => {
+      speak(segmentKana, { gender: 'female' });
+    }, [speak]);
 
   // Calculate font sizes for duration-length mode
   const totalKanjiLen = data.segments.reduce((sum, s) => sum + s.kanji.length, 0);
@@ -353,4 +366,4 @@ export function ClockBottomDisplay(props: ClockBottomDisplayProps) {
       </AnimatePresence>
     </div>
   );
-}
+});

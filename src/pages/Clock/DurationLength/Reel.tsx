@@ -49,7 +49,8 @@ export interface ReelProps {
   side: 'left' | 'right' | 'center';
   accentColor: string;
   accentBg: string;
-  onDoubleTap?: () => void;    // 双击回调
+  onDoubleTap?: () => void;
+  onScrollComplete?: (value: number) => void;
 }
 
 export function Reel({
@@ -59,8 +60,8 @@ export function Reel({
   onSelect,
   side,
   accentColor,
-  accentBg,
   onDoubleTap,
+  onScrollComplete,
 }: ReelProps) {
   // 获取屏幕配置
   const config = getReelConfig();
@@ -140,7 +141,10 @@ export function Reel({
           setOffset(0);
           // mark as internal BEFORE calling onSelect so the effect knows
           isInternalRef.current = true;
-          onSelect(wrap(selected + targetIndex));
+          const newValue = wrap(selected + targetIndex);
+          onSelect(newValue);
+          // 滚动完成后触发回调
+          onScrollComplete?.(newValue);
         }
       };
       animRef.current = requestAnimationFrame(tick);

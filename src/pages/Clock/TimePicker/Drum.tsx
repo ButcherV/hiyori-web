@@ -37,6 +37,7 @@ export interface DrumProps {
   accentBg?: string;
   physCount?: number;
   onDoubleTap?: () => void;
+  onScrollComplete?: (value: number) => void;
 }
 
 export function Drum({
@@ -48,6 +49,7 @@ export function Drum({
   accentColor,
   physCount = 24,
   onDoubleTap,
+  onScrollComplete,
 }: DrumProps) {
   const step = TWO_PI / physCount;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -160,6 +162,8 @@ export function Drum({
               (((selectedRef.current + rawSteps) % vr) + vr) % vr;
             isInternalRef.current = true;
             onSelect(newValue);
+            // 滚动完成后触发回调
+            onScrollComplete?.(newValue);
           }
           return;
         }
