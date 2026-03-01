@@ -19,18 +19,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 20px;
-  border-radius: 20px;
+  padding: 8px 12px;
+  border-radius: 16px;
   font-size: 14px;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  white-space: nowrap;
   flex-shrink: 0;
   transition: background 0.2s, color 0.2s, opacity 0.15s;
-  height: 32px;
+  min-height: 44px;
   box-sizing: border-box;
   user-select: none;
+  flex: 1;
+  max-width: 100px;
 }
 
 .chip:active {
@@ -45,5 +46,36 @@
 .chipInactive {
   background: #ebebeb;
   color: #a0a0a8;
+}
+
+.chipContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.kana {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 1;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.kanji {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.translation {
+  font-size: 9px;
+  font-weight: 500;
+  opacity: 0.65;
+  line-height: 1;
+  white-space: nowrap;
 }
 

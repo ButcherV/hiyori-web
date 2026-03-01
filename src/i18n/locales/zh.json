@@ -520,6 +520,11 @@
     "time": "时刻",
     "duration_length": "时长",
     "duration_period": "时段",
+    "duration_axis": {
+      "hour": "小时",
+      "minute": "分钟",
+      "second": "秒"
+    },
     "duration_hint": "拖动圆圈上的控制点来选择时间段",
     "toast": {
       "hour_4_title": "以 4 结尾的小时，数字 4 读作「<ja>よ</ja>」",
