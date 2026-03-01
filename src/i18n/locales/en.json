@@ -501,9 +501,33 @@
     "title": "Time Reading",
     "now": "Now",
     "duration": "Duration",
-    "time": "Time",
-    "duration_length": "Duration",
-    "duration_period": "Time Period",
+    "time_label": "Time",
+    "time_title": "Time Study",
+    "duration_length_label": "Duration",
+    "duration_length_title": "Duration Study",
+    "duration_period_label": "Time Period",
+    "duration_period_title": "Time Period Study",
+    "common": {
+      "goal": "Learning Goal",
+      "special_pronunciation": "Special Pronunciation",
+      "vocabulary": "Vocabulary Notes",
+      "interaction": "Interaction Guide"
+    },
+    "time_course": {
+      "goal_desc": "<highlight>Master the complete expression of time in Japanese,</highlight> including 12/24-hour formats, AM/PM (午前/午後), and special times (noon, midnight).",
+      "special_pronunciation_desc": "<strong>Special Hour Readings:</strong><br><highlight>4時 (よじ), 7時 (しちじ), 9時 (くじ)</highlight><br><br><strong>Minute Gemination Rule:</strong><br><highlight>Minutes ending in <span>1, 3, 6, 8, 0</span> use geminate forms</highlight> (e.g., 1分 いっぷん, 10分 じゅっぷん)",
+      "interaction_desc": "<strong>Scroll Drums:</strong><br>Scroll to find the number you want to learn.<br><br><strong>Double-Tap Jump:</strong><br>Double-tap to quickly jump to special pronunciation times."
+    },
+    "duration_length_course": {
+      "goal_desc": "<highlight>Learn to express duration in Japanese,</highlight> including hours (時間), minutes (分), seconds (秒), and their combinations.",
+      "special_pronunciation_desc": "<strong>Special Hour Readings:</strong><br><highlight>4時間 (よじかん), 9時間 (くじかん)</highlight><br><br><strong>Minute Gemination Rule:</strong><br><highlight>Minutes ending in <span>1, 3, 6, 8, 0</span> use geminate forms</highlight> (same as time)",
+      "interaction_desc": "<strong>Scroll Reels:</strong><br>Scroll to find the number you want to learn.<br><br><strong>Double-Tap Jump:</strong><br>Double-tap to quickly jump to special pronunciation numbers."
+    },
+    "duration_period_course": {
+      "goal_desc": "<highlight>Learn Japanese vocabulary for different periods of the day,</highlight> such as 朝, 昼, 夕方, 夜, and understand their time ranges.",
+      "vocabulary_desc": "<strong>Main Time Periods:</strong><br><highlight>朝 (あさ), 昼 (ひる), 夕方 (ゆうがた), 夜 (よる), 深夜 (しんや)</highlight><br><br><strong>Special Times:</strong><br>正午 (しょうご), 真夜中 (まよなか)",
+      "interaction_desc": "<strong>Double-Tap Clock:</strong><br>Double-tap the circular clock to cycle to the next period."
+    },
     "duration_axis": {
       "hour": "Hours",
       "minute": "Minutes",

@@ -24,6 +24,12 @@ interface AppSettings {
   lastNumberLevel: string;
   // 2. 记录哪些关卡的说明书已经看过了 (存 ['lvl1', 'lvl2'])
   viewedNumberIntros: string[];
+
+  // 时钟模块专用字段
+  // 1. 记录上次学习的课程 (如 'time', 'duration-length', 'duration-period')
+  lastClockLesson: string;
+  // 2. 记录哪些课程的说明书已经看过了
+  viewedClockIntros: string[];
 }
 
 interface SettingsContextType extends AppSettings {
@@ -32,6 +38,8 @@ interface SettingsContextType extends AppSettings {
   setTheme: (mode: 'light' | 'dark') => void;
   setLastNumberLevel: (levelId: string) => void;
   markNumberIntroAsViewed: (levelId: string) => void;
+  setLastClockLesson: (lessonId: string) => void;
+  markClockIntroAsViewed: (lessonId: string) => void;
 }
 
 // 默认设置
@@ -50,6 +58,8 @@ const defaultSettings: AppSettings = {
   lastKatakanaTab: 'seion',
   lastNumberLevel: 'lvl1',
   viewedNumberIntros: [],
+  lastClockLesson: 'time',
+  viewedClockIntros: [],
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
@@ -116,6 +126,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
+  const setLastClockLesson = (lessonId: string) => {
+    setSettings((prev) => ({ ...prev, lastClockLesson: lessonId }));
+  };
+
+  const markClockIntroAsViewed = (lessonId: string) => {
+    setSettings((prev) => {
+      // 如果已经包含，直接返回，避免不必要的重渲染
+      if (prev.viewedClockIntros.includes(lessonId)) return prev;
+      return {
+        ...prev,
+        viewedClockIntros: [...prev.viewedClockIntros, lessonId],
+      };
+    });
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -125,6 +150,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
         setTheme,
         setLastNumberLevel,
         markNumberIntroAsViewed,
+        setLastClockLesson,
+        markClockIntroAsViewed,
       }}
     >
       {children}

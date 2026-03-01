@@ -66,9 +66,33 @@
     "title": "時刻讀法",
     "now": "現在",
     "duration": "時間段",
-    "time": "時刻",
-    "duration_length": "時長",
-    "duration_period": "時段",
+    "time_label": "時刻",
+    "time_title": "時刻學習",
+    "duration_length_label": "時長",
+    "duration_length_title": "時長學習",
+    "duration_period_label": "時段",
+    "duration_period_title": "時段學習",
+    "common": {
+      "goal": "學習目標",
+      "special_pronunciation": "特殊讀音",
+      "vocabulary": "詞彙說明",
+      "interaction": "交互說明"
+    },
+    "time_course": {
+      "goal_desc": "<highlight>掌握日語時刻的完整表達方式，</highlight>包括 12/24 小時制、午前午後、以及特殊時刻（正午、真夜中）的讀法。",
+      "special_pronunciation_desc": "<strong>特殊小時讀音：</strong><br><highlight>4時 (よじ)、7時 (しちじ)、9時 (くじ)</highlight><br><br><strong>分鐘促音規則：</strong><br><highlight>尾數為 <span>1, 3, 6, 8, 0</span> 的分鐘讀音帶促音</highlight>（如 1分 いっぷん、10分 じゅっぷん）",
+      "interaction_desc": "<strong>滾動鼓盤：</strong><br>滾動找到想學習的數字。<br><br><strong>雙擊跳轉：</strong><br>雙擊可快速跳轉到特殊發音時刻。"
+    },
+    "duration_length_course": {
+      "goal_desc": "<highlight>學習表達時間長度的方式，</highlight>包括小時（時間）、分鐘（分）、秒（秒）的讀法及其組合。",
+      "special_pronunciation_desc": "<strong>特殊小時讀音：</strong><br><highlight>4時間 (よじかん)、9時間 (くじかん)</highlight><br><br><strong>分鐘促音規則：</strong><br><highlight>尾數為 <span>1, 3, 6, 8, 0</span> 的分鐘讀音帶促音</highlight>（與時刻相同）",
+      "interaction_desc": "<strong>滾動滾輪：</strong><br>滾動找到想學習的數字。<br><br><strong>雙擊跳轉：</strong><br>雙擊可快速跳轉到特殊發音數字。"
+    },
+    "duration_period_course": {
+      "goal_desc": "<highlight>學習日語中表示一天不同時段的詞彙，</highlight>如朝、晝、夕方、夜等，理解它們對應的時間範圍。",
+      "vocabulary_desc": "<strong>主要時段：</strong><br><highlight>朝 (あさ)、昼 (ひる)、夕方 (ゆうがた)、夜 (よる)、深夜 (しんや)</highlight><br><br><strong>特殊時刻：</strong><br>正午 (しょうご)、真夜中 (まよなか)",
+      "interaction_desc": "<strong>雙擊時鐘：</strong><br>雙擊圓盤切換到下一個時段。"
+    },
     "duration_axis": {
       "hour": "小時",
       "minute": "分鐘",

@@ -27,6 +27,14 @@
   overflow: hidden;
 }
 
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  overflow: hidden;
+}
+
 .headerTitle {
   font-size: 18px;
   font-weight: 700;
@@ -55,6 +63,11 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.iconBtn:active {
+  opacity: 0.7;
 }
 
 /* === Layer 2: 关卡导航 === */
@@ -75,4 +88,9 @@
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   box-shadow: var(--shadow-header);
+}
+
+/* === BottomSheet 内容样式 === */
+.infoSheetContent {
+  padding: 0 8px 32px 8px;
 }

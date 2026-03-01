@@ -94,6 +94,7 @@
   --color-perfect-shadow: rgba(250, 173, 20, 0.3);
 
   --color-study-number: #ff9500;
+  --color-study-clock: #5856d6; /* 时钟学习主题色 - 紫色 */
 
   --gradient-header-2: linear-gradient(
     to bottom,
