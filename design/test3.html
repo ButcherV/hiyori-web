@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Time Picker</title>
+    <style>
+      :root {
+        --item-height: 60px;
+        --visible-items: 5;
+        --picker-height: calc(var(--item-height) * var(--visible-items));
+      }
+
+      body {
+        background-color: #f2f3f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+
+      .picker-container {
+        position: relative;
+        display: flex;
+        width: 320px;
+        height: var(--picker-height);
+        background-color: #f4f5f9;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      /* 中间的选中高亮区域 */
+      .highlight-band {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: var(--item-height);
+        transform: translateY(-50%);
+        pointer-events: none; /* 让事件穿透到下方的滚动轮 */
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(205, 215, 230, 0.5) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        border-top: 1px solid rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+      }
+
+      .wheel {
+        flex: 1;
+        height: 100%;
+        overflow-y: auto;
+        /* 核心：CSS Scroll Snap 提供原生阻尼与惯性 */
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch; /* iOS 弹性滚动 */
+        scrollbar-width: none; /* Firefox 隐藏滚动条 */
+        -ms-overflow-style: none; /* IE 隐藏滚动条 */
+        cursor: grab;
+      }
+
+      .wheel:active {
+        cursor: grabbing;
+      }
+
+      .wheel::-webkit-scrollbar {
+        display: none; /* Chrome/Safari 隐藏滚动条 */
+      }
+
+      .wheel-inner {
+        /* 上下 padding 确保首尾项能滚动到正中间 */
+        padding: calc(var(--item-height) * 2) 0;
+      }
+
+      .item {
+        height: var(--item-height);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        scroll-snap-align: center; /* 每次滚动都吸附到中心 */
+        font-size: 44px;
+        font-weight: 600;
+        color: #9095a0;
+        position: relative;
+        user-select: none;
+        /* 避免开启 transform 动画导致文字模糊，全部由 JS 实时控制 */
+      }
+
+      .item-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .dot {
+        position: absolute;
+        bottom: -8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        opacity: 0; /* 默认隐藏，JS 实时控制 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="picker-container">
+      <div class="highlight-band"></div>
+      <div class="wheel" id="hours" data-color="#CA4714"></div>
+      <div class="wheel" id="minutes" data-color="#1B4EA1"></div>
+      <div class="wheel" id="seconds" data-color="#0E8243"></div>
+    </div>
+
+    <script>
+      const ITEM_HEIGHT = 60;
+
+      function initWheel(id, max) {
+        const wheel = document.getElementById(id);
+        const color = wheel.getAttribute('data-color');
+
+        const inner = document.createElement('div');
+        inner.className = 'wheel-inner';
+
+        // 生成数字列表
+        for (let i = 0; i <= max; i++) {
+          const item = document.createElement('div');
+          item.className = 'item';
+
+          const content = document.createElement('div');
+          content.className = 'item-content';
+
+          const num = document.createElement('span');
+          num.innerText = i.toString().padStart(2, '0'); // 补零
+
+          const dot = document.createElement('div');
+          dot.className = 'dot';
+          dot.style.backgroundColor = color;
+
+          content.appendChild(num);
+          content.appendChild(dot);
+          item.appendChild(content);
+          inner.appendChild(item);
+        }
+        wheel.appendChild(inner);
+
+        const items = inner.querySelectorAll('.item');
+
+        // 更新项的缩放、透明度和颜色
+        function updateItems() {
+          const scrollTop = wheel.scrollTop;
+
+          items.forEach((item, index) => {
+            const itemCenter = index * ITEM_HEIGHT;
+            const distance = Math.abs(scrollTop - itemCenter);
+
+            // 计算距离中心的比例
+            const ratio = Math.max(0, 1 - distance / (ITEM_HEIGHT * 2.5));
+
+            // 根据距离计算缩放和透明度
+            const scale = 0.5 + 0.5 * ratio;
+            const opacity = 0.2 + 0.8 * Math.pow(ratio, 2);
+
+            item.style.transform = `scale(${scale})`;
+            item.style.opacity = opacity;
+
+            // 判断是否在中心高亮区
+            if (distance < ITEM_HEIGHT / 2) {
+              item.style.color = color;
+              item.querySelector('.dot').style.opacity = 1;
+            } else {
+              item.style.color = '#9095A0';
+              item.querySelector('.dot').style.opacity = 0;
+            }
+          });
+        }
+
+        // 监听滚动事件（触发 UI 刷新）
+        wheel.addEventListener('scroll', () => {
+          window.requestAnimationFrame(updateItems);
+        });
+
+        // 初始化视觉状态
+        updateItems();
+
+        // ----------------------------------------------------
+        // 为了在 PC 端也能用鼠标拖拽体验惯性（触屏端原生已支持）
+        // ----------------------------------------------------
+        let isDown = false;
+        let startY;
+        let scrollTopBase;
+
+        wheel.addEventListener('mousedown', (e) => {
+          isDown = true;
+          startY = e.pageY - wheel.offsetTop;
+          scrollTopBase = wheel.scrollTop;
+          wheel.style.scrollSnapType = 'none'; // 拖拽时取消吸附
+          wheel.style.scrollBehavior = 'auto';
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (!isDown) return;
+          isDown = false;
+          wheel.style.scrollSnapType = 'y mandatory'; // 松开时恢复吸附，产生自动归位动画
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const y = e.pageY - wheel.offsetTop;
+          const walk = (y - startY) * 1.2; // 拖拽阻尼系数
+          wheel.scrollTop = scrollTopBase - walk;
+        });
+      }
+
+      // 初始化时分秒 (0-23, 0-59, 0-59)
+      initWheel('hours', 23);
+      initWheel('minutes', 59);
+      initWheel('seconds', 59);
+    </script>
+  </body>
+</html>

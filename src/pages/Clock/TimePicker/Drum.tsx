@@ -13,7 +13,6 @@ const DAMP_HALF_LIFE = 220;
 const MIN_VEL = 0.00006;
 const SNAP_EASE = 0.25;
 const SNAP_THRESH = 0.0008;
-// 外部跳转动画最大偏移槽数
 const MAX_JUMP_STEPS = 5;
 
 // ── 物理状态 ──────────────────────────────────────────────
@@ -28,7 +27,6 @@ interface Phys {
   history: Array<{ pa: number; t: number }>;
 }
 
-// ── Drum 组件 ─────────────────────────────────────────────
 export interface DrumProps {
   valueRange: number;
   selected: number;
@@ -36,9 +34,9 @@ export interface DrumProps {
   onSelect: (v: number) => void;
   side: 'left' | 'right';
   accentColor: string;
-  accentBg?: string;           // 接受但不强制使用，保持与 Reel 接口一致
-  physCount?: number;          // 圆等分物理槽数，默认 24
-  onDoubleTap?: () => void;    // 双击鼓面回调
+  accentBg?: string;
+  physCount?: number;
+  onDoubleTap?: () => void;
 }
 
 export function Drum({
@@ -67,20 +65,24 @@ export function Drum({
     history: [],
   });
 
-  // 双击检测
-  const lastTapRef = useRef<{ time: number; x: number; y: number } | null>(null);
-
-  // 区分内部 snap 还是外部跳转
+  const lastTapRef = useRef<{ time: number; x: number; y: number } | null>(
+    null
+  );
   const isInternalRef = useRef(false);
   const prevSelectedRef = useRef(selected);
 
-  // 用 ref 持有最新值，避免 tick 闭包过时
   const selectedRef = useRef(selected);
   const stepRef = useRef(step);
   const valueRangeRef = useRef(valueRange);
-  useLayoutEffect(() => { selectedRef.current = selected; }, [selected]);
-  useLayoutEffect(() => { stepRef.current = step; }, [step]);
-  useLayoutEffect(() => { valueRangeRef.current = valueRange; }, [valueRange]);
+  useLayoutEffect(() => {
+    selectedRef.current = selected;
+  }, [selected]);
+  useLayoutEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+  useLayoutEffect(() => {
+    valueRangeRef.current = valueRange;
+  }, [valueRange]);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
@@ -136,7 +138,8 @@ export function Drum({
         p.velocity *= Math.pow(0.5, dt / DAMP_HALF_LIFE);
         if (Math.abs(p.velocity) < MIN_VEL) {
           p.phase = 'snap';
-          p.snapTarget = -Math.round(-p.angle / stepRef.current) * stepRef.current;
+          p.snapTarget =
+            -Math.round(-p.angle / stepRef.current) * stepRef.current;
         }
       } else if (p.phase === 'snap') {
         const diff = p.snapTarget - p.angle;
@@ -151,10 +154,10 @@ export function Drum({
           p.snapTarget = 0;
           setRenderAngle(0);
 
-          // rawSteps === 0：外部跳转动画完成，不需要回调
           if (rawSteps !== 0) {
             const vr = valueRangeRef.current;
-            const newValue = (((selectedRef.current + rawSteps) % vr) + vr) % vr;
+            const newValue =
+              (((selectedRef.current + rawSteps) % vr) + vr) % vr;
             isInternalRef.current = true;
             onSelect(newValue);
           }
@@ -169,7 +172,6 @@ export function Drum({
     p.animId = requestAnimationFrame(tick);
   }, [onSelect]);
 
-  // ── 外部跳转动画（chip / Now 按钮触发）────────────────
   useEffect(() => {
     const prev = prevSelectedRef.current;
     prevSelectedRef.current = selected;
@@ -180,14 +182,13 @@ export function Drum({
     }
     if (prev === selected) return;
 
-    // 最短圆形路径 delta
     let delta = selected - prev;
     const vr = valueRangeRef.current;
     if (delta > vr / 2) delta -= vr;
     if (delta < -vr / 2) delta += vr;
 
-    // 限制动画幅度，避免大跳
-    const animSteps = Math.sign(delta) * Math.min(Math.abs(delta), MAX_JUMP_STEPS);
+    const animSteps =
+      Math.sign(delta) * Math.min(Math.abs(delta), MAX_JUMP_STEPS);
 
     const p = physRef.current;
     cancelAnim();
@@ -196,17 +197,15 @@ export function Drum({
     p.snapTarget = 0;
     setRenderAngle(p.angle);
     startAnim();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  // ── Pointer handlers ─────────────────────────────────────
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault();
       const now = performance.now();
       const { clientX, clientY } = e;
 
-      // 双击检测：350ms 内、25px 范围内的第二次按下
       if (lastTapRef.current) {
         const dt = now - lastTapRef.current.time;
         const dx = Math.abs(clientX - lastTapRef.current.x);
@@ -276,103 +275,105 @@ export function Drum({
 
   // ── 渲染 ─────────────────────────────────────────────────
   const { R, H, W } = dims;
-  const MARGIN = 8;
-  const innerR = R - MARGIN;
-  const cosThresh = (R - W) / innerR;
+  // 建立两级轨道半径：文字偏外缘（数字轨道），刻度偏内侧（刻度轨道）
+  const numR = R - 20;
+  const tickR = R - 45;
+
+  const safeR = R - 10;
+  const cosThresh = safeR <= 0 ? 0 : (R - W) / safeR;
   const halfAngle = Math.acos(Math.max(-1, Math.min(1, cosThresh)));
 
   const intSteps = Math.round(-renderAngle / step);
   const centerPhysIdx = ((intSteps % physCount) + physCount) % physCount;
 
-  // ── 刻度（游标卡尺风格）──────────────────────────────────
-  // 主刻度在数字内侧 36px 处（与 test1.html 25px 间距对应），每格之间插入 4 根次刻度
-  const tickR = innerR - 36;
-  const SUB_TICKS = 4;
-  const ticks: React.ReactNode[] = [];
+  const items: React.ReactNode[] = [];
+  const SUB_TICKS = 5; // 两大刻度之间的分片数
 
   for (let phys = 0; phys < physCount; phys++) {
-    for (let sub = 0; sub <= SUB_TICKS; sub++) {
-      let theta = (phys + sub / (SUB_TICKS + 1)) * step + renderAngle;
-      theta = theta - TWO_PI * Math.floor((theta + Math.PI) / TWO_PI);
-      if (Math.abs(theta) > halfAngle) continue;
+    // 1. 绘制刻度
+    for (let j = 0; j < SUB_TICKS; j++) {
+      let tickTheta = (phys + j / SUB_TICKS) * step + renderAngle;
+      tickTheta =
+        tickTheta - TWO_PI * Math.floor((tickTheta + Math.PI) / TWO_PI);
+      if (Math.abs(tickTheta) > halfAngle) continue;
 
-      const cosT = Math.cos(theta);
-      const sinT = Math.sin(theta);
-      // 刻度 opacity：只做 3D 深度感，顶/底渐隐交给 CSS mask
-      const opacity = Math.max(0, cosT);
+      const isLarge = j === 0;
+      const cosT = Math.cos(tickTheta);
+      const sinT = Math.sin(tickTheta);
+
+      // 左表盘圆心在靠右 W-R 处，右表盘圆心在靠左 R 处
       const tx = side === 'left' ? W - R + tickR * cosT : R - tickR * cosT;
       const ty = H / 2 + tickR * sinT;
-      const isMajor = sub === 0;
-      // 径向旋转：让刻度线沿半径方向排列（游标卡尺效果）
-      const rotDeg =
-        side === 'left'
-          ? theta * (180 / Math.PI)
-          : 180 - theta * (180 / Math.PI);
 
-      ticks.push(
-        <span
-          key={`t${phys}-${sub}`}
+      const tickWidth = isLarge ? 14 : 8;
+      const tickHeight = isLarge ? 2 : 1;
+      const bgColor = isLarge ? '#a4a9af' : '#c9ccd0';
+      // 刻度指向圆心
+      const rotRad = side === 'left' ? tickTheta : Math.PI - tickTheta;
+
+      items.push(
+        <div
+          key={`tick-${phys}-${j}`}
           style={{
             position: 'absolute',
             left: `${tx}px`,
             top: `${ty}px`,
-            width: `${isMajor ? 14 : 8}px`,
-            height: `${isMajor ? 2 : 1}px`,
-            background: isMajor ? '#a4a9af' : '#c9ccd0',
+            width: `${tickWidth}px`,
+            height: `${tickHeight}px`,
+            backgroundColor: bgColor,
             borderRadius: '1px',
-            transform: `translate(-50%, -50%) rotate(${rotDeg}deg)`,
-            opacity,
+            transform: `translate(-50%, -50%) rotate(${rotRad}rad)`,
             pointerEvents: 'none',
           }}
         />
       );
     }
-  }
 
-  // ── 数字 ─────────────────────────────────────────────────
-  const items: React.ReactNode[] = [];
-
-  for (let phys = 0; phys < physCount; phys++) {
+    // 2. 绘制数字
     let theta = phys * step + renderAngle;
     theta = theta - TWO_PI * Math.floor((theta + Math.PI) / TWO_PI);
     if (Math.abs(theta) > halfAngle) continue;
 
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
-    // 数字 opacity：只用于 3D 深度感，顶/底渐隐交给 CSS mask-image
-    const opacity = Math.max(0, cosT);
-    const x = side === 'left' ? W - R + innerR * cosT : R - innerR * cosT;
-    const y = H / 2 + innerR * sinT;
-    // 字号：22px (非选中) → 28px (选中)，与 test1.html 对齐
-    const fontSize = Math.round(22 + 6 * cosT * cosT);
+    const nx = side === 'left' ? W - R + numR * cosT : R - numR * cosT;
+    const ny = H / 2 + numR * sinT;
 
     let offsetFromCenter = phys - centerPhysIdx;
     if (offsetFromCenter > physCount / 2) offsetFromCenter -= physCount;
     if (offsetFromCenter < -physCount / 2) offsetFromCenter += physCount;
 
     const slotValue =
-      (((selected + intSteps + offsetFromCenter) % valueRange) + valueRange) % valueRange;
+      (((selected + intSteps + offsetFromCenter) % valueRange) + valueRange) %
+      valueRange;
     const label = formatLabel(slotValue);
     const isCenter = phys === centerPhysIdx;
+
+    const fontSize = isCenter ? 28 : 22;
+    const fontWeight = isCenter ? 600 : 400;
+    const color = isCenter ? accentColor : '#959fa6';
+    // 左表盘辐射角度，右表盘负辐射角度（保证文字不颠倒）
+    const textRot = side === 'left' ? theta : -theta;
+
     items.push(
       <span
-        key={phys}
+        key={`num-${phys}`}
         style={{
           position: 'absolute',
-          left: `${x}px`,
-          top: `${y}px`,
-          transform: side === 'left' ? 'translate(-100%, -50%)' : 'translate(0, -50%)',
-          opacity,
+          left: `${nx}px`,
+          top: `${ny}px`,
+          transform: `translate(-50%, -50%) rotate(${textRot}rad)`,
           fontSize: `${fontSize}px`,
-          fontWeight: isCenter ? 600 : 400,
-          color: isCenter ? accentColor : 'var(--color-Gray6, #6b7280)',
+          fontWeight,
+          color,
           fontVariantNumeric: 'tabular-nums',
-          fontFamily: 'Inter, -apple-system, sans-serif',
-          letterSpacing: isCenter ? '-0.025em' : '-0.01em',
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
           lineHeight: 1,
           userSelect: 'none',
           pointerEvents: 'none',
           whiteSpace: 'nowrap',
+          transition: 'font-size 0.2s, font-weight 0.2s, color 0.2s',
         }}
       >
         {label}
@@ -385,9 +386,6 @@ export function Drum({
       ? `circle(${R}px at ${W - R}px 50%)`
       : `circle(${R}px at ${R}px 50%)`;
 
-  // 中心指示线宽度：从边缘延伸到数字内侧 tick 区域
-  const centerLineW = Math.round(innerR * 0.38);
-
   return (
     <div
       ref={containerRef}
@@ -398,23 +396,22 @@ export function Drum({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {ticks}
-      {items}
-      {/* 中心指示线 */}
+      {/* 底部内凹表盘阴影 */}
       <div
+        className={styles.plateBg}
         style={{
-          position: 'absolute',
-          top: '50%',
-          ...(side === 'left' ? { right: 0 } : { left: 0 }),
-          width: `${centerLineW}px`,
-          height: '2px',
-          marginTop: '-1px',
-          background: accentColor,
-          borderRadius: '2px',
-          pointerEvents: 'none',
-          zIndex: 10,
+          width: `${R * 2}px`,
+          height: `${R * 2}px`,
+          left: side === 'left' ? `${W - R * 2}px` : `0px`,
+          top: `${H / 2 - R}px`,
         }}
       />
+      {/* 居中激活指示线 */}
+      <div
+        className={`${styles.centerLine} ${styles[side]}`}
+        style={{ backgroundColor: accentColor }}
+      />
+      {items}
     </div>
   );
 }

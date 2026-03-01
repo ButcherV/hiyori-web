@@ -38,7 +38,7 @@
 /* ── AM/PM Indicator ── */
 .ampmIndicator {
   position: absolute;
-  right: 48px; /* 距离右边缘的距离 */
+  left: 96px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;

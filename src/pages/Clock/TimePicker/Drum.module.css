@@ -1,36 +1,26 @@
-/* ── 单个轮盘 ──────────────────────────────────────────────
-   设计：两个大圆并排，圆心各在屏幕横向中心左右 R 处（通常在屏幕外）
-   R = 容器高度 / 2
-   左鼓：圆心在 (W-R, H/2)，clip-path circle(R at W-R 50%)
-   右鼓：圆心在 (R, H/2)，   clip-path circle(R at R 50%)
-   clip-path 由 JS 根据实测像素注入 inline style
-──────────────────────────────────────────────────────────── */
+/* ── Drum.module.css ─────────────────────────────────────── */
 .drum {
-  /* 父容器 .drums 已设 align-self:stretch + flex:1，
-     所以这里用百分比即可，不需要 vw/dvh */
   flex: 1;
   height: 100%;
   position: relative;
-  background: #ffffff;
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(0, 0, 0, 0.05);
+  /* 移除原有的白底和外阴影，改为透明，让 plateBg 的内阴影透出来 */
+  background: transparent;
   cursor: grab;
   overflow: hidden;
   touch-action: none;
-  /* 顶/底渐隐，与 test1.html mask-image 一致 */
+  /* 顶部和底部渐变消失效果，复刻 test1 的视觉 */
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 26%,
-    black 74%,
+    rgba(0, 0, 0, 1) 30%,
+    rgba(0, 0, 0, 1) 70%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 26%,
-    black 74%,
+    rgba(0, 0, 0, 1) 30%,
+    rgba(0, 0, 0, 1) 70%,
     transparent 100%
   );
 }
@@ -39,7 +29,34 @@
   cursor: grabbing;
 }
 
+/* 模拟表盘背景的微凹陷阴影效果 */
+.plateBg {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #efebec;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.04),
+    inset 0 0 5px rgba(0, 0, 0, 0.02);
+  z-index: -1;
+  pointer-events: none;
+}
 
-/* .left / .right 留给将来差异化样式 */
-.left {}
-.right {}
+/* 准星中心线 */
+.centerLine {
+  position: absolute;
+  top: 50%;
+  width: 88px;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* 左右轮盘中心线的靠位不同 */
+.left .centerLine {
+  left: 0px;
+}
+.right .centerLine {
+  right: 0px;
+}
