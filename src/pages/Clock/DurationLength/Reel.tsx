@@ -280,22 +280,6 @@ export function Reel({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {/* 选中框：与数字容器对齐 */}
-      <div
-        className={styles.selectionWindow}
-        style={{
-          borderColor: accentColor,
-          background: accentBg,
-          // 数字容器现在是 88px 宽，padding 9px，数字在容器内居中
-          // selectionWindow 也是 88px 宽，直接对齐到边缘即可
-          ...(side === 'left'
-          ? { right: 0 }
-          : side === 'right'
-          ? { left: 0 }
-          : { left: '50%', transform: 'translateX(-50%) translateY(-50%)' }),
-        }}
-      />
-
       {/* 滚动内容 */}
       <div className={styles.scrollContent}>
         {items}

@@ -14,28 +14,7 @@
   cursor: grabbing;
 }
 
-/* 固定的选中框背景，渲染在文字层之下 */
-.selectionWindow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 88px;
-  height: 60px;
-  border: 2px solid;
-  border-radius: 14px;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* 小屏幕适配 */
-@media (max-height: 700px) {
-  .selectionWindow {
-    width: 80px;
-    height: 50px; /* 48px 字号 + padding */
-  }
-}
-
-/* 滚动内容容器，渲染在选中框之上 */
+/* 滚动内容容器 */
 .scrollContent {
   position: absolute;
   inset: 0;

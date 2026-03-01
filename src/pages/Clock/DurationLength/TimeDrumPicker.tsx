@@ -62,6 +62,9 @@ export function TimeDrumPicker() {
 
       <div className={styles.pickerArea}>
         <div className={styles.reels}>
+          {/* 横跨时、分、秒的整体选中高亮条（test3.html highlight-band） */}
+          <div className={styles.highlightBand} />
+
           <div
             className={`${styles.reelWrapper} ${!activeAxes.has('hour') ? styles.reelDisabled : ''}`}
           >
