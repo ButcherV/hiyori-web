@@ -509,7 +509,6 @@
       "minute": "Minutes",
       "second": "Seconds"
     },
-    "duration_hint": "Drag the control points on the circle to select a time duration",
     "toast": {
       "hour_4_title": "Hours ending in 4: the digit 4 reads as <ja>よ</ja>",
       "hour_4_desc": "<ja>4時（よじ）、14時（じゅうよじ）</ja> - digit 4 is NOT <ja>よん</ja>",
@@ -564,10 +563,10 @@
       "asa":      "The most everyday word for morning",
       "gozen":    "Spans midnight to noon, not just morning",
       "hiru":     "Also means lunchtime",
-      "shougo":   "Exactly noon, not a general midday",
-      "gogo":     "",
+      "shougo":   "Exactly noon at 12:00, not a general midday",
+      "gogo":     "12:00 to 18:00, formal afternoon expression",
       "yuugata":  "Specifically dusk and evening, not afternoon",
-      "yoru":     "",
+      "yoru":     "The most everyday word for night, after 19:00",
       "mayonaka": "Colloquial midnight; more emotive than 深夜"
     }
   }

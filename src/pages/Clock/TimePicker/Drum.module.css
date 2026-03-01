@@ -18,6 +18,21 @@
   cursor: grab;
   overflow: hidden;
   touch-action: none;
+  /* 顶/底渐隐，与 test1.html mask-image 一致 */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 26%,
+    black 74%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 26%,
+    black 74%,
+    transparent 100%
+  );
 }
 
 .drum:active {

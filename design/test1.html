@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>弧形时间选择器</title>
+    <style>
+      :root {
+        --bg-color: #f6f3f2;
+        --text-color: #959fa6;
+        --orange: #d35400;
+        --blue: #2980b9;
+        --tick-color: #c9ccd0;
+        --tick-large-color: #a4a9af;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: var(--bg-color);
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI',
+          Roboto, Helvetica, Arial, sans-serif;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .picker-wrapper {
+        display: flex;
+        align-items: center;
+        position: relative;
+        gap: 15px;
+      }
+
+      /* 冒号 */
+      .colon {
+        font-size: 24px;
+        font-weight: 500;
+        color: #555;
+        padding-bottom: 4px;
+      }
+
+      /* 每个滚动列的容器 */
+      .dial-container {
+        position: relative;
+        width: 130px;
+        height: 360px;
+        overflow: hidden;
+        /* 顶部和底部渐变消失效果 */
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(0, 0, 0, 1) 30%,
+          rgba(0, 0, 0, 1) 70%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(0, 0, 0, 1) 30%,
+          rgba(0, 0, 0, 1) 70%,
+          transparent 100%
+        );
+        touch-action: none; /* 阻止浏览器默认滚动 */
+        cursor: grab;
+      }
+
+      .dial-container:active {
+        cursor: grabbing;
+      }
+
+      /* 旋转的轮盘中心 */
+      .wheel {
+        position: absolute;
+        top: 50%;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+        transform: translateZ(0); /* 开启硬件加速 */
+      }
+
+      /* * 核心布局逻辑：
+         * 左表盘圆心在屏幕左侧远处，半径 260px，放置在距离右边缘 20px 处
+         * 右表盘因为刻度更密集，为了视觉弧度一致，圆心在更远的右侧，半径 650px
+         */
+      .left-dial .wheel {
+        right: 280px;
+      }
+      .right-dial .wheel {
+        left: 670px;
+      }
+
+      /* 数字样式 */
+      .num {
+        position: absolute;
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--text-color);
+        transition:
+          font-size 0.2s,
+          font-weight 0.2s,
+          color 0.2s;
+        text-align: center;
+        line-height: 1;
+      }
+
+      /* 选中状态 */
+      .num.active {
+        font-size: 28px;
+        font-weight: 600;
+      }
+      .left-dial .num.active {
+        color: var(--orange);
+      }
+      .right-dial .num.active {
+        color: var(--blue);
+      }
+
+      /* 刻度线 */
+      .tick {
+        position: absolute;
+        height: 1px;
+        background-color: var(--tick-color);
+        border-radius: 1px;
+      }
+      .tick.large {
+        height: 2px;
+        background-color: var(--tick-large-color);
+      }
+
+      /* 中心指示线 */
+      .center-line {
+        position: absolute;
+        top: 50%;
+        width: 65px;
+        height: 2px;
+        margin-top: -1px;
+        border-radius: 2px;
+        z-index: 10;
+        pointer-events: none;
+      }
+      .left-dial .center-line {
+        right: 0px;
+        background-color: var(--orange);
+      }
+      .right-dial .center-line {
+        left: 0px;
+        background-color: var(--blue);
+      }
+
+      /* 模拟表盘背景的微凹陷阴影效果 */
+      .plate-bg {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        box-shadow:
+          inset 0 0 20px rgba(0, 0, 0, 0.04),
+          inset 0 0 5px rgba(0, 0, 0, 0.02);
+        pointer-events: none;
+        background-color: #efebec;
+        z-index: -1;
+      }
+      .left-dial .plate-bg {
+        right: -30px;
+        width: 580px;
+        height: 580px;
+      }
+      .right-dial .plate-bg {
+        left: -30px;
+        width: 1360px;
+        height: 1360px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="picker-wrapper">
+      <div class="dial-container left-dial" id="hours-container">
+        <div class="plate-bg"></div>
+        <div class="wheel" id="hours-wheel"></div>
+        <div class="center-line"></div>
+      </div>
+
+      <div class="colon">:</div>
+
+      <div class="dial-container right-dial" id="minutes-container">
+        <div class="plate-bg"></div>
+        <div class="wheel" id="minutes-wheel"></div>
+        <div class="center-line"></div>
+      </div>
+    </div>
+
+    <script>
+      class DialPicker {
+        constructor(options) {
+          this.container = document.getElementById(options.containerId);
+          this.wheel = document.getElementById(options.wheelId);
+          this.type = options.type; // 'left' 或 'right'
+          this.itemsCount = options.itemsCount;
+          this.step = 360 / this.itemsCount;
+          this.radius = options.radius;
+          this.tickRadius = options.tickRadius;
+
+          // 物理滚动相关状态
+          this.currentAngle = 0;
+          this.velocity = 0;
+          this.isDragging = false;
+          this.lastY = 0;
+          this.lastTime = 0;
+
+          this.elements = [];
+
+          this.initDOM();
+
+          // 设置初始值 (左侧设为 01, 右侧设为 13)
+          let startVal = options.startVal || 0;
+          if (this.type === 'left') {
+            this.currentAngle = -startVal * this.step;
+          } else {
+            this.currentAngle = startVal * this.step;
+          }
+
+          this.bindEvents();
+          this.updateWheel();
+
+          this.animate = this.animate.bind(this);
+          requestAnimationFrame(this.animate);
+        }
+
+        initDOM() {
+          // 生成刻度和数字
+          for (let i = 0; i < this.itemsCount; i++) {
+            // 绘制刻度 (每两根主刻度间插入 4 根细刻度)
+            let subTicks = 5;
+            for (let j = 0; j < subTicks; j++) {
+              let tickAngle = (i + j / subTicks) * this.step;
+              if (this.type === 'right') tickAngle = 180 - tickAngle;
+
+              let tick = document.createElement('div');
+              tick.className = 'tick ' + (j === 0 ? 'large' : 'small');
+
+              // 刻度宽度
+              let tickWidth = j === 0 ? 14 : 8;
+              tick.style.width = tickWidth + 'px';
+
+              // 定位刻度
+              tick.style.transform = `translate(-50%, -50%) rotate(${tickAngle}deg) translateX(${this.tickRadius}px)`;
+              this.wheel.appendChild(tick);
+            }
+
+            // 绘制数字
+            let numAngle = i * this.step;
+            let textRot = 0;
+
+            // 右侧表盘的圆心在右，起始角度是 180度，需将文字翻转以保持正向阅读
+            if (this.type === 'right') {
+              numAngle = 180 - numAngle;
+              textRot = 180;
+            }
+
+            let numDiv = document.createElement('div');
+            numDiv.className = 'num';
+            numDiv.innerText = i.toString().padStart(2, '0');
+
+            // 定位数字
+            numDiv.style.transform = `translate(-50%, -50%) rotate(${numAngle}deg) translateX(${this.radius}px) rotate(${textRot}deg)`;
+
+            this.elements.push({ node: numDiv, index: i });
+            this.wheel.appendChild(numDiv);
+          }
+        }
+
+        bindEvents() {
+          const down = (e) => {
+            this.isDragging = true;
+            this.lastY = e.touches ? e.touches[0].clientY : e.clientY;
+            this.lastTime = Date.now();
+            this.velocity = 0; // 停止惯性
+          };
+
+          const move = (e) => {
+            if (!this.isDragging) return;
+            e.preventDefault();
+
+            let currentY = e.touches ? e.touches[0].clientY : e.clientY;
+            let dy = currentY - this.lastY;
+            let currentTime = Date.now();
+            let dt = currentTime - this.lastTime;
+
+            // 根据圆周率将手指移动的像素距离换算为旋转角度
+            let pixelToAngle = 360 / (2 * Math.PI * this.radius);
+            let dAngle = dy * pixelToAngle * 1.5; // 1.5 是灵敏度系数
+
+            // 更新角度
+            if (this.type === 'left') {
+              this.currentAngle += dAngle;
+            } else {
+              this.currentAngle -= dAngle;
+            }
+
+            // 计算瞬时速度用于松手后的惯性
+            if (dt > 0) {
+              let v = (this.type === 'left' ? dAngle : -dAngle) / dt;
+              // 简单的低通滤波平滑速度
+              this.velocity = this.velocity * 0.2 + v * 0.8 * 16;
+            }
+
+            this.lastY = currentY;
+            this.lastTime = currentTime;
+          };
+
+          const up = () => {
+            this.isDragging = false;
+          };
+
+          this.container.addEventListener('touchstart', down, {
+            passive: false,
+          });
+          this.container.addEventListener('mousedown', down);
+
+          // 绑定在 window 上防止拖拽过快脱离目标
+          window.addEventListener('touchmove', move, { passive: false });
+          window.addEventListener('mousemove', move);
+          window.addEventListener('touchend', up);
+          window.addEventListener('mouseup', up);
+        }
+
+        updateWheel() {
+          this.wheel.style.transform = `rotate(${this.currentAngle}deg) translateZ(0)`;
+
+          // 计算当前中心位置的索引
+          let rawIndex =
+            this.type === 'left'
+              ? Math.round(-this.currentAngle / this.step)
+              : Math.round(this.currentAngle / this.step);
+
+          let activeIndex =
+            ((rawIndex % this.itemsCount) + this.itemsCount) % this.itemsCount;
+
+          // 更新激活样式
+          this.elements.forEach((item) => {
+            if (item.index === activeIndex) {
+              item.node.classList.add('active');
+            } else {
+              item.node.classList.remove('active');
+            }
+          });
+        }
+
+        animate() {
+          if (!this.isDragging) {
+            // 惯性阻尼衰减
+            this.velocity *= 0.92;
+            this.currentAngle += this.velocity;
+
+            // 当速度足够小时，开始回弹吸附到最近的刻度 (阻尼感)
+            if (Math.abs(this.velocity) < 0.2) {
+              let snapAngle =
+                Math.round(this.currentAngle / this.step) * this.step;
+              // 弹性系数计算
+              this.currentAngle += (snapAngle - this.currentAngle) * 0.15;
+            }
+          }
+
+          this.updateWheel();
+          requestAnimationFrame(this.animate);
+        }
+      }
+
+      // 实例化左侧小时表盘
+      new DialPicker({
+        containerId: 'hours-container',
+        wheelId: 'hours-wheel',
+        type: 'left',
+        itemsCount: 24,
+        radius: 260, // 数字半径
+        tickRadius: 235, // 刻度半径 (在数字内侧)
+        startVal: 1, // 默认选中 01
+      });
+
+      // 实例化右侧分钟表盘
+      new DialPicker({
+        containerId: 'minutes-container',
+        wheelId: 'minutes-wheel',
+        type: 'right',
+        itemsCount: 60,
+        radius: 650, // 半径拉大以保证视觉上的垂直间距与左侧弧度相似
+        tickRadius: 625,
+        startVal: 13, // 默认选中 13
+      });
+    </script>
+  </body>
+</html>

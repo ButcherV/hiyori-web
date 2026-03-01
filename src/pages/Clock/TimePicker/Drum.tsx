@@ -284,6 +284,52 @@ export function Drum({
   const intSteps = Math.round(-renderAngle / step);
   const centerPhysIdx = ((intSteps % physCount) + physCount) % physCount;
 
+  // ── 刻度（游标卡尺风格）──────────────────────────────────
+  // 主刻度在数字内侧 36px 处（与 test1.html 25px 间距对应），每格之间插入 4 根次刻度
+  const tickR = innerR - 36;
+  const SUB_TICKS = 4;
+  const ticks: React.ReactNode[] = [];
+
+  for (let phys = 0; phys < physCount; phys++) {
+    for (let sub = 0; sub <= SUB_TICKS; sub++) {
+      let theta = (phys + sub / (SUB_TICKS + 1)) * step + renderAngle;
+      theta = theta - TWO_PI * Math.floor((theta + Math.PI) / TWO_PI);
+      if (Math.abs(theta) > halfAngle) continue;
+
+      const cosT = Math.cos(theta);
+      const sinT = Math.sin(theta);
+      // 刻度 opacity：只做 3D 深度感，顶/底渐隐交给 CSS mask
+      const opacity = Math.max(0, cosT);
+      const tx = side === 'left' ? W - R + tickR * cosT : R - tickR * cosT;
+      const ty = H / 2 + tickR * sinT;
+      const isMajor = sub === 0;
+      // 径向旋转：让刻度线沿半径方向排列（游标卡尺效果）
+      const rotDeg =
+        side === 'left'
+          ? theta * (180 / Math.PI)
+          : 180 - theta * (180 / Math.PI);
+
+      ticks.push(
+        <span
+          key={`t${phys}-${sub}`}
+          style={{
+            position: 'absolute',
+            left: `${tx}px`,
+            top: `${ty}px`,
+            width: `${isMajor ? 14 : 8}px`,
+            height: `${isMajor ? 2 : 1}px`,
+            background: isMajor ? '#a4a9af' : '#c9ccd0',
+            borderRadius: '1px',
+            transform: `translate(-50%, -50%) rotate(${rotDeg}deg)`,
+            opacity,
+            pointerEvents: 'none',
+          }}
+        />
+      );
+    }
+  }
+
+  // ── 数字 ─────────────────────────────────────────────────
   const items: React.ReactNode[] = [];
 
   for (let phys = 0; phys < physCount; phys++) {
@@ -293,10 +339,12 @@ export function Drum({
 
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
+    // 数字 opacity：只用于 3D 深度感，顶/底渐隐交给 CSS mask-image
     const opacity = Math.max(0, cosT);
     const x = side === 'left' ? W - R + innerR * cosT : R - innerR * cosT;
     const y = H / 2 + innerR * sinT;
-    const fontSize = Math.round(15 + 23 * cosT * cosT);
+    // 字号：22px (非选中) → 28px (选中)，与 test1.html 对齐
+    const fontSize = Math.round(22 + 6 * cosT * cosT);
 
     let offsetFromCenter = phys - centerPhysIdx;
     if (offsetFromCenter > physCount / 2) offsetFromCenter -= physCount;
@@ -316,7 +364,7 @@ export function Drum({
           transform: side === 'left' ? 'translate(-100%, -50%)' : 'translate(0, -50%)',
           opacity,
           fontSize: `${fontSize}px`,
-          fontWeight: isCenter ? 700 : 400,
+          fontWeight: isCenter ? 600 : 400,
           color: isCenter ? accentColor : 'var(--color-Gray6, #6b7280)',
           fontVariantNumeric: 'tabular-nums',
           fontFamily: 'Inter, -apple-system, sans-serif',
@@ -337,6 +385,9 @@ export function Drum({
       ? `circle(${R}px at ${W - R}px 50%)`
       : `circle(${R}px at ${R}px 50%)`;
 
+  // 中心指示线宽度：从边缘延伸到数字内侧 tick 区域
+  const centerLineW = Math.round(innerR * 0.38);
+
   return (
     <div
       ref={containerRef}
@@ -347,7 +398,23 @@ export function Drum({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
+      {ticks}
       {items}
+      {/* 中心指示线 */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          ...(side === 'left' ? { right: 0 } : { left: 0 }),
+          width: `${centerLineW}px`,
+          height: '2px',
+          marginTop: '-1px',
+          background: accentColor,
+          borderRadius: '2px',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
     </div>
   );
 }
