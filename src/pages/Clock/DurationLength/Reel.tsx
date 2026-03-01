@@ -49,6 +49,7 @@ export interface ReelProps {
   side: 'left' | 'right' | 'center';
   accentColor: string;
   accentBg: string;
+  onDoubleTap?: () => void;    // 双击回调
 }
 
 export function Reel({
@@ -59,6 +60,7 @@ export function Reel({
   side,
   accentColor,
   accentBg,
+  onDoubleTap,
 }: ReelProps) {
   // 获取屏幕配置
   const config = getReelConfig();
@@ -74,6 +76,9 @@ export function Reel({
     velocity: number;
   } | null>(null);
   const animRef = useRef<number | null>(null);
+
+  // 双击检测
+  const lastTapRef = useRef<{ time: number; y: number } | null>(null);
 
   // true when the current selected change was triggered by THIS component's snap
   const isInternalRef = useRef(false);
@@ -171,6 +176,23 @@ export function Reel({
   // ── Pointer handlers ─────────────────────────────────────
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
+      const now = performance.now();
+      const { clientY } = e;
+
+      // 双击检测：350ms 内、25px 范围内的第二次按下
+      if (lastTapRef.current) {
+        const dt = now - lastTapRef.current.time;
+        const dy = Math.abs(clientY - lastTapRef.current.y);
+        
+        if (dt < 350 && dy < 25) {
+          lastTapRef.current = null;
+          onDoubleTap?.();
+          return;
+        }
+      }
+      lastTapRef.current = { time: now, y: clientY };
+
+      // 正常拖拽逻辑
       e.preventDefault();
       cancelAnim();
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -182,7 +204,7 @@ export function Reel({
         velocity: 0,
       };
     },
-    [cancelAnim, offset]
+    [cancelAnim, offset, onDoubleTap]
   );
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {

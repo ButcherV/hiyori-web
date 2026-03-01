@@ -46,11 +46,11 @@
   white-space: nowrap;
 }
 
-@media (max-height: 700px) {
+/* @media (max-height: 700px) {
   .segKana {
     font-size: 10px;
   }
-}
+} */
 
 .segKanji {
   font-size: 36px;

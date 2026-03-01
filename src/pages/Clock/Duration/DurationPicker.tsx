@@ -103,6 +103,17 @@ export function DurationPicker() {
     if (period) setTimePeriod(period);
   };
 
+  // 双击跳转到下一个时段
+  const goToNextPeriod = () => {
+    if (!activePeriod) {
+      setTimePeriod(TIME_PERIODS[0]);
+      return;
+    }
+    const currentIndex = TIME_PERIODS.findIndex(p => p.name === activePeriod.name);
+    const nextIndex = (currentIndex + 1) % TIME_PERIODS.length;
+    setTimePeriod(TIME_PERIODS[nextIndex]);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.scrollArea}>
@@ -116,6 +127,7 @@ export function DurationPicker() {
           endAngle={endAngle}
           selectedPeriod={activePeriod}
           onGoToCurrent={goToCurrent}
+          onDoubleTap={goToNextPeriod}
         />
       </div>
       <PeriodInfo
