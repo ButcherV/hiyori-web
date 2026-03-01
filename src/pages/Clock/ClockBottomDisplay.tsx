@@ -488,14 +488,16 @@ export const ClockBottomDisplay = forwardRef<
                   >
                     {seg.kana}
                   </span>
-                  <span
-                    className={styles.segKanji}
-                    style={kanjiSize ? { fontSize: kanjiSize } : undefined}
-                  >
-                    {seg.kanji}
-                  </span>
+                  <div className={styles.kanjiWrapper}>
+                    <span
+                      className={styles.segKanji}
+                      style={kanjiSize ? { fontSize: kanjiSize } : undefined}
+                    >
+                      {seg.kanji}
+                    </span>
+                    <Volume2 size={10} className={styles.speakerIcon} />
+                  </div>
                 </div>
-                <Volume2 size={10} className={styles.speakerIcon} />
               </button>
             ))}
           </div>

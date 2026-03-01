@@ -100,9 +100,9 @@
 }
 
 @media (max-height: 700px) {
-  .kana {
+  /* .kana {
     font-size: 10px;
-  }
+  } */
   .kanji {
     font-size: 36px;
   }
