@@ -82,7 +82,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
             onDoubleTap={handleHourDoubleTap}
           />
 
-          <span className={styles.colon}>:</span>
+          <span className={styles.colon}></span>
 
           <Drum
             valueRange={60}

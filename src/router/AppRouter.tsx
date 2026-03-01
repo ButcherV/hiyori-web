@@ -64,7 +64,7 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname === '/dice') return 2;
   if (pathname === '/mistake-book') return 2;
   if (pathname === '/quiz/session') return 3;
-  if (pathname === '/study/clock/drum') return 2;
+  if (pathname === '/study/clock') return 2;
   if (pathname === '/study/numbers') return 2;
   if (pathname === '/study/numbers/translator') return 3;
 
@@ -178,7 +178,7 @@ export const AppRouter = () => {
 
           <Route path="/dice" element={<DicePage />} />
           <Route
-            path="/study/clock/drum"
+            path="/study/clock"
             element={
               <PageTransition preset="slide" depth={2} direction={direction}>
                 <PageClock />

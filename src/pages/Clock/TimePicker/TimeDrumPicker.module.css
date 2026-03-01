@@ -24,10 +24,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  font-size: 40px;
+  width: 8px;
+  /* font-size: 40px;
   font-weight: 300;
-  color: #d4d4d8;
+  color: #d4d4d8; */
   /* background: #ffffff; */
   pointer-events: none;
   user-select: none;

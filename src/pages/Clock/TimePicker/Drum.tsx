@@ -349,7 +349,7 @@ export function Drum({
     const label = formatLabel(slotValue);
     const isCenter = phys === centerPhysIdx;
 
-    const fontSize = isCenter ? 28 : 22;
+    const fontSize = 24; // 统一大小，远近只靠 opacity 渐隐
     const fontWeight = isCenter ? 600 : 400;
     const color = isCenter ? accentColor : '#959fa6';
     // 左表盘辐射角度，右表盘负辐射角度（保证文字不颠倒）
