@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Reel } from './Reel';
-import { TimeDisplay } from './TimeDisplay';
+import { ClockBottomDisplay } from '../ClockBottomDisplay';
 import { QuickActions } from './QuickActions';
 import styles from './TimeDrumPicker.module.css';
 
@@ -112,7 +112,7 @@ export function TimeDrumPicker() {
         </div>
       </div>
 
-      <TimeDisplay hour={hour} minute={minute} second={second} activeAxes={activeAxes} />
+      <ClockBottomDisplay mode="duration-length" hour={hour} minute={minute} second={second} activeAxes={activeAxes} />
     </>
   );
 }

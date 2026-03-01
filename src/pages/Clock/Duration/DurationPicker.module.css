@@ -25,7 +25,7 @@
 
 @media (max-height: 700px) {
   .scrollArea {
-    padding: 10px 12px 0;
-    gap: 10px;
+    padding: 8px 12px 0;
+    gap: 8px;
   }
 }

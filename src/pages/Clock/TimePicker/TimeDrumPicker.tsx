@@ -1,6 +1,6 @@
 import { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { Drum } from './Drum';
-import { TimeDisplay } from './TimeDisplay';
+import { ClockBottomDisplay } from '../ClockBottomDisplay';
 import { QuickActions } from './QuickActions';
 import styles from './TimeDrumPicker.module.css';
 
@@ -103,7 +103,7 @@ export const TimeDrumPicker = forwardRef<TimeDrumPickerRef, object>(function Tim
         </div>
       </div>
 
-      <TimeDisplay hour={hour} minute={minute} is24h={is24h} />
+      <ClockBottomDisplay mode="time" hour={hour} minute={minute} is24h={is24h} />
     </>
   );
 });

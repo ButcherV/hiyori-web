@@ -3,7 +3,7 @@ import { useTTS } from '../../../hooks/useTTS';
 import { TIME_PERIODS, type TimePeriod } from './types';
 import { PeriodChips } from './PeriodChips';
 import { CircularPicker } from './CircularPicker';
-import { PeriodInfo } from './PeriodInfo';
+import { ClockBottomDisplay } from '../ClockBottomDisplay';
 import styles from './DurationPicker.module.css';
 
 // 根据当前小时找最匹配的时段（取范围最小/最精确的）
@@ -130,8 +130,9 @@ export function DurationPicker() {
           onDoubleTap={goToNextPeriod}
         />
       </div>
-      <PeriodInfo
-        selectedPeriod={activePeriod}
+      <ClockBottomDisplay
+        mode="duration-period"
+        period={activePeriod}
         onPlayPeriod={() => { if (activePeriod) speak(activePeriod.name); }}
       />
     </div>

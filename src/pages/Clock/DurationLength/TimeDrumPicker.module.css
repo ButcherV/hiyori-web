@@ -75,5 +75,7 @@
   .pickerArea {
     -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
     mask-image: linear-gradient(to bottom, black 55%, transparent 88%);
+    height: 60%;
+    flex: none;
   }
 }
