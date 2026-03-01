@@ -152,12 +152,14 @@
   }
 }
 
-/* ── Speaker Icon (小图标，低调显示在右下角) ── */
+/* ── Speaker Icon (小图标，绝对定位在右下角) ── */
 .speakerIcon {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
   color: #a1a1aa;
   opacity: 0.4;
   flex-shrink: 0;
-  margin-bottom: 2px;
 }
 
 .segmentButton:active .speakerIcon {
