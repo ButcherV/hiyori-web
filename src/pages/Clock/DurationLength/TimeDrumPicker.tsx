@@ -1,6 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
 import { Reel } from './Reel';
-import { ClockBottomDisplay, type ClockBottomDisplayRef } from '../ClockBottomDisplay';
+import {
+  ClockBottomDisplay,
+  type ClockBottomDisplayRef,
+} from '../ClockBottomDisplay';
 import { QuickActions } from './QuickActions';
 import styles from './TimeDrumPicker.module.css';
 
@@ -14,7 +17,11 @@ const SPECIAL_MINUTES = Array.from({ length: 60 }, (_, i) => i).filter(
 const SPECIAL_SECONDS: number[] = [];
 
 /** 找增大方向上最近的特殊发音值（始终排除 current 本身，到头则循环） */
-function findNearestSpecial(current: number, specials: number[], range: number): number {
+function findNearestSpecial(
+  current: number,
+  specials: number[],
+  range: number
+): number {
   if (specials.length === 0) return current;
   const fwdDist = (v: number) => (v - current + range) % range;
   return specials
@@ -29,7 +36,7 @@ export function TimeDrumPicker() {
   const [activeAxes, setActiveAxes] = useState<Set<Axis>>(
     new Set<Axis>(['hour', 'minute', 'second'])
   );
-  
+
   const displayRef = useRef<ClockBottomDisplayRef>(null);
 
   const handleToggleAxis = useCallback((axis: Axis) => {
@@ -45,22 +52,19 @@ export function TimeDrumPicker() {
   const fmtPad2 = useCallback((v: number) => String(v).padStart(2, '0'), []);
 
   // 双击：跳到最近的特殊发音值
+  // 【修复】：去掉了 setTimeout，完全依赖 Reel 停稳后触发的 onScrollComplete 进行播音
   const handleHourDoubleTap = useCallback(() => {
     setHour((h) => findNearestSpecial(h, SPECIAL_HOURS, 24));
-    // 双击后也播放
-    setTimeout(() => displayRef.current?.playSegment('hour'), 300);
   }, []);
+
   const handleMinuteDoubleTap = useCallback(() => {
     setMinute((m) => findNearestSpecial(m, SPECIAL_MINUTES, 60));
-    // 双击后也播放
-    setTimeout(() => displayRef.current?.playSegment('minute'), 300);
   }, []);
+
   const handleSecondDoubleTap = useCallback(() => {
     setSecond((s) => findNearestSpecial(s, SPECIAL_SECONDS, 60));
-    // 双击后也播放
-    setTimeout(() => displayRef.current?.playSegment('second'), 300);
   }, []);
-  
+
   // 滚动完成后播放单个轴的读音（传入 value 避免读取到 React 尚未提交的旧 props）
   const handleHourScrollComplete = useCallback((value: number) => {
     displayRef.current?.playSegment('hour', value);
@@ -80,7 +84,7 @@ export function TimeDrumPicker() {
 
       <div className={styles.pickerArea}>
         <div className={styles.reels}>
-          {/* 横跨时、分、秒的整体选中高亮条（test3.html highlight-band） */}
+          {/* 横跨时、分、秒的整体选中高亮条 */}
           <div className={styles.highlightBand} />
 
           <div
@@ -133,7 +137,14 @@ export function TimeDrumPicker() {
         </div>
       </div>
 
-      <ClockBottomDisplay ref={displayRef} mode="duration-length" hour={hour} minute={minute} second={second} activeAxes={activeAxes} />
+      <ClockBottomDisplay
+        ref={displayRef}
+        mode="duration-length"
+        hour={hour}
+        minute={minute}
+        second={second}
+        activeAxes={activeAxes}
+      />
     </>
   );
 }

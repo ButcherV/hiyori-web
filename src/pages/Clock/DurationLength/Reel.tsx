@@ -1,10 +1,4 @@
-import {
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from 'react';
+import { useState, useRef, useCallback, useLayoutEffect } from 'react';
 import styles from './Reel.module.css';
 
 // 根据屏幕高度动态调整
@@ -86,12 +80,13 @@ export function Reel({
     history: [] as { y: number; t: number }[],
     dragStartY: 0,
     dragStartOffset: 0,
+    isExternalJump: false, // ⬅️ 新增：标记是否为外部触发的跳转动画
   });
 
   const lastTapRef = useRef<{ time: number; y: number } | null>(null);
   const isInternalRef = useRef(false);
 
-  // 保持引用最新，避免闭包陷阱。这里改为 useLayoutEffect 以避免闪烁
+  // 保持引用最新，避免闭包陷阱
   const selectedRef = useRef(selected);
   const prevSelectedRef = useRef(selected);
   useLayoutEffect(() => {
@@ -147,13 +142,22 @@ export function Reel({
           p.offset = 0;
           setOffset(0);
 
-          // 【修复】：外部双击跳转时 newValue === selectedRef.current，此时跳过更新，避免死锁
+          // 获取并清除跳转标记
+          const wasExternal = p.isExternalJump;
+          p.isExternalJump = false;
+
+          // ⬅️ 【核心修复逻辑】：区分真假滚动与外部跳转
           if (newValue !== selectedRef.current) {
+            // 情况 A：数字真实发生改变（用户滑动了滚轮）
             isInternalRef.current = true;
             onSelect(newValue);
+            onScrollComplete?.(newValue);
+          } else if (wasExternal) {
+            // 情况 B：数字没变（因为外部已经更新了），但这是个外部动画的完成帧（如双击跳转）
+            onScrollComplete?.(newValue);
           }
+          // 情况 C：数字没变，且不是外部跳转（说明用户只是原地单击了一下），什么都不做，完美屏蔽第一次多余的播音！
 
-          onScrollComplete?.(newValue);
           return; // 动画结束
         }
       }
@@ -165,7 +169,7 @@ export function Reel({
     p.animId = requestAnimationFrame(tick);
   }, [onSelect, onScrollComplete, wrap]);
 
-  // ── 外部传入新值跳转（如点击快捷键） ───────────────────────
+  // ── 外部传入新值跳转（如点击快捷键、双击） ───────────────────────
   useLayoutEffect(() => {
     const prev = prevSelectedRef.current;
     prevSelectedRef.current = selected;
@@ -191,6 +195,7 @@ export function Reel({
     p.offset = startOffset;
     p.phase = 'snap';
     p.snapTarget = 0; // 朝着中心 0 自动吸附
+    p.isExternalJump = true; // ⬅️ 新增：标记为外部触发的跳转动画
     setOffset(startOffset);
     startAnim();
   }, [selected, valueRange, VISIBLE_AROUND, cancelAnim, startAnim]);
@@ -208,7 +213,7 @@ export function Reel({
         if (dt < 350 && dy < 25) {
           lastTapRef.current = null;
           onDoubleTap?.();
-          return;
+          return; // 双击后直接 return，不再将 phase 置为 drag，这也能防止杂音
         }
       }
       lastTapRef.current = { time: now, y: clientY };
@@ -280,7 +285,7 @@ export function Reel({
   const items: React.ReactNode[] = [];
   const renderBuffer = 5; // 视野外多渲染几个作为缓冲
 
-  // 【核心修复】：以当前滚动到的 offset 为中心，动态计算需要渲染的范围
+  // 以当前滚动到的 offset 为中心，动态计算需要渲染的范围
   const centerJ = Math.round(offset);
   const startJ = centerJ - (VISIBLE_AROUND + renderBuffer);
   const endJ = centerJ + (VISIBLE_AROUND + renderBuffer);

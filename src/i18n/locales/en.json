@@ -520,7 +520,7 @@
     },
     "duration_length_course": {
       "goal_desc": "<highlight>Learn to express duration in Japanese,</highlight> including hours (時間), minutes (分), seconds (秒), and their combinations.",
-      "special_pronunciation_desc": "<strong>Special Hour Readings:</strong><br><highlight>4時間 (よじかん), 9時間 (くじかん)</highlight><br><br><strong>Minute Gemination Rule:</strong><br><highlight>Minutes ending in <span>1, 3, 6, 8, 0</span> use geminate forms</highlight> (same as time)",
+      "special_pronunciation_desc": "<strong>Special Hour Readings:</strong><br><highlight>4時間 (よじかん), 9時間 (くじかん)</highlight><br><br><strong>Minute Gemination Rule:</strong><br><highlight>Minutes ending in <span>1, 3, 6, 8, 0</span> use geminate forms</highlight> (same as time)<br><br><strong>Second Pronunciation Rule:</strong><br><highlight>Number + びょう</highlight> (completely regular, no exceptions)",
       "interaction_desc": "<strong>Scroll Reels:</strong><br>Scroll to find the number you want to learn.<br><br><strong>Double-Tap Jump:</strong><br>Double-tap to quickly jump to special pronunciation numbers."
     },
     "duration_period_course": {

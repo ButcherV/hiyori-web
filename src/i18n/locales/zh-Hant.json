@@ -85,7 +85,7 @@
     },
     "duration_length_course": {
       "goal_desc": "<highlight>學習表達時間長度的方式，</highlight>包括小時（時間）、分鐘（分）、秒（秒）的讀法及其組合。",
-      "special_pronunciation_desc": "<strong>特殊小時讀音：</strong><br><highlight>4時間 (よじかん)、9時間 (くじかん)</highlight><br><br><strong>分鐘促音規則：</strong><br><highlight>尾數為 <span>1, 3, 6, 8, 0</span> 的分鐘讀音帶促音</highlight>（與時刻相同）",
+      "special_pronunciation_desc": "<strong>特殊小時讀音：</strong><br><highlight>4時間 (よじかん)、9時間 (くじかん)</highlight><br><br><strong>分鐘促音規則：</strong><br><highlight>尾數為 <span>1, 3, 6, 8, 0</span> 的分鐘讀音帶促音</highlight>（與時刻相同）<br><br><strong>秒的發音規律：</strong><br><highlight>數字 + びょう</highlight>（完全規律，無特殊讀音）",
       "interaction_desc": "<strong>滾動滾輪：</strong><br>滾動找到想學習的數字。<br><br><strong>雙擊跳轉：</strong><br>雙擊可快速跳轉到特殊發音數字。"
     },
     "duration_period_course": {
