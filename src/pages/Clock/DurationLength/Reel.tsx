@@ -1,4 +1,10 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import styles from './Reel.module.css';
 
 // 根据屏幕高度动态调整
@@ -85,10 +91,10 @@ export function Reel({
   const lastTapRef = useRef<{ time: number; y: number } | null>(null);
   const isInternalRef = useRef(false);
 
-  // 保持引用最新，避免闭包陷阱
+  // 保持引用最新，避免闭包陷阱。这里改为 useLayoutEffect 以避免闪烁
   const selectedRef = useRef(selected);
   const prevSelectedRef = useRef(selected);
-  useEffect(() => {
+  useLayoutEffect(() => {
     selectedRef.current = selected;
   }, [selected]);
 
@@ -141,8 +147,12 @@ export function Reel({
           p.offset = 0;
           setOffset(0);
 
-          isInternalRef.current = true;
-          onSelect(newValue);
+          // 【修复】：外部双击跳转时 newValue === selectedRef.current，此时跳过更新，避免死锁
+          if (newValue !== selectedRef.current) {
+            isInternalRef.current = true;
+            onSelect(newValue);
+          }
+
           onScrollComplete?.(newValue);
           return; // 动画结束
         }
@@ -156,7 +166,7 @@ export function Reel({
   }, [onSelect, onScrollComplete, wrap]);
 
   // ── 外部传入新值跳转（如点击快捷键） ───────────────────────
-  useEffect(() => {
+  useLayoutEffect(() => {
     const prev = prevSelectedRef.current;
     prevSelectedRef.current = selected;
 

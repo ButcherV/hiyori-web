@@ -93,4 +93,6 @@
 /* === BottomSheet 内容样式 === */
 .infoSheetContent {
   padding: 0 8px 32px 8px;
+  overflow-y: scroll;
+  height: 100%;
 }
