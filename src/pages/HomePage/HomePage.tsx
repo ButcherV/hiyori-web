@@ -90,9 +90,9 @@ export function HomePage() {
     },
 
     {
-      id: 'listening',
-      title: t('home.drills.listening'),
-      sub: t('home.drills.listening_sub'),
+      id: 'honorifics',
+      title: t('home.drills.honorifics'),
+      sub: t('home.drills.honorifics_sub'),
       icon: Headphones,
       color: '#00C7BE',
     },
@@ -147,6 +147,8 @@ export function HomePage() {
       navigate('/study/numbers');
     } else if (id === 'times') {
       navigate('/study/clock');
+    } else if (id === 'honorifics') {
+      navigate('/study/honorifics');
     }
   };
 

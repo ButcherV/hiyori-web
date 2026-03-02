@@ -45,6 +45,9 @@ const PageNumbers = lazy(() =>
 const PageDates = lazy(() =>
   import('../pages/Dates/PageDates').then(m => ({ default: m.PageDates }))
 );
+const PageHonorifics = lazy(() =>
+  import('../pages/Honorifics/PageHonorifics').then(m => ({ default: m.PageHonorifics }))
+);
 const NumberTranslator = lazy(() =>
   import('../pages/Numbers/Translator/NumberTranslator').then(m => ({
     default: m.NumberTranslator,
@@ -60,6 +63,7 @@ const getRouteDepth = (pathname: string): number => {
   if (pathname.startsWith('/study/kana')) return 2;
   if (pathname === '/quiz/selection') return 2;
   if (pathname === '/study/dates') return 2;
+  if (pathname === '/study/honorifics') return 2;
   if (pathname === '/kana-dictionary') return 2;
   if (pathname === '/dice') return 2;
   if (pathname === '/mistake-book') return 2;
@@ -145,6 +149,15 @@ export const AppRouter = () => {
             element={
               <PageTransition preset="slide" depth={2} direction={direction}>
                 <PageDates />
+              </PageTransition>
+            }
+          />
+
+          <Route
+            path="/study/honorifics"
+            element={
+              <PageTransition preset="slide" depth={2} direction={direction}>
+                <PageHonorifics />
               </PageTransition>
             }
           />

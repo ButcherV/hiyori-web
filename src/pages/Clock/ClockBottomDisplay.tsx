@@ -454,13 +454,13 @@ export const ClockBottomDisplay = forwardRef<
   const hasNotes = data.notes.length > 0;
 
   // 只有时刻和时长模式在小屏幕需要绝对定位（浮在滚筒上方），时段模式不需要
-  const needsAbsolutePosition =
-    props.mode === 'time' || props.mode === 'duration-length';
+  const modeClassName = 
+    props.mode === 'time' ? styles.wrapperTime :
+    props.mode === 'duration-length' ? styles.wrapperDurationLength :
+    styles.wrapperPeriod;
 
   return (
-    <div
-      className={`${styles.wrapper} ${needsAbsolutePosition ? styles.wrapperAbsolute : ''}`}
-    >
+    <div className={`${styles.wrapper} ${modeClassName}`}>
       <AnimatePresence mode="wait">
         <motion.div
           key={contentKey}
