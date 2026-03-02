@@ -31,6 +31,9 @@
   align-items: center;
   pointer-events: none;
   user-select: none;
+  
+  /* === 新增：强制开启 GPU 硬件加速 === */
+  will-change: transform, opacity;
 }
 
 /* 左侧 reel：数字容器固定宽度，定位到右边缘（黑线） */
